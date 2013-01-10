@@ -120,6 +120,11 @@ String Drawable::getColor() const
   return getImplementation()->getColor();
 }
 
+String Drawable::getColorCode() const
+{
+  return getImplementation()->getColorCode();
+}
+
 /* Accessor for color */
 void Drawable::setColor(const String & color)
 {

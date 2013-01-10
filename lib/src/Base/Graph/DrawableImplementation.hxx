@@ -69,6 +69,8 @@ public:
   virtual Bool isValidData(const NumericalPoint & data) const;
 
   /** Check validity of color */
+  static Bool IsValidColorCode(const String & key);
+  static Bool IsValidColorName(const String & key);
   static Bool IsValidColor(const String & key);
 
   /** Check validity of line style */
@@ -96,6 +98,7 @@ public:
 
   /** Color accessor */
   virtual String getColor() const;
+  virtual String getColorCode() const;
   virtual void setColor(const String & color);
 
   /** Point style accessor */
@@ -178,6 +181,9 @@ public:
   /** Give the point style names */
   static Description GetValidPointStyles();
 
+  /** Convert a color name to a valid hexadecimal code */
+  static String ConvertFromName(const String & name);
+
   /** Convert an RGB triplet to a valid hexadecimal code */
   static String ConvertFromRGB(const UnsignedLong red,
                                const UnsignedLong green,
@@ -241,8 +247,8 @@ protected:
   /** A map matching keys with R codes for point symbols */
   static std::map<String, UnsignedLong> SymbolCodes;
 
-  /** Valid colors */
-  static Description ValidColors;
+  /** A map matching keys with HTML definition for R colors */
+  static std::map<String, String> ColorCodes;
 
   /** Valid line styles */
   static Description ValidLineStyles;

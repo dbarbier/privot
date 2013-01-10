@@ -79,6 +79,7 @@ public:
 
   /** Accessor for color */
   String getColor() const;
+  String getColorCode() const;
   void setColor(const String & color);
 
   /** Accessor for pattern */

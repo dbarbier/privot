@@ -169,11 +169,11 @@ class View:
 
             # set color
             if (not 'color' in plot_kwargs_default) and (not 'c' in plot_kwargs_default):
-                plot_kwargs['color'] = drawable.getColor()
+                plot_kwargs['color'] = drawable.getColorCode()
             if (not 'color' in bar_kwargs_default) and (not 'c' in bar_kwargs_default):
-                bar_kwargs['color'] = drawable.getColor()
+                bar_kwargs['color'] = drawable.getColorCode()
             if (not 'color' in step_kwargs_default) and (not 'c' in step_kwargs_default):
-                step_kwargs['color'] = drawable.getColor()
+                step_kwargs['color'] = drawable.getColorCode()
 
             # set marker
             pointStyleDict = {'square':'s', 'circle':'o', 'triangleup':'2', 'plus':'+', 'times':'+', 'diamond':'+', 'triangledown':'v', 'star':'*', 'fsquare':'s', 'fcircle':'o', 'ftriangleup':'2', 'fdiamond':'D', 'bullet':'+', 'dot':','}
