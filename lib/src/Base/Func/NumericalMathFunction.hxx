@@ -32,9 +32,6 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
-
 /**
  * @class NumericalMathFunction
  * @brief Simulates a numerical math function

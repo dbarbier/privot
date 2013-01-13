@@ -55,6 +55,9 @@
 %include Bisection.i
 %include Secant.i
 %include Brent.i
+%include ODESolverImplementation.i
+%include ODESolver.i
+%include RungeKutta.i
 
 /* At last we include template definitions */
 %include BaseSolverTemplateDefs.i

@@ -80,6 +80,7 @@ CalibrationStrategy::CalibrationStrategy(const CalibrationStrategyImplementation
 
 void CalibrationStrategy::setRange(const Interval & range)
 {
+  copyOnWrite();
   getImplementation()->setRange(range);
 }
 
@@ -92,6 +93,7 @@ Interval CalibrationStrategy::getRange() const
 
 void CalibrationStrategy::setExpansionFactor(const NumericalScalar expansionFactor)
 {
+  copyOnWrite();
   getImplementation()->setExpansionFactor(expansionFactor);
 }
 
@@ -104,6 +106,7 @@ NumericalScalar CalibrationStrategy::getExpansionFactor() const
 
 void CalibrationStrategy::setShrinkFactor(const NumericalScalar shrinkFactor)
 {
+  copyOnWrite();
   getImplementation()->setShrinkFactor(shrinkFactor);
 }
 
@@ -115,6 +118,7 @@ NumericalScalar CalibrationStrategy::getShrinkFactor() const
 
 void CalibrationStrategy::setCalibrationStep(const UnsignedLong calibrationStep)
 {
+  copyOnWrite();
   getImplementation()->setCalibrationStep(calibrationStep);
 }
 

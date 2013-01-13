@@ -28,13 +28,11 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 CLASSNAMEINIT(Composite);
 
 /* Default constructor */
-Composite::Composite(const String & name):
-  StratifiedExperiment(name)
+Composite::Composite(const String & name)
+  : StratifiedExperiment(name)
 {
   // Nothing to do
 }
@@ -42,8 +40,8 @@ Composite::Composite(const String & name):
 /* Constructor with parameters */
 Composite::Composite(const NumericalPoint & center,
                      const NumericalPoint & levels,
-                     const String & name):
-  StratifiedExperiment(center, levels, name)
+                     const String & name)
+  : StratifiedExperiment(center, levels, name)
 {
   // Nothing to do
 }
@@ -51,8 +49,8 @@ Composite::Composite(const NumericalPoint & center,
 /* Constructor with parameters */
 Composite::Composite(const UnsignedLong dimension,
                      const NumericalPoint & levels,
-                     const String & name):
-  StratifiedExperiment(NumericalPoint(dimension, 0.0), levels, name)
+                     const String & name)
+  : StratifiedExperiment(NumericalPoint(dimension, 0.0), levels, name)
 {
   // Nothing to do
 }
@@ -67,20 +65,20 @@ Composite * Composite::clone() const
 NumericalSample Composite::generate()
 {
   /* Dimension of the realizations */
-  UnsignedLong dimension(center_.getDimension());
+  const UnsignedLong dimension(center_.getDimension());
   /* Hypercube number of vertices */
-  UnsignedLong verticesNumber((UnsignedLong)round(pow(2, dimension)));
+  const UnsignedLong verticesNumber((UnsignedLong)round(pow(2, dimension)));
   /* Number of levels to be generated */
-  UnsignedLong levelNumber(levels_.getDimension());
+  const UnsignedLong levelNumber(levels_.getDimension());
   /* Size of the sample to be generated: 1 + number of levels x (2 x dimension + 2^dimension) */
   UnsignedLong size(1 + levelNumber * (2 * dimension + verticesNumber));
   /* A composite plane is made of an axial plane and a factorial plane with the same levels */
   /* First the axial plane */
   Axial axial(center_, levels_);
-  NumericalSample axialPlane(axial.generate());
+  const NumericalSample axialPlane(axial.generate());
   /* Second the factorial plane */
   Factorial factorial(center_, levels_);
-  NumericalSample factorialPlane(factorial.generate());
+  const NumericalSample factorialPlane(factorial.generate());
   /* We create the composite plane by copying the factorial plane (larger than the axial plane) then we append all the elements of the axial plane excepted its first one, which is the center of the plane and thus already present in the factorial plane */
   NumericalSample compositePlane(size, center_);
   compositePlane.setName("Composite plane");

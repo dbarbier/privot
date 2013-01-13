@@ -32,9 +32,6 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
-
 /**
  * @class DynamicalFunctionImplementation
  *
@@ -67,6 +64,8 @@ public:
   virtual String __str__(const String & offset = "") const;
 
   /** Operator () */
+  virtual NumericalPoint operator() (const NumericalScalar timeStamp,
+				     const NumericalPoint & inP) const;
   virtual TimeSeries operator() (const TimeSeries & inTS) const;
   virtual ProcessSample operator() (const ProcessSample & inPS) const;
 

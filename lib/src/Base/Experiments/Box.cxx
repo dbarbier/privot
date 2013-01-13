@@ -28,14 +28,11 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 CLASSNAMEINIT(Box);
 
-
 /* Default constructor */
-Box::Box(const String & name):
-  StratifiedExperiment(name)
+Box::Box(const String & name)
+  : StratifiedExperiment(name)
 {
   // Nothing to do
 }

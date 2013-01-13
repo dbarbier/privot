@@ -28,19 +28,16 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 CLASSNAMEINIT(DynamicalFunctionImplementation);
-
 
 static Factory<DynamicalFunctionImplementation> RegisteredFactory("DynamicalFunctionImplementation");
 
 /* Default constructor */
 DynamicalFunctionImplementation::DynamicalFunctionImplementation()
-  : PersistentObject(),
-    inputDescription_(),
-    outputDescription_(),
-    callsNumber_(0)
+  : PersistentObject()
+  , inputDescription_()
+  , outputDescription_()
+  , callsNumber_(0)
 {
   // Nothing to do
 }
@@ -112,9 +109,20 @@ Description DynamicalFunctionImplementation::getOutputDescription() const
 }
 
 /* Operator () */
+NumericalPoint DynamicalFunctionImplementation::operator() (const NumericalScalar timeStamp,
+							    const NumericalPoint & inP) const
+{
+  const UnsignedLong inputDimension(getInputDimension());
+  if (inP.getDimension() != inputDimension + 1) throw InvalidArgumentException(HERE) << "Error: the given point an invalid dimension. Expect a dimension " << inputDimension + 1 << ", got " << inP.getDimension() << ". Remember that the first component of the point is the time stamp.";
+  // Convert the point into a TimeSeries
+  const TimeSeries inTS(RegularGrid(timeStamp, 0.0, 1), NumericalSample(1, inP));
+  return operator()(inTS).getSample()[0];
+}
+
+/* Operator () */
 TimeSeries DynamicalFunctionImplementation::operator() (const TimeSeries & inTS) const
 {
-  return TimeSeries();
+  throw NotYetImplementedException(HERE);
 }
 
 /* Operator () */

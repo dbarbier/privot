@@ -382,6 +382,7 @@ ot_check_test ( BoundConstrainedAlgorithmImplementationResult_std )
 ot_check_test ( Bisection_std )
 ot_check_test ( Brent_std )
 ot_check_test ( Secant_std )
+ot_check_test ( RungeKutta_std )
 
 # Stat
 ot_check_test ( NumericalSample_std )

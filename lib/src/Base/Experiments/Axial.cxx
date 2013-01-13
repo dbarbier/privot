@@ -65,18 +65,18 @@ Axial * Axial::clone() const
 NumericalSample Axial::generate()
 {
   /* Dimension of the realizations */
-  UnsignedLong dimension(center_.getDimension());
+  const UnsignedLong dimension(center_.getDimension());
   /* Number of level to be generated */
-  UnsignedLong levelNumber(levels_.getDimension());
+  const UnsignedLong levelNumber(levels_.getDimension());
   /* Size of the sample to be generated: 1 + 2 x number of levels x dimension */
-  UnsignedLong size(1 + 2 * levelNumber * dimension);
+  const UnsignedLong size(1 + 2 * levelNumber * dimension);
   NumericalSample axialPlane(size, center_);
   axialPlane.setName("Axial plane");
   UnsignedLong index(1);
   /* For each level of the axial plane */
   for(UnsignedLong levelIndex = 0; levelIndex < levelNumber; ++levelIndex)
     {
-      NumericalScalar levelValue(levels_[levelIndex]);
+      const NumericalScalar levelValue(levels_[levelIndex]);
       /* For each vertex of one half of the current level */
       for(UnsignedLong vertex = 0; vertex < dimension; ++vertex)
         {

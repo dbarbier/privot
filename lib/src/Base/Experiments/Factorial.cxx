@@ -27,13 +27,11 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 CLASSNAMEINIT(Factorial);
 
 /* Default constructor */
-Factorial::Factorial(const String & name):
-  StratifiedExperiment(name)
+Factorial::Factorial(const String & name)
+  : StratifiedExperiment(name)
 {
   // Nothing to do
 }
@@ -41,8 +39,8 @@ Factorial::Factorial(const String & name):
 /* Constructor with parameters */
 Factorial::Factorial(const NumericalPoint & center,
                      const NumericalPoint & levels,
-                     const String & name):
-  StratifiedExperiment(center, levels, name)
+                     const String & name)
+   : StratifiedExperiment(center, levels, name)
 {
   // Nothing to do
 }
@@ -50,8 +48,8 @@ Factorial::Factorial(const NumericalPoint & center,
 /* Constructor with parameters */
 Factorial::Factorial(const UnsignedLong dimension,
                      const NumericalPoint & levels,
-                     const String & name):
-  StratifiedExperiment(NumericalPoint(dimension, 0.0), levels, name)
+                     const String & name)
+  : StratifiedExperiment(NumericalPoint(dimension, 0.0), levels, name)
 {
   // Nothing to do
 }
@@ -66,20 +64,20 @@ Factorial * Factorial::clone() const
 NumericalSample Factorial::generate()
 {
   /* Dimension of the realizations */
-  UnsignedLong dimension(center_.getDimension());
+  const UnsignedLong dimension(center_.getDimension());
   /* Hypercube number of vertices */
-  UnsignedLong verticesNumber((UnsignedLong)round(pow(2, dimension)));
+  const UnsignedLong verticesNumber((UnsignedLong)round(pow(2, dimension)));
   /* Number of levels to be generated */
-  UnsignedLong levelNumber(levels_.getDimension());
+  const UnsignedLong levelNumber(levels_.getDimension());
   /* Size of the sample to be generated: 1 + number of levels x 2^dimension */
-  UnsignedLong size(1 + levelNumber * verticesNumber);
+  const UnsignedLong size(1 + levelNumber * verticesNumber);
   NumericalSample factorialPlane(size, center_);
   factorialPlane.setName("Factorial plane");
   UnsignedLong index(1);
   /* For each level of the factorial plane */
   for(UnsignedLong levelIndex = 0; levelIndex < levelNumber; ++levelIndex)
     {
-      NumericalScalar levelValue(levels_[levelIndex]);
+      const NumericalScalar levelValue(levels_[levelIndex]);
       /* For each vertex of the current level */
       for(UnsignedLong vertex = 0; vertex < verticesNumber; ++vertex)
         {

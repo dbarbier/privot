@@ -26,16 +26,13 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
-
 CLASSNAMEINIT(StratifiedExperiment);
 
 /* Default constructor */
-StratifiedExperiment::StratifiedExperiment(const String & name):
-  ExperimentImplementation(name),
-  center_(NumericalPoint(0)),
-  levels_(NumericalPoint(0))
+StratifiedExperiment::StratifiedExperiment(const String & name)
+  : ExperimentImplementation(name)
+  , center_(NumericalPoint(0))
+  , levels_(NumericalPoint(0))
 {
   // Nothing to do
 }
@@ -43,10 +40,10 @@ StratifiedExperiment::StratifiedExperiment(const String & name):
 /* Constructor with parameters */
 StratifiedExperiment::StratifiedExperiment(const NumericalPoint & center,
                                            const NumericalPoint & levels,
-                                           const String & name):
-  ExperimentImplementation(name),
-  center_(center),
-  levels_(levels)
+                                           const String & name)
+  : ExperimentImplementation(name)
+  , center_(center)
+  , levels_(levels)
 {
   // Nothing to do
 }

@@ -31,5 +31,8 @@
 #include "Secant.hxx"
 #include "Solver.hxx"
 #include "SolverImplementation.hxx"
+#include "ODESolver.hxx"
+#include "ODESolverImplementation.hxx"
+#include "RungeKutta.hxx"
 
 #endif /* OPENTURNS_OTSOLVER_HXX */

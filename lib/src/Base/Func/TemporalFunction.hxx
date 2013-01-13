@@ -32,9 +32,6 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
-
 /**
  * @class TemporalFunction
  *

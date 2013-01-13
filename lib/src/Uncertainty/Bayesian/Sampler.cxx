@@ -68,6 +68,7 @@ NumericalSample Sampler::getSample(const UnsignedLong size) const
 
 void Sampler::setVerbose(const Bool verbose)
 {
+  copyOnWrite();
   getImplementation()->setVerbose(verbose);
 }
 

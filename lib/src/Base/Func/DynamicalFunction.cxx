@@ -102,6 +102,12 @@ Description DynamicalFunction::getOutputDescription() const
 }
 
 /* Operator () */
+NumericalPoint DynamicalFunction::operator() (const NumericalScalar timeStamp,
+					      const NumericalPoint & inP) const
+{
+  return getImplementation()->operator()(timeStamp, inP);
+}
+
 TimeSeries DynamicalFunction::operator() (const TimeSeries & inTS) const
 {
   return getImplementation()->operator()(inTS);

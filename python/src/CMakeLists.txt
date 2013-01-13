@@ -343,6 +343,9 @@ ot_add_python_module( solver solver_module.i
                       Secant.i
                       Brent.i
                       BaseSolverTemplateDefs.i
+                      ODESolverImplementation.i
+                      ODESolver.i
+                      RungeKutta.i
                       PythonWrappingFunctions.hxx
                     )
 
