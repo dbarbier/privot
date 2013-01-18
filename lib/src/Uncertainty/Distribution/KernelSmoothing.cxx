@@ -236,6 +236,8 @@ Distribution KernelSmoothing::build(const NumericalSample & sample,
   NumericalSample newSample(sample);
   const NumericalScalar xmin(sample.getMin()[0]);
   const NumericalScalar xmax(sample.getMax()[0]);
+  NumericalScalar xminNew(xmin);
+  NumericalScalar xmaxNew(xmax);
   // If boundary correction,
   if (boundaryCorrection)
     {
@@ -250,43 +252,42 @@ Distribution KernelSmoothing::build(const NumericalSample & sample,
         }
     }
   // Now, work on the extended sample
-  newSample = newSample.sort();
+  if (!bined_) return TruncatedDistribution(KernelMixture(kernel_, bandwidth, newSample), xmin, xmax);
+  if (boundaryCorrection)
+    {
+      xminNew = newSample.getMin()[0];
+      xmaxNew = newSample.getMax()[0];
+    }
   const UnsignedLong size(newSample.getSize());
-  const NumericalScalar xminNew(newSample[0][0]);
-  const NumericalScalar xmaxNew(newSample[size-1][0]);
-  // No binning: there must be boundary correction
-  if (!bined_) return TruncatedDistribution(KernelMixture(kernel_, bandwidth, newSample), xminNew, xmaxNew);
   // Here, we have to bin the data
-  Indices reducedData(binNumber_);
+  NumericalPoint reducedData(binNumber_);
   NumericalPoint x(binNumber_);
   const NumericalScalar delta((xmaxNew - xminNew) / (binNumber_ - 1));
   const NumericalScalar h(0.5 * delta);
   for (UnsignedLong i = 0; i < binNumber_; ++i) x[i] = xminNew + i * delta;
-  UnsignedLong j(0);
   for (UnsignedLong i = 0; i < size; ++i)
     {
-      while (fabs(newSample[i][0] - x[j]) > h) ++j;
-      ++reducedData[j];
+      UnsignedLong index(0);
+      NumericalScalar slice((newSample[i][0] - (xminNew - h)) / delta);
+      if (slice >= 0.0) index = static_cast< UnsignedLong > (trunc(slice));
+      if (index >= binNumber_) index = binNumber_ - 1;
+      ++reducedData[index];
     }
   Collection< Distribution > atoms(binNumber_);
   for (UnsignedLong i = 0; i < binNumber_; ++i)
     {
       KernelMixture atom(kernel_, bandwidth, NumericalSample(1, NumericalPoint(1, x[i])));
-      atom.setWeight(static_cast< NumericalScalar >(reducedData[i]) / size);
       atoms[i] = atom;
     }
-  if (boundaryCorrection) return TruncatedDistribution(Mixture(atoms), xmin, xmax);
-  return Mixture(atoms);
+  if (boundaryCorrection) return TruncatedDistribution(Mixture(atoms, reducedData), xmin, xmax);
+  return Mixture(atoms, reducedData);
 }
 
 /* Bandwidth accessor */
 void KernelSmoothing::setBandwidth(const NumericalPoint & bandwidth)
 {
   // Check the given bandwidth
-  for (UnsignedLong i = 0; i < bandwidth.getDimension(); i++)
-    {
-      if (bandwidth[i] <= 0.0) throw InvalidArgumentException(HERE) << "Error: the bandwidth must be > 0, here bandwith=" << bandwidth;
-    }
+  for (UnsignedLong i = 0; i < bandwidth.getDimension(); i++) if (bandwidth[i] <= 0.0) throw InvalidArgumentException(HERE) << "Error: the bandwidth must be > 0, here bandwith=" << bandwidth;
   bandwidth_ = bandwidth;
 }
 

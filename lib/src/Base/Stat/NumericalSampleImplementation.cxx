@@ -742,22 +742,8 @@ SquareMatrix NumericalSampleImplementation::computeStandardDeviation() const
  */
 NumericalPoint NumericalSampleImplementation::computeStandardDeviationPerComponent() const
 {
-  if (size_ == 0) throw InternalException(HERE) << "Error: cannot compute the standard deviation per component of an empty sample.";
-  // Special case for a sample of size 1
-  if (size_ == 1) return NumericalPoint(dimension_, 0.0);
-
-  const NumericalPoint mean(computeMean());
-  NumericalPoint sd(dimension_);
-  for (UnsignedLong index = 0; index < size_; ++index)
-    {
-      NumericalPoint centeredRealization((*this)[index] - mean);
-      for (UnsignedLong i = 0; i < dimension_; ++i)
-        sd[i] += centeredRealization[i] * centeredRealization[i];
-    }
-
-  sd *= 1.0 / (size_ - 1);
-  for (UnsignedLong i = 0; i < dimension_; ++i)
-    sd[i] = sqrt(sd[i]);
+  NumericalPoint sd(computeVariancePerComponent());
+  for (UnsignedLong i = 0; i < dimension_; ++i) sd[i] = sqrt(sd[i]);
 
   return sd;
 }
@@ -1550,7 +1536,7 @@ struct CDFPolicy
     return a;
   }
 
-}; /* end struct AddPolicy */
+}; /* end struct CDFPolicy */
 
 /*
  * Get the empirical CDF of the sample
