@@ -63,92 +63,95 @@ Point=  class=NumericalPoint name=Unnamed dimension=2 values=[0,0]
  cdf(exact)=0.305529
 kernel= Normal
 Bounded underlying distribution?  False  bounded reconstruction?  False
- pdf(smoothed)=  0.30285292321  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.206602753426  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.303368316143  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.206338170405  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  False  bounded reconstruction?  True
- pdf(smoothed)=  0.303411047573  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.205159940752  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.302634713183  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.205644087393  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  True  bounded reconstruction?  False
- pdf(smoothed)=  0.340008752088  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0879563419612  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.339852194792  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0876632051263  cdf(exact)= 0.0852121908344
 Bounded underlying distribution?  True  bounded reconstruction?  True
- pdf(smoothed)=  0.516733507886  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0500864327464  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.516723548845  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0500720745871  cdf(exact)= 0.0852121908344
 kernel= Epanechnikov
 Bounded underlying distribution?  False  bounded reconstruction?  False
- pdf(smoothed)=  0.302583998811  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.208330264188  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.302806900314  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.208136291592  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  False  bounded reconstruction?  True
- pdf(smoothed)=  0.302583998811  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.208330264188  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.302599227108  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.208476065309  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  True  bounded reconstruction?  False
- pdf(smoothed)=  0.316809578551  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0889725135795  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.316663580842  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0887128253939  cdf(exact)= 0.0852121908344
 Bounded underlying distribution?  True  bounded reconstruction?  True
- pdf(smoothed)=  0.521833645721  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0517197294116  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.522410454118  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0518410697798  cdf(exact)= 0.0852121908344
 kernel= Uniform
 Bounded underlying distribution?  False  bounded reconstruction?  False
  pdf(smoothed)=  0.302200836404  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.208886666759  cdf(exact)= 0.184060125347
+ cdf(smoothed)=  0.208779993888  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  False  bounded reconstruction?  True
- pdf(smoothed)=  0.302200836404  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.208886666759  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.302131587927  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.20902588939  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  True  bounded reconstruction?  False
  pdf(smoothed)=  0.294132562243  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0899223491878  cdf(exact)= 0.0852121908344
+ cdf(smoothed)=  0.08965774514  cdf(exact)= 0.0852121908344
 Bounded underlying distribution?  True  bounded reconstruction?  True
- pdf(smoothed)=  0.482377402078  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0508262439895  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.482326517096  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0507636523672  cdf(exact)= 0.0852121908344
 kernel= Triangular
 Bounded underlying distribution?  False  bounded reconstruction?  False
- pdf(smoothed)=  0.30270050279  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.208090874727  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.303461529083  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.207852803734  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  False  bounded reconstruction?  True
- pdf(smoothed)=  0.30270050279  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.208090874727  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.30242729657  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.207261015078  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  True  bounded reconstruction?  False
- pdf(smoothed)=  0.334461667351  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0885624082321  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.334461911021  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.088275605786  cdf(exact)= 0.0852121908344
 Bounded underlying distribution?  True  bounded reconstruction?  True
- pdf(smoothed)=  0.531650116802  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0527500853222  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.530575903584  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.052660842893  cdf(exact)= 0.0852121908344
 kernel= Logistic
 Bounded underlying distribution?  False  bounded reconstruction?  False
- pdf(smoothed)=  0.303990074026  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.205569852158  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.304924847548  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.205259869738  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  False  bounded reconstruction?  True
- pdf(smoothed)=  0.305224518952  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.202472552453  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.306130558313  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.20224421506  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  True  bounded reconstruction?  False
- pdf(smoothed)=  0.356201577231  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0870209133827  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.355841176714  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0867001490873  cdf(exact)= 0.0852121908344
 Bounded underlying distribution?  True  bounded reconstruction?  True
- pdf(smoothed)=  0.502329730526  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0481263803958  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.500217053351  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0479054819953  cdf(exact)= 0.0852121908344
 kernel= Beta
 Bounded underlying distribution?  False  bounded reconstruction?  False
- pdf(smoothed)=  0.302583998811  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.208330264188  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.302806900314  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.208136291592  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  False  bounded reconstruction?  True
- pdf(smoothed)=  0.302583998811  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.208330264188  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.302599227108  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.208476065309  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  True  bounded reconstruction?  False
- pdf(smoothed)=  0.316809578551  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0889725135795  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.316663580842  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0887128253939  cdf(exact)= 0.0852121908344
 Bounded underlying distribution?  True  bounded reconstruction?  True
- pdf(smoothed)=  0.521833645721  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0517197294116  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.522410454118  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0518410697798  cdf(exact)= 0.0852121908344
 kernel= Beta
 Bounded underlying distribution?  False  bounded reconstruction?  False
- pdf(smoothed)=  0.302281963351  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.207750702568  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.302521210354  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.207530528564  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  False  bounded reconstruction?  True
- pdf(smoothed)=  0.302281963351  pdf(exact)= 0.266085249899
- cdf(smoothed)=  0.207750702568  cdf(exact)= 0.184060125347
+ pdf(smoothed)=  0.301718732801  pdf(exact)= 0.266085249899
+ cdf(smoothed)=  0.207225747734  cdf(exact)= 0.184060125347
 Bounded underlying distribution?  True  bounded reconstruction?  False
- pdf(smoothed)=  0.324638535683  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0886618499491  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.324613203118  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0883900458283  cdf(exact)= 0.0852121908344
 Bounded underlying distribution?  True  bounded reconstruction?  True
- pdf(smoothed)=  0.527875250109  pdf(exact)= 0.597680964865
- cdf(smoothed)=  0.0522553592641  cdf(exact)= 0.0852121908344
+ pdf(smoothed)=  0.527809559804  pdf(exact)= 0.597680964865
+ cdf(smoothed)=  0.0522403176784  cdf(exact)= 0.0852121908344
+with low  bin count, pdf= 0.362851566442
+with high bin count, pdf= 0.364927013275
+without   binning,   pdf= 0.364987413279

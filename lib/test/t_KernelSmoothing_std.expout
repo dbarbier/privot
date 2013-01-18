@@ -50,105 +50,108 @@ Point= class=NumericalPoint name=Unnamed dimension=2 values=[0,0]
 kernel=Normal
 Silverman's bandwidth=0.313172 plugin bandwidth=0.301536 mixed bandwidth=0.290624
 Bounded underlying distribution? False bounded reconstruction? False
- pdf(smoothed)= 0.271248 pdf(exact)=0.266085
- cdf(smoothed)= 0.207727 cdf(exact)=0.18406
+ pdf(smoothed)= 0.272165 pdf(exact)=0.266085
+ cdf(smoothed)= 0.207852 cdf(exact)=0.18406
 Bounded underlying distribution? False bounded reconstruction? True
- pdf(smoothed)= 0.271419 pdf(exact)=0.266085
- cdf(smoothed)= 0.207412 cdf(exact)=0.18406
+ pdf(smoothed)= 0.272346 pdf(exact)=0.266085
+ cdf(smoothed)= 0.207519 cdf(exact)=0.18406
 Silverman's bandwidth=0.296562 plugin bandwidth=0.14183 mixed bandwidth=0.14916
 Bounded underlying distribution? True bounded reconstruction? False
- pdf(smoothed)= 0.454612 pdf(exact)=0.597681
- cdf(smoothed)= 0.0832752 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.454885 pdf(exact)=0.597681
+ cdf(smoothed)= 0.08332 cdf(exact)=0.0852122
 Bounded underlying distribution? True bounded reconstruction? True
- pdf(smoothed)= 0.619593 pdf(exact)=0.597681
- cdf(smoothed)= 0.0616631 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.618769 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0616167 cdf(exact)=0.0852122
 kernel=Epanechnikov
 Silverman's bandwidth=0.700273 plugin bandwidth=0.674254 mixed bandwidth=0.649854
 Bounded underlying distribution? False bounded reconstruction? False
- pdf(smoothed)= 0.272169 pdf(exact)=0.266085
- cdf(smoothed)= 0.208057 cdf(exact)=0.18406
+ pdf(smoothed)= 0.272784 pdf(exact)=0.266085
+ cdf(smoothed)= 0.20817 cdf(exact)=0.18406
 Bounded underlying distribution? False bounded reconstruction? True
- pdf(smoothed)= 0.272169 pdf(exact)=0.266085
- cdf(smoothed)= 0.208057 cdf(exact)=0.18406
+ pdf(smoothed)= 0.272234 pdf(exact)=0.266085
+ cdf(smoothed)= 0.207817 cdf(exact)=0.18406
 Silverman's bandwidth=0.663132 plugin bandwidth=0.317142 mixed bandwidth=0.333531
 Bounded underlying distribution? True bounded reconstruction? False
- pdf(smoothed)= 0.433023 pdf(exact)=0.597681
- cdf(smoothed)= 0.0835946 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.432607 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0836447 cdf(exact)=0.0852122
 Bounded underlying distribution? True bounded reconstruction? True
- pdf(smoothed)= 0.637807 pdf(exact)=0.597681
- cdf(smoothed)= 0.064839 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.637952 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0648745 cdf(exact)=0.0852122
 kernel=Uniform
 Silverman's bandwidth=0.542429 plugin bandwidth=0.522275 mixed bandwidth=0.503375
 Bounded underlying distribution? False bounded reconstruction? False
  pdf(smoothed)= 0.284745 pdf(exact)=0.266085
- cdf(smoothed)= 0.20838 cdf(exact)=0.18406
+ cdf(smoothed)= 0.20849 cdf(exact)=0.18406
 Bounded underlying distribution? False bounded reconstruction? True
- pdf(smoothed)= 0.284745 pdf(exact)=0.266085
- cdf(smoothed)= 0.20838 cdf(exact)=0.18406
+ pdf(smoothed)= 0.284746 pdf(exact)=0.266085
+ cdf(smoothed)= 0.208181 cdf(exact)=0.18406
 Silverman's bandwidth=0.51366 plugin bandwidth=0.245657 mixed bandwidth=0.258352
 Bounded underlying distribution? True bounded reconstruction? False
  pdf(smoothed)= 0.406422 pdf(exact)=0.597681
- cdf(smoothed)= 0.0833973 cdf(exact)=0.0852122
+ cdf(smoothed)= 0.0834818 cdf(exact)=0.0852122
 Bounded underlying distribution? True bounded reconstruction? True
- pdf(smoothed)= 0.632213 pdf(exact)=0.597681
- cdf(smoothed)= 0.0639012 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.638339 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0639934 cdf(exact)=0.0852122
 kernel=Triangular
 Silverman's bandwidth=0.767111 plugin bandwidth=0.738609 mixed bandwidth=0.71188
 Bounded underlying distribution? False bounded reconstruction? False
- pdf(smoothed)= 0.268005 pdf(exact)=0.266085
- cdf(smoothed)= 0.207953 cdf(exact)=0.18406
+ pdf(smoothed)= 0.268626 pdf(exact)=0.266085
+ cdf(smoothed)= 0.208064 cdf(exact)=0.18406
 Bounded underlying distribution? False bounded reconstruction? True
- pdf(smoothed)= 0.268005 pdf(exact)=0.266085
- cdf(smoothed)= 0.207953 cdf(exact)=0.18406
+ pdf(smoothed)= 0.268334 pdf(exact)=0.266085
+ cdf(smoothed)= 0.207693 cdf(exact)=0.18406
 Silverman's bandwidth=0.726424 plugin bandwidth=0.347412 mixed bandwidth=0.365365
 Bounded underlying distribution? True bounded reconstruction? False
- pdf(smoothed)= 0.443565 pdf(exact)=0.597681
- cdf(smoothed)= 0.0837544 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.443653 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0837894 cdf(exact)=0.0852122
 Bounded underlying distribution? True bounded reconstruction? True
- pdf(smoothed)= 0.634679 pdf(exact)=0.597681
- cdf(smoothed)= 0.0655059 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.635433 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0656708 cdf(exact)=0.0852122
 kernel=Logistic
 Silverman's bandwidth=0.172661 plugin bandwidth=0.166245 mixed bandwidth=0.160229
 Bounded underlying distribution? False bounded reconstruction? False
- pdf(smoothed)= 0.269918 pdf(exact)=0.266085
- cdf(smoothed)= 0.207648 cdf(exact)=0.18406
+ pdf(smoothed)= 0.271006 pdf(exact)=0.266085
+ cdf(smoothed)= 0.20778 cdf(exact)=0.18406
 Bounded underlying distribution? False bounded reconstruction? True
- pdf(smoothed)= 0.270086 pdf(exact)=0.266085
- cdf(smoothed)= 0.207348 cdf(exact)=0.18406
+ pdf(smoothed)= 0.271183 pdf(exact)=0.266085
+ cdf(smoothed)= 0.207463 cdf(exact)=0.18406
 Silverman's bandwidth=0.163503 plugin bandwidth=0.0781951 mixed bandwidth=0.082236
 Bounded underlying distribution? True bounded reconstruction? False
- pdf(smoothed)= 0.472811 pdf(exact)=0.597681
- cdf(smoothed)= 0.0830003 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.473298 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0830388 cdf(exact)=0.0852122
 Bounded underlying distribution? True bounded reconstruction? True
- pdf(smoothed)= 0.601078 pdf(exact)=0.597681
- cdf(smoothed)= 0.0588661 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.601435 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0589383 cdf(exact)=0.0852122
 kernel=Beta
 Silverman's bandwidth=0.700273 plugin bandwidth=0.674254 mixed bandwidth=0.649854
 Bounded underlying distribution? False bounded reconstruction? False
- pdf(smoothed)= 0.272169 pdf(exact)=0.266085
- cdf(smoothed)= 0.208057 cdf(exact)=0.18406
+ pdf(smoothed)= 0.272784 pdf(exact)=0.266085
+ cdf(smoothed)= 0.20817 cdf(exact)=0.18406
 Bounded underlying distribution? False bounded reconstruction? True
- pdf(smoothed)= 0.272169 pdf(exact)=0.266085
- cdf(smoothed)= 0.208057 cdf(exact)=0.18406
+ pdf(smoothed)= 0.272234 pdf(exact)=0.266085
+ cdf(smoothed)= 0.207817 cdf(exact)=0.18406
 Silverman's bandwidth=0.663132 plugin bandwidth=0.317142 mixed bandwidth=0.333531
 Bounded underlying distribution? True bounded reconstruction? False
- pdf(smoothed)= 0.433023 pdf(exact)=0.597681
- cdf(smoothed)= 0.0835946 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.432607 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0836447 cdf(exact)=0.0852122
 Bounded underlying distribution? True bounded reconstruction? True
- pdf(smoothed)= 0.637807 pdf(exact)=0.597681
- cdf(smoothed)= 0.064839 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.637952 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0648745 cdf(exact)=0.0852122
 kernel=Beta
 Silverman's bandwidth=0.828575 plugin bandwidth=0.797789 mixed bandwidth=0.768918
 Bounded underlying distribution? False bounded reconstruction? False
- pdf(smoothed)= 0.271031 pdf(exact)=0.266085
- cdf(smoothed)= 0.207897 cdf(exact)=0.18406
+ pdf(smoothed)= 0.271682 pdf(exact)=0.266085
+ cdf(smoothed)= 0.20801 cdf(exact)=0.18406
 Bounded underlying distribution? False bounded reconstruction? True
- pdf(smoothed)= 0.271031 pdf(exact)=0.266085
- cdf(smoothed)= 0.207897 cdf(exact)=0.18406
+ pdf(smoothed)= 0.271276 pdf(exact)=0.266085
+ cdf(smoothed)= 0.207644 cdf(exact)=0.18406
 Silverman's bandwidth=0.784628 plugin bandwidth=0.375247 mixed bandwidth=0.394639
 Bounded underlying distribution? True bounded reconstruction? False
- pdf(smoothed)= 0.438783 pdf(exact)=0.597681
- cdf(smoothed)= 0.0835457 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.438711 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0835938 cdf(exact)=0.0852122
 Bounded underlying distribution? True bounded reconstruction? True
- pdf(smoothed)= 0.637201 pdf(exact)=0.597681
- cdf(smoothed)= 0.0652034 cdf(exact)=0.0852122
+ pdf(smoothed)= 0.637618 pdf(exact)=0.597681
+ cdf(smoothed)= 0.0652733 cdf(exact)=0.0852122
+with low  bin count, pdf=0.366687
+with high bin count, pdf=0.367239
+without   binning,   pdf=0.367263

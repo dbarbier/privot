@@ -79,6 +79,15 @@ try :
                 print " pdf(smoothed)= ", pointPDF, " pdf(exact)=", distributionCollection[j].computePDF( point )
                 print " cdf(smoothed)= ", pointCDF, " cdf(exact)=", distributionCollection[j].computeCDF( point )
 
+    sample = Normal().getSample(5000)
+    ks1 = KernelSmoothing(Normal(), True, 64).build(sample)
+    ks2 = KernelSmoothing(Normal(), True, 1024).build(sample)
+    ks3 = KernelSmoothing(Normal(), False).build(sample)
+    point = 0.3
+    print "with low  bin count, pdf=", ks1.computePDF(point)
+    print "with high bin count, pdf=", ks2.computePDF(point)
+    print "without   binning,   pdf=", ks3.computePDF(point)
+
 except :
     import sys
     print "t_KernelSmoothing_std.py", sys.exc_type, sys.exc_value

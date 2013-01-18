@@ -25,6 +25,7 @@
 #include "KernelSmoothing.hxx"
 #include "Normal.hxx"
 #include "KernelMixture.hxx"
+#include "Mixture.hxx"
 #include "TruncatedDistribution.hxx"
 #include "PersistentObjectFactory.hxx"
 #include "Brent.hxx"
@@ -52,19 +53,26 @@ KernelSmoothing::KernelSmoothing(const String & name)
   : PersistentObject(name)
   , bandwidth_(NumericalPoint(0))
   , kernel_(Normal())
+  , bined_(true)
+  , binNumber_(ResourceMap::GetAsUnsignedLong( "KernelSmoothing-BinNumber" ))
 {
-  // Nothing to do
+  if (binNumber_ < 2) throw InvalidArgumentException(HERE) << "Error: The default number of bins=" << binNumber_ << " is less than 2. Chek the ResourceMap or the openturns.conf file.";
 }
 
 /* Default constructor */
 KernelSmoothing::KernelSmoothing(const Distribution & kernel,
+                                 const Bool & bined,
+				 const UnsignedLong binNumber,
                                  const String & name)
   : PersistentObject(name)
   , bandwidth_(NumericalPoint(0))
   , kernel_(kernel)
+  , bined_(bined)
+  , binNumber_(binNumber)
 {
   // Only 1D kernel allowed here
   if (kernel.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: only 1D kernel allowed for product kernel smoothing";
+  if (bined && (binNumber < 2)) throw InvalidArgumentException(HERE) << "Error: The number of bins=" << binNumber << " is less than 2.";
 }
 
 /* Virtual constructor */
@@ -209,7 +217,11 @@ Distribution KernelSmoothing::build(const NumericalSample & sample,
   return build(sample, computeSilvermanBandwidth(sample), boundaryCorrection);
 }
 
-/* Build a Normal kernel mixture based on the given sample and bandwidth */
+/* Build a Normal kernel mixture based on the given sample and bandwidth
+ * For multi-dimentional data, no binning and no boundary correction
+ * If boundary correction: mirroring on the two sides, followed by truncation
+ * If binning: condensation on a regular grid
+ */
 Distribution KernelSmoothing::build(const NumericalSample & sample,
                                     const NumericalPoint & bandwidth,
                                     const Bool boundaryCorrection)
@@ -217,27 +229,54 @@ Distribution KernelSmoothing::build(const NumericalSample & sample,
   const UnsignedLong dimension(sample.getDimension());
   if (bandwidth.getDimension() != dimension) throw InvalidDimensionException(HERE) << "Error: the given bandwidth must have the same dimension as the given sample, here bandwidth dimension=" << bandwidth.getDimension() << " and sample dimension=" << dimension;
   setBandwidth(bandwidth);
-  // Make cheap boundary correction by extending the sample. Only valid for 1D sample.
-  if (boundaryCorrection && (dimension == 1))
+  // The usual case: no boundary correction, no binning
+  if ((dimension > 1) || ((!bined_) && (!boundaryCorrection))) return KernelMixture(kernel_, bandwidth, sample);
+
+  // Here we are in the 1D case, with at least binning or boundary boundary correction
+  NumericalSample newSample(sample);
+  const NumericalScalar xmin(sample.getMin()[0]);
+  const NumericalScalar xmax(sample.getMax()[0]);
+  // If boundary correction,
+  if (boundaryCorrection)
     {
-      NumericalScalar min(sample.getMin()[0]);
-      NumericalScalar max(sample.getMax()[0]);
       NumericalScalar h(bandwidth[0]);
       // Reflect and add points close to the boundaries to the sample
-      NumericalSample newSample(sample);
       const UnsignedLong size(sample.getSize());
       for (UnsignedLong i = 0; i < size; i++)
         {
           NumericalScalar realization(sample[i][0]);
-          if (realization <= min + h) newSample.add(NumericalPoint(1, 2.0 * min - realization));
-          if (realization >= max - h) newSample.add(NumericalPoint(1, 2.0 * max - realization));
+          if (realization <= xmin + h) newSample.add(NumericalPoint(1, 2.0 * xmin - realization));
+          if (realization >= xmax - h) newSample.add(NumericalPoint(1, 2.0 * xmax - realization));
         }
-      TruncatedDistribution kernelMixture(KernelMixture(kernel_, bandwidth, newSample), min, max);
-      return kernelMixture;
     }
-  KernelMixture kernelMixture(kernel_, bandwidth, sample);
-  kernelMixture.setName("Kernel smoothing from sample " + sample.getName());
-  return kernelMixture;
+  // Now, work on the extended sample
+  newSample = newSample.sort();
+  const UnsignedLong size(newSample.getSize());
+  const NumericalScalar xminNew(newSample[0][0]);
+  const NumericalScalar xmaxNew(newSample[size-1][0]);
+  // No binning: there must be boundary correction
+  if (!bined_) return TruncatedDistribution(KernelMixture(kernel_, bandwidth, newSample), xminNew, xmaxNew);
+  // Here, we have to bin the data
+  Indices reducedData(binNumber_);
+  NumericalPoint x(binNumber_);
+  const NumericalScalar delta((xmaxNew - xminNew) / (binNumber_ - 1));
+  const NumericalScalar h(0.5 * delta);
+  for (UnsignedLong i = 0; i < binNumber_; ++i) x[i] = xminNew + i * delta;
+  UnsignedLong j(0);
+  for (UnsignedLong i = 0; i < size; ++i)
+    {
+      while (fabs(newSample[i][0] - x[j]) > h) ++j;
+      ++reducedData[j];
+    }
+  Collection< Distribution > atoms(binNumber_);
+  for (UnsignedLong i = 0; i < binNumber_; ++i)
+    {
+      KernelMixture atom(kernel_, bandwidth, NumericalSample(1, NumericalPoint(1, x[i])));
+      atom.setWeight(static_cast< NumericalScalar >(reducedData[i]) / size);
+      atoms[i] = atom;
+    }
+  if (boundaryCorrection) return TruncatedDistribution(Mixture(atoms), xmin, xmax);
+  return Mixture(atoms);
 }
 
 /* Bandwidth accessor */

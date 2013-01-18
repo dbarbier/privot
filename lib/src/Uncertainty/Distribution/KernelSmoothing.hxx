@@ -32,9 +32,6 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
-
 /**
  * @class KernelSmoothing
  *
@@ -49,7 +46,10 @@ public:
   explicit KernelSmoothing(const String & name = "KernelSmoothing");
 
   /** Default constructor */
-  explicit KernelSmoothing(const Distribution & kernel, const String & name = "KernelSmoothing");
+  explicit KernelSmoothing(const Distribution & kernel,
+			   const Bool & bined = true,
+			   const UnsignedLong binNumber = ResourceMap::GetAsUnsignedLong( "KernelSmoothing-BinNumber" ),
+			   const String & name = "KernelSmoothing");
 
   /** Virtual constructor */
   virtual KernelSmoothing * clone() const;
@@ -99,8 +99,15 @@ private:
 
   // Bandwith of the smoothing
   NumericalPoint bandwidth_;
+
   // 1D kernel for kernel product
   Distribution kernel_;
+
+  // Flag to tell if we compute a bined version of the estimator
+  Bool bined_;
+
+  // Number of bins
+  UnsignedLong binNumber_;
 
 }; /* class KernelSmoothing */
 

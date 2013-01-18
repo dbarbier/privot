@@ -115,6 +115,17 @@ int main(int argc, char *argv[])
                 }
             }
         }
+      // Test with varying binning
+      {
+        NumericalSample sample(Normal().getSample(5000));
+        Distribution ks1(KernelSmoothing(Normal(), true, 64).build(sample));
+        Distribution ks2(KernelSmoothing(Normal(), true, 1024).build(sample));
+        Distribution ks3(KernelSmoothing(Normal(), false).build(sample));
+        NumericalPoint point(1, 0.3);
+        fullprint << "with low  bin count, pdf=" << ks1.computePDF(point) << std::endl;
+        fullprint << "with high bin count, pdf=" << ks2.computePDF(point) << std::endl;
+        fullprint << "without   binning,   pdf=" << ks3.computePDF(point) << std::endl;
+      }
     }
   catch (TestFailed & ex)
     {

@@ -521,6 +521,7 @@ void ResourceMap::loadDefaultConfiguration()
 
   // KernelSmoothing parameters //
   setAsUnsignedLong( "KernelSmoothing-SmallSize", 250 );
+  setAsUnsignedLong( "KernelSmoothing-BinNumber", 256 );
   setAsNumericalScalar( "KernelSmoothing-CutOffPlugin", 5.0 );
   setAsNumericalScalar( "KernelSmoothing-AbsolutePrecision", 0.0 );
   setAsNumericalScalar( "KernelSmoothing-RelativePrecision", 1.0e-5 );

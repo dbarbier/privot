@@ -275,6 +275,7 @@ ot_add_python_module( func func_module.i
                       AnalyticalNumericalMathHessianImplementation.i
                       DatabaseNumericalMathEvaluationImplementation.i
                       IndicatorNumericalMathEvaluationImplementation.i
+                      PiecewiseEvaluationImplementation.i
                       ProductPolynomialEvaluationImplementation.i
                       RestrictedEvaluationImplementation.i
                       RestrictedGradientImplementation.i

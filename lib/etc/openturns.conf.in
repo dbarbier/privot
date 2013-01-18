@@ -192,6 +192,7 @@
 
   <!-- OT::KernelSmoothing parameters -->
   <KernelSmoothing-SmallSize           value="250"    />
+  <KernelSmoothing-binnumber           value="256"    />
   <KernelSmoothing-CutOffPlugin        value="5.0"    />
   <KernelSmoothing-AbsolutePrecision   value="0.0"    />
   <KernelSmoothing-RelativePrecision   value="1.0e-5" />
