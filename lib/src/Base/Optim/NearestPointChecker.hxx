@@ -69,7 +69,7 @@ public:
   NumericalMathFunction getLevelFunction() const ;
 
   /** Result accessor */
-  void setResult(const NearestPointCheckerResult result );
+  void setResult(const NearestPointCheckerResult & result );
 
   /** Result accessor */
   NearestPointCheckerResult getResult() const;

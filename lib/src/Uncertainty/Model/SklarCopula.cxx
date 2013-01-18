@@ -56,7 +56,7 @@ SklarCopula::SklarCopula()
 }
 
 /* Parameters constructor */
-SklarCopula::SklarCopula(const Distribution distribution)
+SklarCopula::SklarCopula(const Distribution & distribution)
   : CopulaImplementation("SklarCopula"),
     distribution_(distribution),
     marginalCollection_(distribution.getDimension())
@@ -368,7 +368,7 @@ Bool SklarCopula::hasEllipticalCopula() const
 }
 
 /* Distribution accessor */
-void SklarCopula::setDistribution(const Distribution distribution)
+void SklarCopula::setDistribution(const Distribution & distribution)
 {
   distribution_ = distribution;
 }

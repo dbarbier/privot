@@ -75,7 +75,7 @@ NearestPointCheckerResult NearestPointChecker::getResult() const
 }
 
 /* Result accessor */
-void NearestPointChecker::setResult(const NearestPointCheckerResult result)
+void NearestPointChecker::setResult(const NearestPointCheckerResult & result)
 {
   result_ = result;
 }

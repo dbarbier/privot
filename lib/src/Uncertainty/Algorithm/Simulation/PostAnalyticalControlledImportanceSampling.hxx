@@ -52,8 +52,6 @@ public:
   /** String converter */
   String __repr__() const;
 
-private:
-
   /** Compute the block sample */
   NumericalSample computeBlockSample();
 

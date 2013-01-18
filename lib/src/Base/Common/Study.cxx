@@ -55,7 +55,7 @@ String Study::__repr__() const
   const char * separator = "  ";
   for(Map::const_iterator it = map_.begin();
       it != map_.end();
-      it++, separator = "\n  ")
+      ++it, separator = "\n  ")
     {
 #if 0
       oss << separator << (*it).first << " => " << ((*it).second)->getClassName()
@@ -89,7 +89,7 @@ String Study::__str__(const String & offset) const
 {
   OSS oss;
   const char * separator = "  ";
-  for(Map::const_iterator it = map_.begin(); it != map_.end(); it++, separator = "\n  ")
+  for(Map::const_iterator it = map_.begin(); it != map_.end(); ++it, separator = "\n  ")
     {
       oss << separator << (*it).first << " => " << ((*it).second)->getClassName() << "\n"
           << ((*it).second)->__str__( String( 7 + int( log10((*it).first) ), ' ') );
@@ -120,7 +120,7 @@ void Study::save()
     }
 
   for(Map::const_iterator it = map_.begin();
-      it != map_.end(); it++)
+      it != map_.end(); ++it)
     {
       mgr.save(*(it->second), "", true);
     }

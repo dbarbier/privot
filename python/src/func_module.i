@@ -80,6 +80,7 @@
 %include UniVariatePolynomialImplementation.i
 %include UniVariatePolynomial.i
 %include AggregatedNumericalMathEvaluationImplementation.i
+%include PiecewiseEvaluationImplementation.i
 %include AnalyticalNumericalMathEvaluationImplementation.i
 %include AnalyticalNumericalMathGradientImplementation.i
 %include AnalyticalNumericalMathHessianImplementation.i

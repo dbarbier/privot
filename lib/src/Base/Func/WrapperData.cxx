@@ -464,7 +464,7 @@ struct WrapperFileList * WrapperData::getNewFileListForCInterface() const
   FileListType::const_iterator fileList_iterator;
   for(fileList_iterator  = getFileList().begin();
       fileList_iterator != getFileList().end();
-      fileList_iterator++)
+      ++fileList_iterator)
     {
       const WrapperDataFile & file = *fileList_iterator;
 
@@ -534,7 +534,7 @@ struct WrapperVariableList * WrapperData::getNewVariableListForCInterface() cons
   VariableListType::const_iterator variableList_iterator;
   for(variableList_iterator  = getVariableList().begin();
       variableList_iterator != getVariableList().end();
-      variableList_iterator++)
+      ++variableList_iterator)
     {
       const WrapperDataVariable & variable = *variableList_iterator;
 

@@ -38,8 +38,13 @@ public:
   /** Default constructor */
   RestrictedEvaluationImplementation();
 
-  /** Default constructor */
+  /** Parameter constructor */
   RestrictedEvaluationImplementation(const NumericalMathEvaluationImplementation & evaluation,
+                                     const Indices & restrictionIndices,
+                                     const NumericalPoint & referencePoint);
+
+  /** Parameter constructor */
+  RestrictedEvaluationImplementation(const Implementation & p_evaluation,
                                      const Indices & restrictionIndices,
                                      const NumericalPoint & referencePoint);
 

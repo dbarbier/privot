@@ -734,7 +734,7 @@ String ResourceMap::__repr__() const
   OSS oss;
   oss << "ResourceMap={";
   const char * separator = "\n  ";
-  for(MapType::const_iterator it = map_.begin(); it != map_.end(); it++, separator = ",\n  ")
+  for(MapType::const_iterator it = map_.begin(); it != map_.end(); ++it, separator = ",\n  ")
     oss << separator
         << it->first << " => " << it->second;
   oss << "\n}";

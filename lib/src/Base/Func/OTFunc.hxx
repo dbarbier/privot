@@ -72,6 +72,7 @@
 #include "NumericalMathFunctionImplementation.hxx"
 #include "NumericalMathGradientImplementation.hxx"
 #include "NumericalMathHessianImplementation.hxx"
+#include "PiecewiseEvaluationImplementation.hxx"
 #include "ProductNumericalMathEvaluationImplementation.hxx"
 #include "ProductNumericalMathFunction.hxx"
 #include "ProductNumericalMathGradientImplementation.hxx"

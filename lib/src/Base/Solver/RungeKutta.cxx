@@ -76,6 +76,7 @@ NumericalSample RungeKutta::solve(const NumericalPoint & initialState,
       const NumericalPoint phi(computeStep(t, state, timeStep));
       state += timeStep * phi;
       result[i] = state;
+      t = newT;
     }
   return result;
 }

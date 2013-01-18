@@ -56,10 +56,10 @@ public:
   /** Constructor from DynamicalFunctionImplementation */
   DynamicalFunction(const DynamicalFunctionImplementation & implementation);
 
-#ifndef SWIG
   /** Constructor from implementation */
   DynamicalFunction(const Implementation & p_implementation);
 
+#ifndef SWIG
   /** Constructor from implementation pointer */
   DynamicalFunction(DynamicalFunctionImplementation * p_implementation);
 #endif

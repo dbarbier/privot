@@ -113,7 +113,7 @@ NumericalPoint DynamicalFunctionImplementation::operator() (const NumericalScala
 							    const NumericalPoint & inP) const
 {
   const UnsignedLong inputDimension(getInputDimension());
-  if (inP.getDimension() != inputDimension + 1) throw InvalidArgumentException(HERE) << "Error: the given point an invalid dimension. Expect a dimension " << inputDimension + 1 << ", got " << inP.getDimension() << ". Remember that the first component of the point is the time stamp.";
+  if (inP.getDimension() != inputDimension) throw InvalidArgumentException(HERE) << "Error: the given point an invalid dimension. Expect a dimension " << inputDimension << ", got " << inP.getDimension() << ". Remember that the first component of the point is the time stamp.";
   // Convert the point into a TimeSeries
   const TimeSeries inTS(RegularGrid(timeStamp, 0.0, 1), NumericalSample(1, inP));
   return operator()(inTS).getSample()[0];

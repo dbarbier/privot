@@ -70,7 +70,7 @@ LibraryLoader::~LibraryLoader()
   CatalogType::const_iterator iterator;
   for(iterator =  libraryCatalog_.begin();
       iterator != libraryCatalog_.end();
-      iterator++)
+      ++iterator)
     {
       if (dlclose((*iterator).second))
         throw DynamicLibraryException(HERE) << "Cannot dlclose library located at '"
@@ -105,7 +105,7 @@ String LibraryLoader::__repr__() const
     CatalogType::const_iterator iterator;
     for(iterator =  libraryCatalog_.begin();
         iterator != libraryCatalog_.end();
-        iterator++, separator = ", ")
+        ++iterator, separator = ", ")
       {
         oss << separator
             << "('" << (*iterator).first << "'," << (*iterator).second << ")";

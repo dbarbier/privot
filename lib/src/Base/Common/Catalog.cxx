@@ -155,7 +155,7 @@ String Catalog::__repr__() const
   OSS oss;
   oss << "Catalog={";
   const char * separator = "\n  ";
-  for(CatalogType::const_iterator it = catalog_.begin(); it != catalog_.end(); it++, separator = ",\n  ")
+  for(CatalogType::const_iterator it = catalog_.begin(); it != catalog_.end(); ++it, separator = ",\n  ")
     oss << separator
         << it->first;
   oss << "\n}";

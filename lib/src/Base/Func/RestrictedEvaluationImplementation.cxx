@@ -57,6 +57,25 @@ RestrictedEvaluationImplementation::RestrictedEvaluationImplementation(const Num
   setDescription(description);
 } // RestrictedEvaluationImplementation
 
+/* Default constructor */
+RestrictedEvaluationImplementation::RestrictedEvaluationImplementation(const Implementation & p_evaluation,
+                                                                       const Indices & restrictionIndices,
+                                                                       const NumericalPoint & referencePoint)
+  : NumericalMathEvaluationImplementation()
+  , p_evaluation_(p_evaluation)
+  , restrictionIndices_(restrictionIndices)
+  , referencePoint_(referencePoint)
+{
+  if (referencePoint.getDimension() != p_evaluation->getInputDimension()) throw InvalidDimensionException(HERE) << "Error: the dimension of the reference point=" << referencePoint.getDimension() << " must match the input dimension of the evaluation=" << p_evaluation->getInputDimension();
+  if (!restrictionIndices.check(referencePoint.getDimension() - 1)) throw InvalidArgumentException(HERE) << "The indices of a marginal function must be in the range [0, dim-1] and  must be different";
+  const Description inputDescription(p_evaluation->getInputDescription());
+  const Description outputDescription(p_evaluation->getOutputDescription());
+  Description description;
+  for (UnsignedLong i = 0; i < restrictionIndices.getSize(); ++i) description.add(inputDescription[restrictionIndices[i]]);
+  for (UnsignedLong i = 0; i < outputDescription.getSize(); ++i) description.add(outputDescription[i]);
+  setDescription(description);
+} // RestrictedEvaluationImplementation
+
 
 /* Virtual constructor */
 RestrictedEvaluationImplementation * RestrictedEvaluationImplementation::clone() const

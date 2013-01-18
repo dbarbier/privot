@@ -224,7 +224,7 @@ Bool Pie::IsValidColorPalette(const Description & palette)
 {
   Bool IsValid = true;
   Description::const_iterator it;
-  for(it = palette.begin(); it != palette.end(); it++)
+  for(it = palette.begin(); it != palette.end(); ++it)
     IsValid &= IsValidColor(*it);
   return IsValid;
 }

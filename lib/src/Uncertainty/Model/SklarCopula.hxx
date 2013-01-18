@@ -52,7 +52,7 @@ public:
   SklarCopula();
 
   /** Parameters constructor */
-  SklarCopula(const Distribution distribution);
+  SklarCopula(const Distribution & distribution);
 
 
   /** Comparison operator */
@@ -128,7 +128,7 @@ public:
   /* Interface specific to SklarCopula */
 
   /** Distribution accessor */
-  void setDistribution(const Distribution distribution);
+  void setDistribution(const Distribution & distribution);
   Distribution getDistribution() const;
 
   /** Method save() stores the object through the StorageManager */
