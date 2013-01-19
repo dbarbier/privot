@@ -1322,9 +1322,11 @@ struct VariancePerComponentPolicy
 
   inline value_type & inplace_op( value_type & var, NSI_const_point point ) const
   {
-    const value_type centeredRealization(point - mean_);
     for (UnsignedLong i = 0; i < dimension_; ++i)
-      var[i] += centeredRealization[i] * centeredRealization[i];
+      {
+	const NumericalScalar val(point[i] - mean_[i]);
+	var[i] += val * val;
+      }
     return var;
   }
 
