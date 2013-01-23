@@ -61,8 +61,8 @@ public:
   UserDefinedCovarianceModel * clone() const;
 
   /** Computation of the covariance function */
-  CovarianceMatrix computeCovariance(const NumericalScalar t,
-                                     const NumericalScalar s) const;
+  CovarianceMatrix computeCovariance(const NumericalScalar s,
+                                     const NumericalScalar t) const;
 
 
   /** Time grid accessor */

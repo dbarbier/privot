@@ -183,6 +183,12 @@ NumericalScalar Interval::getNumericalVolume() const
   return volume;
 }
 
+/* Get the dimension of the interval */
+UnsignedLong Interval::getDimension() const
+{
+  return upperBound_.getDimension();
+}
+
 /* Check if the given point is numerically inside of the closed interval, i.e. using only the bounds part of the interval */
 Bool Interval::numericallyContains(const NumericalPoint & point) const
 {

@@ -114,6 +114,8 @@ NumericalPoint PosteriorDistribution::computeLikelihood(const NumericalPoint & t
 /* Get the PDF of the distribution */
 NumericalScalar PosteriorDistribution::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
   const NumericalScalar value(log(conditionalDistribution_.getConditioningDistribution().computePDF(point)) - logNormalizationFactor_ + log(computeLikelihood(point)[0]));
   return exp(value);
 }
@@ -122,6 +124,8 @@ NumericalScalar PosteriorDistribution::computePDF(const NumericalPoint & point) 
 /* Get the CDF of the distribution */
 NumericalScalar PosteriorDistribution::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
   Description inputDescription(getDimension());
   for (UnsignedLong i = 0; i < getDimension(); ++i) inputDescription[i] = String(OSS() << "x" << i);
   const NumericalMathFunction f(inputDescription, Description(1, "1"));

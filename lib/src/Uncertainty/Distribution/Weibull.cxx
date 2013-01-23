@@ -36,8 +36,10 @@ static Factory<Weibull> RegisteredFactory("Weibull");
 
 /* Default constructor */
 Weibull::Weibull()
-  : NonEllipticalDistribution("Weibull"),
-    alpha_(1.0), beta_(1.0), gamma_(0.0)
+  : NonEllipticalDistribution("Weibull")
+  , alpha_(1.0)
+  , beta_(1.0)
+  , gamma_(0.0)
 {
   setDimension(1);
   computeRange();
@@ -48,8 +50,10 @@ Weibull::Weibull(const NumericalScalar arg1,
                  const NumericalScalar arg2,
                  const NumericalScalar gamma,
                  const ParameterSet set)
-  : NonEllipticalDistribution("Weibull"),
-    alpha_(0.0), beta_(0.0), gamma_(gamma)
+  : NonEllipticalDistribution("Weibull")
+  , alpha_(0.0)
+  , beta_(0.0)
+  , gamma_(gamma)
 {
   switch (set)
     {
@@ -125,6 +129,8 @@ NumericalPoint Weibull::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Weibull::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return NumericalPoint(1, 0.0);
   const NumericalScalar powX(pow(x / alpha_, beta_));
@@ -135,6 +141,8 @@ NumericalPoint Weibull::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Weibull::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return 0.0;
   const NumericalScalar y(x / alpha_);
@@ -145,6 +153,8 @@ NumericalScalar Weibull::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Weibull::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return 0.0;
   return 1.0 - exp(-pow(x / alpha_, beta_));
@@ -153,6 +163,8 @@ NumericalScalar Weibull::computeCDF(const NumericalPoint & point) const
 /* Get the PDFGradient of the distribution */
 NumericalPoint Weibull::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0] - gamma_);
   NumericalPoint pdfGradient(3, 0.0);
   if (x <= 0.0) return pdfGradient;
@@ -167,6 +179,8 @@ NumericalPoint Weibull::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Weibull::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0] - gamma_);
   NumericalPoint cdfGradient(3, 0.0);
   if (x <= 0.0) return cdfGradient;

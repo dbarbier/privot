@@ -90,6 +90,8 @@ NumericalPoint NonCentralChiSquare::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar NonCentralChiSquare::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   pdfEpsilon_ = ResourceMap::GetAsNumericalScalar("DistFunc-Precision");
   return DistFunc::dNonCentralChiSquare(nu_, lambda_, point[0]);
 }
@@ -97,6 +99,8 @@ NumericalScalar NonCentralChiSquare::computePDF(const NumericalPoint & point) co
 /* Get the CDF of the distribution */
 NumericalScalar NonCentralChiSquare::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   cdfEpsilon_ = ResourceMap::GetAsNumericalScalar("DistFunc-Precision");
   return DistFunc::pNonCentralChiSquare(nu_, lambda_, point[0]);
 }
@@ -104,6 +108,8 @@ NumericalScalar NonCentralChiSquare::computeCDF(const NumericalPoint & point) co
 /** Get the PDFGradient of the distribution */
 NumericalPoint NonCentralChiSquare::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalScalar eps(pow(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"), 1.0 / 3.0));
   NumericalPoint pdfGradient(2);
   pdfGradient[0] = (DistFunc::dNonCentralChiSquare(nu_ + eps, lambda_, point[0]) - DistFunc::dNonCentralChiSquare(nu_ - eps, lambda_, point[0])) / (2.0 * eps);
@@ -114,6 +120,8 @@ NumericalPoint NonCentralChiSquare::computePDFGradient(const NumericalPoint & po
 /** Get the CDFGradient of the distribution */
 NumericalPoint NonCentralChiSquare::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalScalar eps(pow(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"), 1.0 / 3.0));
   NumericalPoint cdfGradient(2);
   cdfGradient[0] = (DistFunc::pNonCentralChiSquare(nu_ + eps, lambda_, point[0]) - DistFunc::pNonCentralChiSquare(nu_ - eps, lambda_, point[0])) / (2.0 * eps);

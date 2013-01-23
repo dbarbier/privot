@@ -28,17 +28,15 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
-
 CLASSNAMEINIT(Uniform);
 
 static Factory<Uniform> RegisteredFactory("Uniform");
 
 /* Default constructor */
 Uniform::Uniform()
-  : NonEllipticalDistribution("Uniform"),
-    a_(-1.0), b_(1.0)
+  : NonEllipticalDistribution("Uniform")
+  , a_(-1.0)
+  , b_(1.0)
 {
   setDimension( 1 );
   computeRange();
@@ -47,8 +45,9 @@ Uniform::Uniform()
 /* Parameters constructor */
 Uniform::Uniform(const NumericalScalar a,
                  const NumericalScalar b)
-  : NonEllipticalDistribution("Uniform"),
-    a_(a), b_(b)
+  : NonEllipticalDistribution("Uniform")
+  , a_(a)
+  , b_(b)
 {
   if (b_ <= a_) throw InvalidArgumentException(HERE) << "Error the lower bound a of a Uniform distribution must be lesser than its upper bound b, here a=" << a << " b=" << b;
   setDimension( 1 );
@@ -104,6 +103,8 @@ NumericalPoint Uniform::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Uniform::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   return NumericalPoint(1, 0.0);
 }
 
@@ -111,6 +112,8 @@ NumericalPoint Uniform::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Uniform::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return 0.0;
   return 1.0 / (b_ - a_);
@@ -120,6 +123,8 @@ NumericalScalar Uniform::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Uniform::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= a_) return 0.0;
   if (x > b_)  return 1.0;
@@ -128,6 +133,8 @@ NumericalScalar Uniform::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar Uniform::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= a_) return 1.0;
   if (x > b_)  return 0.0;
@@ -152,6 +159,8 @@ NumericalComplex Uniform::computeCharacteristicFunction(const NumericalScalar x)
 /* Get the PDFGradient of the distribution */
 NumericalPoint Uniform::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   NumericalPoint pdfGradient(2, 0.0);
   if ((x <= a_) || (x > b_)) return pdfGradient;
@@ -165,6 +174,8 @@ NumericalPoint Uniform::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Uniform::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   NumericalPoint cdfGradient(2, 0.0);
   if ((x <= a_) || (x > b_)) return cdfGradient;

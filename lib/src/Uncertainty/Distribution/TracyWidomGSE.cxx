@@ -68,6 +68,8 @@ TracyWidomGSE * TracyWidomGSE::clone() const
 /* Get the DDF of the distribution */
 NumericalPoint TracyWidomGSE::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
@@ -75,6 +77,8 @@ NumericalPoint TracyWidomGSE::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar TracyWidomGSE::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
@@ -82,18 +86,24 @@ NumericalScalar TracyWidomGSE::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar TracyWidomGSE::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
 /** Get the PDFGradient of the distribution */
 NumericalPoint TracyWidomGSE::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   return NumericalPoint(0);
 }
 
 /** Get the CDFGradient of the distribution */
 NumericalPoint TracyWidomGSE::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   return NumericalPoint(0);
 }
 

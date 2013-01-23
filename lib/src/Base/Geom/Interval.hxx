@@ -83,6 +83,9 @@ public:
   /** Get the numerical volume of the interval */
   NumericalScalar getNumericalVolume() const;
 
+  /** Get the dimension of the interval */
+  UnsignedLong getDimension() const;
+
   /** Returns the interval equals to the intersection between the interval and another one */
   Interval intersect(const Interval & other) const;
 

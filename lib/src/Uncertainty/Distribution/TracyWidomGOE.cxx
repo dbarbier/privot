@@ -66,6 +66,8 @@ TracyWidomGOE * TracyWidomGOE::clone() const
 /* Get the DDF of the distribution */
 NumericalPoint TracyWidomGOE::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
@@ -82,18 +84,24 @@ NumericalScalar TracyWidomGOE::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar TracyWidomGOE::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
 /** Get the PDFGradient of the distribution */
 NumericalPoint TracyWidomGOE::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   return NumericalPoint(0);
 }
 
 /** Get the CDFGradient of the distribution */
 NumericalPoint TracyWidomGOE::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   return NumericalPoint(0);
 }
 

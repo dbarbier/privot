@@ -35,8 +35,8 @@ CLASSNAMEINIT(UserDefinedSpectralModel);
 static Factory<UserDefinedSpectralModel> RegisteredFactory("UserDefinedSpectralModel");
 /* Constructor with parameters */
 UserDefinedSpectralModel::UserDefinedSpectralModel(const String & name)
-  : SpectralModelImplementation(name),
-    DSPCollection_(0)
+  : SpectralModelImplementation(name)
+  , DSPCollection_(0)
 {
   dimension_ = 0;
 }

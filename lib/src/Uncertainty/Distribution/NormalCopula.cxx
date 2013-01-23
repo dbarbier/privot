@@ -112,7 +112,8 @@ NumericalPoint NormalCopula::getRealization() const
 NumericalPoint NormalCopula::computeDDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution dimension";
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
   // Be careful to evaluate the copula only in the interior of its support
   for (UnsignedLong i = 0; i < dimension; ++i)
     {
@@ -142,7 +143,8 @@ NumericalPoint NormalCopula::computeDDF(const NumericalPoint & point) const
 NumericalScalar NormalCopula::computePDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution dimension";
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
   // Be careful to evaluate the copula only in the interior of its support
   for (UnsignedLong i = 0; i < dimension; ++i)
     {
@@ -172,7 +174,8 @@ NumericalScalar NormalCopula::computePDF(const NumericalPoint & point) const
 NumericalScalar NormalCopula::computeCDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution dimension";
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
   // Compute the normal point such that a normal distribution with this copula
   // and standard 1D normal marginals has the same CDF at this normal point
   // than the copula at the given point.
@@ -202,7 +205,8 @@ NumericalScalar NormalCopula::computeCDF(const NumericalPoint & point) const
 NumericalScalar NormalCopula::computeComplementaryCDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution dimension";
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
   // Compute the normal point such that a normal distribution with this copula
   // and standard 1D normal marginals has the same CDF at this normal point
   // than the copula at the given point.
@@ -232,7 +236,8 @@ NumericalScalar NormalCopula::computeComplementaryCDF(const NumericalPoint & poi
 NumericalScalar NormalCopula::computeProbability(const Interval & interval) const
 {
   const UnsignedLong dimension(getDimension());
-  if (interval.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given interval has a dimension not compatible with the distribution dimension";
+  if (interval.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given interval must have dimension=" << dimension << ", here dimension=" << interval.getDimension();
+
   // Reduce the given interval to the support of the distribution, which is the nD unit cube
   const Interval intersect(interval.intersect(Interval(dimension)));
   // If the intersection is empty
@@ -272,13 +277,17 @@ NumericalScalar NormalCopula::computeProbability(const Interval & interval) cons
 /* Get the PDF gradient of the distribution */
 NumericalPoint NormalCopula::computePDFGradient(const NumericalPoint & point) const
 {
-  return NumericalPoint(0, 0.0);
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
+  throw NotYetImplementedException(HERE);
 }
 
 /* Get the CDF gradient of the distribution */
 NumericalPoint NormalCopula::computeCDFGradient(const NumericalPoint & point) const
 {
-  return NumericalPoint(0, 0.0);
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
+  throw NotYetImplementedException(HERE);
 }
 
 /* Compute the PDF of Xi | X1, ..., Xi-1. x = Xi, y = (X1,...,Xi-1)
@@ -289,7 +298,8 @@ NumericalPoint NormalCopula::computeCDFGradient(const NumericalPoint & point) co
    This expression simplifies if we use the inverse of the Cholesky factor of the covariance matrix.
    See [Lebrun, Dutfoy, "Rosenblatt and Nataf transformation"]
 */
-NumericalScalar NormalCopula::computeConditionalPDF(const NumericalScalar x, const NumericalPoint & y) const
+NumericalScalar NormalCopula::computeConditionalPDF(const NumericalScalar x,
+						    const NumericalPoint & y) const
 {
   const UnsignedLong conditioningDimension(y.getDimension());
   if (conditioningDimension >= getDimension()) throw InvalidArgumentException(HERE) << "Error: cannot compute a conditional PDF with a conditioning point of dimension greater or equal to the distribution dimension.";
@@ -302,7 +312,8 @@ NumericalScalar NormalCopula::computeConditionalPDF(const NumericalScalar x, con
 }
 
 /* Compute the CDF of Xi | X1, ..., Xi-1. x = Xi, y = (X1,...,Xi-1) */
-NumericalScalar NormalCopula::computeConditionalCDF(const NumericalScalar x, const NumericalPoint & y) const
+NumericalScalar NormalCopula::computeConditionalCDF(const NumericalScalar x,
+						    const NumericalPoint & y) const
 {
   const UnsignedLong conditioningDimension(y.getDimension());
   if (conditioningDimension >= getDimension()) throw InvalidArgumentException(HERE) << "Error: cannot compute a conditional CDF with a conditioning point of dimension greater or equal to the distribution dimension.";
@@ -315,7 +326,8 @@ NumericalScalar NormalCopula::computeConditionalCDF(const NumericalScalar x, con
 }
 
 /* Compute the quantile of Xi | X1, ..., Xi-1, i.e. x such that CDF(x|y) = q with x = Xi, y = (X1,...,Xi-1) */
-NumericalScalar NormalCopula::computeConditionalQuantile(const NumericalScalar q, const NumericalPoint & y) const
+NumericalScalar NormalCopula::computeConditionalQuantile(const NumericalScalar q,
+							 const NumericalPoint & y) const
 {
   const UnsignedLong conditioningDimension(y.getDimension());
   if (conditioningDimension >= getDimension()) throw InvalidArgumentException(HERE) << "Error: cannot compute a conditional quantile with a conditioning point of dimension greater or equal to the distribution dimension.";

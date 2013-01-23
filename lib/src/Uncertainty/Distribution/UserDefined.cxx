@@ -163,6 +163,8 @@ NumericalPoint UserDefined::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar UserDefined::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
   const UnsignedLong size(collection_.getSize());
   const UnsignedLong dimension(getDimension());
   NumericalScalar pdf(0.0);
@@ -206,6 +208,8 @@ NumericalScalar UserDefined::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar UserDefined::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
   NumericalScalar cdf(0.0);
   const UnsignedLong size(collection_.getSize());
   const UnsignedLong dimension(getDimension());
@@ -256,6 +260,8 @@ NumericalScalar UserDefined::computeCDF(const NumericalPoint & point) const
 /* Get the PDF gradient of the distribution */
 NumericalPoint UserDefined::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
   const UnsignedLong size(collection_.getSize());
   NumericalPoint pdfGradient(size, 0.0);
   for (UnsignedLong i = 0; i < size; ++i)
@@ -273,6 +279,8 @@ NumericalPoint UserDefined::computePDFGradient(const NumericalPoint & point) con
 /* Get the CDF gradient of the distribution */
 NumericalPoint UserDefined::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+
   const UnsignedLong size(collection_.getSize());
   const UnsignedLong dimension(getDimension());
   NumericalPoint cdfGradient(size, 0.0);

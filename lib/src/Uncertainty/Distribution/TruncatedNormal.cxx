@@ -158,6 +158,8 @@ NumericalPoint TruncatedNormal::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint TruncatedNormal::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return NumericalPoint(1, 0.0);
   const NumericalScalar iSigma(1.0 / sigma_);
@@ -169,6 +171,8 @@ NumericalPoint TruncatedNormal::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar TruncatedNormal::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return 0.0;
   const NumericalScalar iSigma(1.0 / sigma_);
@@ -180,6 +184,8 @@ NumericalScalar TruncatedNormal::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar TruncatedNormal::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= a_) return 0.0;
   if (x > b_) return 1.0;
@@ -188,6 +194,8 @@ NumericalScalar TruncatedNormal::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar TruncatedNormal::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= a_) return 1.0;
   if (x > b_) return 0.0;
@@ -225,6 +233,8 @@ NumericalComplex TruncatedNormal::computeLogCharacteristicFunction(const Numeric
 /* Get the PDFGradient of the distribution */
 NumericalPoint TruncatedNormal::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   NumericalPoint pdfGradient(4, 0.0);
   if ((x <= a_) || (x > b_)) return pdfGradient;
@@ -243,6 +253,8 @@ NumericalPoint TruncatedNormal::computePDFGradient(const NumericalPoint & point)
 /* Get the CDFGradient of the distribution */
 NumericalPoint TruncatedNormal::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   NumericalPoint cdfGradient(4, 0.0);
   if ((x <= a_) || (x > b_)) return cdfGradient;

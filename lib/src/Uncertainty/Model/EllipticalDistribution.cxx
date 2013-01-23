@@ -34,6 +34,7 @@
 #include "Lapack.hxx"
 #include "IdentityMatrix.hxx"
 #include "ResourceMap.hxx"
+#include "SpecFunc.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
@@ -142,6 +143,13 @@ NumericalScalar EllipticalDistribution::computeDensityGenerator(const NumericalS
   throw NotYetImplementedException(HERE);
 }
 
+NumericalScalar EllipticalDistribution::computeLogDensityGenerator(const NumericalScalar betaSquare) const
+{
+  const NumericalScalar densityGenerator(computeDensityGenerator(betaSquare));
+  if (densityGenerator == 0.0) return -SpecFunc::MaxNumericalScalar;
+  return log(densityGenerator);
+}
+
 /* Compute the derivative of the density generator */
 NumericalScalar EllipticalDistribution::computeDensityGeneratorDerivative(const NumericalScalar betaSquare) const
 {
@@ -161,6 +169,8 @@ NumericalScalar EllipticalDistribution::computeDensityGeneratorSecondDerivative(
 /* Get the DDF of the distribution */
 NumericalPoint EllipticalDistribution::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalPoint iLx(inverseCholesky_ * (point - mean_));
   const NumericalScalar betaSquare(iLx.norm2());
   return 2.0 * normalizationFactor_ * computeDensityGeneratorDerivative(betaSquare) * inverseCholesky_.transpose() * iLx;
@@ -169,6 +179,8 @@ NumericalPoint EllipticalDistribution::computeDDF(const NumericalPoint & point) 
 /* Get the PDF of the distribution */
 NumericalScalar EllipticalDistribution::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalPoint iLx(inverseCholesky_ * (point - mean_));
   const NumericalScalar betaSquare(iLx.norm2());
   return normalizationFactor_ * computeDensityGenerator(betaSquare);
@@ -177,6 +189,8 @@ NumericalScalar EllipticalDistribution::computePDF(const NumericalPoint & point)
 /* Get the PDF gradient of the distribution */
 NumericalPoint EllipticalDistribution::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalPoint minusGardientMean(computeDDF(point));
   const UnsignedLong dimension(getDimension());
   const NumericalPoint u(normalize(point));

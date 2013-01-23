@@ -318,6 +318,8 @@ NumericalPoint RandomMixture::computeDDF(const NumericalPoint & point) const
 */
 NumericalScalar RandomMixture::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const UnsignedLong size(distributionCollection_.getSize());
   const NumericalScalar x(point[0]);
   // Special case for combination containing only one contributor
@@ -376,6 +378,8 @@ NumericalSample RandomMixture::computePDF(const NumericalScalar xMin,
 /* Get the CDF of the RandomMixture */
 NumericalScalar RandomMixture::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const UnsignedLong size(distributionCollection_.getSize());
   const NumericalScalar x(point[0]);
   // Special case for combination containing only one contributor Y = alpha * X + beta
@@ -403,6 +407,8 @@ NumericalScalar RandomMixture::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar RandomMixture::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const UnsignedLong size(distributionCollection_.getSize());
   const NumericalScalar x(point[0]);
   // Special case for combination containing only one contributor Y = alpha * X + beta
@@ -465,6 +471,8 @@ NumericalSample RandomMixture::computeCDF(const NumericalScalar xMin,
 */
 NumericalScalar RandomMixture::computeProbability(const Interval & interval) const
 {
+  if (interval.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given interval must have dimension=1, here dimension=" << interval.getDimension();
+
   if (interval.isNumericallyEmpty()) return 0.0;
   const UnsignedLong size(distributionCollection_.getSize());
   // Special case for combination containing only one contributor
@@ -716,12 +724,16 @@ NumericalComplex RandomMixture::computeDeltaCharacteristicFunction(const Unsigne
 /* Get the PDF gradient of the distribution */
 NumericalPoint RandomMixture::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
 /* Get the CDF gradient of the distribution */
 NumericalPoint RandomMixture::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 

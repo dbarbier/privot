@@ -35,8 +35,6 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 /**
  * @class NumericalSample
  */
@@ -189,6 +187,11 @@ public:
   SquareMatrix computeStandardDeviation() const;
 
   /**
+   * Method computeVariance() gives the variance of the sample (by component)
+   */
+  NumericalPoint computeVariancePerComponent() const;
+
+  /**
    * Method computeStandardDeviationPerComponent() gives the standard deviation of each component of the sample
    */
   NumericalPoint computeStandardDeviationPerComponent() const;
@@ -217,11 +220,6 @@ public:
    * Method computeMedianPerComponent() gives the median of the sample (by component)
    */
   NumericalPoint computeMedianPerComponent() const;
-
-  /**
-   * Method computeVariance() gives the variance of the sample (by component)
-   */
-  NumericalPoint computeVariancePerComponent() const;
 
   /**
    * Method computeSkewness() gives the skewness of the sample (by component)

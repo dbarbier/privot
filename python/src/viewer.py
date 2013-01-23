@@ -38,7 +38,6 @@
 import openturns as ot
 import numpy as np
 import matplotlib.pyplot as pyplot
-import re
 import warnings
 
 class View:
@@ -165,8 +164,6 @@ class View:
             clabel_kwargs = dict(clabel_kwargs_default)
             text_kwargs = dict(text_kwargs_default)
 
-            drawableKind = re.search('(?<=implementation\=class\=)\w+', re.sub('implementation=\s?class', 'implementation=class', repr(drawable)[:70])).group(0)
-
             # set color
             if (not 'color' in plot_kwargs_default) and (not 'c' in plot_kwargs_default):
                 plot_kwargs['color'] = drawable.getColorCode()
@@ -209,6 +206,7 @@ class View:
                 y = data.getMarginal(1)
 
             # add legend, title
+            drawableKind = drawable.getImplementation().getClassName()
             if drawableKind != 'Pie':
                 self._ax[0].set_xlabel( graph.getXTitle() )
                 self._ax[0].set_ylabel( graph.getYTitle() )
@@ -260,6 +258,7 @@ class View:
                 Z = np.reshape(drawable.getData(), (drawable.getX().getSize(), drawable.getY().getSize()) )
 
                 contour_kwargs.setdefault('levels', drawable.getLevels())
+                contour_kwargs.setdefault('linestyles', plot_kwargs['linestyle'])
                 contourset = pyplot.contour(X, Y, Z, **contour_kwargs)
 
                 clabel_kwargs.setdefault('fontsize', 8)
@@ -299,6 +298,9 @@ class View:
                             text_kwargs['transform'] = self._ax[1+i*dim+j].transAxes
                             self._ax[1+i*dim+j].text( 0.5,0.5,'marginal '+str(i+1), **text_kwargs )
 
+            else:
+                raise ValueError('Drawable type not implemented: ' + drawableKind)
+              
         # Add legend
         if (drawableKind != 'Pie') and (graph.getLegendPosition() != ''):
             # set legend position

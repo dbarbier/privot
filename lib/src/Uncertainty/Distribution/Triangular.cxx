@@ -109,6 +109,8 @@ NumericalPoint Triangular::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Triangular::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return NumericalPoint(1, 0.0);
   const NumericalScalar ddf(2.0 / (b_ - a_));
@@ -120,6 +122,8 @@ NumericalPoint Triangular::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Triangular::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return 0.0;
   const NumericalScalar pdf(2.0 / (b_ - a_));
@@ -131,6 +135,8 @@ NumericalScalar Triangular::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Triangular::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= a_) return 0.0;
   if (x > b_) return 1.0;
@@ -161,6 +167,8 @@ NumericalComplex Triangular::computeLogCharacteristicFunction(const NumericalSca
 /* Get the PDFGradient of the distribution */
 NumericalPoint Triangular::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return NumericalPoint(1, 0.0);
   NumericalPoint pdfGradient(3);
@@ -186,6 +194,8 @@ NumericalPoint Triangular::computePDFGradient(const NumericalPoint & point) cons
 /* Get the CDFGradient of the distribution */
 NumericalPoint Triangular::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return NumericalPoint(1, 0.0);
   NumericalPoint cdfGradient(3);

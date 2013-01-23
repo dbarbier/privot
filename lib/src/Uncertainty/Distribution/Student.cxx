@@ -281,7 +281,8 @@ NumericalScalar Student::computeCDF(const NumericalPoint & point) const
 NumericalScalar Student::computeComplementaryCDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension incompatible with the distribution.";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   // Special case for dimension 1
   if (dimension == 1) return DistFunc::pStudent(nu_, (point[0] - mean_[0]) / sigma_[0], true);
   // Other cases do not depend on tail flag
@@ -291,8 +292,10 @@ NumericalScalar Student::computeComplementaryCDF(const NumericalPoint & point) c
 /* Compute the probability content of an interval */
 NumericalScalar Student::computeProbability(const Interval & interval) const
 {
-  if (interval.isNumericallyEmpty()) return 0.0;
   const UnsignedLong dimension(getDimension());
+  if (interval.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given interval must have dimension=" << dimension << ", here dimension=" << interval.getDimension();
+
+  if (interval.isNumericallyEmpty()) return 0.0;
   // The generic implementation provided by the DistributionImplementation upper class is more accurate than the generic implementation provided by the ContinuousDistribution upper class for dimension = 1
   if (dimension == 1) return DistributionImplementation::computeProbability(interval);
   // Decompose and normalize the interval
@@ -396,6 +399,9 @@ NumericalScalar Student::computeProbability(const Interval & interval) const
 NumericalPoint Student::computePDFGradient(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
+
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalPoint pdfGradient(2 * dimension + 1, 0.0);
   if (dimension == 1)
     {
@@ -411,7 +417,11 @@ NumericalPoint Student::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Student::computeCDFGradient(const NumericalPoint & point) const
 {
-  if (getDimension() == 1)
+  const UnsignedLong dimension(getDimension());
+
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
+  if (dimension == 1)
     {
       NumericalPoint cdfGradient(3, 0.0);
       const NumericalScalar x(point[0] - mean_[0]);

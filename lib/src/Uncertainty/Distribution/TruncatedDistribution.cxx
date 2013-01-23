@@ -218,6 +218,8 @@ NumericalPoint TruncatedDistribution::getRealization() const
 /* Get the DDF of the distribution: DDF_trunc = 1[a, b] * DDF / (CDF(b) - CDF(a)) */
 NumericalPoint TruncatedDistribution::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= lowerBound_) || (x > upperBound_)) return NumericalPoint(1, 0.0);
   return normalizationFactor_ * distribution_.computeDDF(point);
@@ -227,6 +229,8 @@ NumericalPoint TruncatedDistribution::computeDDF(const NumericalPoint & point) c
 /* Get the PDF of the distribution: PDF_trunc = 1[a, b] * PDF / (CDF(b) - CDF(a)) */
 NumericalScalar TruncatedDistribution::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   const NumericalScalar quantileEpsilon(ResourceMap::GetAsNumericalScalar("DistributionImplementation-DefaultQuantileEpsilon"));
   if ((x < lowerBound_ - quantileEpsilon) || (x > upperBound_ + quantileEpsilon)) return 0.0;
@@ -237,6 +241,8 @@ NumericalScalar TruncatedDistribution::computePDF(const NumericalPoint & point) 
 /* Get the CDF of the distribution: CDF_trunc = 1[a, b] * (CDF - CDF(a)) / (CDF(b) - CDF(a)) + 1]b, inf] */
 NumericalScalar TruncatedDistribution::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= lowerBound_) return 0.0;
   if (x > upperBound_) return 1.0;
@@ -246,6 +252,8 @@ NumericalScalar TruncatedDistribution::computeCDF(const NumericalPoint & point) 
 
 NumericalScalar TruncatedDistribution::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= lowerBound_) return 1.0;
   if (x > upperBound_) return 0.0;
@@ -256,6 +264,8 @@ NumericalScalar TruncatedDistribution::computeComplementaryCDF(const NumericalPo
 /* Get the PDFGradient of the distribution */
 NumericalPoint TruncatedDistribution::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= lowerBound_) || (x > upperBound_)) return NumericalPoint(distribution_.getParametersCollection()[0].getDimension() + finiteLowerBound_ + finiteUpperBound_);
   const NumericalPoint pdfGradientX(distribution_.computePDFGradient(point));
@@ -279,6 +289,8 @@ NumericalPoint TruncatedDistribution::computePDFGradient(const NumericalPoint & 
 /* Get the CDFGradient of the distribution */
 NumericalPoint TruncatedDistribution::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= lowerBound_) || (x > upperBound_)) return NumericalPoint(distribution_.getParametersCollection()[0].getDimension() + finiteLowerBound_ + finiteUpperBound_);
   const NumericalPoint cdfGradientX(distribution_.computeCDFGradient(point));

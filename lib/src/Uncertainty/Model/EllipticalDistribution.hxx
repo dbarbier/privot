@@ -85,6 +85,7 @@ public:
    *  the function phi such that the density of the distribution can
    *  be written as p(x) = phi(t(x-mu)R^{-1}(x-mu))                      */
   virtual NumericalScalar computeDensityGenerator(const NumericalScalar betaSquare) const;
+  virtual NumericalScalar computeLogDensityGenerator(const NumericalScalar betaSquare) const;
 
   /** Compute the derivative of the density generator */
   virtual NumericalScalar computeDensityGeneratorDerivative(const NumericalScalar betaSquare) const;

@@ -96,6 +96,8 @@ NumericalPoint Poisson::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar Poisson::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   if ((k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) || (fabs(k - round(k)) > ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"))) return 0.0;
   return exp(k * log(lambda_) - lambda_ - SpecFunc::LnGamma(k + 1.0));
@@ -105,6 +107,8 @@ NumericalScalar Poisson::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Poisson::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   if (k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return 0.0;
   return DistFunc::pGamma(floor(k) + 1.0, lambda_, true);
@@ -112,6 +116,8 @@ NumericalScalar Poisson::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar Poisson::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   if (k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return 1.0;
   return DistFunc::pGamma(floor(k) + 1.0, lambda_);
@@ -120,6 +126,8 @@ NumericalScalar Poisson::computeComplementaryCDF(const NumericalPoint & point) c
 /* Get the PDF gradient of the distribution */
 NumericalPoint Poisson::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   NumericalPoint pdfGradient(1, 0.0);
   if ((k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) || (fabs(k - round(k)) > ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"))) return pdfGradient;
@@ -130,6 +138,8 @@ NumericalPoint Poisson::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDF gradient of the distribution */
 NumericalPoint Poisson::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   if (k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return NumericalPoint(1, 0.0);
   return NumericalPoint(1, -exp(floor(k) * log(lambda_) - lambda_ - SpecFunc::LnGamma(floor(k) + 1.0)));

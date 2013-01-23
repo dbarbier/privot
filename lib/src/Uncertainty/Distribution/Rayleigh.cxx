@@ -110,6 +110,8 @@ NumericalPoint Rayleigh::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Rayleigh::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return NumericalPoint(1, 0.0);
   const NumericalScalar y(x / sigma_);
@@ -121,7 +123,7 @@ NumericalPoint Rayleigh::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Rayleigh::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
   const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return 0.0;
@@ -143,6 +145,8 @@ NumericalScalar Rayleigh::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Rayleigh::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return 0.0;
   const NumericalScalar y(x / sigma_);
@@ -167,6 +171,8 @@ NumericalComplex Rayleigh::computeCharacteristicFunction(const NumericalScalar x
 /* Get the PDFGradient of the distribution */
 NumericalPoint Rayleigh::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0] - gamma_);
   NumericalPoint pdfGradient(2, 0.0);
   if (x <= 0.0) return pdfGradient;
@@ -181,6 +187,8 @@ NumericalPoint Rayleigh::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Rayleigh::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0] - gamma_);
   NumericalPoint cdfGradient(2, 0.0);
   const NumericalScalar pdf(computePDF(point));

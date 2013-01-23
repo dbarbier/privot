@@ -36,8 +36,8 @@ CLASSNAMEINIT(UserDefinedCovarianceModel);
 static Factory<UserDefinedCovarianceModel> RegisteredFactory("UserDefinedCovarianceModel");
 /* Constructor with parameters */
 UserDefinedCovarianceModel::UserDefinedCovarianceModel(const String & name)
-  : CovarianceModelImplementation(name),
-    covarianceCollection_(0)
+  : CovarianceModelImplementation(name)
+  , covarianceCollection_(0)
 {
   dimension_ = 0;
 }
@@ -47,15 +47,16 @@ UserDefinedCovarianceModel::UserDefinedCovarianceModel(const String & name)
 UserDefinedCovarianceModel::UserDefinedCovarianceModel(const RegularGrid & timeGrid,
                                                        const CovarianceMatrixCollection & covarianceFunction,
                                                        const String & name)
-  : CovarianceModelImplementation(name),
-    covarianceCollection_(0)
+  : CovarianceModelImplementation(name)
+  , covarianceCollection_(0)
 {
   const UnsignedLong N(timeGrid.getN());
-  if (N * (N + 1) / 2 != covarianceFunction.getSize())
-    throw InvalidArgumentException(HERE) << "Error: for a non stationary covariance model, sizes are incoherents"
-                                         << " timeGrid size = " << N << "covariance function size = " << covarianceFunction.getSize();
+  const UnsignedLong size(static_cast<UnsignedLong>((N * (N + 1)) / 2));
+  if (size == 0) throw InvalidArgumentException(HERE) << "Error: the time grid is empty.";
+  if (size != covarianceFunction.getSize())
+    throw InvalidArgumentException(HERE) << "Error: for a non stationary covariance model, sizes are incoherents:"
+                                         << " timeGrid size=" << N << " and covariance function size=" << covarianceFunction.getSize() << " instead of " << size;
   timeGrid_ = timeGrid;
-  UnsignedLong size(static_cast<UnsignedLong>(N * (N + 1) / 2));
 
   covarianceCollection_ = CovarianceMatrixCollection(size);
   // put the first element
@@ -65,7 +66,7 @@ UserDefinedCovarianceModel::UserDefinedCovarianceModel(const RegularGrid & timeG
   for (UnsignedLong k = 1; k < size; ++k)
     {
       if (covarianceFunction[k].getDimension() != dimension_)
-        throw InvalidArgumentException(HERE) << " Error with dimension; the covariance matrices should be of same dimension";
+        throw InvalidArgumentException(HERE) << " Error with dimension; all the covariance matrices must have the same dimension";
       covarianceCollection_[k] = covarianceFunction[k];
     }
 }
@@ -78,10 +79,10 @@ UserDefinedCovarianceModel * UserDefinedCovarianceModel::clone() const
 
 
 /* Computation of the covariance density function */
-CovarianceMatrix UserDefinedCovarianceModel::computeCovariance(const NumericalScalar t,
-                                                               const NumericalScalar s) const
+CovarianceMatrix UserDefinedCovarianceModel::computeCovariance(const NumericalScalar s,
+                                                               const NumericalScalar t) const
 {
-  if (t > s) return computeCovariance(s, t);
+  if (s > t) return computeCovariance(t, s);
   // If the grid size is one , return the covariance function
   // else find in the grid the nearest instant values
   if (timeGrid_.getN() == 1) return covarianceCollection_[0];
@@ -91,24 +92,13 @@ CovarianceMatrix UserDefinedCovarianceModel::computeCovariance(const NumericalSc
   const NumericalScalar initialInstant(timeGrid_.getStart());
   const NumericalScalar step(timeGrid_.getStep());
   const SignedInteger N(timeGrid_.getN());
-  const SignedInteger index_t(static_cast<SignedInteger>( nearbyint( ( t - initialInstant ) / step) ));
-  if ((index_t < 0) || (index_t >= N))
-    throw InvalidArgumentException(HERE) << "Error : first instant given is out of the time grid";
-
-  const SignedInteger index_s(static_cast<SignedInteger>( nearbyint( ( s - initialInstant ) / step) ));
-  if ((index_s < 0) || (index_s >= N))
-    throw InvalidArgumentException(HERE) << "Error : second given is out of the time grid";
-
+  const SignedInteger indexS(std::min(static_cast<SignedInteger>(N - 1), std::max(static_cast<SignedInteger>(0), static_cast<SignedInteger>( nearbyint( ( s - initialInstant ) / step) ))));
+  const SignedInteger indexT(std::min(static_cast<SignedInteger>(N - 1), std::max(static_cast<SignedInteger>(indexS), static_cast<SignedInteger>( nearbyint( ( t - initialInstant ) / step) ))));
   // We use the information about the ordering of the collection
-  // N first elements => t = initialInstant and s = (initialInstant...endInstant)
-  // then t = initialInstant + step and s = (initialInstant...endInstant)
+  // N first elements => s = initialInstant and t = (initialInstant...endInstant)
+  // then s = initialInstant + step and t = (initialInstant + step...endInstant)
   // size is N * (N + 1) / 2 with N the time grid size
-  const SignedInteger index(index_t * N  + index_s - (index_t + 1) * index_t / 2);
-#ifdef DEBUG_BOUNDCHECKING
-  const UnsignedLong size = covarianceCollection_.getSize();
-  if (index < 0) return covarianceCollection_[0];
-  if (index >= size) return covarianceCollection_[size - 1];
-#endif
+  const SignedInteger index(indexT + (indexS * (2 * N - indexS - 1)) /2);
   return covarianceCollection_[index];
 }
 

@@ -64,6 +64,9 @@ int main(int argc, char *argv[])
       fullprint << "Variance=" << sample.computeVariancePerComponent() << std::endl;
       fullprint << "Skewness=" << sample.computeSkewnessPerComponent() << std::endl;
       fullprint << "Kurtosis=" << sample.computeKurtosisPerComponent() << std::endl;
+      for (UnsignedLong i = 0; i < 10; ++i)
+	fullprint << "Centered moment of order " << i << "=" << sample.computeCenteredMomentPerComponent(i) << std::endl;
+
       fullprint << "Marginal 1=" << sample.getMarginal(1) << std::endl;
       Indices indices(2);
       indices[0] = 2;

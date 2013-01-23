@@ -135,7 +135,8 @@ NumericalPoint Multinomial::getRealization() const
 NumericalScalar Multinomial::computePDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution dimension";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   // First, check the validity of the input
   NumericalScalar sumX(0.0);
   const NumericalScalar supportEpsilon(ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"));
@@ -219,7 +220,8 @@ NumericalComplex Multinomial::computeLocalPhi(const NumericalComplex & z,
 NumericalScalar Multinomial::computeCDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution dimension";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   // Early exit for 1D case
   if (dimension == 1) return Binomial(n_, p_[0]).computeCDF(point);
   // First, check the bording cases

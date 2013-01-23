@@ -39,12 +39,12 @@ static Factory<ZipfMandelbrot> RegisteredFactory("ZipfMandelbrot");
 
 /* Default constructor */
 ZipfMandelbrot::ZipfMandelbrot()
-  : DiscreteDistribution("ZipfMandelbrot"),
-    isAlreadyComputedHarmonicNumbers_(false),
-    harmonicNumbers_(0),
-    n_(1),
-    q_(0.0),
-    s_(1.0)
+  : DiscreteDistribution("ZipfMandelbrot")
+  , isAlreadyComputedHarmonicNumbers_(false)
+  , harmonicNumbers_(0)
+  , n_(1)
+  , q_(0.0)
+  , s_(1.0)
 {
   // We set the dimension of the ZipfMandelbrot distribution
   setDimension( 1 );
@@ -55,12 +55,12 @@ ZipfMandelbrot::ZipfMandelbrot()
 ZipfMandelbrot::ZipfMandelbrot(const UnsignedLong n,
                                const NumericalScalar q,
                                const NumericalScalar s )
-  : DiscreteDistribution("ZipfMandelbrot"),
-    isAlreadyComputedHarmonicNumbers_(false),
-    harmonicNumbers_(NumericalScalarCollection(0)),
-    n_(n),
-    q_(q),
-    s_(s)
+  : DiscreteDistribution("ZipfMandelbrot")
+  , isAlreadyComputedHarmonicNumbers_(false)
+  , harmonicNumbers_(NumericalScalarCollection(0))
+  , n_(n)
+  , q_(q)
+  , s_(s)
 {
   // We set the dimension of the ZipfMandelbrot distribution
   setDimension( 1 );
@@ -118,6 +118,8 @@ NumericalPoint ZipfMandelbrot::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar ZipfMandelbrot::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
 
   if ((k < 1 - ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) || (fabs(k - round(k)) > ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) || (k > n_ + ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"))) return 0.0;
@@ -128,6 +130,7 @@ NumericalScalar ZipfMandelbrot::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar ZipfMandelbrot::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
   const NumericalScalar k(point[0]);
 
   if (k < 1 - ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return 0.0;

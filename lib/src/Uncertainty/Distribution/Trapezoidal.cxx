@@ -113,6 +113,8 @@ NumericalPoint Trapezoidal::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Trapezoidal::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
 
   if ((a_ < x) && (x < b_)) return NumericalPoint(1, h_ / (b_ - a_));
@@ -199,6 +201,8 @@ NumericalComplex Trapezoidal::computeCharacteristicFunction(const NumericalScala
 /* Get the PDFGradient of the distribution */
 NumericalPoint Trapezoidal::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   NumericalPoint pdfGradient(4, 0.0);
   if ((a_ < x) && (x < b_))
@@ -229,6 +233,8 @@ NumericalPoint Trapezoidal::computePDFGradient(const NumericalPoint & point) con
 /* Get the CDFGradient of the distribution */
 NumericalPoint Trapezoidal::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   NumericalPoint cdfGradient(4, 0.0);
   if ((a_ < x) && (x < b_))

@@ -111,6 +111,8 @@ NumericalPoint Rice::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar Rice::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return 0.0;
   const NumericalScalar lambda(pow(nu_ / sigma_, 2));
@@ -122,6 +124,8 @@ NumericalScalar Rice::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Rice::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   if (point[0] <= 0.0) return 0.0;
   const NumericalScalar lambda(pow(nu_ / sigma_, 2));
   const NumericalScalar y(pow(point[0] / sigma_, 2));
@@ -130,6 +134,8 @@ NumericalScalar Rice::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar Rice::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   if (point[0] <= 0.0) return 1.0;
   const NumericalScalar lambda(pow(nu_ / sigma_, 2));
   const NumericalScalar y(pow(point[0] / sigma_, 2));

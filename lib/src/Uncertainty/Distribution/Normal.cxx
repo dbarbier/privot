@@ -171,6 +171,18 @@ NumericalPoint Normal::getRealization() const
   return cholesky_ * value + mean_;
 }
 
+NumericalSample Normal::getSample(const UnsignedLong size) const
+{
+  if (!hasIndependentCopula_) return DistributionImplementation::getSample(size);
+  const UnsignedLong dimension(getDimension());
+  NumericalSample returnSample(size, dimension);
+  for (UnsignedLong i = 0; i < size; ++i)
+    for (UnsignedLong j = 0; j < dimension; ++j) returnSample[i][j] = sigma_[j] * DistFunc::rNormal() + mean_[j];
+  returnSample.setName(getName());
+  returnSample.setDescription(getDescription());
+  return returnSample;
+}
+
 /* Compute the density generator of the ellipticalal generator, i.e.
  *  the function phi such that the density of the distribution can
  *  be written as p(x) = phi(t(x-mu)S^(-1)(x-mu))                      */
@@ -663,7 +675,8 @@ Bool Normal::hasIndependentCopula() const
 void Normal::checkIndependentCopula()
 {
   hasIndependentCopula_ = true;
-  UnsignedLong dimension(getDimension());
+  const UnsignedLong dimension(getDimension());
+  if (dimension == 1) return;
   for (UnsignedLong i = 0; i < dimension; i++)
     {
       for (UnsignedLong j = 0; j < i; j++)

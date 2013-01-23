@@ -102,6 +102,8 @@ NumericalPoint NegativeBinomial::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar NegativeBinomial::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   if ((k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) || (fabs(k - round(k)) > ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"))) return 0.0;
   return exp(SpecFunc::LnGamma(k + r_) - SpecFunc::LnGamma(r_) - SpecFunc::LnGamma(k + 1.0) + k * log(p_) + r_ * log1p(-p_));
@@ -111,6 +113,8 @@ NumericalScalar NegativeBinomial::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar NegativeBinomial::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   if (k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return 0.0;
   const NumericalScalar value(SpecFunc::BetaRatioInc(r_, floor(k) + 1, 1.0 - p_));
@@ -119,6 +123,8 @@ NumericalScalar NegativeBinomial::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar NegativeBinomial::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   if (k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return 1.0;
   // Complementary relation for incomplete regularized Beta function: I(a, b, x) = 1 - I(b, a, 1-x)
@@ -129,6 +135,8 @@ NumericalScalar NegativeBinomial::computeComplementaryCDF(const NumericalPoint &
 /* Get the PDF gradient of the distribution */
 NumericalPoint NegativeBinomial::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   NumericalPoint pdfGradient(1, 0.0);
   if ((k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) || (fabs(k - round(k)) > ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"))) return pdfGradient;
@@ -139,6 +147,8 @@ NumericalPoint NegativeBinomial::computePDFGradient(const NumericalPoint & point
 /* Get the CDF gradient of the distribution */
 NumericalPoint NegativeBinomial::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   if (k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return NumericalPoint(1, 0.0);
   throw NotYetImplementedException(HERE);

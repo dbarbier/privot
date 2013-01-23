@@ -31,8 +31,6 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 /**
  * @class CovarianceMatrix
  */

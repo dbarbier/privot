@@ -57,10 +57,6 @@ TEMPLATE_CLASSNAMEINIT(PersistentCollection<NumericalPoint>);
 
 static Factory<PersistentCollection<NumericalPoint> > RegisteredFactory_PC_NP("PersistentCollection<NumericalPoint>");
 
-
-
-
-
 NSI_point::NSI_point(NumericalSampleImplementation * p_nsi, const UnsignedLong index)
   : p_nsi_(p_nsi), index_(index), dimension_(p_nsi->dimension_) {}
 
@@ -701,6 +697,44 @@ NumericalPoint NumericalSampleImplementation::computeMean() const
   return functor.accumulator_ * (1.0 / size_);
 }
 
+struct CovariancePolicy
+{
+  typedef NumericalPoint value_type;
+
+  const value_type & mean_;
+  const UnsignedLong dimension_;
+
+  CovariancePolicy( const value_type & mean)
+    : mean_(mean), dimension_(mean_.getDimension()) {}
+
+  static inline value_type GetInvariant(const NumericalSampleImplementation & nsi)
+  {
+    return value_type(nsi.getDimension() * nsi.getDimension(), 0.0);
+  }
+
+  inline value_type & inplace_op( value_type & var, NSI_const_point point ) const
+  {
+    UnsignedLong baseIndex(0);
+    for (UnsignedLong i = 0; i < dimension_; ++i)
+      {
+	const NumericalScalar deltaI(point[i] - mean_[i]);
+	for (UnsignedLong j = i; j < dimension_; ++j)
+	  {
+	    const NumericalScalar deltaJ(point[j] - mean_[j]);
+	    var[baseIndex + j] += deltaI * deltaJ;
+	  }
+	baseIndex += dimension_;
+      }
+    return var;
+  }
+
+  static inline value_type & inplace_op( value_type & var, const value_type & point )
+  {
+    return var += point;
+  }
+
+}; /* end struct CovariancePolicy */
+
 /*
  * Gives the covariance matrix of the sample, normalization by 1 / (size - 1) if size > 1
  */
@@ -708,24 +742,15 @@ CovarianceMatrix NumericalSampleImplementation::computeCovariance() const
 {
   if (size_ == 0) throw InternalException(HERE) << "Error: cannot compute the covariance of an empty sample.";
   // Special case for a sample of size 1
-  if (size_ == 1) return CovarianceMatrix(SquareMatrix(dimension_).getImplementation());
+  if (size_ == 1) return CovarianceMatrix(dimension_, NumericalPoint(dimension_ * dimension_));
 
   const NumericalPoint mean(computeMean());
-  CovarianceMatrix covariance(SquareMatrix(dimension_).getImplementation());
-  for (UnsignedLong index = 0; index < size_; ++index)
-    {
-      const NumericalPoint realization( (*this)[index] );
-      for (UnsignedLong i = 0; i < dimension_; ++i)
-        for (UnsignedLong j = 0; j <= i; ++j)
-          covariance(i, j) += (realization[i] - mean[i]) * (realization[j] - mean[j]);
-    }
 
-  const NumericalScalar alpha(1.0 / (size_ - 1));
-  for (UnsignedLong i = 0; i < dimension_; ++i)
-    for (UnsignedLong j = 0; j <= i; ++j)
-      covariance(i, j) *= alpha;
-
-  return covariance;
+  const CovariancePolicy policy ( mean );
+  ReductionFunctor<CovariancePolicy> functor( *this, policy );
+  TBB::ParallelReduce( 0, size_, functor );
+  CovarianceMatrix result(dimension_, functor.accumulator_ / (size_ - 1));
+  return result;
 }
 
 /*
@@ -735,6 +760,56 @@ SquareMatrix NumericalSampleImplementation::computeStandardDeviation() const
 {
   if (size_ == 0) throw InternalException(HERE) << "Error: cannot compute the standard deviation of an empty sample.";
   return computeCovariance().computeCholesky();
+}
+
+
+struct VariancePerComponentPolicy
+{
+  typedef NumericalPoint value_type;
+
+  const value_type & mean_;
+  const UnsignedLong dimension_;
+
+  VariancePerComponentPolicy( const value_type & mean)
+    : mean_(mean), dimension_(mean_.getDimension()) {}
+
+  static inline value_type GetInvariant(const NumericalSampleImplementation & nsi)
+  {
+    return value_type(nsi.getDimension(), 0.0);
+  }
+
+  inline value_type & inplace_op( value_type & var, NSI_const_point point ) const
+  {
+    for (UnsignedLong i = 0; i < dimension_; ++i)
+      {
+	const NumericalScalar val(point[i] - mean_[i]);
+	var[i] += val * val;
+      }
+    return var;
+  }
+
+  static inline value_type & inplace_op( value_type & var, const value_type & point )
+  {
+    return var += point;
+  }
+
+}; /* end struct VariancePerComponentPolicy */
+
+/*
+ * Gives the variance of the sample (by component)
+ */
+NumericalPoint NumericalSampleImplementation::computeVariancePerComponent() const
+{
+  if (size_ == 0) throw InternalException(HERE) << "Error: cannot compute the variance per component of an empty sample.";
+
+  // Special case for a sample of size 1
+  if (size_ == 1) return NumericalPoint(dimension_, 0.0);
+  const NumericalPoint mean( computeMean() );
+
+  const VariancePerComponentPolicy policy ( mean );
+  ReductionFunctor<VariancePerComponentPolicy> functor( *this, policy );
+  TBB::ParallelReduce( 0, size_, functor );
+  return functor.accumulator_ / (size_ - 1);
 }
 
 /*
@@ -938,7 +1013,7 @@ NumericalSampleImplementation NumericalSampleImplementation::sortAccordingToACom
 {
   if (size_ == 0) throw InternalException(HERE) << "Error: cannot sort an empty sample.";
 
-  NumericalSampleImplementation rankedIndex(rank(index));
+  const NumericalSampleImplementation rankedIndex(rank(index));
   NumericalSampleImplementation result(size_, dimension_);
   for (UnsignedLong i = 0; i < size_; ++i)
     result[static_cast<UnsignedLong>( round(rankedIndex[i][0]) ) ] = (*this)[i];
@@ -1305,19 +1380,19 @@ NumericalPoint NumericalSampleImplementation::computeMedianPerComponent() const
   return computeQuantilePerComponent(0.5);
 }
 
-struct VariancePerComponentPolicy
+struct SkewnessPerComponentPolicy
 {
   typedef NumericalPoint value_type;
 
   const value_type & mean_;
   const UnsignedLong dimension_;
 
-  VariancePerComponentPolicy( const value_type & mean)
+  SkewnessPerComponentPolicy( const value_type & mean)
     : mean_(mean), dimension_(mean_.getDimension()) {}
 
   static inline value_type GetInvariant(const NumericalSampleImplementation & nsi)
   {
-    return value_type(nsi.getDimension(), 0.0);
+    return value_type(2 * nsi.getDimension(), 0.0);
   }
 
   inline value_type & inplace_op( value_type & var, NSI_const_point point ) const
@@ -1325,7 +1400,9 @@ struct VariancePerComponentPolicy
     for (UnsignedLong i = 0; i < dimension_; ++i)
       {
 	const NumericalScalar val(point[i] - mean_[i]);
-	var[i] += val * val;
+	const NumericalScalar val2(val * val);
+	var[i] += val2;
+	var[i + dimension_] += val2 * val;
       }
     return var;
   }
@@ -1335,62 +1412,58 @@ struct VariancePerComponentPolicy
     return var += point;
   }
 
-}; /* end struct VariancePerComponentPolicy */
-
-/*
- * Gives the variance of the sample (by component)
- */
-NumericalPoint NumericalSampleImplementation::computeVariancePerComponent() const
-{
-  if (size_ == 0) throw InternalException(HERE) << "Error: cannot compute the variance per component of an empty sample.";
-
-  // Special case for a sample of size 1
-  if (size_ == 1) return NumericalPoint(dimension_, 0.0);
-  const NumericalPoint mean( computeMean() );
-
-  const VariancePerComponentPolicy policy ( mean );
-  ReductionFunctor<VariancePerComponentPolicy> functor( *this, policy );
-  TBB::ParallelReduce( 0, size_, functor );
-  functor.accumulator_ *= 1.0 / (size_ - 1);
-  return functor.accumulator_;
-}
+}; /* end struct SkewnessPerComponentPolicy */
 
 /*
  * Gives the skewness of the sample (by component)
  */
 NumericalPoint NumericalSampleImplementation::computeSkewnessPerComponent() const
 {
-  if (size_ == 0) throw InternalException(HERE) << "Error: cannot compute the skewness per component of an empty sample.";
-
-  // Special case for a sample of size 1
-  if (size_ == 1) return NumericalPoint(dimension_, 0.0);
+  if (size_ <= 2) throw InternalException(HERE) << "Error: cannot compute the skewness per component of a sample of size less than 3.";
 
   const NumericalPoint mean(computeMean());
+  const SkewnessPerComponentPolicy policy ( mean );
+  ReductionFunctor<SkewnessPerComponentPolicy> functor( *this, policy );
+  TBB::ParallelReduce( 0, size_, functor );
   NumericalPoint skewness(dimension_);
-  NumericalPoint var(dimension_);
-
-  for (UnsignedLong index = 0; index < size_; ++index)
-    {
-      NumericalPoint centeredRealization(operator[](index) - mean);
-      for (UnsignedLong i = 0; i < dimension_; ++i)
-        {
-          // var = sum (Xi - Xmean)^2
-          const NumericalScalar square(centeredRealization[i] * centeredRealization[i]);
-          var[i] += square;
-          // skewness = sum (Xi - Xmean)^3
-          skewness[i] += square * centeredRealization[i];
-        }
-    }
-
-  const NumericalScalar factor(1.0 / size_);
-  const NumericalScalar factor1(1.0 / (size_ - 1));
-  for (UnsignedLong i = 0; i < dimension_; ++i)
-    {
-      // skewness = 1 / size sum (Xi - Xmean)^3 / (var/(size-1))^3/2
-      skewness[i] *= factor * pow(var[i] * factor1, -1.5);
-    }
+  const NumericalScalar factor(size_ * sqrt(size_ - 1) / (size_ - 2));
+  for (UnsignedLong i = 0; i < dimension_; ++i) skewness[i] = factor * functor.accumulator_[i + dimension_] / pow(functor.accumulator_[i], 1.5);
   return skewness;
 }
+
+struct KurtosisPerComponentPolicy
+{
+  typedef NumericalPoint value_type;
+
+  const value_type & mean_;
+  const UnsignedLong dimension_;
+
+  KurtosisPerComponentPolicy( const value_type & mean)
+    : mean_(mean), dimension_(mean_.getDimension()) {}
+
+  static inline value_type GetInvariant(const NumericalSampleImplementation & nsi)
+  {
+    return value_type(2 * nsi.getDimension(), 0.0);
+  }
+
+  inline value_type & inplace_op( value_type & var, NSI_const_point point ) const
+  {
+    for (UnsignedLong i = 0; i < dimension_; ++i)
+      {
+	const NumericalScalar val(point[i] - mean_[i]);
+	const NumericalScalar val2(val * val);
+	var[i] += val2;
+	var[i + dimension_] += val2 * val2;
+      }
+    return var;
+  }
+
+  static inline value_type & inplace_op( value_type & var, const value_type & point )
+  {
+    return var += point;
+  }
+
+}; /* end struct KurtosisPerComponentPolicy */
 
 /*
  * Gives the kurtosis of the sample (by component)
@@ -1403,32 +1476,48 @@ NumericalPoint NumericalSampleImplementation::computeKurtosisPerComponent() cons
   if (size_ == 1) return NumericalPoint(dimension_, 0.0);
 
   const NumericalPoint mean(computeMean());
+  const KurtosisPerComponentPolicy policy ( mean );
+  ReductionFunctor<KurtosisPerComponentPolicy> functor( *this, policy );
+  TBB::ParallelReduce( 0, size_, functor );
   NumericalPoint kurtosis(dimension_);
-  NumericalPoint var(dimension_);
-
-  for (UnsignedLong index = 0; index < size_; ++index)
-    {
-      const NumericalPoint centeredRealization(operator[](index) - mean);
-      for (UnsignedLong i = 0; i < dimension_; ++i)
-        {
-          // var = sum (Xi - Xmean)^2
-          const NumericalScalar square(centeredRealization[i] * centeredRealization[i]);
-          var[i] += square;
-          // kurtosis = sum (Xi - Xmean)^4
-          kurtosis[i] += square * square;
-        }
-    }
-
-  const NumericalScalar factor(1.0 / size_);
-  const NumericalScalar factor1(1.0 / (size_ - 1));
-  for (UnsignedLong i = 0; i < dimension_; ++i)
-    {
-      // kurtosis = 1 / size sum (Xi - Xmean)^4 / (var/(size-1))^2
-      kurtosis[i] *= factor * pow(var[i] * factor1, -2);
-    }
-
+  const NumericalScalar factor1((size_ + 1.0) * size_ * (size_ - 1.0) / ((size_ - 2.0) * (size_ - 3.0)));
+  const NumericalScalar factor2(-3.0 * (3.0 * size_ - 5.0) / ((size_ - 2.0) * (size_ - 3.0)));
+  for (UnsignedLong i = 0; i < dimension_; ++i) kurtosis[i] = factor1 * functor.accumulator_[i + dimension_] / (functor.accumulator_[i] * functor.accumulator_[i]) + factor2;
   return kurtosis;
 }
+
+struct CenteredMomentPerComponentPolicy
+{
+  typedef NumericalPoint value_type;
+
+  const value_type & mean_;
+  const UnsignedLong k_;
+  const UnsignedLong dimension_;
+
+  CenteredMomentPerComponentPolicy( const value_type & mean, const UnsignedLong k)
+    : mean_(mean), k_(k), dimension_(mean_.getDimension()) {}
+
+  static inline value_type GetInvariant(const NumericalSampleImplementation & nsi)
+  {
+    return value_type(nsi.getDimension(), 0.0);
+  }
+
+  inline value_type & inplace_op( value_type & var, NSI_const_point point ) const
+  {
+    for (UnsignedLong i = 0; i < dimension_; ++i)
+      {
+	const NumericalScalar val(point[i] - mean_[i]);
+	var[i] += pow(val, k_);
+      }
+    return var;
+  }
+
+  static inline value_type & inplace_op( value_type & var, const value_type & point )
+  {
+    return var += point;
+  }
+
+}; /* end struct CenteredMomentPerComponentPolicy */
 
 /*
  * Gives the centered moment of order k of the sample (by component)
@@ -1439,26 +1528,19 @@ NumericalPoint NumericalSampleImplementation::computeCenteredMomentPerComponent(
 
   if (size_ == 0) throw InvalidArgumentException(HERE) << "Cannot compute centered moments on an empty sample";
 
-  // Special case: order 0, return (1,...,1)
-  if (k == 0) return NumericalPoint(dimension_, 1.0);
+  // Special case: order 0, return (size,...,size)
+  if (k == 0) return NumericalPoint(dimension_, size_);
   // Special case: order 1, return (0,...,0)
   if (k == 1) return NumericalPoint(dimension_, 0.0);
-
+  // Special case: order 2, return biased variance estimator
+  if (k == 2) return computeVariancePerComponent() * (size_ - 1.0) / size_;
   // General case
   const NumericalPoint mean(computeMean());
-  NumericalPoint moment(dimension_);
-  for (UnsignedLong index = 0; index < size_; ++index)
-    {
-      const NumericalPoint centeredRealization(operator[](index) - mean);
-      for (UnsignedLong i = 0; i < dimension_; ++i)
-        {
-          // moment[i] = sum Xc^k, the normalization is done later
-          moment[i] += pow(centeredRealization[i], k);
-        }
-    }
 
-  // Normalization by 1 / size
-  return moment * (1.0 / size_);
+  const CenteredMomentPerComponentPolicy policy ( mean, k );
+  ReductionFunctor<CenteredMomentPerComponentPolicy> functor( *this, policy );
+  TBB::ParallelReduce( 0, size_, functor );
+  return functor.accumulator_ / size_;
 }
 
 /*

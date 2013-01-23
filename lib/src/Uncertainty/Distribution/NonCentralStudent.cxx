@@ -91,6 +91,8 @@ NumericalPoint NonCentralStudent::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar NonCentralStudent::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   pdfEpsilon_ = ResourceMap::GetAsNumericalScalar("DistFunc-Precision");
   return DistFunc::dNonCentralStudent(nu_, delta_, point[0] - gamma_);
 }
@@ -98,6 +100,8 @@ NumericalScalar NonCentralStudent::computePDF(const NumericalPoint & point) cons
 /* Get the CDF of the distribution */
 NumericalScalar NonCentralStudent::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   cdfEpsilon_ = ResourceMap::GetAsNumericalScalar("DistFunc-Precision");
   return DistFunc::pNonCentralStudent(nu_, delta_, point[0] - gamma_);
 }
@@ -105,6 +109,8 @@ NumericalScalar NonCentralStudent::computeCDF(const NumericalPoint & point) cons
 /** Get the PDFGradient of the distribution */
 NumericalPoint NonCentralStudent::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar eps(pow(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"), 1.0 / 3.0));
   NumericalPoint pdfGradient(3);
   pdfGradient[0] = (DistFunc::dNonCentralStudent(nu_ + eps, delta_, point[0] - gamma_) - DistFunc::dNonCentralStudent(nu_ - eps, delta_, point[0] - gamma_)) / (2.0 * eps);
@@ -116,6 +122,8 @@ NumericalPoint NonCentralStudent::computePDFGradient(const NumericalPoint & poin
 /** Get the CDFGradient of the distribution */
 NumericalPoint NonCentralStudent::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar eps(pow(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"), 1.0 / 3.0));
   NumericalPoint cdfGradient(3);
   cdfGradient[0] = (DistFunc::pNonCentralStudent(nu_ + eps, delta_, point[0] - gamma_) - DistFunc::pNonCentralStudent(nu_ - eps, delta_, point[0] - gamma_)) / (2.0 * eps);
