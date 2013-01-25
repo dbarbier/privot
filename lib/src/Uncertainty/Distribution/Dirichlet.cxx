@@ -124,7 +124,8 @@ NumericalPoint Dirichlet::getRealization() const
 NumericalScalar Dirichlet::computePDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution.";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalScalar sum(0.0);
   for (UnsignedLong i = 0; i < dimension; ++i)
     {
@@ -139,7 +140,8 @@ NumericalScalar Dirichlet::computePDF(const NumericalPoint & point) const
 NumericalScalar Dirichlet::computeLogPDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution.";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalScalar sum(0.0);
   for (UnsignedLong i = 0; i < dimension; ++i)
     {
@@ -157,6 +159,8 @@ NumericalScalar Dirichlet::computeLogPDF(const NumericalPoint & point) const
 NumericalScalar Dirichlet::computeCDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   if (dimension == 1) return DistFunc::pBeta(theta_[0], theta_[1], point[0]);
   // First, the trivial cases
   Bool oneNegative(false);
@@ -279,6 +283,8 @@ NumericalScalar Dirichlet::computeCDF(const NumericalPoint & point) const
 NumericalScalar Dirichlet::computeComplementaryCDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   if (dimension == 1) return DistFunc::pBeta(theta_[0], theta_[1], point[0], true);
   // other cases do not depend on tail flag
   return computeCDF(point);
@@ -469,7 +475,7 @@ Dirichlet::Implementation Dirichlet::getMarginal(const Indices & indices) const
 
 DistributionImplementation::NumericalPointWithDescriptionCollection Dirichlet::getParametersCollection() const
 {
-  const UnsignedLong dimension = getDimension();
+  const UnsignedLong dimension(getDimension());
   NumericalPointWithDescriptionCollection parameters(dimension);
   const Description description(getDescription());
   for (UnsignedLong marginalIndex = 0; marginalIndex < dimension; ++marginalIndex)
@@ -490,8 +496,8 @@ DistributionImplementation::NumericalPointWithDescriptionCollection Dirichlet::g
 
 void Dirichlet::setParametersCollection(const NumericalPointCollection & parametersCollection)
 {
-  const UnsignedLong size = parametersCollection.getSize();
-  const UnsignedLong dimension = size;
+  const UnsignedLong size(parametersCollection.getSize());
+  const UnsignedLong dimension(size);
   NumericalPoint theta(dimension + 1);
   if ( size == 0 ) throw InvalidArgumentException(HERE) << "The collection is empty.";
   if ( parametersCollection[0].getSize() < 2 ) throw InvalidArgumentException(HERE) << "The collection is too small.";

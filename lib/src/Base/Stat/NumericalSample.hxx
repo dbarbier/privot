@@ -262,11 +262,15 @@ public:
    * Translate realizations in-place
    */
   void translate(const NumericalPoint & translation);
+  NumericalSample & operator += (const NumericalPoint & translation);
+  NumericalSample & operator -= (const NumericalPoint & translation);
 
   /**
    * Scale realizations componentwise in-place
    */
   void scale(const NumericalPoint & scaling);
+  NumericalSample & operator *= (const NumericalPoint & scaling);
+  NumericalSample & operator *= (const SquareMatrix & scaling);
 
   /** Ranked sample */
   NumericalSample rank() const;

@@ -98,6 +98,8 @@ NumericalPoint Exponential::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Exponential::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   if (point[0] < gamma_) return NumericalPoint(1, 0.0);
   return NumericalPoint(1, -lambda_ * computePDF(point));
 }
@@ -106,18 +108,18 @@ NumericalPoint Exponential::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Exponential::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
-  NumericalScalar x(point[0] - gamma_);
+  const NumericalScalar x(point[0] - gamma_);
   if (x < 0.0) return 0.0;
   return lambda_ * exp(-lambda_ * x);
 }
 
 NumericalScalar Exponential::computeLogPDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
-  NumericalScalar x(point[0] - gamma_);
+  const NumericalScalar x(point[0] - gamma_);
   if (x < 0.0) return -SpecFunc::MaxNumericalScalar;
   return log(lambda_) - lambda_ * x;
 }
@@ -125,7 +127,9 @@ NumericalScalar Exponential::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Exponential::computeCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   if (x < 0.0) return 0.0;
   return 1.0 - exp(-lambda_ * x);
 }
@@ -144,10 +148,12 @@ NumericalComplex Exponential::computeLogCharacteristicFunction(const NumericalSc
 /* Get the PDFGradient of the distribution */
 NumericalPoint Exponential::computePDFGradient(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   NumericalPoint pdfGradient(2, 0.0);
   if (x < 0.0) return pdfGradient;
-  NumericalScalar expX(exp(-lambda_ * x));
+  const NumericalScalar expX(exp(-lambda_ * x));
   pdfGradient[0] = (1.0 - lambda_ * x) * expX;
   pdfGradient[1] = lambda_ * lambda_ * expX;
   return pdfGradient;
@@ -156,10 +162,12 @@ NumericalPoint Exponential::computePDFGradient(const NumericalPoint & point) con
 /* Get the CDFGradient of the distribution */
 NumericalPoint Exponential::computeCDFGradient(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   NumericalPoint cdfGradient(2, 0.0);
   if (x < 0.0) return cdfGradient;
-  NumericalScalar expX(exp(-lambda_ * x));
+  const NumericalScalar expX(exp(-lambda_ * x));
   cdfGradient[0] = x * expX;
   cdfGradient[1] = -lambda_ * expX;
   return cdfGradient;

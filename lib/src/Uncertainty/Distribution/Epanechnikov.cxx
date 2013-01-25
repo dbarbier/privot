@@ -75,7 +75,9 @@ Epanechnikov * Epanechnikov::clone() const
 /* Get the DDF of the distribution */
 NumericalPoint Epanechnikov::computeDDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   if ((x <= -1.0) || (x > 1.0)) return NumericalPoint(1, 0.0);
   return NumericalPoint(1, -1.5 * x);
 }
@@ -84,7 +86,9 @@ NumericalPoint Epanechnikov::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Epanechnikov::computePDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   if ((x <= -1.0) || (x > 1.0)) return 0.0;
   return 0.75 * (1.0 + x) * (1.0 - x);
 }
@@ -93,7 +97,9 @@ NumericalScalar Epanechnikov::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Epanechnikov::computeCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   if (x <= -1.0) return 0.0;
   if (x > 1.0) return 1.0;
   return 0.5 + x * (0.75 - 0.25 * x * x);
@@ -101,7 +107,9 @@ NumericalScalar Epanechnikov::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar Epanechnikov::computeComplementaryCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   if (x <= -1.0) return 1.0;
   if (x > 1.0) return 0.0;
   return 0.5 - x * (0.75 - 0.25 * x * x);
@@ -110,12 +118,16 @@ NumericalScalar Epanechnikov::computeComplementaryCDF(const NumericalPoint & poi
 /** Get the PDFGradient of the distribution */
 NumericalPoint Epanechnikov::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   return NumericalPoint(0);
 }
 
 /** Get the CDFGradient of the distribution */
 NumericalPoint Epanechnikov::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   return NumericalPoint(0);
 }
 

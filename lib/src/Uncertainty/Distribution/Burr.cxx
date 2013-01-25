@@ -107,6 +107,8 @@ NumericalPoint Burr::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Burr::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return NumericalPoint(1, 0.0);
   const NumericalScalar xC(pow(x, c_));
@@ -117,7 +119,7 @@ NumericalPoint Burr::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Burr::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return 0.0;
@@ -127,7 +129,7 @@ NumericalScalar Burr::computePDF(const NumericalPoint & point) const
 
 NumericalScalar Burr::computeLogPDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return -SpecFunc::MaxNumericalScalar;
@@ -138,7 +140,9 @@ NumericalScalar Burr::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Burr::computeCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   if (x < 0.0) return 0.0;
   return 1.0 - exp(-k_ * log1p(exp(c_ * log(x))));
 }
@@ -146,6 +150,8 @@ NumericalScalar Burr::computeCDF(const NumericalPoint & point) const
 /* Get the PDFGradient of the distribution */
 NumericalPoint Burr::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   NumericalPoint pdfGradient(2, 0.0);
   if (x <= 0.0) return pdfGradient;
@@ -159,6 +165,8 @@ NumericalPoint Burr::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Burr::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   NumericalPoint cdfGradient(2, 0.0);
   if (x <= 0.0) return cdfGradient;

@@ -83,7 +83,8 @@ NumericalPoint MinCopula::getRealization() const
 NumericalPoint MinCopula::computeDDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution dimension";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   return NumericalPoint(dimension, 0.0);
 }
 
@@ -91,7 +92,8 @@ NumericalPoint MinCopula::computeDDF(const NumericalPoint & point) const
 NumericalScalar MinCopula::computePDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution dimension";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   if ((u <= 0.0) || (u > 1.0)) return 0.0;
   for (UnsignedLong i = 1; i < dimension; ++i) if (u != point[i]) return 0.0;
@@ -102,7 +104,8 @@ NumericalScalar MinCopula::computePDF(const NumericalPoint & point) const
 NumericalScalar MinCopula::computeCDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point has a dimension not compatible with the distribution dimension";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalScalar u(point[0]);
   for (UnsignedLong i = 1; i < dimension; ++i) if (point[i] < u) u = point[i];
   return std::max(0.0, std::min(1.0, u));

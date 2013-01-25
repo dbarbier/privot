@@ -96,6 +96,8 @@ NumericalPoint Logistic::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Logistic::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalScalar expX(exp((point[0] - alpha_) / beta_));
   NumericalScalar betaExpX(beta_ * (1.0 + expX));
   return NumericalPoint(1, beta_ * expX * (1.0 - expX) / (betaExpX * betaExpX * betaExpX));
@@ -105,7 +107,7 @@ NumericalPoint Logistic::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Logistic::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
   const NumericalScalar x((point[0] - alpha_) / beta_);
   if ((x <= 0.5 * SpecFunc::LogMinNumericalScalar) || (x >= 0.5 * SpecFunc::LogMaxNumericalScalar)) return 0.0;
@@ -116,7 +118,7 @@ NumericalScalar Logistic::computePDF(const NumericalPoint & point) const
 
 NumericalScalar Logistic::computeLogPDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
   const NumericalScalar x((point[0] - alpha_) / beta_);
   if ((x <= 0.5 * SpecFunc::LogMinNumericalScalar) || (x >= 0.5 * SpecFunc::LogMaxNumericalScalar)) return -SpecFunc::MaxNumericalScalar;
@@ -126,12 +128,16 @@ NumericalScalar Logistic::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Logistic::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar expX(exp((point[0] - alpha_) / beta_));
   return expX / (1.0 + expX);
 }
 
 NumericalScalar Logistic::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar expX(exp((point[0] - alpha_) / beta_));
   return 1.0 / (1.0 + expX);
 }

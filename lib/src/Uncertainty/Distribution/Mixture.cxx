@@ -245,7 +245,10 @@ NumericalPoint Mixture::getRealization() const
 /* Get the DDF of the Mixture */
 NumericalPoint Mixture::computeDDF(const NumericalPoint & point) const
 {
-  NumericalPoint ddfValue(getDimension(), 0.0);
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
+  NumericalPoint ddfValue(dimension, 0.0);
   if (!getRange().numericallyContains(point)) return ddfValue;
   const UnsignedLong size(distributionCollection_.getSize());
   for(UnsignedLong i = 0; i < size; ++i) ddfValue += distributionCollection_[i].getWeight() * distributionCollection_[i].computeDDF(point);
@@ -255,6 +258,9 @@ NumericalPoint Mixture::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the Mixture */
 NumericalScalar Mixture::computePDF(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalScalar pdfValue(0.0);
   const UnsignedLong size(distributionCollection_.getSize());
   if (!getRange().numericallyContains(point)) return pdfValue;
@@ -265,6 +271,9 @@ NumericalScalar Mixture::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the Mixture */
 NumericalScalar Mixture::computeCDF(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalScalar cdfValue(0.0);
   const UnsignedLong size(distributionCollection_.getSize());
   for(UnsignedLong i = 0; i < size; ++i) cdfValue += distributionCollection_[i].getWeight() * distributionCollection_[i].computeCDF(point);
@@ -283,6 +292,9 @@ NumericalComplex Mixture::computeCharacteristicFunction(const NumericalScalar x)
 /* Get the PDF gradient of the distribution */
 NumericalPoint Mixture::computePDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalPoint pdfGradientValue;
   const UnsignedLong size(distributionCollection_.getSize());
   for(UnsignedLong i = 0; i < size; ++i) pdfGradientValue += distributionCollection_[i].getWeight() * distributionCollection_[i].computePDFGradient(point);
@@ -292,6 +304,9 @@ NumericalPoint Mixture::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDF gradient of the distribution */
 NumericalPoint Mixture::computeCDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalPoint cdfGradientValue(getDimension(), 0.0);
   const UnsignedLong size(distributionCollection_.getSize());
   for(UnsignedLong i = 0; i < size; ++i) cdfGradientValue += distributionCollection_[i].getWeight() * distributionCollection_[i].computeCDFGradient(point);

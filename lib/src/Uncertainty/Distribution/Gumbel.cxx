@@ -111,7 +111,9 @@ NumericalPoint Gumbel::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Gumbel::computeDDF(const NumericalPoint & point) const
 {
-  NumericalScalar expX(exp(-alpha_ * (point[0] - beta_)));
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar expX(exp(-alpha_ * (point[0] - beta_)));
   return NumericalPoint(1, alpha_ * alpha_ * (expX - 1.0) * expX * exp(-expX));
 }
 
@@ -119,17 +121,17 @@ NumericalPoint Gumbel::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Gumbel::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
-  NumericalScalar expX(exp(-alpha_ * (point[0] - beta_)));
+  const NumericalScalar expX(exp(-alpha_ * (point[0] - beta_)));
   return alpha_ * expX * exp(-expX);
 }
 
 NumericalScalar Gumbel::computeLogPDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
-  NumericalScalar X(-alpha_ * (point[0] - beta_));
+  const NumericalScalar X(-alpha_ * (point[0] - beta_));
   return log(alpha_) + X - exp(X);
 }
 
@@ -137,15 +139,19 @@ NumericalScalar Gumbel::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Gumbel::computeCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(-alpha_ * (point[0] - beta_));
-  NumericalScalar expX(exp(x));
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(-alpha_ * (point[0] - beta_));
+  const NumericalScalar expX(exp(x));
   return exp(-expX);
 }
 
 NumericalScalar Gumbel::computeComplementaryCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(-alpha_ * (point[0] - beta_));
-  NumericalScalar expX(exp(x));
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(-alpha_ * (point[0] - beta_));
+  const NumericalScalar expX(exp(x));
   // -2.419227917539996841 = numerical bound for which the approximation has a relative error less than 1e-16
   if (x < -2.419227917539996841)
     {
@@ -175,9 +181,11 @@ NumericalComplex Gumbel::computeLogCharacteristicFunction(const NumericalScalar 
 /* Get the PDFGradient of the distribution */
 NumericalPoint Gumbel::computePDFGradient(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - beta_);
-  NumericalScalar expX(exp(-alpha_ * x));
-  NumericalScalar pdf(alpha_ * expX * exp(-expX));
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - beta_);
+  const NumericalScalar expX(exp(-alpha_ * x));
+  const NumericalScalar pdf(alpha_ * expX * exp(-expX));
   NumericalPoint pdfGradient(2);
   pdfGradient[0] = (1.0 / alpha_ - x * (1.0 - expX)) * pdf;
   pdfGradient[1] = alpha_ * (1.0 - expX) * pdf;
@@ -187,9 +195,11 @@ NumericalPoint Gumbel::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Gumbel::computeCDFGradient(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - beta_);
-  NumericalScalar expX(exp(-alpha_ * x));
-  NumericalScalar cdf(exp(-expX));
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - beta_);
+  const NumericalScalar expX(exp(-alpha_ * x));
+  const NumericalScalar cdf(exp(-expX));
   NumericalPoint cdfGradient(2);
   cdfGradient[0] = x * expX * cdf;
   cdfGradient[1] = -alpha_ * expX * cdf;
@@ -271,7 +281,7 @@ void Gumbel::setParametersCollection(const NumericalPointCollection & parameters
 /* Alpha accessor */
 void Gumbel::setAlpha(const NumericalScalar alpha)
 {
-  if (alpha <= 0.) throw InvalidArgumentException(HERE) << "Alpha MUST be positive";
+  if (alpha <= 0.0) throw InvalidArgumentException(HERE) << "Alpha MUST be positive";
   if (alpha != alpha_)
     {
       alpha_ = alpha;

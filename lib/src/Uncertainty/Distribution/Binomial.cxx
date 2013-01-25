@@ -100,6 +100,8 @@ NumericalPoint Binomial::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar Binomial::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   const NumericalScalar supportEpsilon(ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"));
   if ((k < -supportEpsilon) || (fabs(k - round(k)) > supportEpsilon) || (k > n_ + supportEpsilon)) return 0.0;
@@ -110,6 +112,8 @@ NumericalScalar Binomial::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Binomial::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   const NumericalScalar supportEpsilon(ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"));
   if (k < -supportEpsilon) return 0.0;
@@ -121,6 +125,8 @@ NumericalScalar Binomial::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar Binomial::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   const NumericalScalar supportEpsilon(ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"));
   if (k < -supportEpsilon) return 1.0;
@@ -133,6 +139,8 @@ NumericalScalar Binomial::computeComplementaryCDF(const NumericalPoint & point) 
 /* Get the PDF gradient of the distribution */
 NumericalPoint Binomial::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   NumericalPoint pdfGradient(1, 0.0);
   const NumericalScalar supportEpsilon(ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"));
@@ -144,6 +152,8 @@ NumericalPoint Binomial::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDF gradient of the distribution */
 NumericalPoint Binomial::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   const NumericalScalar supportEpsilon(ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"));
   if (k < -supportEpsilon) return NumericalPoint(1, 0.0);

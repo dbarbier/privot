@@ -156,7 +156,8 @@ NumericalPoint ComposedCopula::getRealization() const
 NumericalPoint ComposedCopula::computeDDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if(point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "The given point has a wrong dimension";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalPoint DDF(getDimension());
   const UnsignedLong size(copulaCollection_.getSize());
   NumericalPoint copulaPDF(size);
@@ -199,7 +200,9 @@ NumericalPoint ComposedCopula::computeDDF(const NumericalPoint & point) const
 NumericalScalar ComposedCopula::computePDF(const NumericalPoint & point) const
 {
   /* PDF = PDF_copula1x...xPDF_copula_n */
-  if(point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "The given point has a wrong dimension";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const UnsignedLong size(copulaCollection_.getSize());
   NumericalScalar productPDF(1.0);
   UnsignedLong index(0);
@@ -223,7 +226,9 @@ NumericalScalar ComposedCopula::computePDF(const NumericalPoint & point) const
 NumericalScalar ComposedCopula::computeCDF(const NumericalPoint & point) const
 {
   /* CDF = CDF_copula1x...xCDF_copula_n */
-  if(point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "The given point has a wrong dimension";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const UnsignedLong size(copulaCollection_.getSize());
   NumericalScalar productCDF(1.0);
   UnsignedLong index(0);
@@ -252,6 +257,8 @@ NumericalScalar ComposedCopula::computeCDF(const NumericalPoint & point) const
 NumericalScalar ComposedCopula::computeProbability(const Interval & interval) const
 {
   const UnsignedLong dimension(getDimension());
+  if (interval.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given interval must have dimension=" << dimension << ", here dimension=" << interval.getDimension();
+
   // Reduce the given interval to the support of the distribution, which is the nD unit cube
   const Interval intersect(interval.intersect(Interval(dimension)));
   // If the intersection is empty
@@ -279,12 +286,18 @@ NumericalScalar ComposedCopula::computeProbability(const Interval & interval) co
 /* Get the PDF gradient of the distribution */
 NumericalPoint ComposedCopula::computePDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
 /* Get the CDF gradient of the distribution */
 NumericalPoint ComposedCopula::computeCDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 

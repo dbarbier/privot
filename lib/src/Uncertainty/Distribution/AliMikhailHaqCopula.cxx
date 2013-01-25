@@ -104,6 +104,9 @@ NumericalPoint AliMikhailHaqCopula::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint AliMikhailHaqCopula::computeDDF(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // A copula has a null DDF outside of ]0, 1[^2
@@ -129,6 +132,9 @@ NumericalPoint AliMikhailHaqCopula::computeDDF(const NumericalPoint & point) con
 /* Get the PDF of the distribution */
 NumericalScalar AliMikhailHaqCopula::computePDF(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // A copula has a null PDF outside of ]0, 1[^2
@@ -143,6 +149,9 @@ NumericalScalar AliMikhailHaqCopula::computePDF(const NumericalPoint & point) co
 /* Get the CDF of the distribution */
 NumericalScalar AliMikhailHaqCopula::computeCDF(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // If we are outside of the support, in the lower parts
@@ -172,12 +181,18 @@ NumericalScalar AliMikhailHaqCopula::computeCDF(const NumericalPoint & point) co
 /** Get the PDFGradient of the distribution */
 NumericalPoint AliMikhailHaqCopula::computePDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
 /** Get the CDFGradient of the distribution */
 NumericalPoint AliMikhailHaqCopula::computeCDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 

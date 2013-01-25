@@ -34,6 +34,7 @@
 #include "SquareMatrix.hxx"
 #include "CovarianceMatrix.hxx"
 #include "CorrelationMatrix.hxx"
+#include "SquareMatrix.hxx"
 #include "Collection.hxx"
 #include "ResourceMap.hxx"
 
@@ -736,11 +737,15 @@ public:
    * Translate realizations in-place
    */
   void translate(const NumericalPoint & translation);
+  NumericalSampleImplementation & operator += (const NumericalPoint & translation);
+  NumericalSampleImplementation & operator -= (const NumericalPoint & translation);
 
   /**
    * Scale realizations componentwise in-place
    */
   void scale(const NumericalPoint & scaling);
+  NumericalSampleImplementation & operator *= (const NumericalPoint & scaling);
+  NumericalSampleImplementation & operator *= (const SquareMatrix & scaling);
 
   /** Save to CSV file */
   void exportToCSVFile(const FileName & filename,

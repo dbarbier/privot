@@ -530,6 +530,20 @@ void NumericalSample::translate(const NumericalPoint & translation)
   getImplementation()->translate(translation);
 }
 
+NumericalSample & NumericalSample::operator += (const NumericalPoint & translation)
+{
+  copyOnWrite();
+  getImplementation()->operator +=(translation);
+  return *this;
+}
+
+NumericalSample & NumericalSample::operator -= (const NumericalPoint & translation)
+{
+  copyOnWrite();
+  getImplementation()->operator -=(translation);
+  return *this;
+}
+
 /*
  * Scale realizations componentwise in-place
  */
@@ -537,6 +551,20 @@ void NumericalSample::scale(const NumericalPoint & scaling)
 {
   copyOnWrite();
   getImplementation()->scale(scaling);
+}
+
+NumericalSample & NumericalSample::operator *= (const NumericalPoint & scaling)
+{
+  copyOnWrite();
+  getImplementation()->operator *=(scaling);
+  return *this;
+}
+
+NumericalSample & NumericalSample::operator *= (const SquareMatrix & scaling)
+{
+  copyOnWrite();
+  getImplementation()->operator *=(scaling);
+  return *this;
 }
 
 /* Ranked sample */

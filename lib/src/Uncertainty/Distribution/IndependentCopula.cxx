@@ -90,13 +90,18 @@ NumericalPoint IndependentCopula::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint IndependentCopula::computeDDF(const NumericalPoint & point) const
 {
-  return NumericalPoint(getDimension(), 0.0);
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
+  return NumericalPoint(dimension, 0.0);
 }
 
 /* Compute the probability content of an interval */
 NumericalScalar IndependentCopula::computeProbability(const Interval & interval) const
 {
   const UnsignedLong dimension(getDimension());
+  if (interval.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given interval must have dimension=" << dimension << ", here dimension=" << interval.getDimension();
+
   // Reduce the given interval to the support of the distribution, which is the nD unit cube
   const Interval intersect(interval.intersect(Interval(dimension)));
   // If the intersection is empty
@@ -114,7 +119,9 @@ NumericalScalar IndependentCopula::computeProbability(const Interval & interval)
 /* Get the PDF of the distribution */
 NumericalScalar IndependentCopula::computePDF(const NumericalPoint & point) const
 {
-  UnsignedLong dimension(getDimension());
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   for (UnsignedLong i = 0; i < dimension; i++)
     {
       NumericalScalar x(point[i]);
@@ -128,7 +135,9 @@ NumericalScalar IndependentCopula::computePDF(const NumericalPoint & point) cons
 /* Get the CDF of the distribution */
 NumericalScalar IndependentCopula::computeCDF(const NumericalPoint & point) const
 {
-  UnsignedLong dimension(getDimension());
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalScalar value(1.0);
   for (UnsignedLong i = 0; i < dimension; i++)
     {
@@ -145,12 +154,18 @@ NumericalScalar IndependentCopula::computeCDF(const NumericalPoint & point) cons
 /* Get the PDF gradient of the distribution */
 NumericalPoint IndependentCopula::computePDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   return NumericalPoint(0, 0.0);
 }
 
 /* Get the CDF gradient of the distribution */
 NumericalPoint IndependentCopula::computeCDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   return NumericalPoint(0, 0.0);
 }
 

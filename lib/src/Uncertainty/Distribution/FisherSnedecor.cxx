@@ -117,7 +117,8 @@ NumericalPoint FisherSnedecor::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar FisherSnedecor::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: cannot compute the PDF of a FisherSnedecor distribution at a point of dimension not equal to 1.";
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return 0.0;
   return exp(normalizationFactor_ + (0.5 * d1_ - 1.0) * log(x) - 0.5 * (d1_ + d2_) * log1p(d1_ * x / d2_));
@@ -126,8 +127,9 @@ NumericalScalar FisherSnedecor::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar FisherSnedecor::computeCDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: cannot compute the CDF of a FisherSnedecor distribution at a point of dimension not equal to 1.";
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   if (x <= 0) return 0.0;
   return DistFunc::pBeta(0.5 * d1_, 0.5 * d2_, d1_ * x / (d1_ * x + d2_));
 }

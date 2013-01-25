@@ -113,6 +113,8 @@ NumericalPoint LogUniform::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint LogUniform::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x < a_) || (x > b_)) return NumericalPoint(1, 0.0);
   return NumericalPoint(1, -1.0 / (x * x * (bLog_ - aLog_)));
@@ -122,6 +124,8 @@ NumericalPoint LogUniform::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar LogUniform::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return 0.0;
   return 1.0 / (x * (bLog_ - aLog_));
@@ -131,6 +135,8 @@ NumericalScalar LogUniform::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar LogUniform::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= a_) return 0.0;
   if (x > b_)  return 1.0;
@@ -139,6 +145,8 @@ NumericalScalar LogUniform::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar LogUniform::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= a_) return 1.0;
   if (x > b_)  return 0.0;
@@ -148,6 +156,8 @@ NumericalScalar LogUniform::computeComplementaryCDF(const NumericalPoint & point
 /* Get the PDFGradient of the distribution */
 NumericalPoint LogUniform::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint pdfGradient(2, 0.0);
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return pdfGradient;
@@ -160,6 +170,8 @@ NumericalPoint LogUniform::computePDFGradient(const NumericalPoint & point) cons
 /* Get the CDFGradient of the distribution */
 NumericalPoint LogUniform::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint cdfGradient(2, 0.0);
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return cdfGradient;

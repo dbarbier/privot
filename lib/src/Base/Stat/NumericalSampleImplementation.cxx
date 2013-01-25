@@ -1729,6 +1729,18 @@ void NumericalSampleImplementation::translate(const NumericalPoint & translation
   TBB::ParallelFor( 0, size_, functor );
 }
 
+NumericalSampleImplementation & NumericalSampleImplementation::operator += (const NumericalPoint & translation)
+{
+  translate(translation);
+  return *this;
+}
+
+NumericalSampleImplementation & NumericalSampleImplementation::operator -= (const NumericalPoint & translation)
+{
+  translate(translation * (-1.0));
+  return *this;
+}
+
 /* Get the i-th marginal distribution */
 NumericalSampleImplementation NumericalSampleImplementation::getMarginal(const UnsignedLong index) const
 {
@@ -1813,6 +1825,39 @@ void NumericalSampleImplementation::scale(const NumericalPoint & scaling)
 
   const ScalingPolicy policy( scaling );
   ParallelFunctor<ScalingPolicy> functor( *this, policy );
+  TBB::ParallelFor( 0, size_, functor );
+}
+
+NumericalSampleImplementation & NumericalSampleImplementation::operator *= (const NumericalPoint & scaling)
+{
+  scale(scaling);
+  return *this;
+}
+
+struct MatrixMultiplyPolicy
+{
+  const SquareMatrix & scale_;
+  const UnsignedLong dimension_;
+
+  MatrixMultiplyPolicy( const SquareMatrix & scale) : scale_(scale), dimension_(scale_.getDimension()) {}
+
+  inline void inplace_op( NSI_point point ) const
+  {
+    point = scale_ * point;
+  }
+
+}; /* end struct MatrixMultiplyPolicy */
+
+NumericalSampleImplementation & NumericalSampleImplementation::operator *= (const SquareMatrix & scaling)
+{
+  if (dimension_ != scaling.getDimension())
+    throw InvalidArgumentException(HERE) << "Scaling point has incorrect dimension. Got " << scaling.getDimension()
+                                         << ". Expected " << dimension_;
+
+  if (size_ == 0) return *this;
+
+  const MatrixMultiplyPolicy policy( scaling );
+  ParallelFunctor<MatrixMultiplyPolicy> functor( *this, policy );
   TBB::ParallelFor( 0, size_, functor );
 }
 

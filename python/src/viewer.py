@@ -258,7 +258,11 @@ class View:
                 Z = np.reshape(drawable.getData(), (drawable.getX().getSize(), drawable.getY().getSize()) )
 
                 contour_kwargs.setdefault('levels', drawable.getLevels())
-                contour_kwargs.setdefault('linestyles', plot_kwargs['linestyle'])
+                if (not 'linestyles' in contour_kwargs_default) and (not 'ls' in contour_kwargs_default):
+                    try:
+                        contour_kwargs['linestyles'] = lineStyleDict[ drawable.getLineStyle() ]
+                    except:
+                        warnings.warn( '-- Unknown line style' )
                 contourset = pyplot.contour(X, Y, Z, **contour_kwargs)
 
                 clabel_kwargs.setdefault('fontsize', 8)

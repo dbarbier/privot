@@ -136,7 +136,9 @@ NumericalPoint Chi::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Chi::computeDDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   if (x <= 0.0) return NumericalPoint(1, 0.0);
   return NumericalPoint(1, (( nu_ - 1.0) / x - x) * computePDF(point));
 }
@@ -145,7 +147,9 @@ NumericalPoint Chi::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Chi::computePDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   if (x <= 0.0) return 0.0;
   return exp( normalizationFactor_ + (nu_ - 1) * log(x) - 0.5 * x * x );
 }
@@ -154,7 +158,9 @@ NumericalScalar Chi::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Chi::computeCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   // No test here as the CDF is continuous for all nu_
   if (x <= 0.0) return 0.0;
   return DistFunc::pGamma(0.5 * nu_, 0.5 * x * x);
@@ -162,7 +168,9 @@ NumericalScalar Chi::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar Chi::computeComplementaryCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   // No test here as the CDF is continuous for all nu_
   if (x <= 0.0) return 1.0;
   return DistFunc::pGamma(0.5 * nu_, 0.5 * x * x, true);
@@ -183,8 +191,10 @@ NumericalComplex Chi::computeCharacteristicFunction(const NumericalScalar x) con
 /* Get the PDFGradient of the distribution */
 NumericalPoint Chi::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint pdfGradient(1, 0.0);
-  NumericalScalar x(point[0]);
+  const NumericalScalar x(point[0]);
   if (x <= 0.0) return pdfGradient;
   NumericalScalar pdf(computePDF(point));
   /*        pdfGradient[0] = 0.5 * (2. * log(x / sqrt(2)) - SpecFunc::Psi(0.5 * nu_)) * pdf;*/
@@ -195,8 +205,10 @@ NumericalPoint Chi::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Chi::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint cdfGradient(1, 0.0);
-  NumericalScalar x(point[0]);
+  const NumericalScalar x(point[0]);
   if (x <= 0.0) return cdfGradient;
   NumericalScalar eps(pow(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"), 1.0 / 3.0));
   cdfGradient[0] = (DistFunc::pGamma(0.5 * (nu_ + eps), 0.5 * x * x) - DistFunc::pGamma(0.5 * (nu_ - eps), 0.5 * x * x)) / (2.0 * eps);

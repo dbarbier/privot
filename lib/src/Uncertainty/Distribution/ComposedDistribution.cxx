@@ -224,7 +224,8 @@ NumericalPoint ComposedDistribution::computeDDF(const NumericalPoint & point) co
 {
   /* PDF = PDF_copula(CDF_dist1(p1), ..., CDF_distn(pn))xPDF_dist1(p1)x...xPDF_distn(pn) */
   const UnsignedLong dimension(getDimension());
-  if(point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "The given point has a wrong dimension";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalPoint uPoint(dimension);
   NumericalPoint pdfMarginal(dimension);
   NumericalPoint ddfMarginal(dimension);
@@ -257,7 +258,8 @@ NumericalScalar ComposedDistribution::computePDF(const NumericalPoint & point) c
 {
   /* PDF = PDF_copula(CDF_dist1(p1), ..., CDF_distn(pn))xPDF_dist1(p1)x...xPDF_distn(pn) */
   const UnsignedLong dimension(getDimension());
-  if(point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "The given point has a wrong dimension";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   // Special case for dimension 1, to boost performances
   if (dimension == 1) return distributionCollection_[0].computePDF(point);
   NumericalScalar productPDF(1.0);
@@ -283,7 +285,8 @@ NumericalScalar ComposedDistribution::computeCDF(const NumericalPoint & point) c
 {
   /* CDF = CDF_copula(CDF_dist1(p1), ..., CDF_distn(pn)) */
   const UnsignedLong dimension(getDimension());
-  if(point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "The given point has a wrong dimension";
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   if (dimension == 1) return distributionCollection_[0].computeCDF(point);
   // Special case for the independent case, to boost performances
   if (hasIndependentCopula())
@@ -301,9 +304,11 @@ NumericalScalar ComposedDistribution::computeCDF(const NumericalPoint & point) c
 /* Compute the probability content of an interval */
 NumericalScalar ComposedDistribution::computeProbability(const Interval & interval) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (interval.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given interval must have dimension=" << dimension << ", here dimension=" << interval.getDimension();
+
   // If the interval is empty
   if (interval.isNumericallyEmpty()) return 0.0;
-  const UnsignedLong dimension(getDimension());
   const NumericalPoint lower(interval.getLowerBound());
   const NumericalPoint upper(interval.getUpperBound());
   const Interval::BoolCollection finiteLower(interval.getFiniteLowerBound());
@@ -336,6 +341,8 @@ NumericalScalar ComposedDistribution::computeProbability(const Interval & interv
 NumericalPoint ComposedDistribution::computePDFGradient(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalPoint gradient;
   // First, put the gradient according to marginal parameters
   // The marginal parameters are supposed to be independent from one marginal distribution
@@ -357,6 +364,8 @@ NumericalPoint ComposedDistribution::computePDFGradient(const NumericalPoint & p
 NumericalPoint ComposedDistribution::computeCDFGradient(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalPoint gradient;
   // First, put the gradient according to marginal parameters
   // The marginal parameters are supposed to be independent from one marginal distribution

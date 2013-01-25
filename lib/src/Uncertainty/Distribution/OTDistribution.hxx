@@ -74,6 +74,7 @@
 #include "IndependentCopula.hxx"
 #include "InverseNormal.hxx"
 #include "InverseNormalFactory.hxx"
+#include "KSubset.hxx"
 #include "KernelMixture.hxx"
 #include "KernelSmoothing.hxx"
 #include "Laplace.hxx"

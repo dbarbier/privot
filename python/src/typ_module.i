@@ -57,9 +57,9 @@ def getCorrelationMatrixFromMap(Vars,Map):
 %include PersistentCollection.i
 %include DescriptionImplementation.i
 %include Description.i
+%include Indices.i
 %include NumericalPoint.i
 %include NumericalPointWithDescription.i
-%include Indices.i
 %include DomainImplementation.i
 %include Interval.i
 %include MatrixImplementation.i

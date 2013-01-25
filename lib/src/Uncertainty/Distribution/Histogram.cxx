@@ -121,6 +121,8 @@ NumericalPoint Histogram::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Histogram::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   return NumericalPoint(1, 0.0);
 }
 
@@ -128,6 +130,8 @@ NumericalPoint Histogram::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Histogram::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalScalar x(point[0] - first_);
   const UnsignedLong size(collection_.getSize());
   if ((x <= 0.0) || (x >= cumulatedWidth_[size - 1])) return 0.0;
@@ -147,6 +151,8 @@ NumericalScalar Histogram::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Histogram::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalScalar x(point[0] - first_);
   const UnsignedLong size(collection_.getSize());
   if (x <= 0.0) return 0.0;
@@ -172,12 +178,16 @@ NumericalScalar Histogram::computeCDF(const NumericalPoint & point) const
 /** Get the PDFGradient of the distribution */
 NumericalPoint Histogram::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
 /** Get the CDFGradient of the distribution */
 NumericalPoint Histogram::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 

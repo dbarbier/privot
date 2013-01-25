@@ -173,11 +173,13 @@ NumericalPoint Normal::getRealization() const
 
 NumericalSample Normal::getSample(const UnsignedLong size) const
 {
-  if (!hasIndependentCopula_) return DistributionImplementation::getSample(size);
   const UnsignedLong dimension(getDimension());
-  NumericalSample returnSample(size, dimension);
+  NumericalSampleImplementation returnSample(size, dimension);
   for (UnsignedLong i = 0; i < size; ++i)
-    for (UnsignedLong j = 0; j < dimension; ++j) returnSample[i][j] = sigma_[j] * DistFunc::rNormal() + mean_[j];
+    for (UnsignedLong j = 0; j < dimension; ++j) returnSample[i][j] = DistFunc::rNormal();
+  if (hasIndependentCopula_) returnSample *= sigma_;
+  else returnSample *= cholesky_;
+  returnSample += mean_;
   returnSample.setName(getName());
   returnSample.setDescription(getDescription());
   return returnSample;

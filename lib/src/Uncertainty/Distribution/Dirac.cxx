@@ -104,7 +104,9 @@ NumericalPoint Dirac::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar Dirac::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: cannot compute the PDF on a point with dimension=" << point.getDimension() << " different from the distribution dimension=" << getDimension();
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   if ((point - point_).norm() <= ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return 1.0;
   return 0.0;
 }
@@ -114,7 +116,8 @@ NumericalScalar Dirac::computePDF(const NumericalPoint & point) const
 NumericalScalar Dirac::computeCDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
-  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: cannot compute the CDF on a point with dimension=" << point.getDimension() << " different from the distribution dimension=" << getDimension();
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   // If at least one component is too small
   for (UnsignedLong i = 0; i < dimension; ++i) if (point_[i] > point[i]) return 0.0;
   return 1.0;
@@ -132,7 +135,9 @@ NumericalPoint Dirac::computeQuantile(const NumericalScalar prob,
 /* Get the PDF gradient of the distribution */
 NumericalPoint Dirac::computePDFGradient(const NumericalPoint & point) const
 {
-  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: cannot compute the PDF gradient on a point with dimension=" << point.getDimension() << " different from the distribution dimension=" << getDimension();
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
@@ -140,7 +145,9 @@ NumericalPoint Dirac::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDF gradient of the distribution */
 NumericalPoint Dirac::computeCDFGradient(const NumericalPoint & point) const
 {
-  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: cannot compute the CDF gradient on a point with dimension=" << point.getDimension() << " different from the distribution dimension=" << getDimension();
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 

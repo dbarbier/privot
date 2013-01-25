@@ -180,6 +180,8 @@ NumericalPoint KernelMixture::getRealization() const
 NumericalPoint KernelMixture::computeDDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalPoint ddfValue(dimension, 0.0);
   // Quick rejection test
   if (!getRange().numericallyContains(point)) return ddfValue;
@@ -209,6 +211,8 @@ NumericalPoint KernelMixture::computeDDF(const NumericalPoint & point) const
 NumericalScalar KernelMixture::computePDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalScalar pdfValue(0.0);
   // Quick rejection test
   if (!getRange().numericallyContains(point)) return pdfValue;
@@ -231,6 +235,8 @@ NumericalScalar KernelMixture::computePDF(const NumericalPoint & point) const
 NumericalScalar KernelMixture::computeCDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   NumericalScalar cdfValue(0.0);
   const UnsignedLong size(sample_.getSize());
   for(UnsignedLong i = 0; i < size; ++i)
@@ -260,12 +266,18 @@ NumericalComplex KernelMixture::computeCharacteristicFunction(const NumericalSca
 /* Get the PDF gradient of the distribution */
 NumericalPoint KernelMixture::computePDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
 /* Get the CDF gradient of the distribution */
 NumericalPoint KernelMixture::computeCDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 

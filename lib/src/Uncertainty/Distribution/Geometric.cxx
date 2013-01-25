@@ -104,7 +104,9 @@ NumericalPoint Geometric::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar Geometric::computePDF(const NumericalPoint & point) const
 {
-  NumericalScalar k(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar k(point[0]);
   const NumericalScalar supportEpsilon(ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"));
   if ((k < 1.0 - supportEpsilon) || (fabs(k - round(k)) > supportEpsilon)) return 0.0;
   return p_ * pow(1.0 - p_, k - 1.0);
@@ -114,14 +116,18 @@ NumericalScalar Geometric::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Geometric::computeCDF(const NumericalPoint & point) const
 {
-  NumericalScalar k(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar k(point[0]);
   if (k < 1.0) return 0.0;
   return 1.0 - pow(1.0 - p_, floor(k));
 }
 
 NumericalScalar Geometric::computeComplementaryCDF(const NumericalPoint & point) const
 {
-  NumericalScalar k(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar k(point[0]);
   if (k < 1.0) return 1.0;
   return pow(1.0 - p_, floor(k));
 }
@@ -129,7 +135,9 @@ NumericalScalar Geometric::computeComplementaryCDF(const NumericalPoint & point)
 /* Get the PDFGradient of the distribution */
 NumericalPoint Geometric::computePDFGradient(const NumericalPoint & point) const
 {
-  NumericalScalar k(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar k(point[0]);
   const NumericalScalar supportEpsilon(ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"));
   if ((k < 1.0 - supportEpsilon) || (fabs(k - round(k)) > supportEpsilon)) return NumericalPoint(1, 0.0);
   return NumericalPoint(1, (1.0 - k * p_) * pow(1.0 - p_, k - 2.0));
@@ -138,7 +146,9 @@ NumericalPoint Geometric::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Geometric::computeCDFGradient(const NumericalPoint & point) const
 {
-  NumericalScalar k(floor(point[0]));
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar k(floor(point[0]));
   if ( k < 1.0 ) return NumericalPoint(1, 0.0);
   return NumericalPoint(1, k * pow(1 - p_, k - 1.0));
 }

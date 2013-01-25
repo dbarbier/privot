@@ -117,8 +117,10 @@ NumericalPoint Arcsine::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Arcsine::computeDDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
-  NumericalScalar ddf = 0.0;
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
+  NumericalScalar ddf(0.0);
   if ((a_ < x) && (x <= b_))
     {
       ddf = (x - 0.5 * (a_ + b_)) / (M_PI * (x - a_) * (b_ - x) * sqrt((x - a_) * (b_ - x)));
@@ -130,7 +132,7 @@ NumericalPoint Arcsine::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Arcsine::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x >= b_)) return 0.0;
@@ -139,7 +141,7 @@ NumericalScalar Arcsine::computePDF(const NumericalPoint & point) const
 
 NumericalScalar Arcsine::computeLogPDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
   const NumericalScalar x(point[0]);
   if ((x <= a_) || (x >= b_)) return -SpecFunc::MaxNumericalScalar;
@@ -149,6 +151,8 @@ NumericalScalar Arcsine::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Arcsine::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= a_) return 0.0;
   if (x > b_) return 1.0;
@@ -158,6 +162,8 @@ NumericalScalar Arcsine::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar Arcsine::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= a_) return 1.0;
   if (x > b_) return 0.0;
@@ -168,9 +174,11 @@ NumericalScalar Arcsine::computeComplementaryCDF(const NumericalPoint & point) c
 /* Get the PDFGradient of the distribution */
 NumericalPoint Arcsine::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint pdfGradient(2);
   NumericalPoint pdfGradient2(2);
-  NumericalScalar x(point[0]);
+  const NumericalScalar x(point[0]);
 
   if ((a_ < x) && (x <= b_))
     {
@@ -185,9 +193,11 @@ NumericalPoint Arcsine::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Arcsine::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint cdfGradient(2);
   NumericalPoint cdfGradient2(2);
-  NumericalScalar x(point[0]);
+  const NumericalScalar x(point[0]);
   if ((a_ < x) && (x <= b_))
     {
       cdfGradient[0] = (0.5 * (a_ + b_) - x) / (M_PI * 0.5 * (b_ - a_) * sqrt((b_ - x) * (x - a_)));

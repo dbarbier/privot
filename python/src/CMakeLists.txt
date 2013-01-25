@@ -491,6 +491,7 @@ ot_add_python_module( dist_bundle1 dist_bundle1_module.i
                       HistogramFactory.i
                       InverseNormal.i
                       InverseNormalFactory.i
+                      KSubset.i
                       KernelMixture.i
                       KernelSmoothing.i
                       Laplace.i

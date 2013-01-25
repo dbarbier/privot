@@ -92,7 +92,9 @@ NumericalPoint FarlieGumbelMorgensternCopula::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint FarlieGumbelMorgensternCopula::computeDDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 2) throw InvalidArgumentException(HERE) << "Error: wrong point dimension.";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   NumericalPoint result(2, 0.0);
@@ -109,7 +111,9 @@ NumericalPoint FarlieGumbelMorgensternCopula::computeDDF(const NumericalPoint & 
 /* Get the PDF of the distribution */
 NumericalScalar FarlieGumbelMorgensternCopula::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 2) throw InvalidArgumentException(HERE) << "Error: wrong point dimension.";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // A copula has a null PDF outside of ]0, 1[^2
@@ -123,7 +127,9 @@ NumericalScalar FarlieGumbelMorgensternCopula::computePDF(const NumericalPoint &
 /* Get the CDF of the distribution */
 NumericalScalar FarlieGumbelMorgensternCopula::computeCDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 2) throw InvalidArgumentException(HERE) << "Error: wrong point dimension.";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // If we are outside of the support, in the lower parts
@@ -141,7 +147,9 @@ NumericalScalar FarlieGumbelMorgensternCopula::computeCDF(const NumericalPoint &
 /* Get the PDFGradient of the distribution */
 NumericalPoint FarlieGumbelMorgensternCopula::computePDFGradient(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 2) throw InvalidArgumentException(HERE) << "Error: wrong point dimension.";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // A copula has a null PDF outside of ]0, 1[^2
@@ -155,7 +163,9 @@ NumericalPoint FarlieGumbelMorgensternCopula::computePDFGradient(const Numerical
 /* Get the CDFGradient of the distribution */
 NumericalPoint FarlieGumbelMorgensternCopula::computeCDFGradient(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 2) throw InvalidArgumentException(HERE) << "Error: wrong point dimension.";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   if ((u <= 0.0) || (u >= 1.0) || (v <= 0.0) || (v >= 1.0))

@@ -129,6 +129,8 @@ NumericalPoint ChiSquare::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint ChiSquare::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return NumericalPoint(1, 0.0);
   return NumericalPoint(1, ((0.5 * nu_ - 1.0) / x - 0.5) * computePDF(point));
@@ -138,6 +140,8 @@ NumericalPoint ChiSquare::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar ChiSquare::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return 0.0;
   return normalizationFactor_ * pow(x, 0.5 * nu_ - 1) * exp(-0.5 * x);
@@ -147,6 +151,8 @@ NumericalScalar ChiSquare::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar ChiSquare::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   // No test here as the CDF is continuous for all nu_
   if (x <= 0.0) return 0.0;
@@ -155,6 +161,8 @@ NumericalScalar ChiSquare::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar ChiSquare::computeComplementaryCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   // No test here as the CDF is continuous for all nu_
   if (x <= 0.0) return 1.0;
@@ -175,6 +183,8 @@ NumericalComplex ChiSquare::computeLogCharacteristicFunction(const NumericalScal
 /* Get the PDFGradient of the distribution */
 NumericalPoint ChiSquare::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint pdfGradient(1, 0.0);
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return pdfGradient;
@@ -186,6 +196,8 @@ NumericalPoint ChiSquare::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint ChiSquare::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint cdfGradient(1, 0.0);
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return cdfGradient;

@@ -153,7 +153,9 @@ NumericalPoint LogNormal::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint LogNormal::computeDDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   // Here we keep the bound within the special case as the distribution is continuous
   if (x <= 0.0) return NumericalPoint(1, 0.0);
   NumericalScalar v(sigmaLog_ * sigmaLog_);
@@ -164,9 +166,9 @@ NumericalPoint LogNormal::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar LogNormal::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
-  NumericalScalar x(point[0] - gamma_);
+  const NumericalScalar x(point[0] - gamma_);
   // Here we keep the bound within the special case as the distribution is continuous
   if (x <= 0.0) return 0.0;
   NumericalScalar logX((log(x) - muLog_) / sigmaLog_);
@@ -175,9 +177,9 @@ NumericalScalar LogNormal::computePDF(const NumericalPoint & point) const
 
 NumericalScalar LogNormal::computeLogPDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
-  NumericalScalar x(point[0] - gamma_);
+  const NumericalScalar x(point[0] - gamma_);
   // Here we keep the bound within the special case as the distribution is continuous
   if (x <= 0.0) return -SpecFunc::MaxNumericalScalar;
   NumericalScalar logX((log(x) - muLog_) / sigmaLog_);
@@ -187,7 +189,9 @@ NumericalScalar LogNormal::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar LogNormal::computeCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   // Here we keep the bound within the special case as the distribution is continuous
   if (x <= 0.0) return 0.0;
   NumericalScalar logX((log(x) - muLog_) / sigmaLog_);
@@ -196,7 +200,9 @@ NumericalScalar LogNormal::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar LogNormal::computeComplementaryCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   // Here we keep the bound within the special case as the distribution is continuous
   if (x <= 0.0) return 1.0;
   NumericalScalar logX((log(x) - muLog_) / sigmaLog_);
@@ -277,7 +283,9 @@ NumericalComplex LogNormal::computeLogCharacteristicFunction(const NumericalScal
 /* Get the PDFGradient of the distribution */
 NumericalPoint LogNormal::computePDFGradient(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   NumericalPoint pdfGradient(3, 0.0);
   // Here we keep the bound within the special case as the distribution is continuous
   if (x <= 0.0) return pdfGradient;
@@ -292,7 +300,9 @@ NumericalPoint LogNormal::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint LogNormal::computeCDFGradient(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   NumericalPoint cdfGradient(3, 0.0);
   // Here we keep the bound within the special case as the distribution is continuous
   if (x <= 0.0) return cdfGradient;

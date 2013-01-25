@@ -292,6 +292,8 @@ NumericalPoint RandomMixture::getRealization() const
 /* Get the DDF of the RandomMixture */
 NumericalPoint RandomMixture::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   // A specific implementation should be used. For now, we simply explicitely call the default implementation
   return DistributionImplementation::computeDDF(point);
 }

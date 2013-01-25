@@ -28,6 +28,7 @@
 #include <vector>
 #include "PersistentCollection.hxx"
 #include "Description.hxx"
+#include "Indices.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
@@ -57,6 +58,9 @@ public:
 
   /** Constructor from a collection */
   NumericalPoint(const Collection<NumericalScalar> & coll);
+
+  /** Constructor from indices */
+  NumericalPoint(const Indices & indices);
 
   /** Virtual constructor */
   virtual NumericalPoint * clone() const;

@@ -100,6 +100,8 @@ NumericalPoint Laplace::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Laplace::computeDDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar value(computePDF(point) * lambda_);
   return (point[0] < mu_ ? NumericalPoint(1, value) : NumericalPoint(1, -value));
 }
@@ -108,14 +110,14 @@ NumericalPoint Laplace::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Laplace::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
   return 0.5 * lambda_ * exp(-lambda_ * fabs(point[0] - mu_));
 }
 
 NumericalScalar Laplace::computeLogPDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
   return log(0.5 * lambda_) - lambda_ * fabs(point[0] - mu_);
 }
@@ -123,6 +125,8 @@ NumericalScalar Laplace::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Laplace::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar u(lambda_ * (point[0] - mu_));
   if (u < 0.0) return 0.5 * exp(u);
   return 1.0 - 0.5 * exp(-u);
@@ -144,6 +148,8 @@ NumericalComplex Laplace::computeLogCharacteristicFunction(const NumericalScalar
 /* Get the PDFGradient of the distribution */
 NumericalPoint Laplace::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint pdfGradient(2, 0.0);
   const NumericalScalar factor(fabs(point[0] - mu_) * lambda_);
   const NumericalScalar expFactor(exp(-factor));
@@ -155,6 +161,8 @@ NumericalPoint Laplace::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Laplace::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint cdfGradient(2, 0.0);
   const NumericalScalar factor(fabs(point[0] - mu_) * lambda_);
   const NumericalScalar expFactor(exp(-factor));

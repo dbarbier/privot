@@ -94,6 +94,8 @@ NumericalPoint Bernoulli::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar Bernoulli::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   if (fabs(k) < ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return 1.0 - p_;
   if (fabs(k - 1.0) < ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return p_;
@@ -104,6 +106,8 @@ NumericalScalar Bernoulli::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Bernoulli::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   // k < 0.0
   if (k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return 0.0;
@@ -116,6 +120,8 @@ NumericalScalar Bernoulli::computeCDF(const NumericalPoint & point) const
 /* Get the PDF gradient of the distribution */
 NumericalPoint Bernoulli::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   NumericalPoint pdfGradient(1, 0.0);
   if ((k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) || (fabs(k - round(k)) > ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon"))) return pdfGradient;
@@ -126,6 +132,8 @@ NumericalPoint Bernoulli::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDF gradient of the distribution */
 NumericalPoint Bernoulli::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar k(point[0]);
   if (k < -ResourceMap::GetAsNumericalScalar("DiscreteDistribution-SupportEpsilon")) return NumericalPoint(1, 0.0);
   throw NotYetImplementedException(HERE);

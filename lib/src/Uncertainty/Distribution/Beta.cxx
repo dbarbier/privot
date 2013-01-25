@@ -141,7 +141,9 @@ NumericalPoint Beta::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Beta::computeDDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return NumericalPoint(1, 0.0);
   return NumericalPoint(1, ((r_ - 1.0) / (x - a_) - (t_ - r_ - 1.0) / (b_ - x)) * computePDF(point));
 }
@@ -150,9 +152,9 @@ NumericalPoint Beta::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Beta::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
-  NumericalScalar x(point[0]);
+  const NumericalScalar x(point[0]);
   if ((x == b_) && (t_ - r_ == 1.0)) return 1.0;
   if ((x <= a_) || (x >= b_)) return 0.0;
   return exp(computeLogPDF(point));
@@ -160,9 +162,9 @@ NumericalScalar Beta::computePDF(const NumericalPoint & point) const
 
 NumericalScalar Beta::computeLogPDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
 
-  NumericalScalar x(point[0]);
+  const NumericalScalar x(point[0]);
   if ((x == b_) && (t_ - r_ == 1.0)) return 0.0;
   if ((x <= a_) || (x >= b_)) return -SpecFunc::MaxNumericalScalar;
   return normalizationFactor_ + (r_ - 1.0) * log(x - a_) + (t_ - r_ - 1.0) * log(b_ - x);
@@ -172,7 +174,9 @@ NumericalScalar Beta::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Beta::computeCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0]);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0]);
   if (x <= a_) return 0.0;
   if (x > b_) return 1.0;
   return DistFunc::pBeta(r_, t_ - r_, (x - a_) / (b_ - a_));
@@ -181,16 +185,18 @@ NumericalScalar Beta::computeCDF(const NumericalPoint & point) const
 /* Get the PDFGradient of the distribution */
 NumericalPoint Beta::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint pdfGradient(4, 0.0);
-  NumericalScalar x(point[0]);
+  const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return pdfGradient;
-  NumericalScalar pdf(computePDF(point));
-  NumericalScalar psiTR(SpecFunc::Psi(t_ - r_));
-  NumericalScalar iBA(1.0 / (b_ - a_));
-  NumericalScalar BX(b_ - x);
-  NumericalScalar iBX(1.0 / BX);
-  NumericalScalar XA(x - a_);
-  NumericalScalar iXA(1.0 / XA);
+  const NumericalScalar pdf(computePDF(point));
+  const NumericalScalar psiTR(SpecFunc::Psi(t_ - r_));
+  const NumericalScalar iBA(1.0 / (b_ - a_));
+  const NumericalScalar BX(b_ - x);
+  const NumericalScalar iBX(1.0 / BX);
+  const NumericalScalar XA(x - a_);
+  const NumericalScalar iXA(1.0 / XA);
   pdfGradient[0] = pdf * (log(XA * iBX) + psiTR - SpecFunc::Psi(r_));
   pdfGradient[1] = pdf * (log(BX * iBA) - psiTR + SpecFunc::Psi(t_));
   pdfGradient[2] = pdf * ((t_ - 1.0) * iBA - (r_ - 1.0) * iXA);
@@ -201,14 +207,16 @@ NumericalPoint Beta::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Beta::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint cdfGradient(4, 0.0);
-  NumericalScalar x(point[0]);
+  const NumericalScalar x(point[0]);
   if ((x <= a_) || (x > b_)) return cdfGradient;
-  NumericalScalar cdf(computeCDF(point));
-  NumericalScalar iBA(1.0 / (b_ - a_));
-  NumericalScalar cdfShift(DistFunc::pBeta(r_ + 1.0, t_ - r_ - 1.0, (x - a_) * iBA));
-  NumericalScalar cdfDiff(cdfShift - cdf);
-  NumericalScalar factor(r_ * iBA);
+  const NumericalScalar cdf(computeCDF(point));
+  const NumericalScalar iBA(1.0 / (b_ - a_));
+  const NumericalScalar cdfShift(DistFunc::pBeta(r_ + 1.0, t_ - r_ - 1.0, (x - a_) * iBA));
+  const NumericalScalar cdfDiff(cdfShift - cdf);
+  const NumericalScalar factor(r_ * iBA);
   static const NumericalScalar eps(pow(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"), 1.0 / 3.0));
   static const NumericalScalar i2Eps(0.5 / eps);
   cdfGradient[0] = i2Eps * (DistFunc::pBeta(r_ + eps, t_ - r_ - eps, (x - a_) / (b_ - a_)) - DistFunc::pBeta(r_ - eps, t_ - r_ + eps, (x - a_) / (b_ - a_)));
@@ -236,7 +244,7 @@ NumericalComplex Beta::computeCharacteristicFunction(const NumericalScalar x) co
 /* Get the roughness, i.e. the L2-norm of the PDF */
 NumericalScalar Beta::getRoughness() const
 {
-  NumericalScalar den(SpecFunc::Beta(r_, t_ - r_));
+  const NumericalScalar den(SpecFunc::Beta(r_, t_ - r_));
   return SpecFunc::Beta(2.0 * r_ - 1.0, 2.0 * (t_ - r_) - 1.0) / (den * den * (b_ - a_));
 }
 

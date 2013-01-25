@@ -220,7 +220,9 @@ NumericalPoint Gamma::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint Gamma::computeDDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return NumericalPoint(1, 0.0);
   return NumericalPoint(1, ((k_ - 1.0) / x - lambda_) * computePDF(point));
 }
@@ -229,14 +231,18 @@ NumericalPoint Gamma::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar Gamma::computePDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return 0.0;
   return exp(computeLogPDF(point));
 }
 
 NumericalScalar Gamma::computeLogPDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return -SpecFunc::MaxNumericalScalar;
   return normalizationFactor_ + (k_ - 1) * log(x) - lambda_ * x;
 }
@@ -244,7 +250,9 @@ NumericalScalar Gamma::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar Gamma::computeCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   // No test here as the CDF is continuous for all k_
   if (x <= 0.0) return 0.0;
   return DistFunc::pGamma(k_, lambda_ * x);
@@ -252,7 +260,9 @@ NumericalScalar Gamma::computeCDF(const NumericalPoint & point) const
 
 NumericalScalar Gamma::computeComplementaryCDF(const NumericalPoint & point) const
 {
-  NumericalScalar x(point[0] - gamma_);
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
+  const NumericalScalar x(point[0] - gamma_);
   // No test here as the CDF is continuous for all k_
   if (x <= 0.0) return 1.0;
   return DistFunc::pGamma(k_, lambda_ * x, true);
@@ -272,10 +282,12 @@ NumericalComplex Gamma::computeLogCharacteristicFunction(const NumericalScalar x
 /* Get the PDFGradient of the distribution */
 NumericalPoint Gamma::computePDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint pdfGradient(3, 0.0);
-  NumericalScalar x(point[0] - gamma_);
+  const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return pdfGradient;
-  NumericalScalar pdf(computePDF(point));
+  const NumericalScalar pdf(computePDF(point));
   pdfGradient[0] = (log(x) + log(lambda_) - SpecFunc::Psi(k_)) * pdf;
   pdfGradient[1] = (k_ / lambda_ - x) * pdf;
   pdfGradient[2] = ((1.0 - k_) / x + lambda_) * pdf;
@@ -285,12 +297,14 @@ NumericalPoint Gamma::computePDFGradient(const NumericalPoint & point) const
 /* Get the CDFGradient of the distribution */
 NumericalPoint Gamma::computeCDFGradient(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   NumericalPoint cdfGradient(3, 0.0);
-  NumericalScalar x(point[0] - gamma_);
+  const NumericalScalar x(point[0] - gamma_);
   if (x <= 0.0) return cdfGradient;
-  NumericalScalar lambdaX(lambda_ * x);
-  NumericalScalar factor(exp(k_ * log(lambdaX) - SpecFunc::LnGamma(k_) - lambdaX));
-  NumericalScalar eps(pow(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"), 1.0 / 3.0));
+  const NumericalScalar lambdaX(lambda_ * x);
+  const NumericalScalar factor(exp(k_ * log(lambdaX) - SpecFunc::LnGamma(k_) - lambdaX));
+  const NumericalScalar eps(pow(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"), 1.0 / 3.0));
   cdfGradient[0] = (DistFunc::pGamma(k_ + eps, lambda_ * x) - DistFunc::pGamma(k_ - eps, lambda_ * x)) / (2.0 * eps);
   cdfGradient[1] = factor / lambda_;
   cdfGradient[2] = -factor / x;

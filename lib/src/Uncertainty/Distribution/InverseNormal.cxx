@@ -105,6 +105,8 @@ NumericalPoint InverseNormal::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar InverseNormal::computePDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return 0.0;
   return sqrt(lambda_ / (2.0 * M_PI * x * x * x)) * exp(- lambda_ * (x - mu_) * (x - mu_) / (2.0 * x * mu_ * mu_));
@@ -112,6 +114,8 @@ NumericalScalar InverseNormal::computePDF(const NumericalPoint & point) const
 
 NumericalScalar InverseNormal::computeLogPDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return -SpecFunc::MaxNumericalScalar;
   return 0.5 * ( log(lambda_) - log (2.0 * M_PI * x * x * x)) - lambda_ * (x - mu_) * (x - mu_) / (2.0 * x * mu_ * mu_);
@@ -120,6 +124,8 @@ NumericalScalar InverseNormal::computeLogPDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar InverseNormal::computeCDF(const NumericalPoint & point) const
 {
+  if (point.getDimension() != 1) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=1, here dimension=" << point.getDimension();
+
   const NumericalScalar x(point[0]);
   if (x <= 0.0) return 0.0;
   const NumericalScalar lx(sqrt(lambda_ / x));

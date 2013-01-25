@@ -97,7 +97,9 @@ NumericalPoint ClaytonCopula::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint ClaytonCopula::computeDDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 2) throw InvalidArgumentException(HERE) << "Error: wrong point dimension.";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   // Optimized version given by Maple 11, as there are a lot of pow's involved
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
@@ -123,7 +125,9 @@ NumericalPoint ClaytonCopula::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar ClaytonCopula::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 2) throw InvalidArgumentException(HERE) << "Error: wrong point dimension.";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // A copula has a null PDF outside of ]0, 1[^2
@@ -140,7 +144,9 @@ NumericalScalar ClaytonCopula::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar ClaytonCopula::computeCDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 2) throw InvalidArgumentException(HERE) << "Error: wrong point dimension.";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // If we are outside of the support, in the lower parts
@@ -161,7 +167,8 @@ NumericalScalar ClaytonCopula::computeCDF(const NumericalPoint & point) const
 /* Get the PDFGradient of the distribution */
 NumericalPoint ClaytonCopula::computePDFGradient(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 2) throw InvalidArgumentException(HERE) << "Error: wrong point dimension.";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
 
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
@@ -194,7 +201,9 @@ NumericalPoint ClaytonCopula::computePDFGradient(const NumericalPoint & point) c
 /* Get the CDFGradient of the distribution */
 NumericalPoint ClaytonCopula::computeCDFGradient(const NumericalPoint & point) const
 {
-  if (point.getDimension() != 2) throw InvalidArgumentException(HERE) << "Error: wrong point dimension.";
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // If we are outside of the support, in the lower parts

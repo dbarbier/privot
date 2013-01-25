@@ -93,12 +93,12 @@ GumbelCopula * GumbelCopula::clone() const
 NumericalPoint GumbelCopula::getRealization() const
 {
   NumericalPoint realization(2);
-  NumericalScalar u((RandomGenerator::Generate() - 0.5) * M_PI);
-  NumericalScalar u2(u + M_PI_2);
-  NumericalScalar e(-log(RandomGenerator::Generate()));
-  NumericalScalar inverseTheta(1.0 / theta_);
-  NumericalScalar t(cos(u - u2 * inverseTheta) / e);
-  NumericalScalar gamma(pow(sin(u2 * inverseTheta) / t, inverseTheta) * t / cos(u));
+  const NumericalScalar u((RandomGenerator::Generate() - 0.5) * M_PI);
+  const NumericalScalar u2(u + M_PI_2);
+  const NumericalScalar e(-log(RandomGenerator::Generate()));
+  const NumericalScalar inverseTheta(1.0 / theta_);
+  const NumericalScalar t(cos(u - u2 * inverseTheta) / e);
+  const NumericalScalar gamma(pow(sin(u2 * inverseTheta) / t, inverseTheta) * t / cos(u));
   realization[0] = exp(-pow(-log(RandomGenerator::Generate()), inverseTheta) / gamma);
   realization[1] = exp(-pow(-log(RandomGenerator::Generate()), inverseTheta) / gamma);
   return realization;
@@ -107,8 +107,11 @@ NumericalPoint GumbelCopula::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint GumbelCopula::computeDDF(const NumericalPoint & point) const
 {
-  NumericalScalar u(point[0]);
-  NumericalScalar v(point[1]);
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
+  const NumericalScalar u(point[0]);
+  const NumericalScalar v(point[1]);
   // A copula has a null PDF outside of ]0, 1[^2
   if ((u <= 0.0) || (u >= 1.0) || (v <= 0.0) || (v >= 1.0)) return NumericalPoint(2, 0.0);
   NumericalPoint result(2);
@@ -164,24 +167,30 @@ NumericalPoint GumbelCopula::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar GumbelCopula::computePDF(const NumericalPoint & point) const
 {
-  NumericalScalar u(point[0]);
-  NumericalScalar v(point[1]);
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
+  const NumericalScalar u(point[0]);
+  const NumericalScalar v(point[1]);
   // A copula has a null PDF outside of ]0, 1[^2
   if ((u <= 0.0) || (u >= 1.0) || (v <= 0.0) || (v >= 1.0)) return 0.0;
-  NumericalScalar logU(log(u));
-  NumericalScalar logV(log(v));
-  NumericalScalar minusLogUPowerTheta(pow(-logU, theta_));
-  NumericalScalar minusLogVPowerTheta(pow(-logV, theta_));
-  NumericalScalar sum1(minusLogUPowerTheta + minusLogVPowerTheta);
-  NumericalScalar pow1(pow(sum1, 1.0 / theta_));
+  const NumericalScalar logU(log(u));
+  const NumericalScalar logV(log(v));
+  const NumericalScalar minusLogUPowerTheta(pow(-logU, theta_));
+  const NumericalScalar minusLogVPowerTheta(pow(-logV, theta_));
+  const NumericalScalar sum1(minusLogUPowerTheta + minusLogVPowerTheta);
+  const NumericalScalar pow1(pow(sum1, 1.0 / theta_));
   return pow1 * minusLogUPowerTheta * minusLogVPowerTheta * exp(-pow1) * (pow1 + theta_ - 1.0) / (u * v * logU * logV * sum1 * sum1);
 }
 
 /* Get the CDF of the distribution */
 NumericalScalar GumbelCopula::computeCDF(const NumericalPoint & point) const
 {
-  NumericalScalar u(point[0]);
-  NumericalScalar v(point[1]);
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
+  const NumericalScalar u(point[0]);
+  const NumericalScalar v(point[1]);
   // If we are outside of the support, in the lower parts
   if ((u <= 0.0) || (v <= 0.0)) return 0.0;
   // If we are outside of the support, in the upper part
@@ -197,8 +206,11 @@ NumericalScalar GumbelCopula::computeCDF(const NumericalPoint & point) const
 /* Get the PDFGradient of the distribution */
 NumericalPoint GumbelCopula::computePDFGradient(const NumericalPoint & point) const
 {
-  NumericalScalar u(point[0]);
-  NumericalScalar v(point[1]);
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
+  const NumericalScalar u(point[0]);
+  const NumericalScalar v(point[1]);
   // A copula has a null PDF gradient outside of ]0, 1[^2
   if ((u <= 0.0) || (u >= 1.0) || (v <= 0.0) || (v >= 1.0)) return NumericalPoint(1, 0.0);
   const NumericalScalar epsilon(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"));
@@ -208,18 +220,21 @@ NumericalPoint GumbelCopula::computePDFGradient(const NumericalPoint & point) co
 /* Get the CDFGradient of the distribution */
 NumericalPoint GumbelCopula::computeCDFGradient(const NumericalPoint & point) const
 {
-  NumericalScalar u(point[0]);
-  NumericalScalar v(point[1]);
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
+  const NumericalScalar u(point[0]);
+  const NumericalScalar v(point[1]);
   // A copula has a null CDF gradient outside of ]0, 1[^2
   if ((u <= 0.0) || (u >= 1.0) || (v <= 0.0) || (v >= 1.0)) return NumericalPoint(1, 0.0);
   // If we are in the support
-  NumericalScalar logU(log(u));
-  NumericalScalar logV(log(v));
-  NumericalScalar minusLogUPowerTheta(pow(-logU, theta_));
-  NumericalScalar minusLogVPowerTheta(pow(-logV, theta_));
-  NumericalScalar sum1(minusLogUPowerTheta + minusLogVPowerTheta);
-  NumericalScalar inverseTheta(1.0 / theta_);
-  NumericalScalar pow1(pow(sum1, inverseTheta));
+  const NumericalScalar logU(log(u));
+  const NumericalScalar logV(log(v));
+  const NumericalScalar minusLogUPowerTheta(pow(-logU, theta_));
+  const NumericalScalar minusLogVPowerTheta(pow(-logV, theta_));
+  const NumericalScalar sum1(minusLogUPowerTheta + minusLogVPowerTheta);
+  const NumericalScalar inverseTheta(1.0 / theta_);
+  const NumericalScalar pow1(pow(sum1, inverseTheta));
   return NumericalPoint(1, pow1 * exp(-pow1) * inverseTheta * (log(sum1) * inverseTheta - (minusLogUPowerTheta * log(-logU) + minusLogVPowerTheta * log(-logV)) / sum1));
 }
 

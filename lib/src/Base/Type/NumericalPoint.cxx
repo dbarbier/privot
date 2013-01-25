@@ -64,6 +64,14 @@ NumericalPoint::NumericalPoint(const Collection<NumericalScalar> & coll)
 }
 
 
+/* Constructor from indices */
+NumericalPoint::NumericalPoint(const Indices & indices)
+  : PersistentCollection<NumericalScalar>(indices.begin(), indices.end())
+{
+  // Nothing to do
+}
+
+
 
 /* Virtual constructor */
 NumericalPoint * NumericalPoint::clone() const

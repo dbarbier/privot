@@ -106,6 +106,9 @@ NumericalPoint FrankCopula::getRealization() const
 /* Get the DDF of the distribution */
 NumericalPoint FrankCopula::computeDDF(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // A copula has a null DDF outside of ]0, 1[^2
@@ -133,6 +136,9 @@ NumericalPoint FrankCopula::computeDDF(const NumericalPoint & point) const
 /* Get the PDF of the distribution */
 NumericalScalar FrankCopula::computePDF(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // A copula has a null PDF outside of ]0, 1[^2
@@ -153,6 +159,9 @@ NumericalScalar FrankCopula::computePDF(const NumericalPoint & point) const
 /* Get the CDF of the distribution */
 NumericalScalar FrankCopula::computeCDF(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   const NumericalScalar u(point[0]);
   const NumericalScalar v(point[1]);
   // If we are outside of the support, in the lower parts
@@ -188,12 +197,18 @@ NumericalScalar FrankCopula::computeCDF(const NumericalPoint & point) const
 /** Get the PDFGradient of the distribution */
 NumericalPoint FrankCopula::computePDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 
 /** Get the CDFGradient of the distribution */
 NumericalPoint FrankCopula::computeCDFGradient(const NumericalPoint & point) const
 {
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
+
   throw NotYetImplementedException(HERE);
 }
 

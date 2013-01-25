@@ -163,10 +163,10 @@ NumericalPoint UserDefined::getRealization() const
 /* Get the PDF of the distribution */
 NumericalScalar UserDefined::computePDF(const NumericalPoint & point) const
 {
-  if (point.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << getDimension() << ", here dimension=" << point.getDimension();
+  const UnsignedLong dimension(getDimension());
+  if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
 
   const UnsignedLong size(collection_.getSize());
-  const UnsignedLong dimension(getDimension());
   NumericalScalar pdf(0.0);
   // Quick search for 1D case
   if (dimension == 1)
