@@ -91,18 +91,12 @@ CovarianceMatrix UserDefinedStationaryCovarianceModel::computeCovariance(const N
   // else find in the grid the nearest instant values
   if (timeGrid_.getN() == 1) return covarianceCollection_[0];
 
-  if ((t < timeGrid_.getStart()) || (t >= timeGrid_.getEnd()))
-    throw InvalidArgumentException(HERE) << "Error : first instant given is out of the time grid";
-
   // We consider that the time step is positive
   const NumericalScalar initialInstant(timeGrid_.getStart());
-  const SignedInteger N = timeGrid_.getN();
+  const NumericalScalar N(timeGrid_.getN());
   const NumericalScalar step(timeGrid_.getStep());
-  const SignedInteger index = static_cast<SignedInteger>( nearbyint( ( t - initialInstant ) / step) );
+  const SignedInteger index(static_cast<SignedInteger>(std::min(N - 1.0, std::max(0.0,  nearbyint( ( t - initialInstant ) / step) ))));
 
-
-  if (index < 0) return covarianceCollection_[0];
-  if (index >= N) return covarianceCollection_[N - 1];
   return covarianceCollection_[index];
 }
 
