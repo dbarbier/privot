@@ -381,6 +381,11 @@ ot_add_python_module( experiment experiment_module.i
                       Composite.i
                       Factorial.i
                       Box.i
+                      CombinatorialGeneratorImplementation.i
+                      CombinatorialGenerator.i
+                      Combinations.i
+                      KPermutations.i
+                      Tuples.i
                       BaseExperimentTemplateDefs.i
                     )
 
@@ -491,7 +496,7 @@ ot_add_python_module( dist_bundle1 dist_bundle1_module.i
                       HistogramFactory.i
                       InverseNormal.i
                       InverseNormalFactory.i
-                      KSubset.i
+                      KPermutationsDistribution.i
                       KernelMixture.i
                       KernelSmoothing.i
                       Laplace.i

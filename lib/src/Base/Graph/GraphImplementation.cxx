@@ -1,5 +1,5 @@
 //                                               -*- C++ -*-
-/**
+/*
  *  @file  GraphImplementation.cxx
  * @brief Graph implements graphic devices for plotting through R
  *
@@ -167,7 +167,13 @@ void GraphImplementation::add(const DrawableCollection & drawableCollection)
   for (UnsignedLong i = 0; i < drawableCollection.getSize(); ++i) drawablesCollection_.add(drawableCollection[i]);
 }
 
-/** Drawables accessor */
+/* Adds a collection of drawable instances to the collection of drawables contained in GraphImplementation */
+void GraphImplementation::add(const GraphImplementation & graphImplementation)
+{
+  add(graphImplementation.getDrawables());
+}
+
+/* Drawables accessor */
 GraphImplementation::DrawableCollection GraphImplementation::getDrawables() const
 {
   return drawablesCollection_;
@@ -178,7 +184,7 @@ void GraphImplementation::setDrawables(const DrawableCollection & drawableCollec
   drawablesCollection_ = drawableCollection;
 }
 
-/** Individual drawable accessor */
+/* Individual drawable accessor */
 Drawable GraphImplementation::getDrawable(const UnsignedLong index) const
 {
   if (index >= drawablesCollection_.getSize()) throw InvalidRangeException(HERE) << "Error: trying to get a drawable at position " << index << " from a collection of size " << drawablesCollection_.getSize();
@@ -192,6 +198,23 @@ void GraphImplementation::setDrawable(const Drawable & drawable,
   drawablesCollection_[index] = drawable;
 }
 
+/** Global color accessor */
+Description GraphImplementation::getColors() const
+{
+  const UnsignedLong size(drawablesCollection_.getSize());
+  Description colors(size);
+  for (UnsignedLong i = 0; i < size; ++i) colors[i] = drawablesCollection_[i].getColor();
+  return colors;
+}
+
+void GraphImplementation::setColors(const Description & colors)
+{
+  const UnsignedLong size(drawablesCollection_.getSize());
+  const UnsignedLong inputSize(colors.getSize());
+  for (UnsignedLong i = 0; i < size; ++i) drawablesCollection_[i].setColor(colors[i % inputSize]);
+}
+
+
 /* Hide or show x and y axes */
 void GraphImplementation::setAxes(const Bool showAxes)
 {
@@ -204,14 +227,14 @@ Bool GraphImplementation::getAxes() const
   return showAxes_;
 }
 
-/** Set log scale for x, y both or none axes */
+/* Set log scale for x, y both or none axes */
 void GraphImplementation::setLogScale(const LogScale logScale)
 {
   if (logScale > LOGXY) logScale_ = NONE;
   else logScale_ = logScale;
 }
 
-/** Accessor for logScale_ */
+/* Accessor for logScale_ */
 GraphImplementation::LogScale GraphImplementation::getLogScale() const
 {
   return logScale_;

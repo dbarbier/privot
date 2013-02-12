@@ -112,23 +112,26 @@ String Pairs::draw() const
 {
   dataFileName_ = "";
   OSS oss;
-  // Stores the data in a temporary file
-  // The specific R command for drawing
-  oss << "dim_ <- " << data_.getDimension() << "\n" ;
-  oss << "size_ <- " << data_.getSize() << "\n";
-  oss << DrawableImplementation::draw() << "\n";
-  oss << "description=c(";
-  const UnsignedLong length(data_.getDimension());
-  for(UnsignedLong i = 0; i < length - 1; ++i) oss << "\"" << labels_[i] << "\"" << ",";
-  oss << "\"" << labels_[length - 1] << "\"" << ") \n";
-  // DataFrame organisation
-  const String code((OSS() << getPointCode(pointStyle_)));
-  oss << "dataOT = data.frame(dataOT) \n";
-  oss << "names(dataOT) <- description \n";
-  oss << "points(pairs(dataOT "
-      << ",pch=" << (pointStyle_ == "dot" ? "\".\"" : code)
-      << ",col=\"" << color_ << "\""
-      << ",main=\"" << getTitle() << "\"))";
+  if (pointStyle_ != "none")
+    {
+      // Stores the data in a temporary file
+      // The specific R command for drawing
+      oss << "dim_ <- " << data_.getDimension() << "\n" ;
+      oss << "size_ <- " << data_.getSize() << "\n";
+      oss << DrawableImplementation::draw() << "\n";
+      oss << "description=c(";
+      const UnsignedLong length(data_.getDimension());
+      for(UnsignedLong i = 0; i < length - 1; ++i) oss << "\"" << labels_[i] << "\"" << ",";
+      oss << "\"" << labels_[length - 1] << "\"" << ") \n";
+      // DataFrame organisation
+      const String code((OSS() << getPointCode(pointStyle_)));
+      oss << "dataOT = data.frame(dataOT) \n";
+      oss << "names(dataOT) <- description \n";
+      oss << "points(pairs(dataOT "
+	  << ",pch=" << (pointStyle_ == "dot" ? "\".\"" : code)
+	  << ",col=\"" << color_ << "\""
+	  << ",main=\"" << getTitle() << "\"))";
+    }
   return oss;
 }
 

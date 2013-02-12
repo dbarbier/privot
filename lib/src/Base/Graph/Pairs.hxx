@@ -105,9 +105,6 @@ private:
   /** Title of the main */
   String title_;
 
-  /** Temporary file name for the exchange with R */
-  mutable String dataFileName_;
-
 }; /* class Pairs */
 
 

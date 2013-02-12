@@ -5,11 +5,6 @@ from openturns import *
 TESTPREAMBLE()
 
 try :
-    # Fix the realization as a Normal
-    # Parameters are done such as the values are positive
-    epsilon = 0.01
-    noiseDistribution = Normal(0, epsilon)
-
     # TimeGrid parameters
     n = 101
     timeStart = 0.0
@@ -17,44 +12,38 @@ try :
     timeGrid = RegularGrid(timeStart, timeStep, n)
 
     # White noise
-    whiteNoise = WhiteNoise(noiseDistribution, timeGrid)
+    whiteNoise = WhiteNoise(Uniform(), timeGrid)
 
-    # Now instantiation of a ARMA process
-    arParameters = NumericalPoint(1, 0.1)
-    maParameters = NumericalPoint(1, 5)
-    arCoefficients = ARMACoefficients(arParameters)
-    maCoefficients = ARMACoefficients(maParameters)
+    # Composite process
+    process = CompositeProcess(SpatialFunction(NumericalMathFunction("x", "x+2")), whiteNoise)
+    # A realization of the process
+    timeSeries = process.getRealization()
+    sample = timeSeries.getSample()
+    
+    # Now we build the factory
+    factory = BoxCoxFactory()
+    
+    # Creation of the BoxCoxTransform
+    myBoxCox = factory.build(timeSeries)
+    
+    print "myBoxCox (time-series)=", myBoxCox
+    print "myBoxCox (sample)     =", factory.build(sample)
+    
+    # Creation of the BoxCoxTransform using shift
+    shift = NumericalPoint(1, 1.0)
+    myBoxCoxShift = factory.build(timeSeries, shift)
+    
+    print "myBoxCox with shift (time-series)=", myBoxCoxShift
+    print "myBoxCox with shift (sample)     =", factory.build(sample, shift)
 
-    # Create the ARMA process
-    armaProcess = ARMA(arCoefficients, maCoefficients, whiteNoise)
+    # Creation of the BoxCoxTransform using shift with graph
+    graph = Graph()
+    myBoxCoxShiftGraph = factory.build(timeSeries, shift, graph)
 
-    # 1 realization of the process
-    realization = armaProcess.getRealization()
+    print "BoxCox graph (time-series)=", graph
+    graph.draw("BoxCoxGraph")
 
-    # We have to translate manually in order to use the BoxCox evaluation on positive values
-    sample = realization.getSample()
-
-    alpha = -sample.getMin()[0] + 1.0e-4
-
-    # Now we build the factory using the alpha parameter
-    factory = BoxCoxFactory(alpha)
-
-    # Evaluation of the BoxCoxTransfotm
-    myBoxCox = factory.build(realization)
-
-    print "myBoxCox = ", myBoxCox
-
-    # We translate the input sample using the alpha value
-    sample.translate(NumericalPoint(1, alpha))
-
-    # We build a new TimeSeries
-    translateTimeSerie = TimeSeries(timeGrid, sample)
-
-    # Evaluation of the factory result on the new time series
-    PlatformInfo.SetNumericalPrecision(5)
-    print "input time series=", translateTimeSerie
-    print "f(time series) = ", myBoxCox(translateTimeSerie)
 
 except :
     import sys
-    print "t_BoxCoxTransform_std.py", sys.exc_type, sys.exc_value
+    print "t_BoxCoxFactory_std.py", sys.exc_type, sys.exc_value

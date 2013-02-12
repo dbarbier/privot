@@ -26,18 +26,24 @@ static Factory<InverseTrendEvaluationImplementation> RegisteredFactory("InverseT
 
 /* Default constructor */
 InverseTrendEvaluationImplementation::InverseTrendEvaluationImplementation()
-  : NumericalMathEvaluationImplementation(),
-    function_()
+  : NumericalMathEvaluationImplementation()
+  , function_()
 {
   // Nothing to do
 }
 
 /* Parameter constructor */
 InverseTrendEvaluationImplementation::InverseTrendEvaluationImplementation(const NumericalMathFunction & function)
-  : NumericalMathEvaluationImplementation(),
-    function_(function)
+  : NumericalMathEvaluationImplementation()
+  , function_(function)
 {
-  // Nothing to do
+  Description inputDescription(function.getInputDescription());
+  const Description outputDescription(function.getOutputDescription());
+  const UnsignedLong outputDimension(outputDescription.getSize());
+  const Description otherInputDescription(BuildDefaultDescription(outputDimension, "x"));
+  for (UnsignedLong i = 0; i < outputDimension; ++i) inputDescription.add(otherInputDescription[i]);
+  setInputDescription(inputDescription);
+  setOutputDescription(outputDescription);
 }
 
 /* Clone constructor */
@@ -49,7 +55,7 @@ InverseTrendEvaluationImplementation * InverseTrendEvaluationImplementation::clo
 /* Comparison operator */
 Bool InverseTrendEvaluationImplementation::operator ==(const InverseTrendEvaluationImplementation & other) const
 {
-  if (*this == other) return true;
+  if (this == &other) return true;
   return (function_ == other.function_);
 }
 

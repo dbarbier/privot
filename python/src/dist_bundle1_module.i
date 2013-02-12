@@ -60,7 +60,7 @@
 %include HistogramFactory.i
 %include InverseNormal.i
 %include InverseNormalFactory.i
-%include KSubset.i
+%include KPermutationsDistribution.i
 %include KernelMixture.i
 %include KernelSmoothing.i
 %include Laplace.i

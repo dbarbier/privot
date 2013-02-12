@@ -6,6 +6,7 @@ point2[0] = 10.000000
 point2[1] = 11.000000
 point3[0] = 0.000000
 point3[1] = 1.000000
+point= [0,1,2,3,4]
 point4[0] = 1000.000000
 point4[1] = 1001.000000
 point5 =  class=NumericalPoint name=Unnamed dimension=2 values=[10,12]

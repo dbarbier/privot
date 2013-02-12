@@ -21,6 +21,8 @@
  * @author schueller
  * @date   2012-07-16 12:24:33 +0200 (Mon, 16 Jul 2012)
  */
+#include <algorithm>
+#include <iterator>
 
 #include "NumericalMathEvaluationImplementation.hxx"
 #include "ComposedNumericalMathEvaluationImplementation.hxx"
@@ -66,7 +68,8 @@ NumericalMathEvaluationImplementation::NumericalMathEvaluationImplementation()
     inputStrategy_(Full()),
     outputStrategy_(Full()),
     isHistoryEnabled_(false),
-    description_(0),
+    inputDescription_(0),
+    outputDescription_(0),
     parameters_(0)
 {
   // We disable the cache by default
@@ -92,7 +95,8 @@ String NumericalMathEvaluationImplementation::__repr__() const
   OSS oss;
   oss << "class=" << NumericalMathEvaluationImplementation::GetClassName()
       << " name=" << getName()
-      << " description=" << description_
+      << " input description=" << inputDescription_
+      << " output description=" << outputDescription_
       << " parameters=" << parameters_;
   return oss;
 }
@@ -107,34 +111,45 @@ String NumericalMathEvaluationImplementation::__str__(const String & offset) con
 void NumericalMathEvaluationImplementation::setDescription(const Description & description)
 {
   if (description.getSize() != getInputDimension() + getOutputDimension()) throw InvalidArgumentException(HERE) << "Error: the description must have a size of input dimension + output dimension, here size=" << description.getSize() << ", input dimension=" << getInputDimension() << ", output dimension=" << getOutputDimension();
-  description_ = description;
+  inputDescription_ = Description(getInputDimension());
+  std::copy(description.begin(), description.begin() + getInputDimension(), inputDescription_.begin());
+  outputDescription_ = Description(getOutputDimension());
+  std::copy(description.begin() + getInputDimension(), description.begin() + description.getSize(), outputDescription_.begin());
 }
 
 
 /* Description Accessor */
 Description NumericalMathEvaluationImplementation::getDescription() const
 {
-  return description_;
+  Description description(inputDescription_);
+  for (UnsignedLong i = 0; i < getOutputDimension(); ++i) description.add(outputDescription_[i]);
+  return description;
 }
 
 /* Input description Accessor */
+void NumericalMathEvaluationImplementation::setInputDescription(const Description & inputDescription)
+{
+  if (inputDescription.getSize() != getInputDimension()) throw InvalidArgumentException(HERE) << "Error: the input description must have a size=" << inputDescription.getSize() << " equal to the input dimension=" << getInputDimension();
+  inputDescription_ = inputDescription;
+}
+
 Description NumericalMathEvaluationImplementation::getInputDescription() const
 {
-  Description inputDescription(0);
-  // Check if the description has been set
-  if (description_.getSize() > 0) for (UnsignedLong i = 0; i < getInputDimension(); i++) inputDescription.add(description_[i]);
-  else for (UnsignedLong i = 0; i < getInputDimension(); i++) inputDescription.add((OSS() << "x" << i));
-  return inputDescription;
+  if (inputDescription_.getSize() == 0) return BuildDefaultDescription(getInputDimension(), "x");
+  return inputDescription_;
 }
 
 /* Output description Accessor */
+void NumericalMathEvaluationImplementation::setOutputDescription(const Description & outputDescription)
+{
+  if (outputDescription.getSize() != getOutputDimension()) throw InvalidArgumentException(HERE) << "Error: the output description must have a size=" << outputDescription.getSize() << " equal to the output dimension=" << getOutputDimension();
+  outputDescription_ = outputDescription;
+}
+
 Description NumericalMathEvaluationImplementation::getOutputDescription() const
 {
-  Description outputDescription(0);
-  // Check if the description has been set
-  if (description_.getSize() > 0) for (UnsignedLong i = getInputDimension(); i < description_.getSize(); i++) outputDescription.add(description_[i]);
-  else for (UnsignedLong i = 0; i < getOutputDimension(); i++) outputDescription.add((OSS() << "y" << i));
-  return outputDescription;
+  if (outputDescription_.getSize() == 0) return BuildDefaultDescription(getOutputDimension(), "y");
+  return outputDescription_;
 }
 
 /* Test for actual implementation */
@@ -166,17 +181,7 @@ TimeSeries NumericalMathEvaluationImplementation::operator() (const TimeSeries &
 {
   const UnsignedLong inputDimension(getInputDimension());
   if (inTimeSeries.getDimension() != inputDimension) throw InvalidArgumentException(HERE) << "Error: the given time series has an invalid dimension. Expect a dimension " << inputDimension << ", got " << inTimeSeries.getDimension();
-
-  const UnsignedLong size(inTimeSeries.getSize());
-  TimeSeries outTimeSeries(size, getOutputDimension());
-  // Simple loop over the evaluation operator based on point
-  // The calls number is updated by these calls
-  for (UnsignedLong i = 0; i < size; ++i)
-    {
-      outTimeSeries[i][0] = inTimeSeries[i][0];
-      outTimeSeries.getValueAtIndex(i) = operator()( inTimeSeries.getValueAtIndex(i) );
-    }
-  return outTimeSeries;
+  return TimeSeries(inTimeSeries.getTimeGrid(), operator()(inTimeSeries.getSample()));
 }
 
 
@@ -375,8 +380,10 @@ Graph NumericalMathEvaluationImplementation::draw(const UnsignedLong inputMargin
     inputData[i][inputMarginal] = xMin + i * (xMax - xMin) / (pointNumber - 1.0);
   // Evaluate the function over all its input in one call in order to benefit from potential parallelism
   const NumericalSample outputData((*this)(inputData));
-  const String xName(getInputDescription()[inputMarginal]);
-  const String yName(getOutputDescription()[outputMarginal]);
+  const Description inputDescription(getInputDescription());
+  const Description outputDescription(getOutputDescription());
+  const String xName(inputDescription[inputMarginal]);
+  const String yName(outputDescription[outputMarginal]);
   String title(OSS() << yName << " as a function of " << xName);
   if (centralPoint.getDimension() > 1) title = String(OSS(false) << title << " around " << centralPoint);
   Graph graph(title, xName, yName, true, "");
@@ -461,13 +468,23 @@ Graph NumericalMathEvaluationImplementation::draw(const NumericalPoint & xMin,
   return draw(0, 1, 0, NumericalPoint(2), xMin, xMax, pointNumber);
 }
 
+/* Build a default description */
+Description NumericalMathEvaluationImplementation::BuildDefaultDescription(const UnsignedLong dimension,
+                                                                           const String & prefix)
+{
+  Description description(dimension);
+  for (UnsignedLong k = 0; k < dimension; ++k) description[k] =  String(OSS() << prefix << k);
+  return description;
+}
+
 /* Method save() stores the object through the StorageManager */
 void NumericalMathEvaluationImplementation::save(Advocate & adv) const
 {
   PersistentObject::save(adv);
   adv.saveAttribute( "callsNumber_", callsNumber_ );
   adv.saveAttribute( "cache_", *p_cache_ );
-  adv.saveAttribute( "description_", description_ );
+  adv.saveAttribute( "inputDescription_", inputDescription_ );
+  adv.saveAttribute( "outputDescription_", outputDescription_ );
   adv.saveAttribute( "parameters_", parameters_ );
 }
 
@@ -479,7 +496,8 @@ void NumericalMathEvaluationImplementation::load(Advocate & adv)
   adv.loadAttribute( "callsNumber_", callsNumber_ );
   adv.loadAttribute( "cache_", cache );
   p_cache_ = cache.getImplementation();
-  adv.loadAttribute( "description_", description_ );
+  adv.loadAttribute( "inputDescription_", inputDescription_ );
+  adv.loadAttribute( "outputDescription_", outputDescription_ );
   adv.loadAttribute( "parameters_", parameters_ );
 }
 

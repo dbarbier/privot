@@ -25,7 +25,7 @@
 #ifndef OPENTURNS_BOXCOXTRANSFORM_HXX
 #define OPENTURNS_BOXCOXTRANSFORM_HXX
 
-#include "SpatialFunction.hxx"
+#include "NumericalMathFunction.hxx"
 #include "NumericalPoint.hxx"
 #include "Collection.hxx"
 
@@ -40,62 +40,40 @@ BEGIN_NAMESPACE_OPENTURNS
 class InverseBoxCoxTransform;
 
 class BoxCoxTransform
-  : public SpatialFunction
+  : public NumericalMathFunction
 
 {
   CLASSNAME;
 public:
 
-
-
-
   /** Default constructor */
   BoxCoxTransform();
 
   /** Standard parameter constructor */
-  BoxCoxTransform(const NumericalPoint & lambdaPoint);
+  BoxCoxTransform(const NumericalPoint & lambda);
 
-  /** NumericalScalarCollection parameter constructor */
-  BoxCoxTransform(const Collection<NumericalScalar> & lambdaCollection);
+  BoxCoxTransform(const NumericalPoint & lambda,
+		  const NumericalPoint & shift);
 
   /** 1D NumericalScalar parameter constructor */
-  BoxCoxTransform(const NumericalScalar & lambdaScalar);
+  BoxCoxTransform(const NumericalScalar & lambda);
+
+  BoxCoxTransform(const NumericalScalar & lambda,
+		  const NumericalScalar & shift);
 
   /** Virtual constructor */
   BoxCoxTransform * clone() const;
 
-  /** Comparison operator */
-  Bool operator ==(const BoxCoxTransform & other) const;
-
-  /** String converter */
-  String __repr__() const;
-  String __str__(const String & offset = "") const;
-
-  /** Operator () */
-  TimeSeries operator() (const TimeSeries & inTS) const;
-
   /** Lambda accessor */
   NumericalPoint getLambda () const;
 
-  /** Evaluation accessor */
-  EvaluationImplementation getEvaluation() const;
+  /** Shift accessor */
+  NumericalPoint getShift () const;
 
   /** Inverse accessor */
   InverseBoxCoxTransform getInverse() const;
 
-  /** Method save() stores the object through the StorageManager */
-  void save(Advocate & adv) const;
-
-  /** Method load() reloads the object from the StorageManager */
-  void load(Advocate & adv);
-
 private:
-
-  /** Internal setDefaultDescription method */
-  void setDefaultDescription();
-
-  /** NumericalPoint lambda ==> get a copy is better than a dynamic_cast */
-  NumericalPoint lambda_;
 
 }; /* class BoxCoxTransform */
 

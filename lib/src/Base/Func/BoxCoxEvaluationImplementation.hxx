@@ -45,6 +45,9 @@ public:
   /** Parameter constructor */
   BoxCoxEvaluationImplementation(const NumericalPoint & lamda);
 
+  BoxCoxEvaluationImplementation(const NumericalPoint & lamda,
+				 const NumericalPoint & shift);
+
   /** Virtual constructor */
   BoxCoxEvaluationImplementation * clone() const;
 
@@ -68,6 +71,9 @@ public:
   /** Accessor for the lambda point */
   NumericalPoint getLambda() const;
 
+  /** Accessor for the shift */
+  NumericalPoint getShift() const;
+
   /** Method save() stores the object through the StorageManager */
   void save(Advocate & adv) const;
 
@@ -76,8 +82,11 @@ public:
 
 protected:
 
-  /** lambda vector of the box cox transform */
+  /** Lambda vector of the box cox transform */
   NumericalPoint lambda_;
+
+  /** Shift vector of the box cox transform */
+  NumericalPoint shift_;
 
 
 }; /* class BoxCoxEvaluationImplementation */

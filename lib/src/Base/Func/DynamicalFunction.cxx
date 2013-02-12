@@ -22,16 +22,22 @@
  *  @date   2011-05-24 19:30:41 +0200 (mar. 24 mai 2011)
  */
 #include "DynamicalFunction.hxx"
+#include "SpatialFunction.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
-
-
 
 CLASSNAMEINIT(DynamicalFunction);
 
 /* Default constructor */
 DynamicalFunction::DynamicalFunction()
   : TypedInterfaceObject<DynamicalFunctionImplementation>(new DynamicalFunctionImplementation())
+{
+  // Nothing to do
+}
+
+/* Constructor from NumericalMathFunction */
+DynamicalFunction::DynamicalFunction(const NumericalMathFunction & function)
+  : TypedInterfaceObject<DynamicalFunctionImplementation>(SpatialFunction(function).clone())
 {
   // Nothing to do
 }

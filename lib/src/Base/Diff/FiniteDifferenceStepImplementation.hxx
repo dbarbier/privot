@@ -31,15 +31,13 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 class FiniteDifferenceStepImplementation
   : public PersistentObject
 {
 
   CLASSNAME;
 public:
-  typedef Pointer<FiniteDifferenceStepImplementation>                         Implementation;
+  typedef Pointer<FiniteDifferenceStepImplementation> Implementation;
 
   /** Default constructor */
   FiniteDifferenceStepImplementation();
@@ -69,14 +67,11 @@ public:
   virtual void load(Advocate & adv);
 
 protected:
+  /* The small increments */
   NumericalPoint epsilon_;
+
 };
 
 END_NAMESPACE_OPENTURNS
 
-
-
-
-
-#endif
-
+#endif /* OPENTURNS_FINITEDIFFERENCESTEPIMPLEMENTATION_HXX */

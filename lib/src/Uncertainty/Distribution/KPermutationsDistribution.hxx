@@ -1,7 +1,7 @@
 //                                               -*- C++ -*-
 /**
- *  @file  KSubset.hxx
- *  @brief The KSubset distribution
+ *  @file  KPermutationsDistribution.hxx
+ *  @brief The KPermutationsDistribution distribution
  *
  *  Copyright (C) 2005-2013 EDF-EADS-Phimeca
  *
@@ -20,10 +20,10 @@
  *
  *  @author schueller
  *  @date   2012-07-16 10:12:54 +0200 (Mon, 16 Jul 2012)
- *  Id      KSubset.hxx 2600 2012-07-16 08:12:54Z schueller
+ *  Id      KPermutationsDistribution.hxx 2600 2012-07-16 08:12:54Z schueller
  */
-#ifndef OPENTURNS_KSUBSET_HXX
-#define OPENTURNS_KSUBSET_HXX
+#ifndef OPENTURNS_KPERMUTATIONSDISTRIBUTION_HXX
+#define OPENTURNS_KPERMUTATIONSDISTRIBUTION_HXX
 
 #include "OTprivate.hxx"
 #include "DiscreteDistribution.hxx"
@@ -32,27 +32,27 @@
 BEGIN_NAMESPACE_OPENTURNS
 
 /**
- * @class KSubset
+ * @class KPermutationsDistribution
  *
- * The KSubset distribution.
+ * The KPermutationsDistribution distribution.
  */
-class KSubset
+class KPermutationsDistribution
   : public DiscreteDistribution
 {
   CLASSNAME;
 public:
 
   /** Default constructor */
-  KSubset();
+  KPermutationsDistribution();
 
 
   /** Parameters constructor */
-  KSubset(const UnsignedLong k,
-	  const UnsignedLong n);
+  KPermutationsDistribution(const UnsignedLong k,
+                            const UnsignedLong n);
 
 
   /** Comparison operator */
-  Bool operator ==(const KSubset & other) const;
+  Bool operator ==(const KPermutationsDistribution & other) const;
 
   /** String converter */
   String __repr__() const;
@@ -63,7 +63,7 @@ public:
   /* Interface inherited from Distribution */
 
   /** Virtual constructor */
-  virtual KSubset * clone() const;
+  virtual KPermutationsDistribution * clone() const;
 
   /** Get one realization of the distribution */
   NumericalPoint getRealization() const;
@@ -92,7 +92,7 @@ public:
   /** Parameters value and description accessor */
   NumericalPointWithDescriptionCollection getParametersCollection() const;
 
-  /* Interface specific to KSubset */
+  /* Interface specific to KPermutationsDistribution */
 
   /** K accessor */
   void setK(const UnsignedLong k);
@@ -127,15 +127,18 @@ private:
   /** Compute the covariance of the distribution */
   void computeCovariance() const;
 
-  /** Size of the subset */
+  /** Size of the permutations */
   UnsignedLong k_;
 
   /** Size of the base set */
   UnsignedLong n_;
 
-}; /* class KSubset */
+  /** Log PDF value */
+  NumericalScalar logPDFValue_;
+
+}; /* class KPermutationsDistribution */
 
 
 END_NAMESPACE_OPENTURNS
 
-#endif /* OPENTURNS_KSUBSET_HXX */
+#endif /* OPENTURNS_KPERMUTATIONSDISTRIBUTION_HXX */

@@ -184,6 +184,9 @@ public:
                                 const NumericalScalar value,
                                 const NumericalScalar alpha);
 
+  /** Build default palette */
+  static Description BuildDefaultPalette(const UnsignedLong size);
+
 }; /* class Drawable */
 
 END_NAMESPACE_OPENTURNS

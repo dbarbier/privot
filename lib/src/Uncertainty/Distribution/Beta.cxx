@@ -39,12 +39,12 @@ static Factory<Beta> RegisteredFactory("Beta");
 
 /* Default constructor */
 Beta::Beta()
-  : NonEllipticalDistribution("Beta"),
-    r_(2.0),
-    t_(4.0),
-    a_(-1.0),
-    b_(1.0),
-    normalizationFactor_(log(0.75))
+  : NonEllipticalDistribution("Beta")
+  , r_(2.0)
+  , t_(4.0)
+  , a_(-1.0)
+  , b_(1.0)
+  , normalizationFactor_(log(0.75))
 {
   setDimension(1);
   computeRange();
@@ -56,12 +56,12 @@ Beta::Beta(const NumericalScalar arg1,
            const NumericalScalar a,
            const NumericalScalar b,
            const ParameterSet set)
-  : NonEllipticalDistribution("Beta"),
-    r_(0.0),
-    t_(0.0),
-    a_(a),
-    b_(b),
-    normalizationFactor_(0.0)
+  : NonEllipticalDistribution("Beta")
+  , r_(0.0)
+  , t_(0.0)
+  , a_(a)
+  , b_(b)
+  , normalizationFactor_(0.0)
 {
   if (b <= a) throw InvalidArgumentException(HERE) << "Error: the upper bound must be greater than the lower bound, here a=" << a << " and b=" << b;
   switch (set)

@@ -71,6 +71,7 @@ void DrawableImplementation::InitializeValidParameterList()
   SymbolCodes["fdiamond"]     = 18;
   SymbolCodes["bullet"]       = 20;
   SymbolCodes["dot"]          = 127;
+  SymbolCodes["none"]         = 256;
 
   /* Accepted colors */
   ColorCodes["white"]          = "#FFFFFF";
@@ -798,10 +799,7 @@ Description DrawableImplementation::GetValidPointStyles()
     }
   Description validPointStyle;
   std::map<String, UnsignedLong>::const_iterator it(SymbolCodes.begin());
-  for (it = SymbolCodes.begin(); it != SymbolCodes.end(); ++it)
-    {
-      validPointStyle.add(it->first);
-    }
+  for (it = SymbolCodes.begin(); it != SymbolCodes.end(); ++it) validPointStyle.add(it->first);
   return validPointStyle;
 }
 
@@ -1361,6 +1359,30 @@ String DrawableImplementation::draw() const
 void DrawableImplementation::clean() const
 {
   if ((dataFileName_ != "") && (remove(dataFileName_.c_str()) == -1)) LOGWARN(OSS() << "GraphImplementation: error trying to remove file " << dataFileName_);
+}
+
+/* Build default palette
+   Cycle through the hue wheel with 10 nuances and increasing darkness */
+Description DrawableImplementation::BuildDefaultPalette(const UnsignedLong size)
+{
+  if (size == 0) throw InvalidArgumentException(HERE) << "Error: the size must be > 0";
+  Description palette(size);
+  const UnsignedLong divider(std::min(size + 1, static_cast< UnsignedLong >(12)));
+  const NumericalScalar multiplier(360.0 / divider);
+  const UnsignedLong cycles(size / divider + 1);
+  UnsignedLong paletteIndex(0);
+  for (UnsignedLong iCycle = 0; iCycle < cycles; ++iCycle)
+    {
+      const NumericalScalar value(1.0 - iCycle / static_cast< NumericalScalar >(cycles));
+      const UnsignedLong iHueMax(std::min(size - paletteIndex, static_cast< UnsignedLong >(12)));
+      for (UnsignedLong iHue = 0; iHue < iHueMax; ++iHue)
+        {
+          const NumericalScalar hue(multiplier * iHue);
+          palette[paletteIndex] = ConvertFromHSV(hue, 1.0, value);
+          ++paletteIndex;
+        }
+    }
+  return palette;
 }
 
 /* Method save() stores the object through the StorageManager */

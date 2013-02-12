@@ -45,6 +45,9 @@ public:
   /** Parameter constructor */
   InverseBoxCoxEvaluationImplementation(const NumericalPoint & lamda);
 
+  InverseBoxCoxEvaluationImplementation(const NumericalPoint & lamda,
+					const NumericalPoint & shift);
+
   /** Virtual constructor */
   InverseBoxCoxEvaluationImplementation * clone() const;
 
@@ -68,6 +71,9 @@ public:
   /** Accessor for the lambda point */
   NumericalPoint getLambda() const;
 
+  /** Accessor for the shift */
+  NumericalPoint getShift() const;
+
   /** Method save() stores the object through the StorageManager */
   void save(Advocate & adv) const;
 
@@ -78,6 +84,9 @@ protected:
 
   /** lambda vector of the box cox transform */
   NumericalPoint lambda_;
+
+  /** Shift vector of the box cox transform */
+  NumericalPoint shift_;
 
 
 }; /* class InverseBoxCoxEvaluationImplementation */

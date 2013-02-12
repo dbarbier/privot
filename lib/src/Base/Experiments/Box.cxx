@@ -25,6 +25,7 @@
 #include "OTprivate.hxx"
 #include "Box.hxx"
 #include "Indices.hxx"
+#include "Tuples.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
@@ -55,9 +56,7 @@ Box::Box(const Indices & levels,
   // Check if there is the same number of levels than the dimension of the experiment plane
   const UnsignedLong size(levels.getSize());
   if (size == 0) throw InvalidArgumentException(HERE) << "Error: the levels dimension must be > 0";
-  NumericalPoint newLevels(size);
-  for (UnsignedLong i = 0; i < size; ++i) newLevels[i] = levels[i];
-  setLevels(newLevels);
+  setLevels(levels);
 }
 
 /* Virtual constructor */
@@ -71,31 +70,15 @@ Box * Box::clone() const
    levels counts the number of interior points in each dimension */
 NumericalSample Box::generate()
 {
-  /* Dimension of the realizations */
-  const UnsignedLong dimension(center_.getDimension());
-  /* Levels */
-  Indices levels(dimension);
-  /* Convert NumericalScalar values to UnsignedLong values for the levels */
-  for (UnsignedLong i = 0; i < dimension; ++i) levels[i] = UnsignedLong(round(levels_[i])) + 2;
-  /* Size of the sample to be generated: levels[0] * ... * levels[dimension-1] */
-  UnsignedLong size(levels[0]);
-  for (UnsignedLong i = 1; i < dimension; ++i) size *= levels[i];
+  const UnsignedLong dimension(levels_.getDimension());
+  Indices bounds(dimension);
+  for (UnsignedLong i = 0; i < dimension; ++i) bounds[i] = static_cast< UnsignedLong > (round(levels_[i] + 2.0));
+  Tuples::IndicesCollection tuples(Tuples(bounds).generate());
+  const UnsignedLong size(tuples.getSize());
   NumericalSample boxPlane(size, dimension);
-  boxPlane.setName("Box plane");
-  /* Indices would have stored the indices of the nested loops if we were able to code "dimension" nested loops dynamically */
-  Indices indices(dimension, 0);
-  for (UnsignedLong flatIndex = 0; flatIndex < size; ++flatIndex)
-    {
-      NumericalPoint point(dimension, 0.0);
-      for (UnsignedLong i = 0; i < dimension; ++i) point[i] = indices[i] / (levels_[i] + 1.0);
-      boxPlane[flatIndex] = point;
-      /* Update the indices */
-      ++indices[0];
-      /* Propagate the remainders */
-      for (UnsignedLong i = 0; i < dimension - 1; ++i) indices[i + 1] += (indices[i] == levels[i]);
-      /* Correction of the indices. The last index cannot overflow. */
-      for (UnsignedLong i = 0; i < dimension - 1; ++i) indices[i] = indices[i] % levels[i];
-    }
+  for (UnsignedLong i = 0; i < size; ++i)
+    for (UnsignedLong j = 0; j < dimension; ++j)
+      boxPlane[i][j] = tuples[i][j] / (levels_[j] + 1.0);
   return boxPlane;
 } // generate()
 

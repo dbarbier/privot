@@ -29,10 +29,15 @@
 #include "Axial.hxx"
 #include "Box.hxx"
 #include "Composite.hxx"
+#include "Combinations.hxx"
+#include "CombinatorialGenerator.hxx"
+#include "CombinatorialGeneratorImplementation.hxx"
 #include "Experiment.hxx"
 #include "ExperimentImplementation.hxx"
 #include "Factorial.hxx"
 #include "FixedExperiment.hxx"
+#include "KPermutations.hxx"
 #include "StratifiedExperiment.hxx"
+#include "Tuples.hxx"
 
 #endif /* OPENTURNS_OTEXPERIMENTS_HXX */

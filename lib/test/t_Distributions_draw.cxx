@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
       graphCDF.draw("PointNumberDrawCDF_1D");
       fullprint << "graphCDF=" << graphCDF.getBitmap() << std::endl;
       // Check drawing methods for 2D distributions
+      std::cerr << "bug" << std::endl;
       graphPDF = dist2D.drawPDF();
       graphPDF.draw("DefaultDrawPDF_2D");
       fullprint << "graphPDF=" << graphPDF.getBitmap() << std::endl;

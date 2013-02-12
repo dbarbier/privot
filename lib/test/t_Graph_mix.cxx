@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
       Cloud myCloud(sample, "blue", "fsquare", "Normal Cloud");
 
       // Create the line
-      Curve myLine(tmp, "red", "solid", 2, "Line", true);
+      Curve myLine(tmp, "red", "solid", 2, "Line");
 
       NumericalSample data(0, 1);
       Description palette;

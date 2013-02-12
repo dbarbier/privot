@@ -100,12 +100,12 @@ MCMC::MCMC( const Distribution & prior,
 String MCMC::__repr__() const
 {
   return OSS() << "class=" << MCMC::GetClassName()
-               << "prior=" << prior_
-               << "conditional=" << conditional_
-               << "model=" << model_
-               << "observations=" << observations_
-               << "burnIn=" << burnIn_
-               << "thinning=" << thinning_;
+               << " prior=" << prior_
+               << " conditional=" << conditional_
+               << " model=" << model_
+               << " observations=" << observations_
+               << " burnIn=" << burnIn_
+               << " thinning=" << thinning_;
 }
 
 

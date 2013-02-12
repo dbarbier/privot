@@ -45,6 +45,12 @@ try :
     print "point3[0] = %.6f" % val1
     print "point3[1] = %.6f" % val2
 
+    #Constructor from indices
+    indices = Indices(5)
+    indices.fill()
+    point = NumericalPoint(indices)
+    print "point=", point
+    
     #Constructor from python sequence
     point4 = NumericalPoint( (1000., 1001.) )
     i=0

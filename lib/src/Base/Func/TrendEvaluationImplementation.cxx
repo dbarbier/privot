@@ -26,18 +26,24 @@ static Factory<TrendEvaluationImplementation> RegisteredFactory("TrendEvaluation
 
 /* Default constructor */
 TrendEvaluationImplementation::TrendEvaluationImplementation()
-  : NumericalMathEvaluationImplementation(),
-    function_()
+  : NumericalMathEvaluationImplementation()
+  , function_()
 {
   // Nothing to do
 }
 
 /* Parameter constructor */
 TrendEvaluationImplementation::TrendEvaluationImplementation(const NumericalMathFunction & function)
-  : NumericalMathEvaluationImplementation(),
-    function_(function)
+  : NumericalMathEvaluationImplementation()
+  , function_(function)
 {
-  // Nothing to do
+  Description inputDescription(function.getInputDescription());
+  const Description outputDescription(function.getOutputDescription());
+  const UnsignedLong outputDimension(outputDescription.getSize());
+  const Description otherInputDescription(BuildDefaultDescription(outputDimension, "x"));
+  for (UnsignedLong i = 0; i < outputDimension; ++i) inputDescription.add(otherInputDescription[i]);
+  setInputDescription(inputDescription);
+  setOutputDescription(outputDescription);
 }
 
 /* Clone constructor */
@@ -49,7 +55,7 @@ TrendEvaluationImplementation * TrendEvaluationImplementation::clone() const
 /* Comparison operator */
 Bool TrendEvaluationImplementation::operator ==(const TrendEvaluationImplementation & other) const
 {
-  if (*this == other) return true;
+  if (this == &other) return true;
   return (function_ == other.function_);
 }
 

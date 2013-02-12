@@ -30,17 +30,14 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 CLASSNAMEINIT(CenteredFiniteDifferenceHessian);
-
 
 static Factory<CenteredFiniteDifferenceHessian> RegisteredFactory("CenteredFiniteDifferenceHessian");
 
 
 /* Default constructor */
-CenteredFiniteDifferenceHessian::CenteredFiniteDifferenceHessian() :
-  FiniteDifferenceHessian()
+CenteredFiniteDifferenceHessian::CenteredFiniteDifferenceHessian()
+  : FiniteDifferenceHessian()
 {
   // Nothing to do
 }
@@ -50,6 +47,7 @@ CenteredFiniteDifferenceHessian::CenteredFiniteDifferenceHessian(const Numerical
                                                                  const EvaluationImplementation & p_evaluation)
   : FiniteDifferenceHessian(epsilon, p_evaluation)
 {
+  // Nothing to do
 }
 
 /* Parameter constructor */
@@ -57,6 +55,7 @@ CenteredFiniteDifferenceHessian::CenteredFiniteDifferenceHessian(const Numerical
                                                                  const EvaluationImplementation & p_evaluation)
   : FiniteDifferenceHessian(epsilon, p_evaluation)
 {
+  // Nothing to do
 }
 
 /* Parameter constructor */
@@ -64,6 +63,7 @@ CenteredFiniteDifferenceHessian::CenteredFiniteDifferenceHessian(const FiniteDif
                                                                  const EvaluationImplementation & p_evaluation)
   : FiniteDifferenceHessian(finiteDifferenceStep, p_evaluation)
 {
+  // Nothing to do
 }
 
 /* Virtual constructor */

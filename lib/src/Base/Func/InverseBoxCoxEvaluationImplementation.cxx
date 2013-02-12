@@ -33,10 +33,23 @@ InverseBoxCoxEvaluationImplementation::InverseBoxCoxEvaluationImplementation()
 
 /* Parameter constructor */
 InverseBoxCoxEvaluationImplementation::InverseBoxCoxEvaluationImplementation(const NumericalPoint & lambda)
-  : NumericalMathEvaluationImplementation(),
-    lambda_(lambda)
+  : NumericalMathEvaluationImplementation()
+  , lambda_(lambda)
+  , shift_(lambda.getDimension())
 {
-  // Nothing to do (maybe the description)
+  setInputDescription(BuildDefaultDescription(lambda_.getSize(), "x"));
+  setOutputDescription(BuildDefaultDescription(lambda_.getSize(), "y"));
+}
+
+InverseBoxCoxEvaluationImplementation::InverseBoxCoxEvaluationImplementation(const NumericalPoint & lambda,
+									     const NumericalPoint & shift)
+  : NumericalMathEvaluationImplementation()
+  , lambda_(lambda)
+  , shift_(shift)
+{
+  if (lambda.getDimension() != shift.getDimension()) throw InvalidArgumentException(HERE) << "Error: the given exponent vector has a dimension=" << lambda.getDimension() << " different from the shift dimension=" << shift.getDimension();
+  setInputDescription(BuildDefaultDescription(lambda_.getSize(), "x"));
+  setOutputDescription(BuildDefaultDescription(lambda_.getSize(), "y"));
 }
 
 /* Clone constructor */
@@ -48,7 +61,8 @@ InverseBoxCoxEvaluationImplementation * InverseBoxCoxEvaluationImplementation::c
 /* Comparison operator */
 Bool InverseBoxCoxEvaluationImplementation::operator ==(const InverseBoxCoxEvaluationImplementation & other) const
 {
-  return (lambda_ == other.lambda_);
+  if (this == &other) return true;
+  return (lambda_ == other.lambda_) && (shift_ == other.shift_);
 }
 
 /* String converter */
@@ -57,21 +71,32 @@ String InverseBoxCoxEvaluationImplementation::__repr__() const
   OSS oss;
   oss << "class=" << InverseBoxCoxEvaluationImplementation::GetClassName()
       << " name=" << getName()
-      << " dimension = " << getInputDimension()
-      << " lambda = " << lambda_.__repr__();
+      << " dimension=" << getInputDimension()
+      << " lambda=" << lambda_.__repr__()
+      << " shift=" << shift_.__repr__();
   return oss;
 }
 
 /* String converter __str__ */
 String InverseBoxCoxEvaluationImplementation::__str__(const String & offset) const
 {
-  return OSS(false) << "lambda =" << lambda_.__str__(offset);
+  OSS oss (false);
+  oss << "InverseBoxCox(lambda=" << lambda_.__str__(offset)
+      << ", shift=" << shift_.__str__(offset)
+      << ")";
+  return oss;
 }
 
 /* Accessor for the lambda */
 NumericalPoint InverseBoxCoxEvaluationImplementation::getLambda() const
 {
   return lambda_;
+}
+
+/* Accessor for the shift */
+NumericalPoint InverseBoxCoxEvaluationImplementation::getShift() const
+{
+  return shift_;
 }
 
 /* Operator () */
@@ -121,6 +146,7 @@ void InverseBoxCoxEvaluationImplementation::save(Advocate & adv) const
 {
   NumericalMathEvaluationImplementation::save(adv);
   adv.saveAttribute( "lambda_", lambda_ );
+  adv.saveAttribute( "shift_", shift_ );
 }
 
 /* Method load() reloads the object from the StorageManager */
@@ -128,6 +154,7 @@ void InverseBoxCoxEvaluationImplementation::load(Advocate & adv)
 {
   NumericalMathEvaluationImplementation::load(adv);
   adv.loadAttribute( "lambda_", lambda_ );
+  adv.loadAttribute( "shift_", shift_ );
 }
 
 END_NAMESPACE_OPENTURNS

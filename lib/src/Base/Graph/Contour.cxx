@@ -177,6 +177,7 @@ void Contour::clean() const
 /* Draw method */
 String Contour::draw() const
 {
+  dataFileName_ = "";
   xFileName_ = "";
   yFileName_ = "";
   OSS oss;

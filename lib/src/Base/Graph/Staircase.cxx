@@ -97,6 +97,7 @@ String Staircase::__repr__() const
 /* Draw method */
 String Staircase::draw() const
 {
+  dataFileName_ = "";
   OSS oss;
   // Stores the data in a temporary file
   oss << DrawableImplementation::draw() << "\n";

@@ -23,28 +23,26 @@
  */
 #include "Curve.hxx"
 #include "PersistentObjectFactory.hxx"
+#include "Log.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
-
-
 
 CLASSNAMEINIT(Curve);
 
 static Factory<Curve> RegisteredFactory("Curve");
 
 /* Default constructor */
-Curve::Curve(const String & legend):
-  DrawableImplementation(NumericalSample(2, 0), legend),
-  showPoints_(false)
+Curve::Curve(const String & legend)
+  : DrawableImplementation(NumericalSample(2, 0), legend)
 {
   // Nothing to do
+  setPointStyle("none");
 }
 
 /* Default constructor */
 Curve::Curve(const NumericalSample & data,
-             const String & legend):
-  DrawableImplementation(NumericalSample(2, 0), legend),
-  showPoints_(false)
+             const String & legend)
+  : DrawableImplementation(NumericalSample(2, 0), legend)
 {
   NumericalSample dataFull;
   // If data is unidimensional, assume that it means Y values with indices as X values
@@ -61,14 +59,14 @@ Curve::Curve(const NumericalSample & data,
   else dataFull = data;
   // Check data validity
   setData(dataFull);
+  setPointStyle("none");
 }
 
 /* Contructor from 2 data sets */
 Curve::Curve(const NumericalSample & dataX,
              const NumericalSample & dataY,
-             const String & legend):
-  DrawableImplementation(NumericalSample(2, 0), legend),
-  showPoints_(false)
+             const String & legend)
+  : DrawableImplementation(NumericalSample(2, 0), legend)
 {
   const UnsignedLong size(dataX.getSize());
   if (dataY.getSize() != size) throw InvalidArgumentException(HERE) << "Error: cannot build a Curve based on two numerical samples with different size.";
@@ -81,6 +79,7 @@ Curve::Curve(const NumericalSample & dataX,
     }
   // Check data validity
   setData(dataFull);
+  setPointStyle("none");
 }
 
 /* Constructor with parameters */
@@ -88,10 +87,8 @@ Curve::Curve(const NumericalSample & data,
              const String & color,
              const String & lineStyle,
              const UnsignedLong lineWidth,
-             const String & legend,
-             const Bool & showPoints)
-  : DrawableImplementation(NumericalSample(2, 0), legend),
-    showPoints_(showPoints)
+             const String & legend)
+  : DrawableImplementation(NumericalSample(2, 0), legend)
 {
   NumericalSample dataFull;
   // If data is unidimensional, assume that it means Y values with indices as X values
@@ -111,6 +108,7 @@ Curve::Curve(const NumericalSample & data,
   setLineStyle(lineStyle);
   setLineWidth(lineWidth);
   setColor(color);
+  setPointStyle("none");
 }
 
 /* String converter */
@@ -126,6 +124,7 @@ String Curve::__repr__() const
 /* Draw method */
 String Curve::draw() const
 {
+  dataFileName_ = "";
   OSS oss;
   // Stores the data in a temporary file
   oss << DrawableImplementation::draw() << "\n";
@@ -134,7 +133,7 @@ String Curve::draw() const
       << ", lty=\"" << lineStyle_
       << "\", col=\"" << color_
       << "\", lwd=" << lineWidth_;
-  if (showPoints_)
+  if (pointStyle_ != "none")
     {
       const String code((OSS() << getPointCode(pointStyle_)));
       oss << ", type=\"b\""
@@ -163,28 +162,25 @@ Bool Curve::isValidData(const NumericalSample & data) const
 /* Show points accessors */
 void Curve::setShowPoints(const Bool showPoints)
 {
-  showPoints_ = showPoints;
+  LOGWARN(OSS() << "The setShowPoints() method is deprecated and will be removed in the next release. Use the \"none\" point style to suppress marker");
 }
 
 Bool Curve::getShowPoints() const
 {
-  return showPoints_;
+  LOGWARN("The getShowPoints() method is deprecated and will be removed in the next release.");
+  return pointStyle_ == "none";
 }
 
 /* Method save() stores the object through the StorageManager */
 void Curve::save(Advocate & adv) const
 {
   DrawableImplementation::save(adv);
-  adv.saveAttribute( "showPoints_", showPoints_ );
 }
 
 /* Method load() reloads the object from the StorageManager */
 void Curve::load(Advocate & adv)
 {
   DrawableImplementation::load(adv);
-  adv.loadAttribute( "showPoints_", showPoints_ );
 }
-
-
 
 END_NAMESPACE_OPENTURNS

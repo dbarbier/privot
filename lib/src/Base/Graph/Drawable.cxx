@@ -372,4 +372,11 @@ String Drawable::ConvertFromHSVA(const NumericalScalar hue,
   return DrawableImplementation::ConvertFromHSVA(hue, saturation, value, alpha);
 }
 
+/* Build default palette
+   Cycle through the hue wheel with 10 nuances and increasing darkness */
+Description Drawable::BuildDefaultPalette(const UnsignedLong size)
+{
+  return DrawableImplementation::BuildDefaultPalette(size);
+}
+
 END_NAMESPACE_OPENTURNS

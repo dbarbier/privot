@@ -10,9 +10,11 @@ try :
     inputSample = NumericalSample(0,2)
     inputSample.add(NumericalPoint(2,1.0))
     inputSample.add(NumericalPoint(2,2.0))
+    inputSample.setDescription(["x0", "x1"])
     outputSample = NumericalSample(0,1)
     outputSample.add(NumericalPoint(1,4.0))
     outputSample.add(NumericalPoint(1,5.0))
+    outputSample.setDescription(["y0"])
     database = NumericalMathFunction( inputSample, outputSample )
 
     print  "database=" , database

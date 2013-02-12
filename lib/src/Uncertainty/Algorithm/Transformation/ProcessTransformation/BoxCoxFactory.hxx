@@ -30,6 +30,7 @@
 #include "NumericalSample.hxx"
 #include "TimeSeries.hxx"
 #include "BoxCoxTransform.hxx"
+#include "Graph.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
@@ -46,15 +47,7 @@ class BoxCoxFactory
 public:
 
   /** Default constructor without parameters */
-  BoxCoxFactory(const String & name = DefaultName);
-
-  /** Default constructor without parameters */
-  BoxCoxFactory(const NumericalScalar alpha,
-                const String & name = DefaultName);
-
-  /** alpha accessors */
-  NumericalScalar getAlpha() const;
-  void setAlpha(const NumericalScalar alpha);
+  BoxCoxFactory();
 
   /** Virtual copy constructor */
   BoxCoxFactory * clone() const;
@@ -66,8 +59,18 @@ public:
   String __str__(const String & offset = "") const;
 
   /** Build the factory from data by estimating the best \lambda which maximizes the log-likelihood function */
-  BoxCoxTransform * build(const TimeSeries & timeSeries) const;
-
+  BoxCoxTransform build(const TimeSeries & timeSeries) const;
+  BoxCoxTransform build(const TimeSeries & timeSeries,
+			const NumericalPoint & shift) const;
+  BoxCoxTransform build(const TimeSeries & timeSeries,
+			const NumericalPoint & shift,
+			Graph & graph) const;
+  BoxCoxTransform build(const NumericalSample & sample) const;
+  BoxCoxTransform build(const NumericalSample & sample,
+			const NumericalPoint & shift) const;
+  BoxCoxTransform build(const NumericalSample & sample,
+			const NumericalPoint & shift,
+			Graph & graph) const;
 
 protected:
 
@@ -86,10 +89,8 @@ protected:
   mutable NumericalSample sample_;
 
   /** only used to pass data to be used in computeLogLikeliHood */
-  mutable NumericalScalar scalar_;
+  mutable NumericalScalar sumLog_;
 
-  /** alpha is a scalar used for translating values */
-  NumericalScalar alpha_;
 
 } ; /* class BoxCoxFactory */
 

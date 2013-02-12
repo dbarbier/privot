@@ -1,7 +1,7 @@
 //                                               -*- C++ -*-
 /**
- *  @file  KSubset.cxx
- *  @brief The KSubset distribution
+ *  @file  KPermutationsDistribution.cxx
+ *  @brief The KPermutationsDistribution distribution
  *
  *  Copyright (C) 2005-2013 EDF-EADS-Phimeca
  *
@@ -23,7 +23,7 @@
  */
 #include <cmath>
 #include "Collection.hxx"
-#include "KSubset.hxx"
+#include "KPermutationsDistribution.hxx"
 #include "Binomial.hxx"
 #include "Poisson.hxx"
 #include "TruncatedDistribution.hxx"
@@ -38,13 +38,13 @@ BEGIN_NAMESPACE_OPENTURNS
 
 typedef Collection<UnsignedLong>     UnsignedLongCollection;
 
-CLASSNAMEINIT(KSubset);
+CLASSNAMEINIT(KPermutationsDistribution);
 
-static Factory<KSubset> RegisteredFactory("KSubset");
+static Factory<KPermutationsDistribution> RegisteredFactory("KPermutationsDistribution");
 
 /* Default constructor */
-KSubset::KSubset()
-  : DiscreteDistribution("KSubset")
+KPermutationsDistribution::KPermutationsDistribution()
+  : DiscreteDistribution("KPermutationsDistribution")
   , k_(0)
   , n_(0)
 {
@@ -53,9 +53,9 @@ KSubset::KSubset()
 }
 
 /* Parameters constructor */
-KSubset::KSubset(const UnsignedLong k,
-		 const UnsignedLong n)
-  : DiscreteDistribution("KSubset")
+KPermutationsDistribution::KPermutationsDistribution(const UnsignedLong k,
+                                                     const UnsignedLong n)
+  : DiscreteDistribution("KPermutationsDistribution")
   , k_(0)
   , n_(0)
 {
@@ -65,17 +65,17 @@ KSubset::KSubset(const UnsignedLong k,
 }
 
 /* Comparison operator */
-Bool KSubset::operator ==(const KSubset & other) const
+Bool KPermutationsDistribution::operator ==(const KPermutationsDistribution & other) const
 {
   if (this == &other) return true;
   return (k_ == other.k_) && (n_ == other.n_);
 }
 
 /* String converter */
-String KSubset::__repr__() const
+String KPermutationsDistribution::__repr__() const
 {
   OSS oss;
-  oss << "class=" << KSubset::GetClassName()
+  oss << "class=" << KPermutationsDistribution::GetClassName()
       << " name=" << getName()
       << " dimension=" << getDimension()
       << " k=" << k_
@@ -83,7 +83,7 @@ String KSubset::__repr__() const
   return oss;
 }
 
-String KSubset::__str__(const String & offset) const
+String KPermutationsDistribution::__str__(const String & offset) const
 {
   OSS oss;
   oss << offset << getClassName() << "(k = " << k_ << ", n = " << n_ << ")";
@@ -91,13 +91,13 @@ String KSubset::__str__(const String & offset) const
 }
 
 /* Virtual constructor */
-KSubset * KSubset::clone() const
+KPermutationsDistribution * KPermutationsDistribution::clone() const
 {
-  return new KSubset(*this);
+  return new KPermutationsDistribution(*this);
 }
 
 /* Compute the numerical range of the distribution given the parameters values */
-void KSubset::computeRange()
+void KPermutationsDistribution::computeRange()
 {
   const NumericalPoint lowerBound(k_, 0.0);
   const NumericalPoint upperBound(k_, n_ - 1.0);
@@ -107,7 +107,7 @@ void KSubset::computeRange()
 }
 
 /* Get one realization of the distribution */
-NumericalPoint KSubset::getRealization() const
+NumericalPoint KPermutationsDistribution::getRealization() const
 {
   NumericalPoint realization(k_);
   Indices buffer(n_);
@@ -122,7 +122,7 @@ NumericalPoint KSubset::getRealization() const
 }
 
 /* Get the PDF of the distribution */
-NumericalScalar KSubset::computeLogPDF(const NumericalPoint & point) const
+NumericalScalar KPermutationsDistribution::computeLogPDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
   if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
@@ -137,10 +137,10 @@ NumericalScalar KSubset::computeLogPDF(const NumericalPoint & point) const
       x[i] = ik;
     }
   if (!x.check(n_ - 1)) return 0.0;
-  return SpecFunc::LnGamma(k_ + 1) - SpecFunc::LnGamma(n_ + 1);
+  return logPDFValue_;
 }
 
-NumericalScalar KSubset::computePDF(const NumericalPoint & point) const
+NumericalScalar KPermutationsDistribution::computePDF(const NumericalPoint & point) const
 {
   const NumericalScalar logPDF(computeLogPDF(point));
   if (logPDF == -SpecFunc::MaxNumericalScalar) return 0.0;
@@ -148,7 +148,7 @@ NumericalScalar KSubset::computePDF(const NumericalPoint & point) const
 }
 
 /* Get the CDF of the distribution */
-NumericalScalar KSubset::computeCDF(const NumericalPoint & point) const
+NumericalScalar KPermutationsDistribution::computeCDF(const NumericalPoint & point) const
 {
   const UnsignedLong dimension(getDimension());
   if (point.getDimension() != dimension) throw InvalidArgumentException(HERE) << "Error: the given point must have dimension=" << dimension << ", here dimension=" << point.getDimension();
@@ -168,25 +168,25 @@ NumericalScalar KSubset::computeCDF(const NumericalPoint & point) const
   return cdfValue;
 }
 
-/* Compute the scalar quantile of the 1D KSubset distribution */
-NumericalScalar KSubset::computeScalarQuantile(const NumericalScalar prob,
-					       const Bool tail,
-					       const NumericalScalar precision) const
+/* Compute the scalar quantile of the 1D KPermutationsDistribution distribution */
+NumericalScalar KPermutationsDistribution::computeScalarQuantile(const NumericalScalar prob,
+                                                                 const Bool tail,
+                                                                 const NumericalScalar precision) const
 {
   const UnsignedLong i(static_cast< UnsignedLong >(ceil(prob * (n_ - 1.0))));
   return (tail ? n_ - 1.0 - i : i);
 } // computeScalarQuantile
 
 /* Get the i-th marginal distribution */
-KSubset::Implementation KSubset::getMarginal(const UnsignedLong i) const
+KPermutationsDistribution::Implementation KPermutationsDistribution::getMarginal(const UnsignedLong i) const
 {
   const UnsignedLong dimension(getDimension());
   if (i >= dimension) throw InvalidArgumentException(HERE) << "The index of a marginal distribution must be in the range [0, dim-1]";
-  return new KSubset(1, n_);
+  return new KPermutationsDistribution(1, n_);
 }
 
 /* Get the distribution of the marginal distribution corresponding to indices dimensions */
-KSubset::Implementation KSubset::getMarginal(const Indices & indices) const
+KPermutationsDistribution::Implementation KPermutationsDistribution::getMarginal(const Indices & indices) const
 {
   const UnsignedLong dimension(getDimension());
   if (!indices.check(dimension - 1)) throw InvalidArgumentException(HERE) << "The indices of a marginal distribution must be in the range [0, dim-1] and  must be different";
@@ -194,25 +194,25 @@ KSubset::Implementation KSubset::getMarginal(const Indices & indices) const
   if (dimension == 1) return clone();
   // General case
   const UnsignedLong outputDimension(indices.getSize());
-  return new KSubset(outputDimension, n_);
+  return new KPermutationsDistribution(outputDimension, n_);
 } // getMarginal(Indices)
 
 /* Get the support of a discrete distribution that intersect a given interval */
-NumericalSample KSubset::getSupport(const Interval & interval) const
+NumericalSample KPermutationsDistribution::getSupport(const Interval & interval) const
 {
   if (interval.getDimension() != getDimension()) throw InvalidArgumentException(HERE) << "Error: the given interval has a dimension that does not match the distribution dimension.";
   throw NotYetImplementedException(HERE);
 }
 
 /* Compute the mean of the distribution */
-void KSubset::computeMean() const
+void KPermutationsDistribution::computeMean() const
 {
   mean_ = NumericalPoint(k_, 0.5 * (n_ - 1.0));
   isAlreadyComputedMean_ = true;
 }
 
 /* Compute the covariance of the distribution */
-void KSubset::computeCovariance() const
+void KPermutationsDistribution::computeCovariance() const
 {
   const NumericalScalar var((n_ * n_ - 1.0) / 12.0);
   const NumericalScalar cov(-(n_ + 1.0) / 12.0);
@@ -222,7 +222,7 @@ void KSubset::computeCovariance() const
 }
 
 /* Parameters value and description accessor */
-KSubset::NumericalPointWithDescriptionCollection KSubset::getParametersCollection() const
+KPermutationsDistribution::NumericalPointWithDescriptionCollection KPermutationsDistribution::getParametersCollection() const
 {
   const UnsignedLong dimension(getDimension());
   NumericalPointWithDescriptionCollection parameters((dimension == 1 ? 1 : dimension + 1));
@@ -252,12 +252,13 @@ KSubset::NumericalPointWithDescriptionCollection KSubset::getParametersCollectio
 }
 
 /* K accessor */
-void KSubset::setK(const UnsignedLong k)
+void KPermutationsDistribution::setK(const UnsignedLong k)
 {
   if (k == 0) throw InvalidArgumentException(HERE) << "Error: k must be > 0.";
   if (k != k_)
     {
       k_ = k;
+      logPDFValue_ = SpecFunc::LnGamma(k_ + 1) - SpecFunc::LnGamma(n_ + 1);
       setDimension(k);
       isAlreadyComputedMean_ = false;
       isAlreadyComputedCovariance_ = false;
@@ -266,43 +267,46 @@ void KSubset::setK(const UnsignedLong k)
 }
 
 /* K accessor */
-UnsignedLong KSubset::getK() const
+UnsignedLong KPermutationsDistribution::getK() const
 {
   return k_;
 }
 
 /* N accessor */
-void KSubset::setN(const UnsignedLong n)
+void KPermutationsDistribution::setN(const UnsignedLong n)
 {
   if (n == 0) throw InvalidArgumentException(HERE) << "Error: n must be > 0.";
   if (n != n_)
     {
       n_ = n;
+      logPDFValue_ = SpecFunc::LnGamma(k_ + 1) - SpecFunc::LnGamma(n_ + 1);
       isAlreadyComputedMean_ = false;
       isAlreadyComputedCovariance_ = false;
       computeRange();
     }
 }
 
-UnsignedLong KSubset::getN() const
+UnsignedLong KPermutationsDistribution::getN() const
 {
   return n_;
 }
 
 /* Method save() stores the object through the StorageManager */
-void KSubset::save(Advocate & adv) const
+void KPermutationsDistribution::save(Advocate & adv) const
 {
   DiscreteDistribution::save(adv);
   adv.saveAttribute( "k_", k_ );
   adv.saveAttribute( "n_", n_ );
+  adv.saveAttribute( "logPDFValue_", logPDFValue_ );
 }
 
 /* Method load() reloads the object from the StorageManager */
-void KSubset::load(Advocate & adv)
+void KPermutationsDistribution::load(Advocate & adv)
 {
   DiscreteDistribution::load(adv);
   adv.loadAttribute( "k_", k_ );
   adv.loadAttribute( "n_", n_ );
+  adv.loadAttribute( "logPDFValue_", logPDFValue_ );
   computeRange();
 }
 

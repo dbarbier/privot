@@ -1,4 +1,9 @@
-myBoxCox=  lambda =[0.2]
+myBoxCox= BoxCoxTransform :
+  input  : [x0]
+  output : [y0]
+  evaluation : BoxCox(lambda=[0.2], shift=[0])
+  gradient   :   CenteredFiniteDifferenceGradient epsilon : [1e-05]
+  hessian    :   CenteredFiniteDifferenceHessian epsilon : [0.0001]
 myBoxCox input dimension =  1
 myBoxCox output dimension =  1
 input time series =
@@ -205,5 +210,10 @@ output time series =
  98 : [  9.8      3.74423 ]
  99 : [  9.9      2.44009 ]
 100 : [ 10        2.01835 ]
-myInverseBoxCox =  lambda =[0.2]
-number of call(s) :  1
+myInverseBoxCox =  InverseBoxCoxTransform :
+  input  : [x0]
+  output : [y0]
+  evaluation : InverseBoxCox(lambda=[0.2], shift=[0])
+  gradient   :   CenteredFiniteDifferenceGradient epsilon : [1e-05]
+  hessian    :   CenteredFiniteDifferenceHessian epsilon : [0.0001]
+number of call(s) :  101

@@ -181,6 +181,7 @@ Pie::BoundingBox Pie::getBoundingBox() const
 /* Draw method */
 String Pie::draw() const
 {
+  dataFileName_ = "";
   //pie(xpi,center=center,radius=rayon,labels=noms)
   OSS oss;
   // Stores the data in a temporary file
@@ -262,21 +263,7 @@ Bool Pie::isValidData(const NumericalPoint & data) const
    Cycle through the hue wheel with 10 nuances and increasing darkness */
 void Pie::buildDefaultPalette()
 {
-  const UnsignedLong size(data_.getSize());
-  palette_ = Description(size);
-  UnsignedLong cycles(size / 12 + 1);
-  UnsignedLong paletteIndex(0);
-  for (UnsignedLong iCycle = 0; iCycle < cycles; ++iCycle)
-    {
-      const NumericalScalar value(1.0 - iCycle / static_cast< NumericalScalar >(cycles));
-      const UnsignedLong iHueMax(std::min(size - paletteIndex, static_cast< UnsignedLong >(12)));
-      for (UnsignedLong iHue = 0; iHue < iHueMax; ++iHue)
-        {
-          const NumericalScalar hue(30.0 * iHue);
-          palette_[paletteIndex] = ConvertFromHSV(hue, 1.0, value);
-          ++paletteIndex;
-        }
-    }
+  palette_ = BuildDefaultPalette(data_.getSize());
 }
 
 /* Build default labels */
@@ -284,7 +271,9 @@ void Pie::buildDefaultLabels()
 {
   const UnsignedLong size(data_.getSize());
   labels_ = Description(size);
-  for (UnsignedLong i = 0; i < size; ++i) labels_[i] = String(OSS() << "L" << i);
+  NumericalScalar sum(0.0);
+  for (UnsignedLong i = 0; i < size; ++i) sum += data_[i][0];
+  for (UnsignedLong i = 0; i < size; ++i) labels_[i] = String(OSS() << "L" << i << " " << 0.1 * round(1000.0 * data_[i][0] / sum) << "%");
 }
 
 /* Method save() stores the object through the StorageManager */

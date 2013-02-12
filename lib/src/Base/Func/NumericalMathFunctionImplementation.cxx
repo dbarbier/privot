@@ -204,7 +204,7 @@ NumericalMathFunctionImplementation::NumericalMathFunctionImplementation(const E
   : PersistentObject(),
     p_evaluationImplementation_(evaluationImplementation),
     p_gradientImplementation_(new CenteredFiniteDifferenceGradient(ResourceMap::GetAsNumericalScalar( "CenteredFiniteDifferenceGradient-DefaultEpsilon" ), p_evaluationImplementation_)),
-    p_hessianImplementation_(new CenteredFiniteDifferenceHessian(ResourceMap::GetAsNumericalScalar( "CenteredFiniteDifferenceGradient-DefaultEpsilon" ), p_evaluationImplementation_)),
+    p_hessianImplementation_(new CenteredFiniteDifferenceHessian(ResourceMap::GetAsNumericalScalar( "CenteredFiniteDifferenceHessian-DefaultEpsilon" ), p_evaluationImplementation_)),
     p_initialEvaluationImplementation_(p_evaluationImplementation_),
     p_initialGradientImplementation_(p_gradientImplementation_),
     p_initialHessianImplementation_(p_hessianImplementation_),
@@ -312,7 +312,8 @@ UnsignedLong NumericalMathFunctionImplementation::getCacheHits() const
   return p_evaluationImplementation_->getCacheHits();
 }
 
-void NumericalMathFunctionImplementation::addCacheContent(const NumericalSample& inSample, const NumericalSample& outSample)
+void NumericalMathFunctionImplementation::addCacheContent(const NumericalSample& inSample,
+							  const NumericalSample& outSample)
 {
   p_evaluationImplementation_->addCacheContent(inSample, outSample);
 }

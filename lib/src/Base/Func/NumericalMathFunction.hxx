@@ -327,6 +327,7 @@ public:
   NumericalMathFunction getMarginal(const Indices & indices) const;
 
   /** Number of calls to the evaluation */
+  UnsignedLong getCallsNumber() const;
   UnsignedLong getEvaluationCallsNumber() const;
 
   /** Number of calls to the gradient */

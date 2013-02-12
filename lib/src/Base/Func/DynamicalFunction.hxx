@@ -27,6 +27,7 @@
 
 #include "TypedInterfaceObject.hxx"
 #include "DynamicalFunctionImplementation.hxx"
+#include "NumericalMathFunction.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
@@ -52,6 +53,9 @@ public:
 
   /** Default constructor */
   DynamicalFunction();
+
+  /** Constructor from NumericalMathFunction */
+  DynamicalFunction(const NumericalMathFunction & function);
 
   /** Constructor from DynamicalFunctionImplementation */
   DynamicalFunction(const DynamicalFunctionImplementation & implementation);

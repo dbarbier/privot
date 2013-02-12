@@ -148,7 +148,10 @@ Graph VisualTest::DrawQQplot(const NumericalSample & sample1,
     }
   OSS oss;
   oss << sample1.getName() << " qqplot";
-  const Curve curveQQplot(data, oss);
+  Cloud cloudQQplot(data, oss);
+  if (pointNumber < 100) cloudQQplot.setPointStyle("fcircle");
+  else if (pointNumber < 1000) cloudQQplot.setPointStyle("bullet");
+  else cloudQQplot.setPointStyle("dot");
   Graph graphQQplot("two sample QQplot", "sample1", "sample2", true, "topleft");
   // First, the bisectrice
   NumericalSample diagonal(2, 2);
@@ -162,42 +165,63 @@ Graph VisualTest::DrawQQplot(const NumericalSample & sample1,
   bisectrice.setLineStyle("dashed");
   graphQQplot.add(bisectrice);
   // Then the QQ plot
-  graphQQplot.add(curveQQplot);
+  graphQQplot.add(cloudQQplot);
+  // Adapt the margins
+  NumericalPoint boundingBox(graphQQplot.getBoundingBox());
+  NumericalScalar width(boundingBox[1] - boundingBox[0]);
+  NumericalScalar height(boundingBox[3] - boundingBox[2]);
+  boundingBox[0] -= 0.1 * width;
+  boundingBox[1] += 0.1 * width;
+  boundingBox[2] -= 0.1 * height;
+  boundingBox[3] += 0.1 * height;
+  graphQQplot.setBoundingBox(boundingBox);
   return graphQQplot;
 }
 
 /* Draw the QQplot of one Sample and one Distribution when its dimension is 1 */
-Graph VisualTest::DrawQQplot(const NumericalSample & sample1,
-                             const Distribution & dist,
-                             const UnsignedLong pointNumber)
+Graph VisualTest::DrawQQplot(const NumericalSample & sample,
+                             const Distribution & dist)
 {
-  if (sample1.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: can draw a QQplot only if dimension equals 1, here dimension=" << sample1.getDimension();
+  if (sample.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: can draw a QQplot only if dimension equals 1, here dimension=" << sample.getDimension();
   if (dist.getDimension() != 1) throw InvalidDimensionException(HERE) << "Error: can draw a QQplot only if dimension equals 1, here dimension=" << dist.getDimension();
-  NumericalSample data(pointNumber, 2);
-  const NumericalScalar step(1.0 / pointNumber);
-  for (UnsignedLong i = 0; i < pointNumber; ++i)
+  const UnsignedLong size(sample.getSize());
+  const NumericalSample sortedSample(sample.sort(0));
+  NumericalSample data(size, 2);
+  const NumericalScalar step(1.0 / size);
+  for (UnsignedLong i = 0; i < size; ++i)
     {
-      const NumericalScalar q((i + 0.5) * step);
-      data[i][0] = sample1.computeQuantilePerComponent(q)[0];
-      data[i][1] = dist.computeQuantile(q)[0];
+      data[i][0] = sortedSample[i][0];
+      data[i][1] = dist.computeQuantile((i + 0.5) * step)[0];
     }
   OSS oss;
-  oss << sample1.getName() << " qqplot";
-  const Curve curveQQplot(data, oss);
+  oss << sample.getName() << " qqplot";
+  Cloud cloudQQplot(data, oss);
+  if (size < 100) cloudQQplot.setPointStyle("fcircle");
+  else if (size < 1000) cloudQQplot.setPointStyle("bullet");
+  else cloudQQplot.setPointStyle("dot");
   Graph graphQQplot("sample versus model QQplot", "sample", "model", true, "topleft");
   // First, the bisectrice
   NumericalSample diagonal(2, 2);
   NumericalPoint point(2);
   diagonal[0][0] = data[0][0];
   diagonal[0][1] = data[0][0];
-  diagonal[1][0] = data[pointNumber - 1][0];
-  diagonal[1][1] = data[pointNumber - 1][0];
+  diagonal[1][0] = data[size - 1][0];
+  diagonal[1][1] = data[size - 1][0];
   Curve bisectrice(diagonal);
   bisectrice.setColor("red");
   bisectrice.setLineStyle("dashed");
   graphQQplot.add(bisectrice);
   // Then the QQ plot
-  graphQQplot.add(curveQQplot);
+  graphQQplot.add(cloudQQplot);
+  // Adapt the margins
+  NumericalPoint boundingBox(graphQQplot.getBoundingBox());
+  NumericalScalar width(boundingBox[1] - boundingBox[0]);
+  NumericalScalar height(boundingBox[3] - boundingBox[2]);
+  boundingBox[0] -= 0.1 * width;
+  boundingBox[1] += 0.1 * width;
+  boundingBox[2] -= 0.1 * height;
+  boundingBox[3] += 0.1 * height;
+  graphQQplot.setBoundingBox(boundingBox);
   return graphQQplot;
 }
 
@@ -220,7 +244,7 @@ Graph VisualTest::DrawHenryLine(const NumericalSample & sample)
     }
   OSS oss;
   oss << sample.getName() << " Henry Curve";
-  const Curve curveHenry(data, oss);
+  Curve curveHenry(data, oss);
   Graph graphHenry("Henry Curve", "sample", "model", true, "topleft");
   // First, the diagonal
   NumericalSample diagonal(2, 2);

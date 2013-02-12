@@ -493,6 +493,19 @@ void NumericalSampleImplementation::clear()
   size_ = 0;
 }
 
+
+/* Raw internal format accessor */
+NumericalPoint NumericalSampleImplementation::getData() const
+{
+  return data_;
+}
+
+void NumericalSampleImplementation::setData(const Collection<NumericalScalar> & data)
+{
+  if (data.getSize() != dimension_ * size_) throw InvalidArgumentException(HERE) << "Error: the given raw data are not compatible with the dimension and size of the sample.";
+  data_ = data;
+}
+
 /* Method __contains__() is for Python */
 Bool NumericalSampleImplementation::contains(const NumericalPoint & val) const
 {

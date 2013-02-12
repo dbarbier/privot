@@ -83,6 +83,13 @@ void Graph::add(const Drawable & aDrawable)
 }
 
 /* Adds a collection of drawable instances to the collection of drawables contained in GraphImplementation */
+void Graph::add(const Graph & graph)
+{
+  copyOnWrite();
+  getImplementation()->add(graph.getDrawables());
+}
+
+/* Adds a collection of drawable instances to the collection of drawables contained in GraphImplementation */
 void Graph::add(const DrawableCollection & drawableCollection)
 {
   copyOnWrite();
@@ -120,6 +127,17 @@ void Graph::setDrawable(const Drawable & drawable,
   getImplementation()->setDrawable(drawable, index);
 }
 
+
+/* Global color accessor */
+void Graph::setColors(const Description & colors)
+{
+  copyOnWrite();
+  getImplementation()->setColors(colors);
+}
+Description Graph::getColors() const
+{
+  return getImplementation()->getColors();
+}
 
 /* Hide or show x and y axes */
 void Graph::setAxes(const Bool showAxes)

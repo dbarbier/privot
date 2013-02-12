@@ -31,7 +31,7 @@ try :
     myGraph = Graph("Some curves", "x1", "x2", True, "topright", 1.0, 0)
 
     # Create the first curve
-    myCurve1 = Curve(data1, "blue", "dashed", 2, "linear function", True)
+    myCurve1 = Curve(data1, "blue", "dashed", 2, "linear function")
 
     # Then, draw it
     myGraph.add(myCurve1)

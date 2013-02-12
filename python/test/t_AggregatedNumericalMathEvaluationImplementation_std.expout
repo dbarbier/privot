@@ -3,12 +3,12 @@ evaluation= [NumericalMathFunction :
   output : [y0]
   evaluation : class=PythonNumericalMathEvaluationImplementation name=NumericalMathFunction
   gradient   :   CenteredFiniteDifferenceGradient epsilon : [1e-05,1e-05,1e-05]
-  hessian    :   CenteredFiniteDifferenceHessian epsilon : [1e-05,1e-05,1e-05],NumericalMathFunction :
+  hessian    :   CenteredFiniteDifferenceHessian epsilon : [0.0001,0.0001,0.0001],NumericalMathFunction :
   input  : [x0,x1,x2]
   output : [z0,z1]
   evaluation : class=PythonNumericalMathEvaluationImplementation name=NumericalMathFunction
   gradient   :   CenteredFiniteDifferenceGradient epsilon : [1e-05,1e-05,1e-05]
-  hessian    :   CenteredFiniteDifferenceHessian epsilon : [1e-05,1e-05,1e-05]]
+  hessian    :   CenteredFiniteDifferenceHessian epsilon : [0.0001,0.0001,0.0001]]
 function 1 at [4.0, -4.0, 1.0] = [11]
 function 2 at [4.0, -4.0, 1.0] = [0.844867,0.000632466]
 evaluation at [4.0, -4.0, 1.0] = [11,0.844867,0.000632466]

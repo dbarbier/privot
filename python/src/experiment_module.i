@@ -29,3 +29,8 @@
 %include Composite.i
 %include Factorial.i
 %include Box.i
+%include CombinatorialGeneratorImplementation.i
+%include CombinatorialGenerator.i
+%include Combinations.i
+%include KPermutations.i
+%include Tuples.i

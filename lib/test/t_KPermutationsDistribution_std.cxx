@@ -1,7 +1,7 @@
 //                                               -*- C++ -*-
 /**
- *  @file  t_KSubset_std.cxx
- *  @brief The test file of class KSubset for standard methods
+ *  @file  t_KPermutationsDistribution_std.cxx
+ *  @brief The test file of class KPermutationsDistribution for standard methods
  *
  *  Copyright (C) 2005-2013 EDF-EADS-Phimeca
  *
@@ -27,11 +27,11 @@
 using namespace OT;
 using namespace OT::Test;
 
-class TestObject : public KSubset
+class TestObject : public KPermutationsDistribution
 {
 public:
-  explicit TestObject() : KSubset(5, 12) {}
-  explicit TestObject(const String & name) : KSubset(5, 12)
+  explicit TestObject() : KPermutationsDistribution(5, 12) {}
+  explicit TestObject(const String & name) : KPermutationsDistribution(5, 12)
   {
     setName(name);
   }
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
       checkNameFeature<TestObject>();
 
       // Instanciate one distribution object
-      KSubset distribution(5, 12);
+      KPermutationsDistribution distribution(5, 12);
       fullprint << "Distribution " << distribution << std::endl;
       std::cout << "Distribution " << distribution << std::endl;
 
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
       fullprint << "mean=" << mean << std::endl;
       CovarianceMatrix covariance = distribution.getCovariance();
       fullprint << "covariance=" << covariance << std::endl;
-      KSubset::NumericalPointWithDescriptionCollection parameters = distribution.getParametersCollection();
+      KPermutationsDistribution::NumericalPointWithDescriptionCollection parameters = distribution.getParametersCollection();
       fullprint << "parameters=" << parameters << std::endl;
     }
   catch (TestFailed & ex)

@@ -173,7 +173,7 @@ class View:
                 step_kwargs['color'] = drawable.getColorCode()
 
             # set marker
-            pointStyleDict = {'square':'s', 'circle':'o', 'triangleup':'2', 'plus':'+', 'times':'+', 'diamond':'+', 'triangledown':'v', 'star':'*', 'fsquare':'s', 'fcircle':'o', 'ftriangleup':'2', 'fdiamond':'D', 'bullet':'+', 'dot':','}
+            pointStyleDict = {'square':'s', 'circle':'o', 'triangleup':'2', 'plus':'+', 'times':'+', 'diamond':'+', 'triangledown':'v', 'star':'*', 'fsquare':'s', 'fcircle':'o', 'ftriangleup':'2', 'fdiamond':'D', 'bullet':'+', 'dot':',', 'none':'None'}
             if not 'marker' in plot_kwargs_default:
                 try:
                     plot_kwargs['marker'] = pointStyleDict[ drawable.getPointStyle() ]
@@ -243,8 +243,6 @@ class View:
                 self._ax[0].plot(x, y, **plot_kwargs)
 
             elif drawableKind == 'Curve':
-                if plot_kwargs['linestyle'] == '-':
-                    plot_kwargs['marker'] = ''
                 self._ax[0].plot( x, y, **plot_kwargs )
 
             elif drawableKind == 'Pie':

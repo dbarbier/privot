@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     fullprint << "bitmap = " << twoSamplesQQPlot.getBitmap() << std::endl;
     fullprint << "postscript = " << twoSamplesQQPlot.getPostscript() << std::endl;
 
-    Graph sampleDistributionQQPlot(VisualTest::DrawQQplot(sample, normal, 100));
+    Graph sampleDistributionQQPlot(VisualTest::DrawQQplot(sample, normal));
     sampleDistributionQQPlot.draw("sampleDistributionQQPlot", 640, 480);
     fullprint << "bitmap = " << sampleDistributionQQPlot.getBitmap() << std::endl;
     fullprint << "postscript = " << sampleDistributionQQPlot.getPostscript() << std::endl;

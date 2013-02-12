@@ -703,6 +703,7 @@ void ResourceMap::loadDefaultConfiguration()
   setAsNumericalScalar( "BoxCoxFactory-DefaultRhoBeg", 0.1 );
   setAsNumericalScalar( "BoxCoxFactory-DefaultRhoEnd", 1.0e-10 );
   setAsUnsignedLong( "BoxCoxFactory-DefaultMaxFun", 2000 );
+  setAsUnsignedLong( "BoxCoxFactory-DefaultPointNumber", 201 );
 
   // VisualTest parameters //
   setAsUnsignedLong( "VisualTest-KendallPlot-MonteCarloSize", 100 );

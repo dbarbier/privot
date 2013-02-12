@@ -33,54 +33,54 @@ try :
     myCloud = Cloud(sample, "blue", "fsquare","Normal Cloud")
 
     # Create the line
-    myLine = Curve(tmp, "red", "solid", 2, "Line", True)
+    myLine = Curve(tmp, "red", "solid", 2, "Line")
 
-    data = NumericalSample(0, 1)
+    data = NumericalPoint(0)
 
     palette = Description()
     labels = Description()
 
-    data.add(NumericalPoint(1,5665855))
+    data.add(5665855)
     labels.add("Candidate1")
     palette.add("blue")
 
-    data.add(NumericalPoint(1,4804713))
+    data.add(4804713)
     labels.add("Candidate2")
     palette.add("white")
 
-    data.add(NumericalPoint(1,4610113))
+    data.add(4610113)
     labels.add("Candidate3")
     palette.add("pink")
 
-    data.add(NumericalPoint(1,1949170))
+    data.add(1949170)
     labels.add("Candidate4")
     palette.add("yellow")
 
-    data.add(NumericalPoint(1,1630045))
+    data.add(1630045)
     labels.add("Candidate5")
     palette.add("red")
 
-    data.add(NumericalPoint(1,1518528))
+    data.add(1518528)
     labels.add("Candidate6")
     palette.add("ivory")
 
-    data.add(NumericalPoint(1,1495724))
+    data.add(1495724)
     labels.add("Candidate7")
     palette.add("green")
 
-    data.add(NumericalPoint(1,1210562))
+    data.add(1210562)
     labels.add("Candidate8")
     palette.add("orange")
 
-    data.add(NumericalPoint(1,1204689))
+    data.add(1204689)
     labels.add("Candidate9")
     palette.add("maroon")
 
-    data.add(NumericalPoint(1,1113484))
+    data.add(1113484)
     labels.add("Candidate10")
     palette.add("violet")
 
-    data.add(NumericalPoint(1,3295588))
+    data.add(3295588)
     labels.add("cumul candidates < 3.5% ")
     palette.add("purple")
 

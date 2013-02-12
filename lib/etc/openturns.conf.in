@@ -369,6 +369,7 @@
   <BoxCoxFactory-DefaultRhoBeg             value="0.1"     />
   <BoxCoxFactory-DefaultRhoEnd             value="1.0e-10" />
   <BoxCoxFactory-DefaultMaxFun             value="2000"    />
+  <BoxCoxFactory-DefaultPointNumber        value="201"    />
 
   <!-- OT::VisualTest parameters -->
   <VisualTest-KendallPlot-MonteCarloSize value="100" />

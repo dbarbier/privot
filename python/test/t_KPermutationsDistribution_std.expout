@@ -1,4 +1,4 @@
-Distribution  KSubset(k = 5, n = 12)
+Distribution  KPermutationsDistribution(k = 5, n = 12)
 Elliptical =  False
 Continuous =  False
 oneRealization= [0,5,3,6,8]

@@ -81,6 +81,9 @@ public:
   /** Adds a collection of drawable instances to the collection of drawables contained in GraphImplementation */
   void add(const DrawableCollection & drawableCollection);
 
+  /** Adds all the drawables in the GraphImplementation to the collection of drawables contained in GraphImplementation */
+  void add(const GraphImplementation & graphImplementation);
+
   /** Erase a drawable instance from the collection of drawables contained in GraphImplementation */
   void erase(const UnsignedLong i);
 
@@ -93,6 +96,9 @@ public:
   void setDrawable(const Drawable & drawable,
                    const UnsignedLong index);
 
+  /** Global color accessor */
+  Description getColors() const;
+  void setColors(const Description & colors);
 
   /** Hide or show x and y axes */
   void setAxes(const Bool showAxes);

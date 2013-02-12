@@ -30,8 +30,6 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 /**
  * @class Curve
  *
@@ -65,8 +63,7 @@ public:
         const String & color,
         const String & lineStyle,
         const UnsignedLong lineWidth = 1,
-        const String & legend = "",
-        const Bool & showPoints = false);
+        const String & legend = "");
 
   /** String converter */
   String __repr__() const;
@@ -78,7 +75,9 @@ public:
   Curve * clone() const;
 
 
-  /** Show points accessors */
+  /** Show points accessors
+   * @deprecated
+   */
   void setShowPoints(const Bool showPoints);
   Bool getShowPoints() const;
 
@@ -92,8 +91,6 @@ public:
   void load(Advocate & adv);
 
 private:
-  /** Flag to tell if the points must be drawn */
-  Bool showPoints_;
 
 }; /* class Curve */
 

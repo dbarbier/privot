@@ -66,6 +66,7 @@ public:
 
   /** Get one realization of the distribution */
   NumericalPoint getRealization() const;
+  NumericalSample getSample(const UnsignedLong size) const;
 
   /** Get the DDF of the distribution, i.e. the gradient of its PDF w.r.t. point */
   using NonEllipticalDistribution::computeDDF;

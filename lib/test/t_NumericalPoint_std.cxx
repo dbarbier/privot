@@ -78,6 +78,12 @@ int main(int argc, char *argv[])
       fullprint << "point3[1] = " << val2 << std::endl;
 
 
+      /* Constructor from indices */
+      Indices indices(5);
+      indices.fill();
+      NumericalPoint point(indices);
+
+      fullprint << "point=" << point << std::endl;
       /* Assignment operator */
       NumericalPoint point4;
       const NumericalPoint & ref_point4(point4);

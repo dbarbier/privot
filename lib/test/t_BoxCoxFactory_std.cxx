@@ -34,11 +34,6 @@ int main(int argc, char *argv[])
 
   try
     {
-      // Fix the realization as a Normal
-      // Parameters are done such as the values are positive
-      const NumericalScalar epsilon(0.01);
-      Distribution noiseDistribution(Normal(0, epsilon));
-
       // TimeGrid parameters
       const UnsignedLong n(101);
       const NumericalScalar timeStart(0.0);
@@ -46,43 +41,36 @@ int main(int argc, char *argv[])
       RegularGrid timeGrid(timeStart, timeStep, n);
 
       // White noise
-      const WhiteNoise whiteNoise(noiseDistribution, timeGrid);
+      const WhiteNoise whiteNoise(Uniform(), timeGrid);
 
-      // Now instantiation of a ARMA process
-      const NumericalPoint arParameters(1, 0.1);
-      const NumericalPoint maParameters(1, 5);
-      const ARMACoefficients arCoefficients(arParameters);
-      const ARMACoefficients maCoefficients(maParameters);
+      // Composite process
+      const CompositeProcess process(SpatialFunction(NumericalMathFunction("x", "x+2")), whiteNoise);
+      // A realization of the process
+      const TimeSeries timeSeries(process.getRealization());
+      const NumericalSample sample(timeSeries.getSample());
 
-      // Create the ARMA process
-      ARMA armaProcess(arCoefficients, maCoefficients, whiteNoise);
+      // Now we build the factory
+      BoxCoxFactory factory;
 
-      // 1 realization of the process
-      const TimeSeries realization(armaProcess.getRealization());
+      // Creation of the BoxCoxTransform
+      BoxCoxTransform myBoxCox(factory.build(timeSeries));
 
-      // We have to translate manually in order to use the BoxCox evaluation on positive values
-      NumericalSample sample(realization.getSample());
+      fullprint << "myBoxCox (time-series)=" << myBoxCox << std::endl;
+      fullprint << "myBoxCox (sample)     =" << factory.build(sample) << std::endl;
 
-      const NumericalScalar alpha(-sample.getMin()[0] + 1.0e-4);
+      // Creation of the BoxCoxTransform using shift
+      NumericalPoint shift(1, 1.0);
+      BoxCoxTransform myBoxCoxShift(factory.build(timeSeries, shift));
+      
+      fullprint << "myBoxCox with shift (time-series)=" << myBoxCoxShift << std::endl;
+      fullprint << "myBoxCox with shift (sample)     =" << factory.build(sample, shift) << std::endl;
 
-      // Now we build the factory using the alpha parameter
-      BoxCoxFactory factory(alpha);
-
-      // Evaluation of the BoxCoxTransfotm
-      BoxCoxTransform myBoxCox(*(factory.build(realization)));
-
-      fullprint << "myBoxCox = " << myBoxCox << std::endl;
-
-      // We translate the input sample using the alpha value
-      sample.translate(NumericalPoint(1, alpha));
-
-      // We build a new TimeSeries
-      const TimeSeries translateTimeSerie(timeGrid, sample);
-
-      // Evaluation of the factory result on the new time series
-      PlatformInfo::SetNumericalPrecision(5);
-      fullprint << "input time series=" << translateTimeSerie << std::endl;
-      fullprint << "f(time series) = " << myBoxCox(translateTimeSerie) << std::endl;
+      // Creation of the BoxCoxTransform using shift with graph
+      Graph graph;
+      BoxCoxTransform myBoxCoxShiftGraph(factory.build(timeSeries, shift, graph));
+      
+      fullprint << "BoxCox graph (time-series)=" << graph << std::endl;
+      graph.draw("BoxCoxGraph");
 
     }
   catch (TestFailed & ex)

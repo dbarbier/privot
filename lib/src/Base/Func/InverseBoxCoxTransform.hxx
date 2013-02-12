@@ -25,7 +25,7 @@
 #ifndef OPENTURNS_INVERSEBOXCOXTRANSFORM_HXX
 #define OPENTURNS_INVERSEBOXCOXTRANSFORM_HXX
 
-#include "SpatialFunction.hxx"
+#include "NumericalMathFunction.hxx"
 #include "NumericalPoint.hxx"
 #include "Collection.hxx"
 
@@ -38,61 +38,45 @@ BEGIN_NAMESPACE_OPENTURNS
  */
 
 class BoxCoxTransform;
+
 class InverseBoxCoxTransform
-  : public SpatialFunction
+  : public NumericalMathFunction
 
 {
   CLASSNAME;
 public:
 
-
   /** Default constructor */
   InverseBoxCoxTransform();
 
   /** Standard parameter constructor */
-  InverseBoxCoxTransform(const NumericalPoint & lambdaPoint);
+  InverseBoxCoxTransform(const NumericalPoint & lambda);
 
-  /** NumericalScalarCollection parameter constructor */
-  InverseBoxCoxTransform(const Collection<NumericalScalar> & lambdaCollection);
+  InverseBoxCoxTransform(const NumericalPoint & lambda,
+                         const NumericalPoint & shift);
 
   /** 1D NumericalScalar parameter constructor */
-  InverseBoxCoxTransform(const NumericalScalar & lambdaScalar);
+  InverseBoxCoxTransform(const NumericalScalar & lambda);
+
+  InverseBoxCoxTransform(const NumericalScalar & lambda,
+                         const NumericalScalar & shift);
 
   /** Virtual constructor */
   InverseBoxCoxTransform * clone() const;
 
+  /** Lambda accessor */
+  NumericalPoint getLambda () const;
+
+  /** Shift accessor */
+  NumericalPoint getShift () const;
+
   /** Inverse accessor */
   BoxCoxTransform getInverse() const;
-
-  /** Comparison operator */
-  Bool operator ==(const InverseBoxCoxTransform & other) const;
-
-  /** String converter */
-  String __repr__() const;
-  String __str__(const String & offset = "") const;
-
-  /** Operator () */
-  TimeSeries operator() (const TimeSeries & inTS) const;
-
-  /** Lambda accessor */
-  NumericalPoint getLambda() const;
-
-  /** Evaluation accessor */
-  EvaluationImplementation getEvaluation() const;
-
-  /** Method save() stores the object through the StorageManager */
-  void save(Advocate & adv) const;
-
-  /** Method load() reloads the object from the StorageManager */
-  void load(Advocate & adv);
 
 private:
 
   /** Internal setDefaultDescription method */
   void setDefaultDescription();
-
-  /** NumericalPoint lambda ==> get a copy is better than a dynamic_cast */
-  NumericalPoint lambda_;
 
 }; /* class InverseBoxCoxTransform */
 

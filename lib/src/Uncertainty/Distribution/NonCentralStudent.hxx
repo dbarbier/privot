@@ -26,6 +26,7 @@
 #define OPENTURNS_NONCENTRALSTUDENT_HXX
 
 #include "NonEllipticalDistribution.hxx"
+#include "DistFunc.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
@@ -121,7 +122,31 @@ protected:
 
 
 private:
+#ifdef qtl
+  struct CDFWrapper
+  {
+    CDFWrapper(const NumericalScalar & nu, const NumericalScalar delta, const NumericalScalar gamma, const Bool tail):
+      nu_(nu),
+      delta_(delta),
+      gamma_(gamma),
+      tail_(tail){};
 
+    NumericalPoint computeCDF(const NumericalPoint & point) const
+    {
+      return NumericalPoint(1, DistFunc::pNonCentralStudent(nu_, delta_, point[0] - gamma_, tail_));
+    };
+
+    const NumericalScalar nu_;
+    const NumericalScalar delta_;
+    const NumericalScalar gamma_;
+    const NumericalScalar tail_;
+  }; // struct CDFWrapper
+
+  /** Get the quantile of the distribution, i.e the value Xp such that P(X <= Xp) = prob */
+  NumericalScalar computeScalarQuantile(const NumericalScalar prob,
+                                        const Bool tail = false,
+                                        const NumericalScalar precision = ResourceMap::GetAsNumericalScalar("DistributionImplementation-DefaultQuantileEpsilon")) const;
+#endif
   /** Compute the mean of the distribution */
   void computeMean() const;
 

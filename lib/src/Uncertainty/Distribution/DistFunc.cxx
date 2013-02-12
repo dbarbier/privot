@@ -825,9 +825,11 @@ NumericalScalar DistFunc::dNonCentralStudent(const NumericalScalar nu,
                                              const NumericalScalar delta,
                                              const NumericalScalar x)
 {
+  // Check nu
+  if (nu <= 0.0) throw InvalidArgumentException(HERE) << "Error: the number of degrees of freedom nu=" << nu << " should be strictly positive.";
   // Early exit for delta == 0, central Student PDF
   const NumericalScalar precision(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"));
-  if (fabs(delta) < precision) return exp(SpecFunc::LnGamma(0.5 * nu + 0.5) - SpecFunc::LnGamma(0.5 * nu) - 0.5 * log(M_PI * nu) + (0.5 * nu + 0.5) * log(nu / (nu + x * x)));
+  if (fabs(delta / (4.0 * nu)) < precision) return exp(SpecFunc::LnGamma(0.5 * nu + 0.5) - SpecFunc::LnGamma(0.5 * nu) - 0.5 * log(M_PI * nu) + (0.5 * nu + 0.5) * log(nu / (nu + x * x)));
   // Case delta <> 0
   const NumericalScalar halfNu(0.5 * nu);
   const NumericalScalar halfNup1_2(halfNu + 0.5);
@@ -914,9 +916,12 @@ NumericalScalar DistFunc::pNonCentralStudent(const NumericalScalar nu,
                                              const NumericalScalar x,
                                              const Bool tail)
 {
-  // Special case when |delta| << 1
+  // Check nu
+  if (nu <= 0.0) throw InvalidArgumentException(HERE) << "Error: the number of degrees of freedom nu=" << nu << " should be strictly positive.";  // Special case when |delta| << 1
   const NumericalScalar precision(ResourceMap::GetAsNumericalScalar("DistFunc-Precision"));
-  if (fabs(delta) < precision) return pStudent(nu, x, tail);
+  if (fabs(delta / (4.0 * nu)) < precision) return pStudent(nu, x, tail);
+  // Very large nu
+  if (nu > 1.0 / precision) return pNormal(x - nu);
   // Special case when |x| << 1
   if (fabs(x) < precision) return pNormal(-delta, tail);
 
@@ -1326,7 +1331,7 @@ NumericalScalar DistFunc::pDickeyFullerTrend(const NumericalScalar x,
       return p001;
     }
 
-  if ((x >= q001) && (x <= q005) )
+  if (x <= q005)
     {
       // Linear approach
       // quantileFunction(q) = a * q + b
@@ -1336,7 +1341,7 @@ NumericalScalar DistFunc::pDickeyFullerTrend(const NumericalScalar x,
       return (a * x + b);
     }
 
-  if ((x > q005) && (x <= q010) )
+  if (x <= q010)
     {
       // Linear approach using the same approach
       // quantileFunction(q) = a * q + b
@@ -1347,14 +1352,8 @@ NumericalScalar DistFunc::pDickeyFullerTrend(const NumericalScalar x,
     }
 
   // Arbitrary we seek values until level 0.15
-  if (x > q010)
-    {
-      LOGWARN(OSS() <<  "Warning! Result p-value is missing. The return result is the 0.10 quantile levels ");
-      return p010;
-    }
-
-  // cannot happen
-  return -1.0;
+  LOGWARN(OSS() <<  "Warning! Result p-value is missing. The return result is the 0.10 quantile levels ");
+  return p010;
 }
 
 NumericalScalar DistFunc::pDickeyFullerConstant(const NumericalScalar x,
@@ -1373,7 +1372,7 @@ NumericalScalar DistFunc::pDickeyFullerConstant(const NumericalScalar x,
       return p001;
     }
 
-  if ((x >= q001) && (x <= q005) )
+  if (x <= q005)
     {
       // Linear approach
       // quantileFunction(q) = a * q + b
@@ -1383,7 +1382,7 @@ NumericalScalar DistFunc::pDickeyFullerConstant(const NumericalScalar x,
       return (a * x + b);
     }
 
-  if ((x > q005) && (x <= q010) )
+  if (x <= q010)
     {
       // Linear approach using the same approach
       // quantileFunction(q) = a * q + b
@@ -1392,16 +1391,8 @@ NumericalScalar DistFunc::pDickeyFullerConstant(const NumericalScalar x,
       const NumericalScalar b(p005 - a * q005);
       return (a * x + b);
     }
-
-  // Arbitrary we seek values until level 0.15
-  if (x > q010)
-    {
-      LOGWARN(OSS() <<  "Warning! Result p-value is missing. The return result is the 0.10 quantile levels ");
-      return p010;
-    }
-
-  // cannot happen
-  return -1.0;
+  LOGWARN(OSS() <<  "Warning! Result p-value is missing. The return result is the 0.10 quantile levels ");
+  return p010;
 }
 
 NumericalScalar DistFunc::pDickeyFullerNoConstant(const NumericalScalar x,
@@ -1420,7 +1411,7 @@ NumericalScalar DistFunc::pDickeyFullerNoConstant(const NumericalScalar x,
       return p001;
     }
 
-  if ((x >= q001) && (x <= q005) )
+  if (x <= q005)
     {
       // Linear approach
       // quantileFunction(q) = a * q + b
@@ -1430,7 +1421,7 @@ NumericalScalar DistFunc::pDickeyFullerNoConstant(const NumericalScalar x,
       return (a * x + b);
     }
 
-  if ((x > q005) && (x <= q010) )
+  if (x <= q010)
     {
       // Linear approach using the same approach
       // quantileFunction(q) = a * q + b
@@ -1440,15 +1431,8 @@ NumericalScalar DistFunc::pDickeyFullerNoConstant(const NumericalScalar x,
       return (a * x + b);
     }
 
-  // Arbitrary we seek values until level 0.15
-  if (x > q010)
-    {
-      LOGWARN(OSS() <<  "Warning! Result p-value is missing. The return result is the 0.10 quantile levels ");
-      return p010;
-    }
-
-  // cannot happen
-  return -1.0;
+  LOGWARN(OSS() <<  "Warning! Result p-value is missing. The return result is the 0.10 quantile levels ");
+  return p010;
 }
 
 // We currently use the asymptotic distribution
@@ -1472,7 +1456,7 @@ NumericalScalar DistFunc::qDickeyFullerTrend(const NumericalScalar q,
       return q001;
     }
 
-  if ((q >= 0.01) && (q <= 0.05) )
+  if (q <= 0.05)
     {
       // Linear approach
       // quantileFunction(q) = a * q + b
@@ -1482,7 +1466,7 @@ NumericalScalar DistFunc::qDickeyFullerTrend(const NumericalScalar q,
       return (a * q + b);
     }
 
-  if ((q > 0.05) && (q <= 0.10) )
+  if (q <= 0.10)
     {
       // Linear approach using the same approach
       // quantileFunction(q) = a * q + b
@@ -1493,14 +1477,12 @@ NumericalScalar DistFunc::qDickeyFullerTrend(const NumericalScalar q,
     }
 
   // Arbitrary we seek values until level 0.15
-  if ((q > 0.10) && (q <= 0.15))
+  if (q <= 0.15)
     {
       LOGWARN(OSS() <<  "Warning! Result quantile value is missing. The return result is for level 0.10 ");
       return q010;
     }
-
-  else
-    throw InvalidArgumentException(HERE) << "Can not give quantile value for the level " << q << ". Value is missing in table";
+  throw NotYetImplementedException(HERE) << "Can not give quantile value for the level " << q << ". Value is missing in table";
 }
 
 NumericalScalar DistFunc::qDickeyFullerConstant(const NumericalScalar q,
@@ -1517,7 +1499,7 @@ NumericalScalar DistFunc::qDickeyFullerConstant(const NumericalScalar q,
       return q001;
     }
 
-  if ((q >= 0.01) && (q <= 0.05) )
+  if (q <= 0.05)
     {
       // Linear approach
       // quantileFunction(q) = a * q + b
@@ -1527,7 +1509,7 @@ NumericalScalar DistFunc::qDickeyFullerConstant(const NumericalScalar q,
       return (a * q + b);
     }
 
-  if ((q > 0.05) && (q <= 0.10) )
+  if (q <= 0.10)
     {
       // Linear approach using the same approach
       // quantileFunction(q) = a * q + b
@@ -1538,14 +1520,13 @@ NumericalScalar DistFunc::qDickeyFullerConstant(const NumericalScalar q,
     }
 
   // Arbitrary we seek values until level 0.15
-  if ((q > 0.10) && (q <= 0.15))
+  if (q <= 0.15)
     {
       LOGWARN(OSS() <<  "Warning! Result quantile value is missing. The return result is for level 0.10 ");
       return q010;
     }
 
-  else
-    throw InvalidArgumentException(HERE) << "Can not give quantile value for the level " << q << ". Value is missing in table";
+  throw NotYetImplementedException(HERE) << "Can not give quantile value for the level " << q << ". Value is missing in table";
 }
 
 NumericalScalar DistFunc::qDickeyFullerNoConstant(const NumericalScalar q,
@@ -1562,7 +1543,7 @@ NumericalScalar DistFunc::qDickeyFullerNoConstant(const NumericalScalar q,
       return q001;
     }
 
-  if ((q >= 0.01) && (q <= 0.05) )
+  if (q >= 0.01)
     {
       // Linear approach
       // quantileFunction(q) = a * q + b
@@ -1572,7 +1553,7 @@ NumericalScalar DistFunc::qDickeyFullerNoConstant(const NumericalScalar q,
       return (a * q + b);
     }
 
-  if ((q > 0.05) && (q <= 0.10) )
+  if (q <= 0.10)
     {
       // Linear approach using the same approach
       // quantileFunction(q) = a * q + b
@@ -1583,14 +1564,12 @@ NumericalScalar DistFunc::qDickeyFullerNoConstant(const NumericalScalar q,
     }
 
   // Arbitrary we seek values until level 0.15
-  if ((q > 0.10) && (q <= 0.15))
+  if (q <= 0.15)
     {
       LOGWARN(OSS() <<  "Warning! Result quantile value is missing. The return result is for level 0.10 ");
       return q010;
     }
-
-  else
-    throw InvalidArgumentException(HERE) << "Can not give quantile value for the level " << q << ". Value is missing in table";
+  throw NotYetImplementedException(HERE) << "Can not give quantile value for the level " << q << ". Value is missing in table";
 }
 
 END_NAMESPACE_OPENTURNS

@@ -490,6 +490,11 @@ NumericalMathFunction NumericalMathFunction::getMarginal(const Indices & indices
 }
 
 /* Number of calls to the evaluation */
+UnsignedLong NumericalMathFunction::getCallsNumber() const
+{
+  return getEvaluationCallsNumber();
+}
+
 UnsignedLong NumericalMathFunction::getEvaluationCallsNumber() const
 {
   return getImplementation()->getEvaluationCallsNumber();

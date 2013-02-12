@@ -35,9 +35,6 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
-
 /**
  * @class FiniteDifferenceHessian
  *
@@ -112,9 +109,11 @@ public:
   virtual SymmetricTensor hessian(const NumericalPoint & inP) const = 0;
 
 protected:
+  /* The underlying evaluation object */
   EvaluationImplementation p_evaluation_;
-  FiniteDifferenceStep finiteDifferenceStep_;
 
+  /* The finite difference strategy */
+  FiniteDifferenceStep finiteDifferenceStep_;
 
 }; /* class FiniteDifferenceHessian */
 

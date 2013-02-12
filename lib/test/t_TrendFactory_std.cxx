@@ -101,13 +101,13 @@ int main(int argc, char *argv[])
       TrendFactory myDefaultFactory;
       fullprint << "myDefaultFactory = " << myDefaultFactory << std::endl;
 
-      TrendTransform myEstimateTrend(*(myDefaultFactory.build(myTimeSeries, functions)));
+      TrendTransform myEstimateTrend(myDefaultFactory.build(myTimeSeries, functions));
       fullprint << "myEstimateTrend = " << myEstimateTrend << std::endl;
 
       // We fix a new fitting algorithm
       myDefaultFactory.setFittingAlgorithm(KFold());
       fullprint << "myDefaultFactory = " << myDefaultFactory << std::endl;
-      TrendTransform myNewEstimateTrend(*(myDefaultFactory.build(myTimeSeries, functions)));
+      TrendTransform myNewEstimateTrend(myDefaultFactory.build(myTimeSeries, functions));
       fullprint << "myNewEstimateTrend = " << myNewEstimateTrend << std::endl;
     }
   catch (TestFailed & ex)

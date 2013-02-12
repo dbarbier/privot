@@ -69,8 +69,7 @@ public:
 
   /** Draw the QQplot of one Sample and one Distribution when its dimension is 1 */
   static Graph DrawQQplot(const NumericalSample & sample,
-                          const Distribution & dist,
-                          const UnsignedLong pointNumber = ResourceMap::GetAsUnsignedLong("DistributionImplementation-DefaultPointNumber"));
+                          const Distribution & dist);
 
   /** Draw the Henry curve for one Sample when its dimension is 1 */
   static Graph DrawHenryLine(const NumericalSample & sample);

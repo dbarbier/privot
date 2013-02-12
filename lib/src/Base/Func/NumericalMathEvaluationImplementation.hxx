@@ -80,9 +80,11 @@ public:
 
   /** Input description Accessor, i.e. the names of the input parameters */
   Description getInputDescription() const;
+  void setInputDescription(const Description & inputDescription);
 
   /** Output description Accessor, i.e. the names of the Output parameters */
   Description getOutputDescription() const;
+  void setOutputDescription(const Description & outputDescription);
 
   /** Enable or disable the input/output history */
   void enableHistory() const;
@@ -229,10 +231,17 @@ protected:
   /** Flag to activate or deactivate the history mechanism */
   mutable Bool isHistoryEnabled_;
 
+  /** Build a default description */
+  static Description BuildDefaultDescription(const UnsignedLong dimension,
+					     const String & prefix = "Component");
+
 private:
 
-  /** The description of all the components */
-  Description description_;
+  /** The description of the input components */
+  Description inputDescription_;
+
+  /** The description of the input components */
+  Description outputDescription_;
 
   /** The value and description of all the parameters */
   NumericalPointWithDescription parameters_;

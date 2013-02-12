@@ -559,6 +559,10 @@ public:
   void erase(iterator first, iterator last);
   void clear();
 
+  /** Raw internal format accessor */
+  NumericalPoint getData() const;
+  void setData(const Collection<NumericalScalar> & data);
+
   inline NSI_point operator [] (const UnsignedLong index)
   {
     return NSI_point(this, index);

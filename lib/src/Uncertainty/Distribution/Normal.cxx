@@ -174,15 +174,15 @@ NumericalPoint Normal::getRealization() const
 NumericalSample Normal::getSample(const UnsignedLong size) const
 {
   const UnsignedLong dimension(getDimension());
-  NumericalSampleImplementation returnSample(size, dimension);
+  NumericalSampleImplementation result(size, dimension);
   for (UnsignedLong i = 0; i < size; ++i)
-    for (UnsignedLong j = 0; j < dimension; ++j) returnSample[i][j] = DistFunc::rNormal();
-  if (hasIndependentCopula_) returnSample *= sigma_;
-  else returnSample *= cholesky_;
-  returnSample += mean_;
-  returnSample.setName(getName());
-  returnSample.setDescription(getDescription());
-  return returnSample;
+    for (UnsignedLong j = 0; j < dimension; ++j) result[i][j] = DistFunc::rNormal();
+  if (hasIndependentCopula_) result *= sigma_;
+  else result *= cholesky_;
+  result += mean_;
+  result.setName(getName());
+  result.setDescription(getDescription());
+  return result;
 }
 
 /* Compute the density generator of the ellipticalal generator, i.e.

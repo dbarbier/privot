@@ -610,7 +610,7 @@ NumericalScalar DistributionImplementation::computeConditionalPDF(const Numerica
   const UnsignedLong conditioningDimension(y.getDimension());
   if (conditioningDimension >= getDimension()) throw InvalidArgumentException(HERE) << "Error: cannot compute a conditional PDF with a conditioning point of dimension greater or equal to the distribution dimension.";
   // Special case for no conditioning or independent copula
-  if ((conditioningDimension == 0) || (hasIndependentCopula())) return Implementation(getMarginal(conditioningDimension))->computePDF(x);
+  if ((conditioningDimension == 0) || (hasIndependentCopula())) return getMarginal(conditioningDimension)->computePDF(x);
   // General case
   Indices conditioning(conditioningDimension);
   for (UnsignedLong i = 0; i < conditioningDimension; ++i) conditioning[i] = i;
@@ -634,7 +634,7 @@ NumericalScalar DistributionImplementation::computeConditionalCDF(const Numerica
   const UnsignedLong conditioningDimension(y.getDimension());
   if (conditioningDimension >= getDimension()) throw InvalidArgumentException(HERE) << "Error: cannot compute a conditional CDF with a conditioning point of dimension greater or equal to the distribution dimension.";
   // Special case for no conditioning or independent copula
-  if ((conditioningDimension == 0) || (hasIndependentCopula())) return Implementation(getMarginal(conditioningDimension))->computeCDF(x);
+  if ((conditioningDimension == 0) || (hasIndependentCopula())) return getMarginal(conditioningDimension)->computeCDF(x);
   // General case
   Indices conditioning(conditioningDimension);
   for (UnsignedLong i = 0; i < conditioningDimension; ++i) conditioning[i] = i;
@@ -797,10 +797,13 @@ void DistributionImplementation::initializeQuantileCache() const
       NumericalScalar xMin(0.0);
       NumericalScalar step(1.0);
       // Go backward until the CDF becomes small
-      while (computeCDF(xMin) > cdfEpsilon_)
+      NumericalScalar cdf(computeCDF(xMin));
+      while (cdf > cdfEpsilon_)
         {
+          LOGDEBUG(OSS() << "lower bound, xMin=" << xMin << ", step=" << step << ", cdf=" << cdf);
           xMin -= step;
           step *= 2;
+	  cdf = computeCDF(xMin);
         }
       // If no progress, go forward
       if (xMin == 0.0)
@@ -808,10 +811,13 @@ void DistributionImplementation::initializeQuantileCache() const
           // Go forward until the CDF becomes significant
           xMin += step;
           step *= 2;
-          while (computeCDF(xMin) < cdfEpsilon_)
+	  cdf = computeCDF(xMin);
+          while (cdf < cdfEpsilon_)
             {
+              LOGDEBUG(OSS() << "lower bound, xMin=" << xMin << ", step=" << step << ", cdf=" << cdf);
               xMin += step;
               step *= 2;
+	      cdf = computeCDF(xMin);
             }
         }
       // Else we know that the previous step was before the lower bound
@@ -819,20 +825,25 @@ void DistributionImplementation::initializeQuantileCache() const
       // Numerical fixed point iteration
       while (step + xMin != xMin)
         {
+          LOGDEBUG(OSS() << "lower bound, xMin=" << xMin << ", step=" << step << ", cdf=" << cdf);
           step *= 0.5;
           xMin -= step;
-          if (computeCDF(xMin) < cdfEpsilon_) xMin += step;
+	  cdf = computeCDF(xMin);
+          if (cdf < cdfEpsilon_) xMin += step;
         }
       scalarQuantileCache_[0][0] = 0.0;
       scalarQuantileCache_[0][1] = xMin;
-      // Compute the lower bound by sequential search then by bisection
+      // Compute the upper bound by sequential search then by bisection
       NumericalScalar xMax(0.0);
       step = 1.0;
       // Go forward until the tail CDF becomes close to 0
-      while (computeComplementaryCDF(xMax) >= cdfEpsilon_)
+      NumericalScalar ccdf(computeComplementaryCDF(xMax));
+      while (ccdf >= cdfEpsilon_)
         {
+          LOGDEBUG(OSS() << "upper bound, xMin=" << xMin << ", step=" << step << ", ccdf=" << ccdf);
           xMax += step;
           step *= 2;
+	  ccdf = computeComplementaryCDF(xMax);
         }
       // If no progress, go backward
       if (xMax == 0.0)
@@ -840,10 +851,13 @@ void DistributionImplementation::initializeQuantileCache() const
           // Go backward until the tail CDF becomes significantly greater than 0
           xMax -= step;
           step *= 2;
-          while (computeComplementaryCDF(xMax) < cdfEpsilon_)
+	  ccdf = computeComplementaryCDF(xMax);
+          while (ccdf < cdfEpsilon_)
             {
+              LOGDEBUG(OSS() << "upper bound, xMin=" << xMin << ", step=" << step << ", ccdf=" << ccdf);
               xMax -= step;
               step *= 2;
+	      ccdf = computeComplementaryCDF(xMax);
             }
         }
       // Else we know that the previous step was after the upper bound
@@ -851,9 +865,11 @@ void DistributionImplementation::initializeQuantileCache() const
       // Numerical fixed point iteration
       while (step + xMax != xMax)
         {
+          LOGDEBUG(OSS() << "upper bound, xMin=" << xMin << ", step=" << step << ", ccdf=" << ccdf);
           step *= 0.5;
           xMax += step;
-          if (computeComplementaryCDF(xMax) < cdfEpsilon_) xMax -= step;
+	  ccdf = computeComplementaryCDF(xMax);
+          if (ccdf < cdfEpsilon_) xMax -= step;
         }
       scalarQuantileCache_[size - 1][0] = 1.0;
       scalarQuantileCache_[size - 1][1] = xMax;
@@ -863,6 +879,7 @@ void DistributionImplementation::initializeQuantileCache() const
           scalarQuantileCache_[i][0] = computeCDF(x);
           scalarQuantileCache_[i][1] = x;
         }
+      LOGDEBUG(OSS() << "quantile cache=" << scalarQuantileCache_);
       isAlreadyInitializedQuantileCache_ = true;
     } // size > 1
 }
@@ -1674,6 +1691,9 @@ Graph DistributionImplementation::drawPDF(const NumericalScalar xMin,
   const String xName(getDescription()[0]);
   Graph graphPDF(title, xName, "PDF", true, "topright");
   graphPDF.add(curvePDF);
+  NumericalPoint boundingBox(graphPDF.getBoundingBox());
+  boundingBox[3] *= 1.1;
+  graphPDF.setBoundingBox(boundingBox);
   return graphPDF;
 }
 
@@ -1695,7 +1715,7 @@ Graph DistributionImplementation::drawMarginal1DPDF(const UnsignedLong marginalI
                                                     const NumericalScalar xMax,
                                                     const UnsignedLong pointNumber) const
 {
-  Graph marginalGraph(Implementation(getMarginal(marginalIndex))->drawPDF(xMin, xMax, pointNumber));
+  Graph marginalGraph(getMarginal(marginalIndex)->drawPDF(xMin, xMax, pointNumber));
   marginalGraph.setTitle(OSS() << getName() << ", " << description_[marginalIndex] << " component PDF");
   return marginalGraph;
 }
@@ -1731,11 +1751,11 @@ Graph DistributionImplementation::drawPDF(const NumericalPoint & xMin,
 Graph DistributionImplementation::drawPDF(const Indices & pointNumber) const
 {
   NumericalPoint xMin(2);
-  xMin[0] = (Implementation(getMarginal(0))->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMin" ))[0]);
-  xMin[1] = (Implementation(getMarginal(1))->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMin" ))[0]);
+  xMin[0] = getMarginal(0)->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMin" ))[0];
+  xMin[1] = getMarginal(1)->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMin" ))[0];
   NumericalPoint xMax(2);
-  xMax[0] = (Implementation(getMarginal(0))->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMax" ))[0]);
-  xMax[1] = (Implementation(getMarginal(1))->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMax" ))[0]);
+  xMax[0] = getMarginal(0)->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMax" ))[0];
+  xMax[1] = getMarginal(1)->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMax" ))[0];
   const NumericalPoint delta(2.0 * (xMax - xMin) * (1.0 - 0.5 * (ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMax" ) - ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMin" ))));
   return drawPDF(xMin - delta, xMax + delta, pointNumber);
 }
@@ -1750,7 +1770,7 @@ Graph DistributionImplementation::drawMarginal2DPDF(const UnsignedLong firstMarg
   Indices indices(2);
   indices[0] = firstMarginal;
   indices[1] = secondMarginal;
-  Graph marginalGraph(Implementation(getMarginal(indices))->drawPDF(xMin, xMax, pointNumber));
+  Graph marginalGraph(getMarginal(indices)->drawPDF(xMin, xMax, pointNumber));
   marginalGraph.setTitle(OSS() << getName() << " (" << description_[firstMarginal] << ", " << description_[secondMarginal] << ") components iso-PDF");
   return marginalGraph;
 }
@@ -1837,7 +1857,7 @@ Graph DistributionImplementation::drawMarginal1DCDF(const UnsignedLong marginalI
                                                     const NumericalScalar xMax,
                                                     const UnsignedLong pointNumber) const
 {
-  Graph marginalGraph(Implementation(getMarginal(marginalIndex))->drawCDF(xMin, xMax, pointNumber));
+  Graph marginalGraph(getMarginal(marginalIndex)->drawCDF(xMin, xMax, pointNumber));
   marginalGraph.setTitle(OSS() << getName() << ", " << description_[marginalIndex] << " component CDF");
   return marginalGraph;
 }
@@ -1873,11 +1893,11 @@ Graph DistributionImplementation::drawCDF(const NumericalPoint & xMin,
 Graph DistributionImplementation::drawCDF(const Indices & pointNumber) const
 {
   NumericalPoint xMin(2);
-  xMin[0] = (Implementation(getMarginal(0))->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMin" ))[0]);
-  xMin[1] = (Implementation(getMarginal(1))->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMin" ))[0]);
+  xMin[0] = getMarginal(0)->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMin" ))[0];
+  xMin[1] = getMarginal(1)->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMin" ))[0];
   NumericalPoint xMax(2);
-  xMax[0] = (Implementation(getMarginal(0))->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMax" ))[0]);
-  xMax[1] = (Implementation(getMarginal(1))->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMax" ))[0]);
+  xMax[0] = getMarginal(0)->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMax" ))[0];
+  xMax[1] = getMarginal(1)->computeQuantile(ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMax" ))[0];
   const NumericalPoint delta(2.0 * (xMax - xMin) * (1.0 - 0.5 * (ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMax" ) - ResourceMap::GetAsNumericalScalar( "DistributionImplementation-QMin" ))));
   return drawCDF(xMin - delta, xMax + delta, pointNumber);
 }
@@ -1892,7 +1912,7 @@ Graph DistributionImplementation::drawMarginal2DCDF(const UnsignedLong firstMarg
   Indices indices(2);
   indices[0] = firstMarginal;
   indices[1] = secondMarginal;
-  Graph marginalGraph(Implementation(getMarginal(indices))->drawCDF(xMin, xMax, pointNumber));
+  Graph marginalGraph(getMarginal(indices)->drawCDF(xMin, xMax, pointNumber));
   marginalGraph.setTitle(OSS() << getName() << " (" << description_[firstMarginal] << ", " << description_[secondMarginal] << ") components iso-CDF");
   return marginalGraph;
 }

@@ -222,6 +222,9 @@ public:
                                 const NumericalScalar value,
                                 const NumericalScalar alpha);
 
+  /** Build default palette */
+  static Description BuildDefaultPalette(const UnsignedLong size);
+
   /** Method save() stores the object through the StorageManager */
   void save(Advocate & adv) const;
 
@@ -287,7 +290,6 @@ protected:
   /** Initialize Valid parameter list */
   static void InitializeValidParameterList();
 
-private:
   /** Temporary file name for the exchange with R */
   mutable String dataFileName_;
 

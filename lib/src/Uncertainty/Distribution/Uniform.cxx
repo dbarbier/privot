@@ -99,6 +99,17 @@ NumericalPoint Uniform::getRealization() const
   return NumericalPoint(1, a_ + (b_ - a_) * RandomGenerator::Generate());
 }
 
+/* Get a sample of the distribution */
+NumericalSample Uniform::getSample(const UnsignedLong size) const
+{
+  NumericalSampleImplementation result(size, 1);
+  NumericalPoint point(RandomGenerator::Generate(size));
+  const NumericalScalar c(b_ - a_);
+#pragma omp parallel for
+  for (UnsignedLong i = 0; i < size; ++i) point[i] = c * point[i] + a_;
+  result.setData(point);
+  return result;
+}
 
 /* Get the DDF of the distribution */
 NumericalPoint Uniform::computeDDF(const NumericalPoint & point) const

@@ -7,7 +7,7 @@ RandomGenerator().SetSeed(0)
 
 try :
       # Instanciate one distribution object
-      distribution = KSubset(5, 12)
+      distribution = KPermutationsDistribution(5, 12)
       print "Distribution ", distribution
 
       # Is this distribution elliptical ?
@@ -51,4 +51,4 @@ try :
 
 except :
     import sys
-    print "t_KSubset_std.py", sys.exc_type, sys.exc_value
+    print "t_KPermutationsDistribution_std.py", sys.exc_type, sys.exc_value

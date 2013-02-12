@@ -123,7 +123,9 @@ public:
       inputDimension_(inputDimension),
       outputDimension_(outputDimension)
   {
-    // Nothing to do
+    // Build the descriptions
+    setInputDescription(BuildDefaultDescription(inputDimension, "x"));
+    setOutputDescription(BuildDefaultDescription(outputDimension, "y"));
   }
 
 

@@ -3,11 +3,13 @@ database=NumericalMathFunction :
   output : [y0]
   evaluation : DatabaseNumericalMathEvaluationImplementation
     input sample :
-0 : [ 1 1 ]
-1 : [ 2 2 ]
+    [ x0 x1 ]
+0 : [ 1  1  ]
+1 : [ 2  2  ]
     output sample :
-0 : [ 4 ]
-1 : [ 5 ]
+    [ y0 ]
+0 : [ 4  ]
+1 : [ 5  ]
   gradient   :   NumericalMathGradientImplementation
   hessian    :   NumericalMathHessianImplementation
 

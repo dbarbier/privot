@@ -27,6 +27,8 @@
 #include "SpecFunc.hxx"
 #include "DistFunc.hxx"
 #include "PersistentObjectFactory.hxx"
+#include "Brent.hxx"
+#include "MethodBoundNumericalMathEvaluationImplementation.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
@@ -105,7 +107,91 @@ NumericalScalar NonCentralStudent::computeCDF(const NumericalPoint & point) cons
   cdfEpsilon_ = ResourceMap::GetAsNumericalScalar("DistFunc-Precision");
   return DistFunc::pNonCentralStudent(nu_, delta_, point[0] - gamma_);
 }
-
+#ifdef qtl
+/* Get the quantile of the distribution */
+NumericalScalar NonCentralStudent::computeScalarQuantile(const NumericalScalar prob,
+							 const Bool tail,
+							 const NumericalScalar precision) const
+{
+  // Step is the approximate mode
+  NumericalScalar step(sqrt(nu_ / (1.0 + nu_)) * delta_);
+  std::cerr << "step=" << step << std::endl;;
+  // Initial guess is the normal approximation
+  NumericalScalar q(step);
+  // Use normal approximation for nu > 2
+  if (nu_ > 2.0) q = gamma_ + getMean()[0] + getStandardDeviation()[0] * DistFunc::qNormal(prob, tail);
+  std::cerr << "q initial=" << q << std::endl;
+  const NumericalScalar p(tail ? 1.0 - prob : prob);
+  std::cerr << "prob=" << prob << ", tail=" << (tail ? "true" : "false") << ", p=" << p << std::endl;
+  // Bracket the quantile
+  NumericalScalar qMin(q);
+  NumericalScalar qMax(q);
+  NumericalScalar cdf(DistFunc::pNonCentralStudent(nu_, delta_, q - gamma_, tail));
+  NumericalScalar previousCDF(cdf);
+  NumericalScalar cdfMin(cdf);
+  NumericalScalar cdfMax(cdf);
+  std::cerr << "qMin=" << qMin << ", cdfMin=" << cdfMin << ", qMax=" << qMax << ", cdfMax=" << cdfMax << std::endl;
+  if (tail) step = -fabs(step);
+  while(cdf < p)
+    {
+      previousCDF = cdf;
+      q += step;
+      cdf = DistFunc::pNonCentralStudent(nu_, delta_, q - gamma_);
+      std::cerr << "+step q=" << q << ", cdf=" << cdf << std::endl;
+    }
+  // If at least one iteration has been done, we already found one bound
+  if (q != qMin)
+    {
+      if (step > 0.0)
+	{
+	  qMin = q - step;
+	  cdfMin = previousCDF;
+	  qMax = q;
+	  cdfMax = cdf;
+	}
+      else
+	{
+	  qMin = q;
+	  cdfMin = cdf;
+	  qMax = q - step;
+	  cdfMax = previousCDF;
+	}
+    } // q != qMin
+  else
+    {
+      while(cdf >= p)
+	{
+	  previousCDF = cdf;
+	  q -= step;
+	  cdf = DistFunc::pNonCentralStudent(nu_, delta_, q - gamma_);
+	  std::cerr << "-step q=" << q << ", cdf=" << cdf << std::endl;
+	}
+      // Now we have found a bound
+      if (step > 0.0)
+	{
+	  qMin = q;
+	  cdfMin = cdf;
+	  qMax = q + step;
+	  cdfMax = previousCDF;
+	}
+      else
+	{
+	  qMin = q + step;
+	  cdfMin = previousCDF;
+	  qMax = q;
+	  cdfMax = cdf;
+	}
+    } // q == qMin
+  // Now, q is in [qMin, qMax]
+  CDFWrapper wrapper(nu_, delta_, gamma_, tail);
+  const NumericalMathFunction f(bindMethod<CDFWrapper, NumericalPoint, NumericalPoint>(wrapper, &CDFWrapper::computeCDF, 1, 1));
+  Brent solver(cdfEpsilon_, cdfEpsilon_, cdfEpsilon_, ResourceMap::GetAsUnsignedLong( "DistributionImplementation-DefaultQuantileIteration" ));
+  std::cerr << "solver=" << solver << std::endl;
+  q = solver.solve(f, p, qMin, qMax, cdfMin, cdfMax);
+  std::cerr << "q final=" << q << std::endl;
+  return q;
+}
+#endif
 /** Get the PDFGradient of the distribution */
 NumericalPoint NonCentralStudent::computePDFGradient(const NumericalPoint & point) const
 {

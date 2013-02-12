@@ -66,6 +66,7 @@ DatabaseNumericalMathEvaluationImplementation * DatabaseNumericalMathEvaluationI
 /* Comparison operator */
 Bool DatabaseNumericalMathEvaluationImplementation::operator ==(const DatabaseNumericalMathEvaluationImplementation & other) const
 {
+  if (this == &other) return true;
   return (inputSample_ == other.inputSample_) && (outputSample_ == other.outputSample_);
 }
 
@@ -131,7 +132,8 @@ void DatabaseNumericalMathEvaluationImplementation::setSample(const NumericalSam
 
   inputSample_ = inputSample;
   outputSample_ = outputSample;
-
+  setInputDescription(inputSample.getDescription());
+  setOutputDescription(outputSample.getDescription());
   // Don't activate the cache systematically as it can take a significant amount of time for large samples
   if (activateCache)
     {

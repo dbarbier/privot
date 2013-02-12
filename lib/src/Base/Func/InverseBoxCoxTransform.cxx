@@ -21,7 +21,6 @@
  *  @date   2012-07-16 15:59:45 +0200 (Mon, 16 Jul 2012)
  */
 #include "InverseBoxCoxTransform.hxx"
-#include "PersistentObjectFactory.hxx"
 #include "InverseBoxCoxEvaluationImplementation.hxx"
 #include "BoxCoxTransform.hxx"
 
@@ -29,43 +28,40 @@ BEGIN_NAMESPACE_OPENTURNS
 
 CLASSNAMEINIT(InverseBoxCoxTransform);
 
-static Factory<InverseBoxCoxTransform> RegisteredFactory("InverseBoxCoxTransform");
-
 /* Default constructor */
 InverseBoxCoxTransform::InverseBoxCoxTransform()
-  : SpatialFunction(InverseBoxCoxEvaluationImplementation())
+  : NumericalMathFunction(InverseBoxCoxEvaluationImplementation())
 {
-  setDefaultDescription();
+  // Nothing to do
 }
 
 /* Standard parameter constructor */
-InverseBoxCoxTransform::InverseBoxCoxTransform(const NumericalPoint & lambdaPoint)
-  : SpatialFunction(),
-    lambda_(lambdaPoint)
+InverseBoxCoxTransform::InverseBoxCoxTransform(const NumericalPoint & lambda)
+  : NumericalMathFunction(InverseBoxCoxEvaluationImplementation(lambda))
 {
-  const InverseBoxCoxEvaluationImplementation evaluation(lambda_);
-  p_evaluation_ = evaluation.clone();
-  setDefaultDescription();
+  // Nothing to do
 }
 
 /* NumericalScalarCollection parameter constructor */
-InverseBoxCoxTransform::InverseBoxCoxTransform(const Collection<NumericalScalar> & lambdaCollection)
-  : SpatialFunction(),
-    lambda_(NumericalPoint(lambdaCollection))
+InverseBoxCoxTransform::InverseBoxCoxTransform(const NumericalPoint & lambda,
+                                               const NumericalPoint & shift)
+  : NumericalMathFunction(InverseBoxCoxEvaluationImplementation(lambda, shift))
 {
-  const InverseBoxCoxEvaluationImplementation evaluation(lambda_);
-  p_evaluation_ = evaluation.clone();
-  setDefaultDescription();
+  // Nothing to do
 }
 
 /* 1D NumericalScalar parameter constructor */
-InverseBoxCoxTransform::InverseBoxCoxTransform(const NumericalScalar & lambdaScalar)
-  : SpatialFunction(),
-    lambda_(NumericalPoint(1, lambdaScalar))
+InverseBoxCoxTransform::InverseBoxCoxTransform(const NumericalScalar & lambda)
+  : NumericalMathFunction(InverseBoxCoxEvaluationImplementation(NumericalPoint(1, lambda)))
 {
-  const InverseBoxCoxEvaluationImplementation evaluation(lambda_);
-  p_evaluation_ = evaluation.clone();
-  setDefaultDescription();
+  // Nothing to do
+}
+
+InverseBoxCoxTransform::InverseBoxCoxTransform(const NumericalScalar & lambda,
+                                               const NumericalScalar & shift)
+  : NumericalMathFunction(InverseBoxCoxEvaluationImplementation(NumericalPoint(1, lambda), NumericalPoint(1, lambda)))
+{
+  // Nothing to do
 }
 
 /* Virtual constructor */
@@ -74,82 +70,22 @@ InverseBoxCoxTransform * InverseBoxCoxTransform::clone() const
   return new InverseBoxCoxTransform(*this);
 }
 
-/* Comparison operator */
-Bool InverseBoxCoxTransform::operator ==(const InverseBoxCoxTransform & other) const
+/* Lambda accessor */
+NumericalPoint InverseBoxCoxTransform::getLambda() const
 {
-  return true;
+  return dynamic_cast<InverseBoxCoxEvaluationImplementation *>(getEvaluationImplementation().get())->getLambda();
 }
 
-/* String converter */
-String InverseBoxCoxTransform::__repr__() const
+/* Shift accessor */
+NumericalPoint InverseBoxCoxTransform::getShift() const
 {
-  OSS oss;
-  oss << "class=" << InverseBoxCoxTransform::GetClassName()
-      << " evaluation=" << p_evaluation_->__repr__();
-  return oss;
-}
-
-/* String converter */
-String InverseBoxCoxTransform::__str__(const String & offset) const
-{
-  return OSS(false) << p_evaluation_->__str__(offset);
-}
-
-/* Evaluation accessor */
-InverseBoxCoxTransform::EvaluationImplementation InverseBoxCoxTransform::getEvaluation() const
-{
-  return p_evaluation_;
+  return dynamic_cast<InverseBoxCoxEvaluationImplementation *>(getEvaluationImplementation().get())->getShift();
 }
 
 /* Inverse accessor */
 BoxCoxTransform InverseBoxCoxTransform::getInverse() const
 {
-  return BoxCoxTransform(lambda_);
-}
-
-/* Lambda accessor */
-NumericalPoint InverseBoxCoxTransform::getLambda() const
-{
-  return lambda_;
-}
-
-/* Operator () */
-TimeSeries InverseBoxCoxTransform::operator() (const TimeSeries & inTS) const
-{
-
-  // Before applying the function to the TimeSeries, we check that all values are > 0
-  // otherwise we raise an exception
-  NumericalSample sampleValues(inTS.getSample());
-  const NumericalSample result((*p_evaluation_)(sampleValues));
-  ++callsNumber_;
-  return TimeSeries(inTS.getTimeGrid(), result);
-}
-
-void InverseBoxCoxTransform::setDefaultDescription()
-{
-  const UnsignedLong size(lambda_.getSize());
-  Description description(size);
-  for (UnsignedLong k = 0; k < size; ++k)
-    {
-      description[k] =  String(OSS() << "Marginal " << k);
-    }
-  // call DynamicalFunction description accessors
-  setInputDescription(description);
-  setOutputDescription(description);
-}
-
-/* Method save() stores the object through the StorageManager */
-void InverseBoxCoxTransform::save(Advocate & adv) const
-{
-  SpatialFunction::save(adv);
-  adv.saveAttribute( "lamdba_", lambda_ );
-}
-
-/* Method load() reloads the object from the StorageManager */
-void InverseBoxCoxTransform::load(Advocate & adv)
-{
-  SpatialFunction::load(adv);
-  adv.loadAttribute( "lamdba_", lambda_ );
+  return BoxCoxTransform(getLambda(), getShift());
 }
 
 END_NAMESPACE_OPENTURNS

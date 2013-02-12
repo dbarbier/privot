@@ -30,10 +30,7 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 CLASSNAMEINIT(FiniteDifferenceHessian);
-
 
 /* Default constructor */
 FiniteDifferenceHessian::FiniteDifferenceHessian()
@@ -46,9 +43,9 @@ FiniteDifferenceHessian::FiniteDifferenceHessian()
 FiniteDifferenceHessian::FiniteDifferenceHessian(
                                                  const NumericalPoint & epsilon,
                                                  const EvaluationImplementation & p_evaluation)
-  : NumericalMathHessianImplementation(),
-    p_evaluation_(p_evaluation),
-    finiteDifferenceStep_(epsilon)
+  : NumericalMathHessianImplementation()
+  , p_evaluation_(p_evaluation)
+  , finiteDifferenceStep_(epsilon)
 {
   /* Check if the dimension of the constant term is compatible with the linear and quadratic terms */
   if (epsilon.getDimension() != p_evaluation->getInputDimension())
@@ -56,50 +53,41 @@ FiniteDifferenceHessian::FiniteDifferenceHessian(
 
   /* Check if any epsilon component is exactly zero */
   for (UnsignedLong i = 0; i < epsilon.getDimension(); i++)
-    {
-      if (epsilon[i] == 0.0)
-        throw InvalidArgumentException(HERE) << "At least one of the components of epsilon is equal to 0.0, namely component " << i;
-    }
+    if (epsilon[i] == 0.0) throw InvalidArgumentException(HERE) << "At least one of the components of epsilon is equal to 0.0, namely component " << i;
 }
 
 /* SecondParameter constructor */
 FiniteDifferenceHessian::FiniteDifferenceHessian(const NumericalScalar epsilon,
                                                  const EvaluationImplementation & p_evaluation)
-  :
-  NumericalMathHessianImplementation(),
-  p_evaluation_(p_evaluation),
-  finiteDifferenceStep_(NumericalPoint(p_evaluation->getInputDimension(), epsilon))
+  : NumericalMathHessianImplementation()
+  , p_evaluation_(p_evaluation)
+  , finiteDifferenceStep_(NumericalPoint(p_evaluation->getInputDimension(), epsilon))
 {
   // Check if epsilon is exactly zero
-  if (epsilon == 0.0)
-    throw InvalidArgumentException(HERE) << "The given scalar epsilon is equal to 0.0";
+  if (epsilon == 0.0) throw InvalidArgumentException(HERE) << "The given scalar epsilon is equal to 0.0";
 }
 
 /*  Parameter constructor  with FiniteDifferenceStep*/
 FiniteDifferenceHessian::FiniteDifferenceHessian(
                                                  const FiniteDifferenceStep & finiteDifferenceStep,
                                                  const EvaluationImplementation & p_evaluation)
-  :
-  NumericalMathHessianImplementation(),
-  p_evaluation_(p_evaluation),
-  finiteDifferenceStep_(finiteDifferenceStep)
+  : NumericalMathHessianImplementation()
+  , p_evaluation_(p_evaluation)
+  , finiteDifferenceStep_(finiteDifferenceStep)
 {
   NumericalPoint epsilon(getEpsilon());
   //Check if the dimension of the constant term is compatible with the linear and quadratic terms
-  if (epsilon.getDimension() != p_evaluation->getInputDimension())
-    throw InvalidDimensionException(HERE) << "Epsilon dimension is incompatible with the given evaluation";
+  if (epsilon.getDimension() != p_evaluation->getInputDimension()) throw InvalidDimensionException(HERE) << "Epsilon dimension is incompatible with the given evaluation";
 
   //Check if any epsilon component is exactly zero
   for (UnsignedLong i = 0; i < epsilon.getDimension(); i++)
-    {
-      if (epsilon[i] == 0.0)
-        throw InvalidArgumentException(HERE) << "At least one of the components of epsilon is equal to 0.0, namely component " << i;
-    }
+    if (epsilon[i] == 0.0) throw InvalidArgumentException(HERE) << "At least one of the components of epsilon is equal to 0.0, namely component " << i;
 }
 
 /* Comparison operator */
 Bool FiniteDifferenceHessian::operator ==(const FiniteDifferenceHessian & other) const
 {
+  if (this == &other) return true;
   return (getEpsilon() == other.getEpsilon());
 }
 

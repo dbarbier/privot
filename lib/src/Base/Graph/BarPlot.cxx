@@ -124,6 +124,7 @@ BarPlot::BoundingBox BarPlot::getBoundingBox() const
 /* Draw method */
 String BarPlot::draw() const
 {
+  dataFileName_ = "";
   OSS oss;
   // Stores the data in a temporary file
   oss << DrawableImplementation::draw() << "\n";

@@ -78,8 +78,8 @@ void TrendFactory::setFittingAlgorithm(const FittingAlgorithm & fittingAlgorithm
 }
 
 /* Build the factory from data */
-TrendTransform * TrendFactory::build(const TimeSeries & timeSeries,
-                                     const Basis & basis) const
+TrendTransform TrendFactory::build(const TimeSeries & timeSeries,
+				   const Basis & basis) const
 {
   // size of the collection
   const UnsignedLong N(basis.getSize());
@@ -114,7 +114,7 @@ TrendTransform * TrendFactory::build(const TimeSeries & timeSeries,
     }
   const NumericalMathFunction trendFunction(basis, coefficients);
 
-  return TrendTransform(trendFunction).clone();
+  return TrendTransform(trendFunction);
 }
 
 /* String converter */

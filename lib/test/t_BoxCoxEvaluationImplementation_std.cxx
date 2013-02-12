@@ -39,10 +39,12 @@ int main(int argc, char *argv[])
 
       // Lambda
       NumericalPoint lambda(dimension);
-      lambda[0] = 0.;
+      lambda[0] = 0.0;
       lambda[1] = 0.5;
-      lambda[2] = 1;
+      lambda[2] = 1.0;
 
+      // With zero shift
+      {
       BoxCoxEvaluationImplementation myFunction(lambda);
       myFunction.setName("boxCoxFunction");
       // In this test, we check that for a NumericalPoint with same values, the function is done by component
@@ -63,6 +65,35 @@ int main(int argc, char *argv[])
       // result of the function
       NumericalSample outSample = myFunction( inSample );
       fullprint << myFunction.getName() << "( " << inSample << " ) = " << outSample << std::endl;
+      }
+      // With non-zero shift
+      {
+      // Shift
+      NumericalPoint shift(dimension);
+      shift[0] = 0.8;
+      shift[1] = 1.5;
+      shift[2] = 2.1;
+      BoxCoxEvaluationImplementation myFunction(lambda, shift);
+      myFunction.setName("boxCoxFunction");
+      // In this test, we check that for a NumericalPoint with same values, the function is done by component
+      NumericalPoint inPoint(dimension, 3.0);
+      // result of the function
+      NumericalPoint outPoint = myFunction( inPoint );
+      fullprint << "myFunction=" << myFunction << std::endl;
+      fullprint << myFunction.getName() << "( " << inPoint << " ) = " << outPoint << std::endl;
+
+      // Creation of a NumericalSample
+      const UnsignedLong size(10);
+      NumericalSample inSample(size, dimension);
+      for (UnsignedLong index = 0 ; index < size; ++index)
+        {
+          inSample[index] = NumericalPoint(dimension, index + 1);
+        }
+
+      // result of the function
+      NumericalSample outSample = myFunction( inSample );
+      fullprint << myFunction.getName() << "( " << inSample << " ) = " << outSample << std::endl;
+    }
 
     }
   catch (TestFailed & ex)
