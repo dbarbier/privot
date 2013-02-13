@@ -60,6 +60,9 @@ BoxCoxFactory * BoxCoxFactory::clone() const
   return new BoxCoxFactory(*this);
 }
 
+/* Compute the log-likelihood of the Box Cox transformation
+   (\lambda-1)\sum\log(X_i)-\frac{n}{2}\log(\frac{n-1}{n}Var(T_\lambda(X_i)))
+ */
 NumericalScalar BoxCoxFactory::computeLogLikelihood(const NumericalScalar & lambda) const
 {
   const UnsignedLong size(sample_.getSize());
@@ -179,8 +182,8 @@ BoxCoxTransform BoxCoxFactory::build(const NumericalSample & sample,
   graph = Graph("Box-Cox likelihood", "lambda", "log-likelihood", true, "topright");
   const NumericalScalar lambdaMax(*std::max_element(lambda.begin(), lambda.end()));
   const NumericalScalar lambdaMin(*std::max_element(lambda.begin(), lambda.end()));
-  const NumericalScalar xMin(std::min(0.0, 2.0 * lambdaMin));
-  const NumericalScalar xMax(std::max(0.0, 2.0 * lambdaMax));
+  const NumericalScalar xMin(std::min(0.0, 0.002 * round(1000.0 * lambdaMin)));
+  const NumericalScalar xMax(std::max(0.0, 0.002 * round(1000.0 * lambdaMax)));
   const UnsignedLong npts(ResourceMap::GetAsNumericalScalar("BoxCoxFactory-DefaultPointNumber"));
   NumericalSample lambdaValues(npts, 1);
   for (UnsignedLong i = 0; i < npts; ++i) lambdaValues[i][0] = xMin + i * (xMax - xMin) / (npts - 1.0);
