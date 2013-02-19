@@ -47,31 +47,23 @@ int main(int argc, char *argv[])
 
   try
     {
-
-      try
-        {
-          // Test function operator ()
-          NumericalMathFunction levelFunction("TestOptimNonLinear");
-          CobylaSpecificParameters specific;
-          NumericalPoint startingPoint(4, 0.0);
-          Cobyla myAlgorithm(specific, levelFunction);
-          myAlgorithm.setStartingPoint(startingPoint);
-          myAlgorithm.setLevelValue(3.0);
-          myAlgorithm.setMaximumIterationsNumber(100);
-          myAlgorithm.setMaximumAbsoluteError(1.0e-10);
-          myAlgorithm.setMaximumRelativeError(1.0e-10);
-          myAlgorithm.setMaximumResidualError(1.0e-10);
-          myAlgorithm.setMaximumConstraintError(1.0e-10);
-          fullprint << "myAlgorithm = " << myAlgorithm << std::endl;
-          myAlgorithm.run();
-          fullprint << "result = " << printNumericalPoint(myAlgorithm.getResult().getMinimizer(), 4) << std::endl;
-        }
-      catch (NoWrapperFileFoundException & ex)
-        {
-          throw TestFailed(ex.__repr__());
-        }
-
-
+      NumericalMathFunction levelFunction("TestOptimNonLinear");
+      CobylaSpecificParameters specific;
+      NumericalPoint startingPoint(4, 0.0);
+      Cobyla myAlgorithm(specific, levelFunction);
+      myAlgorithm.setStartingPoint(startingPoint);
+      myAlgorithm.setLevelValue(3.0);
+      myAlgorithm.setMaximumIterationsNumber(100);
+      myAlgorithm.setMaximumAbsoluteError(1.0e-10);
+      myAlgorithm.setMaximumRelativeError(1.0e-10);
+      myAlgorithm.setMaximumResidualError(1.0e-10);
+      myAlgorithm.setMaximumConstraintError(1.0e-10);
+      fullprint << "myAlgorithm = " << myAlgorithm << std::endl;
+      myAlgorithm.run();
+      NearestPointAlgorithmImplementationResult result(myAlgorithm.getResult());
+      fullprint << "result = " << printNumericalPoint(result.getMinimizer(), 4) << std::endl;
+      Graph convergence(result.getErrorHistory());
+      convergence.draw("CobylaConvergence");
     }
   catch (TestFailed & ex)
     {

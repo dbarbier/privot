@@ -57,7 +57,7 @@ DistributionImplementationFactory * DistributionImplementationFactory::clone() c
 String DistributionImplementationFactory::__repr__() const
 {
   OSS oss;
-  oss << "class=" << DistributionImplementationFactory::GetClassName();
+  oss << "class=" << this->getClassName();
   return oss;
 }
 

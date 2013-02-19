@@ -229,36 +229,79 @@ Distribution KernelSmoothing::build(const NumericalSample & sample,
   const UnsignedLong dimension(sample.getDimension());
   if (bandwidth.getDimension() != dimension) throw InvalidDimensionException(HERE) << "Error: the given bandwidth must have the same dimension as the given sample, here bandwidth dimension=" << bandwidth.getDimension() << " and sample dimension=" << dimension;
   setBandwidth(bandwidth);
+  UnsignedLong size(sample.getSize());
   // The usual case: no boundary correction, no binning
-  if ((dimension > 1) || ((!bined_) && (!boundaryCorrection))) return KernelMixture(kernel_, bandwidth, sample);
+  const Bool mustBin(bined_ && (dimension * log(binNumber_) < log(size)));
+  if (bined_ != mustBin) LOGINFO("Will not bin the data because the bin number is greater than the sample size");
+  if ((dimension > 2) || ((!mustBin) && (!boundaryCorrection))) return KernelMixture(kernel_, bandwidth, sample);
+  const NumericalPoint xmin(sample.getMin());
+  const NumericalPoint xmax(sample.getMax());
+  // 2D binning?
+  if ((dimension == 2) && mustBin)
+    {
+      NumericalPoint reducedData(binNumber_ * binNumber_);
+      NumericalPoint x(binNumber_);
+      NumericalPoint y(binNumber_);
+      const NumericalScalar deltaX((xmax[0] - xmin[0]) / (binNumber_ - 1));
+      const NumericalScalar deltaY((xmax[1] - xmin[1]) / (binNumber_ - 1));
+      const NumericalScalar hX(0.5 * deltaX);
+      const NumericalScalar hY(0.5 * deltaY);
+      for (UnsignedLong i = 0; i < binNumber_; ++i)
+	{
+	  x[i] = xmin[0] + i * deltaX;
+	  y[i] = xmin[1] + i * deltaY;
+	}
+      for (UnsignedLong i = 0; i < size; ++i)
+	{
+	  UnsignedLong indexX(0);
+	  NumericalScalar sliceX((sample[i][0] - (xmin[0] - hX)) / deltaX);
+	  if (sliceX >= 0.0) indexX = static_cast< UnsignedLong > (trunc(sliceX));
+	  if (indexX >= binNumber_) indexX = binNumber_ - 1;
+	  UnsignedLong indexY(0);
+	  NumericalScalar sliceY((sample[i][1] - (xmin[1] - hY)) / deltaY);
+	  if (sliceY >= 0.0) indexY = static_cast< UnsignedLong > (trunc(sliceY));
+	  if (indexY >= binNumber_) indexY = binNumber_ - 1;
+	  ++reducedData[indexX + indexY * binNumber_];
+	}
+      Collection< Distribution > atoms(binNumber_ * binNumber_);
+      for (UnsignedLong i = 0; i < binNumber_; ++i)
+	{
+	  NumericalPoint point(2);
+	  point[0] = x[i];
+	  for (UnsignedLong j = 0; j < binNumber_; ++j)
+	    {
+	      point[1] = y[j];
+	      KernelMixture atom(kernel_, bandwidth, NumericalSample(1, point));
+	      atoms[i + j * binNumber_] = atom;
+	    }
+	}
+      return Mixture(atoms, reducedData);      
+    }
 
   // Here we are in the 1D case, with at least binning or boundary boundary correction
   NumericalSample newSample(sample);
-  const NumericalScalar xmin(sample.getMin()[0]);
-  const NumericalScalar xmax(sample.getMax()[0]);
-  NumericalScalar xminNew(xmin);
-  NumericalScalar xmaxNew(xmax);
+  NumericalScalar xminNew(xmin[0]);
+  NumericalScalar xmaxNew(xmax[0]);
   // If boundary correction,
   if (boundaryCorrection)
     {
       NumericalScalar h(bandwidth[0]);
       // Reflect and add points close to the boundaries to the sample
-      const UnsignedLong size(sample.getSize());
       for (UnsignedLong i = 0; i < size; i++)
         {
-          NumericalScalar realization(sample[i][0]);
-          if (realization <= xmin + h) newSample.add(NumericalPoint(1, 2.0 * xmin - realization));
-          if (realization >= xmax - h) newSample.add(NumericalPoint(1, 2.0 * xmax - realization));
+          const NumericalPoint realization(sample[i]);
+          if (realization[0] <= xmin[0] + h) newSample.add(2.0 * xmin - realization);
+          if (realization[0] >= xmax[0] - h) newSample.add(2.0 * xmax - realization);
         }
     }
   // Now, work on the extended sample
-  if (!bined_) return TruncatedDistribution(KernelMixture(kernel_, bandwidth, newSample), xmin, xmax);
+  if (!mustBin) return TruncatedDistribution(KernelMixture(kernel_, bandwidth, newSample), xmin[0], xmax[0]);
   if (boundaryCorrection)
     {
       xminNew = newSample.getMin()[0];
       xmaxNew = newSample.getMax()[0];
     }
-  const UnsignedLong size(newSample.getSize());
+  size = newSample.getSize();
   // Here, we have to bin the data
   NumericalPoint reducedData(binNumber_);
   NumericalPoint x(binNumber_);
@@ -279,7 +322,7 @@ Distribution KernelSmoothing::build(const NumericalSample & sample,
       KernelMixture atom(kernel_, bandwidth, NumericalSample(1, NumericalPoint(1, x[i])));
       atoms[i] = atom;
     }
-  if (boundaryCorrection) return TruncatedDistribution(Mixture(atoms, reducedData), xmin, xmax);
+  if (boundaryCorrection) return TruncatedDistribution(Mixture(atoms, reducedData), xmin[0], xmax[0]);
   return Mixture(atoms, reducedData);
 }
 

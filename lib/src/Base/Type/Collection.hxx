@@ -268,6 +268,13 @@ public:
     coll__.push_back(elt);
   }
 
+  /** Method add() appends a collection to the collection */
+  inline
+  virtual void add(const Collection< T > & coll)
+  {
+    coll__.insert(coll__.end(), coll.begin(), coll.end());
+  }
+
   /** Method getSize() returns the number of elements of the collection */
   inline
   UnsignedLong getSize() const

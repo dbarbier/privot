@@ -2,7 +2,7 @@
 /**
  *  @file  DickeyFullerTest.cxx
  *  @brief StatTest implements statistical tests
- *  This statistical test enables user if a time series is stationary
+ *  This statistical test enables user to check if a time series is stationary
  *
  *  (C) Copyright 2005-2011 EDF-EADS-Phimeca
  *
@@ -548,16 +548,16 @@ TestResult DickeyFullerTest::testNoUnitRootAndNoLinearTrendInDriftAndLinearTrend
     }
 
   // We write the statistic of studentized
-  // Care: check that the variance is the non biased
+  // Care: check that the variance is the non biased estimator
   // Student quantile ==> T(n - p - 1) with n: size of sample and p: number of variables
   // p here is 3 (rho, drift and trend)
   const NumericalScalar studentStatisticNullTrend(std::abs(trend_) / sigmaTrend_);
-  const NumericalScalar cdfNullTrend(DistFunc::pStudent(T_ - 4, studentStatisticNullTrend));
-  // True pValue = 2 - 2 * F(s) with s the student statistic and F the Student cumulative function
-  const NumericalScalar pValue(2.0 * (1.0 - cdfNullTrend));
+  // Here, T_ = n - 1
+  const NumericalScalar complementaryCDFNullTrend(DistFunc::pStudent(T_ - 3, studentStatisticNullTrend, true));
+  // True pValue = 1 - F(s) with s the student statistic and F the Student cumulative function
 
   // Test is rejected if the the statistic is greater than the quantile
-  const TestResult result("DickeyFullerTrendNullWithoutUnitRoot", cdfNullTrend < 0.5 + 0.5 * level, pValue, 1.0 - level);
+  const TestResult result("DickeyFullerTrendNullWithoutUnitRoot", complementaryCDFNullTrend > 1.0 - level, complementaryCDFNullTrend, 1.0 - level);
   return result;
 
 }
@@ -628,11 +628,10 @@ TestResult DickeyFullerTest::testNoUnitRootAndNoDriftInDriftModel(const Numerica
   // Perform the statistical test
   const NumericalScalar studentStatisticNullDrift(std::abs(drift_) / sigmaDrift_);
   // Student quantile ==> T(n - p - 1) with n: size of sample and p: number of variables
-  const NumericalScalar cdfNullDrift(DistFunc::pStudent(T_ - 3, studentStatisticNullDrift));
-  const NumericalScalar pValue(2.0 * (1 - cdfNullDrift));
+  const NumericalScalar complementaryCDFNullDrift(DistFunc::pStudent(T_ - 2, studentStatisticNullDrift));
 
   // Test is rejected if the the statistic is greater than the quantile
-  const TestResult result("DickeyFullerDriftNullWithoutUnitRoot", cdfNullDrift < 0.5 * (1.0 +  level), pValue, 1.0 - level);
+  const TestResult result("DickeyFullerDriftNullWithoutUnitRoot", complementaryCDFNullDrift < 1.0 - level, complementaryCDFNullDrift, 1.0 - level);
   return result;
 
 }

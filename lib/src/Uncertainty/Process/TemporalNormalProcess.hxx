@@ -29,6 +29,7 @@
 #include "SquareMatrix.hxx"
 #include "SecondOrderModel.hxx"
 #include "CovarianceModel.hxx"
+#include "TrendTransform.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
@@ -50,6 +51,18 @@ public:
   TemporalNormalProcess(const String & name = DefaultName);
 
   /** Standard constructor  */
+  TemporalNormalProcess(const TrendTransform & trend,
+			const SecondOrderModel  & model,
+                        const RegularGrid & timeGrid,
+                        const String & name = DefaultName);
+
+  /** Standard constructor  */
+  TemporalNormalProcess(const TrendTransform & trend,
+			const CovarianceModel & covarianceModel,
+                        const RegularGrid & timeGrid,
+                        const String & name = DefaultName);
+
+  /** Standard constructor  */
   TemporalNormalProcess(const SecondOrderModel  & model,
                         const RegularGrid & timeGrid,
                         const String & name = DefaultName);
@@ -68,14 +81,23 @@ public:
   /** String converter  - pretty print */
   String __str__(const String & offset = "") const;
 
+  /** TimeGrid accessor */
+  void setTimeGrid(const RegularGrid & timeGrid);
+
   /** Realization accessor */
   TimeSeries getRealization() const;
 
   /** Covariance model accessor */
   CovarianceModel getCovarianceModel() const;
 
+  /** Trend accessor */
+  TrendTransform getTrend() const;
+
   /** Check if the process is stationary */
   Bool isStationary() const;
+
+  /** Check if the process trend is stationary */
+  Bool isTrendStationary() const;
 
   /** Check if the process is Normal */
   Bool isNormal() const;
@@ -91,6 +113,9 @@ protected:
   /** Initialization of the process */
   void initialize() const;
 
+  /** Check if the trend function is stationary */
+  void checkStationaryTrend() const;
+
 private:
 
   /** Covariance model */
@@ -101,6 +126,14 @@ private:
 
   /** Flag to manage process initialization */
   mutable Bool isInitialized_;
+
+  /** Flag to tell if the process has a stationary trend */
+  mutable Bool hasStationaryTrend_;
+  mutable Bool checkedStationaryTrend_;
+  mutable NumericalPoint stationaryTrendValue_;
+
+  /** Trend function */
+  TrendTransform trend_;
 
 }; /* class TemporalNormalProcess */
 

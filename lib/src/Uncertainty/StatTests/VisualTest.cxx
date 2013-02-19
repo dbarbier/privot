@@ -430,7 +430,7 @@ Graph VisualTest::DrawCobWeb(const NumericalSample & inputSample,
       cobWeb.add(filament);
     }
   // Draw the vertical lines associated with the input variables
-  const Description palette(Curve::GetValidColors());
+  const Description palette(Curve::BuildDefaultPalette(inputDimension));
   for (UnsignedLong i = 0; i < inputDimension + 1; ++i)
     {
       NumericalSample data(2, 2);
@@ -441,7 +441,7 @@ Graph VisualTest::DrawCobWeb(const NumericalSample & inputSample,
       Curve bar(data);
       if (i < inputDimension)
         {
-          bar.setColor(palette[i % palette.getSize()]);
+          bar.setColor(palette[i]);
           bar.setLegendName(inputSample.getDescription()[i]);
         }
       else

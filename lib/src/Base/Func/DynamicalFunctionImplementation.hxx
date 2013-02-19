@@ -70,18 +70,18 @@ public:
   virtual ProcessSample operator() (const ProcessSample & inPS) const;
 
   /** Accessor for input point dimension */
-  UnsignedLong getInputDimension() const;
+  virtual UnsignedLong getInputDimension() const;
 
   /** Accessor for output point dimension */
-  UnsignedLong getOutputDimension() const;
+  virtual UnsignedLong getOutputDimension() const;
 
   /** Input description Accessor, i.e. the names of the input parameters */
-  void setInputDescription(const Description & inputDescription);
-  Description getInputDescription() const;
+  virtual void setInputDescription(const Description & inputDescription);
+  virtual Description getInputDescription() const;
 
   /** Output description Accessor, i.e. the names of the Output parameters */
-  void setOutputDescription(const Description & outputDescription);
-  Description getOutputDescription() const;
+  virtual void setOutputDescription(const Description & outputDescription);
+  virtual Description getOutputDescription() const;
 
   /** Get the i-th marginal function */
   virtual Implementation getMarginal(const UnsignedLong i) const;
@@ -90,16 +90,16 @@ public:
   virtual Implementation getMarginal(const Indices & indices) const;
 
   /** Number of calls to the dynamical function */
-  UnsignedLong getCallsNumber() const;
+  virtual UnsignedLong getCallsNumber() const;
 
   /** Compute the output time grid based on a given input time grid */
-  RegularGrid computeOutputTimeGrid(const RegularGrid & inputTimeGrid) const;
+  virtual RegularGrid computeOutputTimeGrid(const RegularGrid & inputTimeGrid) const;
 
   /** Method save() stores the object through the StorageManager */
-  void save(Advocate & adv) const;
+  virtual void save(Advocate & adv) const;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(Advocate & adv);
+  virtual void load(Advocate & adv);
 
 protected:
 

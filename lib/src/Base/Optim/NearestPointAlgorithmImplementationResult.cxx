@@ -24,7 +24,7 @@
 #include "NearestPointAlgorithmImplementationResult.hxx"
 #include "PersistentObjectFactory.hxx"
 #include "Curve.hxx"
-#include "Staircase.hxx"
+#include "SpecFunc.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
@@ -35,14 +35,20 @@ CLASSNAMEINIT(NearestPointAlgorithmImplementationResult);
 static Factory<NearestPointAlgorithmImplementationResult> RegisteredFactory("NearestPointAlgorithmImplementationResult");
 
 /* Default constructor */
-NearestPointAlgorithmImplementationResult::NearestPointAlgorithmImplementationResult():
-  PersistentObject(),
-  minimizer_(NumericalPoint(1)),
-  iterationsNumber_(0),
-  absoluteError_(-1.),
-  relativeError_(-1.),
-  residualError_(-1.),
-  constraintError_(-1.)
+NearestPointAlgorithmImplementationResult::NearestPointAlgorithmImplementationResult()
+  : PersistentObject()
+  , minimizer_(NumericalPoint(0))
+  , iterationsNumber_(0)
+  , absoluteError_(-1.0)
+  , relativeError_(-1.0)
+  , residualError_(-1.0)
+  , constraintError_(-1.0)
+  , absoluteErrorHistory_()
+  , relativeErrorHistory_()
+  , residualErrorHistory_()
+  , constraintErrorHistory_()
+  , inputHistory_()
+  , outputHistory_()
 {
   // Nothing to do
 }
@@ -53,14 +59,20 @@ NearestPointAlgorithmImplementationResult::NearestPointAlgorithmImplementationRe
                                                                                      const NumericalScalar absoluteError,
                                                                                      const NumericalScalar relativeError,
                                                                                      const NumericalScalar residualError,
-                                                                                     const NumericalScalar constraintError):
-  PersistentObject(),
-  minimizer_(minimizer),
-  iterationsNumber_(iterationsNumber),
-  absoluteError_(-1.),
-  relativeError_(-1.),
-  residualError_(-1.),
-  constraintError_(-1.)
+                                                                                     const NumericalScalar constraintError)
+  : PersistentObject()
+  , minimizer_(minimizer)
+  , iterationsNumber_(iterationsNumber)
+  , absoluteError_(-1.0)
+  , relativeError_(-1.0)
+  , residualError_(-1.0)
+  , constraintError_(-1.0)
+  , absoluteErrorHistory_()
+  , relativeErrorHistory_()
+  , residualErrorHistory_()
+  , constraintErrorHistory_()
+  , inputHistory_()
+  , outputHistory_()
 {
   // Nothing to do
 }
@@ -103,7 +115,7 @@ NumericalScalar NearestPointAlgorithmImplementationResult::getAbsoluteError() co
 
 NumericalSample NearestPointAlgorithmImplementationResult::getAbsoluteErrorHistory() const
 {
-  return absoluteErrorHistory_;
+  return absoluteErrorHistory_.getSample();
 }
 
 /* Absolute error accessor */
@@ -120,7 +132,7 @@ NumericalScalar NearestPointAlgorithmImplementationResult::getRelativeError() co
 
 NumericalSample NearestPointAlgorithmImplementationResult::getRelativeErrorHistory() const
 {
-  return relativeErrorHistory_;
+  return relativeErrorHistory_.getSample();
 }
 
 /* Relative error accessor */
@@ -137,7 +149,7 @@ NumericalScalar NearestPointAlgorithmImplementationResult::getResidualError() co
 
 NumericalSample NearestPointAlgorithmImplementationResult::getResidualErrorHistory() const
 {
-  return residualErrorHistory_;
+  return residualErrorHistory_.getSample();
 }
 
 /* Residual error accessor */
@@ -154,7 +166,7 @@ NumericalScalar NearestPointAlgorithmImplementationResult::getConstraintError() 
 
 NumericalSample NearestPointAlgorithmImplementationResult::getConstraintErrorHistory() const
 {
-  return constraintErrorHistory_;
+  return constraintErrorHistory_.getSample();
 }
 
 /* Constraint error accessor */
@@ -165,12 +177,12 @@ void NearestPointAlgorithmImplementationResult::setConstraintError(const Numeric
 
 NumericalSample NearestPointAlgorithmImplementationResult::getInputSample() const
 {
-  return inputSample_;
+  return inputHistory_.getSample();
 }
 
 NumericalSample NearestPointAlgorithmImplementationResult::getOutputSample() const
 {
-  return outputSample_;
+  return outputHistory_.getSample();
 }
 
 /* String converter */
@@ -203,8 +215,8 @@ void NearestPointAlgorithmImplementationResult::save(Advocate & adv) const
   adv.saveAttribute( "residualErrorHistory_", residualErrorHistory_ );
   adv.saveAttribute( "constraintErrorHistory_", constraintErrorHistory_ );
 
-  adv.saveAttribute( "inputSample_", inputSample_ );
-  adv.saveAttribute( "outputSample_", outputSample_ );
+  adv.saveAttribute( "inputHistory_", inputHistory_ );
+  adv.saveAttribute( "outputHistory_", outputHistory_ );
 }
 
 /* Method load() reloads the object from the StorageManager */
@@ -223,8 +235,8 @@ void NearestPointAlgorithmImplementationResult::load(Advocate & adv)
   adv.loadAttribute( "residualErrorHistory_", residualErrorHistory_ );
   adv.loadAttribute( "constraintErrorHistory_", constraintErrorHistory_ );
 
-  adv.loadAttribute( "inputSampleHistory_", inputSample_ );
-  adv.loadAttribute( "outputSampleHistory_", outputSample_ );
+  adv.loadAttribute( "inputHistory_", inputHistory_ );
+  adv.loadAttribute( "outputHistory_", outputHistory_ );
 }
 
 /* Update current state */
@@ -235,8 +247,8 @@ void NearestPointAlgorithmImplementationResult::update(const NumericalPoint & mi
 }
 
 /* Incremental history storage */
-void NearestPointAlgorithmImplementationResult::store(const NumericalPoint& x,
-                                                      const NumericalPoint& y,
+void NearestPointAlgorithmImplementationResult::store(const NumericalPoint & x,
+                                                      const NumericalPoint & y,
                                                       const NumericalScalar absoluteError,
                                                       const NumericalScalar relativeError,
                                                       const NumericalScalar residualError,
@@ -252,55 +264,58 @@ void NearestPointAlgorithmImplementationResult::store(const NumericalPoint& x,
   constraintError_ = constraintError;
 
   // append values
-  absoluteErrorHistory_.add(NumericalPoint(1, absoluteError));
-  relativeErrorHistory_.add(NumericalPoint(1, relativeError));
-  residualErrorHistory_.add(NumericalPoint(1, residualError));
-  constraintErrorHistory_.add(NumericalPoint(1, constraintError));
+  absoluteErrorHistory_.store(NumericalPoint(1, absoluteError));
+  relativeErrorHistory_.store(NumericalPoint(1, relativeError));
+  residualErrorHistory_.store(NumericalPoint(1, residualError));
+  constraintErrorHistory_.store(NumericalPoint(1, constraintError));
 
-  // initialize sample dimension first
-  if ( inputSample_.getSize() == 0 )
-    {
-      inputSample_ = NumericalSample(0, x.getDimension());
-    }
-  if ( outputSample_.getSize() == 0 )
-    {
-      outputSample_ = NumericalSample(0, y.getDimension());
-    }
-  inputSample_.add(x);
-  outputSample_.add(y);
+  inputHistory_.store(x);
+  outputHistory_.store(y);
 }
 
 Graph NearestPointAlgorithmImplementationResult::getErrorHistory() const
 {
-  Graph result;
-  result.setTitle("Error history");
-  result.setXTitle("Iteration number");
-  result.setYTitle("Error value");
-  result.setLegendPosition("topright");
+  Graph result("Error history", "Iteration number", "Error value", true, "topright", 1.0, GraphImplementation::LOGY);
+  result.setGrid(true);
+  result.setGridColor("black");
 
   // create a sample with the iterations number to be plotted as x data
-  UnsignedLong size = getAbsoluteErrorHistory().getSize();
-  NumericalSample iterationIndex(size, 1);
-  for ( UnsignedLong i = 0; i < size; ++ i )
-    {
-      iterationIndex[i][0] = i + 1;
-    }
+  const UnsignedLong size(getAbsoluteErrorHistory().getSize());
+  {
+    NumericalSample data(getAbsoluteErrorHistory());
+    for (UnsignedLong i = 0; i < size; ++i) if (data[i][0] <= 0.0) data[i][0] = SpecFunc::NumericalScalarEpsilon;
+    Curve absoluteErrorCurve( data, "absolute error" );
+    absoluteErrorCurve.setLegendName("absolute error");
+    absoluteErrorCurve.setColor("red");
+    result.add( absoluteErrorCurve );
+  }
 
-  Curve absoluteErrorCurve( iterationIndex, getAbsoluteErrorHistory(), "absolute error" );
-  absoluteErrorCurve.setLegendName("absolute error");
-  absoluteErrorCurve.setColor("red");
-  result.add( absoluteErrorCurve );
+  {
+    NumericalSample data(getRelativeErrorHistory());
+    for (UnsignedLong i = 0; i < size; ++i) if (data[i][0] <= 0.0) data[i][0] = SpecFunc::NumericalScalarEpsilon;
+    Curve relativeErrorCurve( data, "relative error" );
+    relativeErrorCurve.setLegendName("relative error");
+    relativeErrorCurve.setColor("blue");
+    result.add( relativeErrorCurve );
+  }
 
-  Curve relativeErrorCurve( iterationIndex, getRelativeErrorHistory(), "relative error" );
-  result.add( relativeErrorCurve );
+  {
+    NumericalSample data(getResidualErrorHistory());
+    for (UnsignedLong i = 0; i < size; ++i) if (data[i][0] <= 0.0) data[i][0] = SpecFunc::NumericalScalarEpsilon;
+    Curve residualErrorCurve( data, "residual error" );
+    residualErrorCurve.setLegendName("residual error");
+    residualErrorCurve.setColor("green");
+    result.add( residualErrorCurve );
+  }
 
-  Curve residualErrorCurve( iterationIndex, getResidualErrorHistory(), "residual error" );
-  residualErrorCurve.setColor("green");
-  result.add( residualErrorCurve );
-
-  Curve constraintErrorCurve( iterationIndex, getConstraintErrorHistory(), "constraint error" );
-  constraintErrorCurve.setColor("yellow");
-  result.add(constraintErrorCurve );
+  {
+    NumericalSample data(getConstraintErrorHistory());
+    for (UnsignedLong i = 0; i < size; ++i) if (data[i][0] <= 0.0) data[i][0] = SpecFunc::NumericalScalarEpsilon;
+    Curve constraintErrorCurve( data, "constraint error" );
+    constraintErrorCurve.setLegendName("constraint error");
+    constraintErrorCurve.setColor("yellow");
+    result.add( constraintErrorCurve );
+  }
 
   return result;
 }

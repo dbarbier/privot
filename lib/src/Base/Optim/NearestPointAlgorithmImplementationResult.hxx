@@ -31,6 +31,7 @@
 #include "Threadable.hxx"
 #include "PersistentObject.hxx"
 #include "NumericalMathFunction.hxx"
+#include "Compact.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
@@ -144,12 +145,12 @@ private:
   NumericalScalar relativeError_;   /**< Value of ||x_n - x_{n-1}|| / ||x_n|| */
   NumericalScalar residualError_;   /**< Value of ||objectiveFunction(x_n) - objectiveFunction(x_{n-1})|| */
   NumericalScalar constraintError_; /**< Value of ||constraints(x_n)|| for the active constraints */
-  NumericalSample absoluteErrorHistory_;
-  NumericalSample relativeErrorHistory_;
-  NumericalSample residualErrorHistory_;
-  NumericalSample constraintErrorHistory_;
-  NumericalSample inputSample_;
-  NumericalSample outputSample_;
+  Compact absoluteErrorHistory_;
+  Compact relativeErrorHistory_;
+  Compact residualErrorHistory_;
+  Compact constraintErrorHistory_;
+  Compact inputHistory_;
+  Compact outputHistory_;
 
 }; // class NearestPointAlgorithmImplementationResult
 

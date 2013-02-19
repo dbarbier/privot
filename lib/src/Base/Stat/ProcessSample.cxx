@@ -222,12 +222,12 @@ Graph ProcessSample::drawMarginal(const UnsignedLong index) const
   // Discretization of the x axis
   const String title(OSS() << getName() << " - " << index << " marginal" );
   Graph graph(title, "Time", "Values", true, "topright");
-  const UnsignedLong maxColors(Drawable::GetValidColors().getSize());
   const UnsignedLong size(data_.getSize());
+  const Description colors(Drawable::BuildDefaultPalette(size));
   for (UnsignedLong i = 0; i < size; ++i)
     {
       Drawable drawable(data_[i].drawMarginal(index).getDrawable(0));
-      drawable.setColor(Drawable::GetValidColors()[i % maxColors]);
+      drawable.setColor(colors[i]);
       graph.add(drawable);
     }
   return graph;

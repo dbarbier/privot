@@ -248,9 +248,9 @@ UniVariatePolynomialImplementation UniVariatePolynomialImplementation::operator 
   const UnsignedLong lhsSize(leftCoefficients.getSize());
   const UnsignedLong rhsSize(rightCoefficients.getSize());
   // If the left hand side has a degree greater than the right hand side, add enough zeros to the coefficients in order to equal the degrees
-  if (lhsSize > rhsSize) for (UnsignedLong i = rhsSize; i < lhsSize; ++i) rightCoefficients.add(0.0);
+  if (lhsSize > rhsSize) rightCoefficients.add(NumericalPoint(lhsSize - rhsSize, 0.0));
   // Else the right hand side has a degree greater than the left hand side, add enough zeros to the coefficients in order to equal the degrees
-  else for (UnsignedLong i = lhsSize; i < rhsSize; ++i) leftCoefficients.add(0.0);
+  else leftCoefficients.add(NumericalPoint(rhsSize - lhsSize, 0.0));
   // Then, we just have to sum-up the degrees
   UniVariatePolynomialImplementation sum(leftCoefficients + rightCoefficients);
   sum.compactCoefficients();

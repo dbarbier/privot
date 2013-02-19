@@ -26,12 +26,133 @@
 #include "Description.hxx"
 #include "Path.hxx"
 #include "Exception.hxx"
+#include "AliMikhailHaqCopulaFactory.hxx"
+#include "ArcsineFactory.hxx"
+#include "BernoulliFactory.hxx"
+#include "BetaFactory.hxx"
+#include "BinomialFactory.hxx"
+#include "BurrFactory.hxx"
+#include "ChiFactory.hxx"
+#include "ChiSquareFactory.hxx"
+#include "ClaytonCopulaFactory.hxx"
+#include "DiracFactory.hxx"
+#include "DirichletFactory.hxx"
+#include "ExponentialFactory.hxx"
+#include "FarlieGumbelMorgensternCopulaFactory.hxx"
+#include "FisherSnedecorFactory.hxx"
+#include "FrankCopulaFactory.hxx"
+#include "GammaFactory.hxx"
+#include "GeometricFactory.hxx"
+#include "GumbelCopulaFactory.hxx"
+#include "GumbelFactory.hxx"
+#include "HistogramFactory.hxx"
+#include "InverseNormalFactory.hxx"
+#include "LaplaceFactory.hxx"
+#include "LogisticFactory.hxx"
+#include "LogNormalFactory.hxx"
+#include "LogUniformFactory.hxx"
+#include "MultinomialFactory.hxx"
+#include "NegativeBinomialFactory.hxx"
+#include "NormalCopulaFactory.hxx"
+#include "NormalFactory.hxx"
+#include "PoissonFactory.hxx"
+#include "RayleighFactory.hxx"
+#include "RiceFactory.hxx"
+#include "StudentFactory.hxx"
+#include "TrapezoidalFactory.hxx"
+#include "TriangularFactory.hxx"
+#include "TruncatedNormalFactory.hxx"
+#include "UniformFactory.hxx"
+#include "UserDefinedFactory.hxx"
+#include "WeibullFactory.hxx"
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 CLASSNAMEINIT(DistributionFactory);
+
+/* Catalog of factories */
+DistributionFactory::DistributionFactoryCollection DistributionFactory::GetContinuousUniVariateFactories()
+{
+  DistributionFactoryCollection collection(0);
+  collection.add(ArcsineFactory());
+  collection.add(BetaFactory());
+  collection.add(BurrFactory());
+  collection.add(ChiFactory());
+  collection.add(ChiSquareFactory());
+  collection.add(DirichletFactory());
+  collection.add(ExponentialFactory());
+  collection.add(FisherSnedecorFactory());
+  collection.add(GammaFactory());
+  collection.add(GumbelFactory());
+  collection.add(HistogramFactory());
+  collection.add(InverseNormalFactory());
+  collection.add(LaplaceFactory());
+  collection.add(LogisticFactory());
+  collection.add(LogNormalFactory());
+  collection.add(LogUniformFactory());
+  collection.add(NormalFactory());
+  collection.add(RayleighFactory());
+  collection.add(RiceFactory());
+  collection.add(StudentFactory());
+  collection.add(TrapezoidalFactory());
+  collection.add(TriangularFactory());
+  collection.add(TruncatedNormalFactory());
+  collection.add(UniformFactory());
+  collection.add(WeibullFactory());
+  return collection;
+}
+
+DistributionFactory::DistributionFactoryCollection DistributionFactory::GetContinuousMultiVariateFactories()
+{
+  DistributionFactoryCollection collection(0);
+  collection.add(AliMikhailHaqCopulaFactory());
+  collection.add(ClaytonCopulaFactory());
+  collection.add(DirichletFactory());
+  collection.add(FarlieGumbelMorgensternCopulaFactory());
+  collection.add(FrankCopulaFactory());
+  collection.add(GumbelCopulaFactory());
+  collection.add(NormalCopulaFactory());
+  collection.add(NormalFactory());
+  collection.add(StudentFactory());
+  return collection;
+}
+
+DistributionFactory::DistributionFactoryCollection DistributionFactory::GetDiscreteUniVariateFactories()
+{
+  DistributionFactoryCollection collection(0);
+  collection.add(BernoulliFactory());
+  collection.add(BinomialFactory());
+  collection.add(DiracFactory());
+  collection.add(GeometricFactory());
+  collection.add(MultinomialFactory());
+  collection.add(NegativeBinomialFactory());
+  collection.add(PoissonFactory());
+  collection.add(UserDefinedFactory());
+  return collection;
+}
+
+DistributionFactory::DistributionFactoryCollection DistributionFactory::GetDiscreteMultiVariateFactories()
+{
+  DistributionFactoryCollection collection(0);
+  collection.add(DiracFactory());
+  collection.add(MultinomialFactory());
+  collection.add(UserDefinedFactory());
+  return collection;
+}
+
+DistributionFactory::DistributionFactoryCollection DistributionFactory::GetUniVariateFactories()
+{
+  DistributionFactoryCollection collection(DistributionFactory::GetContinuousUniVariateFactories());
+  collection.add(DistributionFactory::GetDiscreteUniVariateFactories());
+  return collection;
+}
+
+DistributionFactory::DistributionFactoryCollection DistributionFactory::GetMultiVariateFactories()
+{
+  DistributionFactoryCollection collection(DistributionFactory::GetContinuousMultiVariateFactories());
+  collection.add(DistributionFactory::GetDiscreteMultiVariateFactories());
+  return collection;
+}
 
 /* Default constructor */
 DistributionFactory::DistributionFactory(const UnsignedLong bootstrapSize,

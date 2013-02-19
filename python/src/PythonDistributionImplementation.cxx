@@ -54,6 +54,8 @@ PythonDistributionImplementation::PythonDistributionImplementation(PyObject * py
 {
   Py_XINCREF( pyObj_ );
 
+  if ( !PyObject_HasAttrString( pyObj_, const_cast<char *>("computeCDF") ) ) throw InvalidArgumentException(HERE) << "Error: the given object does not have a computeCDF() method.";
+
   // Set the name of the object as its Python classname
   PyObject * cls = PyObject_GetAttrString( pyObj_,
                                            const_cast<char *>( "__class__" ) );

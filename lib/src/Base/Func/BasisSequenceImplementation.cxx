@@ -92,10 +92,7 @@ Basis BasisSequenceImplementation::getBasis(const UnsignedLong index) const
 {
   Basis result;
   Indices subBasisIndices(operator[](index));
-  for (UnsignedLong i = 0; i < subBasisIndices.getSize(); ++ i)
-    {
-      result.add(masterBasis_[subBasisIndices[i]]);
-    }
+  for (UnsignedLong i = 0; i < subBasisIndices.getSize(); ++ i) result.add(masterBasis_[subBasisIndices[i]]);
   return result;
 }
 

@@ -29,8 +29,6 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 /**
  * @class TypedInterfaceObject
  * @brief Implements InterfaceObject for a specific class

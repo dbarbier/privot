@@ -28,8 +28,6 @@
 BEGIN_NAMESPACE_OPENTURNS
 
 
-
-
 CLASSNAMEINIT(Cobyla);
 
 /* Default constructor */
@@ -44,9 +42,9 @@ Cobyla::Cobyla():
  *         and a level value
  */
 Cobyla::Cobyla(const NumericalMathFunction & levelFunction,
-               const Bool verbose):
-  NearestPointAlgorithmImplementation(levelFunction, verbose),
-  specificParameters_()
+               const Bool verbose)
+  : NearestPointAlgorithmImplementation(levelFunction, verbose)
+  , specificParameters_()
 {
   // Nothing to do
 }
@@ -57,9 +55,9 @@ Cobyla::Cobyla(const NumericalMathFunction & levelFunction,
  */
 Cobyla::Cobyla(const CobylaSpecificParameters & specificParameters,
                const NumericalMathFunction & levelFunction,
-               const Bool verbose):
-  NearestPointAlgorithmImplementation(levelFunction, verbose),
-  specificParameters_(specificParameters)
+               const Bool verbose)
+  : NearestPointAlgorithmImplementation(levelFunction, verbose)
+  , specificParameters_(specificParameters)
 {
   // Nothing to do
 }
@@ -82,18 +80,18 @@ void Cobyla::run()
   int maxFun(getMaximumIterationsNumber() * x.getDimension());
   cobyla_message message((getVerbose() ? COBYLA_MSG_INFO : COBYLA_MSG_NONE));
 
-  NumericalScalar absoluteError = -1.0;
-  NumericalScalar relativeError = -1.0;
-  NumericalScalar residualError = -1.0;
-  NumericalScalar constraintError = -1.0;
+  NumericalScalar absoluteError(-1.0);
+  NumericalScalar relativeError(-1.0);
+  NumericalScalar residualError(-1.0);
+  NumericalScalar constraintError(-1.0);
 
   // clear result
   setResult(NearestPointAlgorithmImplementationResult(x, 0, absoluteError, relativeError, residualError, constraintError));
 
   // enable history
-  Bool historyEnabled = getLevelFunction().isHistoryEnabled();
+  const Bool historyEnabled(getLevelFunction().isHistoryEnabled());
   getLevelFunction().enableHistory();
-  UnsignedLong historyOffset = getLevelFunction().getInputHistory().getSample().getSize();
+  const UnsignedLong historyOffset(getLevelFunction().getInputHistory().getSample().getSize());
 
   /*
    * cobyla : minimize a function subject to constraints
@@ -119,40 +117,34 @@ void Cobyla::run()
   // Update the result
   result_.update(x, maxFun / x.getDimension());
 
-  NumericalScalar levelValue = getLevelValue();
-  UnsignedLong size = getLevelFunction().getInputHistory().getSample().getSize();
+  const NumericalScalar levelValue(getLevelValue());
+  const UnsignedLong size(getLevelFunction().getInputHistory().getSample().getSize());
 
-  NumericalSample historyInputSample( getLevelFunction().getInputHistory().getSample() );
-  NumericalSample historyOutputSample( getLevelFunction().getInputHistory().getSample() );
-
+  const NumericalSample historyInputSample( getLevelFunction().getInputHistory().getSample() );
+  const NumericalSample historyOutputSample( getLevelFunction().getOutputHistory().getSample() );
+  // Reconstruct the history convergence
   for ( UnsignedLong i = historyOffset + 1; i < size; ++ i )
     {
-      NumericalPoint inPM( historyInputSample[i - 1] );
-      NumericalPoint inP( historyInputSample[i] );
-      NumericalPoint outP( historyOutputSample[i] );
-      NumericalPoint outPM( historyOutputSample[i - 1] );
+      const NumericalPoint inPM( historyInputSample[i - 1] );
+      const NumericalPoint inP( historyInputSample[i] );
+      const NumericalPoint outP( historyOutputSample[i] );
+      const NumericalPoint outPM( historyOutputSample[i - 1] );
       absoluteError = (inP - inPM).norm();
       relativeError = absoluteError / inP.norm();
       residualError = (outP - outPM).norm();
       constraintError = fabs( outP[0] - levelValue );
       result_.store( inP, outP, absoluteError, relativeError, residualError, constraintError );
+      std::cerr << "ieration=" << i - historyOffset << ", result=" << result_ << std::endl;
     }
 
   // check the convergence criteria
   Bool convergence = ((absoluteError < getMaximumAbsoluteError()) && (relativeError < getMaximumRelativeError())) || ((residualError < getMaximumResidualError()) && (constraintError < getMaximumConstraintError()));
 
-  if (returnCode != 0)
-    {
-      LOGWARN(OSS() << "Warning! The Cobyla algorithm failed to converge. The error message is " << cobyla_rc_string[returnCode - COBYLA_MINRC]);
-    }
-  else if ( ! convergence )
-    {
-      LOGWARN(OSS() << "Warning! The Cobyla algorithm could not enforce the convergence criteria");
-    }
+  if (returnCode != 0) LOGWARN(OSS() << "Warning! The Cobyla algorithm failed to converge. The error message is " << cobyla_rc_string[returnCode - COBYLA_MINRC]);
+  else if ( ! convergence ) LOGWARN(OSS() << "Warning! The Cobyla algorithm could not enforce the convergence criteria");
 
   // revert history state
-  if ( ! historyEnabled )
-    getLevelFunction().disableHistory();
+  if ( ! historyEnabled ) getLevelFunction().disableHistory();
 }
 
 /* Specific parameters accessor */

@@ -104,33 +104,21 @@ String TrendTransform::__str__(const String & offset) const
 /* Operator () */
 TimeSeries TrendTransform::operator() (const TimeSeries & inTS) const
 {
-  // the considered \phi function should from from R to R^n
-  // the check will be done later
-  // since the TimeSeriesImplementation is not available, we have to check some features carefully
+  // The underlying function is from R to R^n
 
-  // 0 : Rework the timeSeries ==> for huge timeSeries, it is better to extract information from the ts
-  // without using the asNumericalSample method
   // first we extract the timeGrid as a NumericalSample
-  NumericalSample timeGridAsSample(inTS.getSize() , 1);
+  const UnsignedLong n(inTS.getSize());
+  NumericalSample timeGridAsSample(n, 1);
 
-  for (UnsignedLong k = 0; k < timeGridAsSample.getSize(); ++k)
-    {
-      timeGridAsSample[k][0] = inTS[k][0];
-    }
+  for (UnsignedLong k = 0; k < n; ++k) timeGridAsSample[k][0] = inTS[k][0];
 
-  // then we evaluation the function on the previous grid
+  // then we evaluate the function on the previous grid
   // result is a NumericalSample of dimension d = function.getOutputDimension()
   NumericalSample outputSample((*p_evaluation_)(timeGridAsSample));
   const UnsignedLong dimension(outputSample.getDimension());
   // finally as the function adds a trend, result
-  for (UnsignedLong k = 0; k < timeGridAsSample.getSize(); ++k)
-    {
-      for (UnsignedLong d = 0; d < dimension; ++d)
-        {
-          // NumericalPoint should be compatible
-          outputSample[k][d] += inTS[k][d + 1];
-        }
-    }
+  for (UnsignedLong k = 0; k < n; ++k)
+    for (UnsignedLong d = 0; d < dimension; ++d) outputSample[k][d] += inTS[k][d + 1];
   ++callsNumber_;
   return TimeSeries(inTS.getTimeGrid(), outputSample);
 }

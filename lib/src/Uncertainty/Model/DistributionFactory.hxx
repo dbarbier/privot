@@ -43,8 +43,9 @@ class DistributionFactory
   CLASSNAME;
 public:
 
-  typedef Collection<NumericalPoint> NumericalPointCollection;
+  typedef Collection<NumericalPoint>                NumericalPointCollection;
   typedef Collection<NumericalPointWithDescription> NumericalPointWithDescriptionCollection;
+  typedef Collection<DistributionFactory>           DistributionFactoryCollection;
 
   /** Default constructor */
   DistributionFactory(const UnsignedLong bootstrapSize = ResourceMap::GetAsUnsignedLong("DistributionImplementationFactory-DefaultBootstrapSize"),
@@ -65,6 +66,14 @@ public:
   virtual Distribution build(const NumericalPointCollection & parameters) const;
   virtual Distribution build(const NumericalPointWithDescriptionCollection & parameters) const;
   virtual Distribution build() const;
+
+  /** Catalog of factories */
+  static DistributionFactoryCollection GetContinuousUniVariateFactories();
+  static DistributionFactoryCollection GetContinuousMultiVariateFactories();
+  static DistributionFactoryCollection GetDiscreteUniVariateFactories();
+  static DistributionFactoryCollection GetDiscreteMultiVariateFactories();
+  static DistributionFactoryCollection GetUniVariateFactories();
+  static DistributionFactoryCollection GetMultiVariateFactories();
 
 private:
 

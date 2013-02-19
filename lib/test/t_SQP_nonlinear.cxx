@@ -48,35 +48,29 @@ int main(int argc, char *argv[])
   try
     {
 
-      try
-        {
-          // Test function operator ()
-          NumericalMathFunction levelFunction("TestOptimNonLinear");
-          // Add a finite difference gradient to the function, as SQP algorithm
-          // needs it
-          CenteredFiniteDifferenceGradient myGradient(1e-7, levelFunction.getEvaluationImplementation());
-          /** Substitute the gradient */
-          levelFunction.setGradientImplementation(new CenteredFiniteDifferenceGradient(myGradient));
+      NumericalMathFunction levelFunction("TestOptimNonLinear");
+      // Add a finite difference gradient to the function, as SQP algorithm
+      // needs it
+      CenteredFiniteDifferenceGradient myGradient(1e-7, levelFunction.getEvaluationImplementation());
+      /** Substitute the gradient */
+      levelFunction.setGradientImplementation(new CenteredFiniteDifferenceGradient(myGradient));
 
-          // Add a finite difference hessian to the function, as SQP algorithm
-          // needs it
-          CenteredFiniteDifferenceHessian myHessian(1e-3, levelFunction.getEvaluationImplementation());
-          /** Substitute the hessian */
-          levelFunction.setHessianImplementation(new CenteredFiniteDifferenceHessian(myHessian));
-          SQPSpecificParameters specific;
-          NumericalPoint startingPoint(4, 0.0);
-          SQP mySQPAlgorithm(specific, levelFunction);
-          mySQPAlgorithm.setStartingPoint(startingPoint);
-          mySQPAlgorithm.setLevelValue(3.0);
-          fullprint << "mySQPAlgorithm=" << mySQPAlgorithm << std::endl;
-          mySQPAlgorithm.run();
-          fullprint << "result=" << printNumericalPoint(mySQPAlgorithm.getResult().getMinimizer(), 4) << std::endl;
-        }
-      catch (NoWrapperFileFoundException & ex)
-        {
-          throw TestFailed(ex.__repr__());
-        }
-
+      // Add a finite difference hessian to the function, as SQP algorithm
+      // needs it
+      CenteredFiniteDifferenceHessian myHessian(1e-3, levelFunction.getEvaluationImplementation());
+      /** Substitute the hessian */
+      levelFunction.setHessianImplementation(new CenteredFiniteDifferenceHessian(myHessian));
+      SQPSpecificParameters specific;
+      NumericalPoint startingPoint(4, 0.0);
+      SQP mySQPAlgorithm(specific, levelFunction);
+      mySQPAlgorithm.setStartingPoint(startingPoint);
+      mySQPAlgorithm.setLevelValue(3.0);
+      fullprint << "mySQPAlgorithm=" << mySQPAlgorithm << std::endl;
+      mySQPAlgorithm.run();
+      NearestPointAlgorithmImplementationResult result(myAlgorithm.getResult());
+      fullprint << "result = " << printNumericalPoint(result.getMinimizer(), 4) << std::endl;
+      Graph convergence(result.getErrorHistory());
+      convergence.draw("SQPConvergence");
 
     }
   catch (TestFailed & ex)

@@ -93,6 +93,9 @@ int main(int argc, char *argv[])
       /* Perform the simulation */
       myAlgo.run();
 
+      /* Get the convergence history */
+      Graph graph(myAlgo.getNearestPointAlgorithm().getResult().getErrorHistory());
+      graph.draw("toto");
       /* Stream out the result */
       FORMResult result(myAlgo.getResult());
       UnsignedLong digits(5);

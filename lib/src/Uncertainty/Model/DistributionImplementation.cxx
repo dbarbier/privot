@@ -183,11 +183,9 @@ NumericalPoint DistributionImplementation::getRealization() const
 NumericalSample DistributionImplementation::getSample(const UnsignedLong size) const
 {
   NumericalSample returnSample(size, dimension_);
+#pragma omp parallel for
   for (UnsignedLong i = 0; i < size; ++i)
-    {
-      const NumericalPoint realization(getRealization());
-      for (UnsignedLong j = 0; j < dimension_; ++j) returnSample[i][j] = realization[j];
-    }
+    returnSample[i] = getRealization();
   returnSample.setName(getName());
   returnSample.setDescription(getDescription());
   return returnSample;

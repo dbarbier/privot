@@ -32,30 +32,73 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
-
 CLASSNAMEINIT(TemporalNormalProcess);
 
 static Factory<TemporalNormalProcess> RegisteredFactory("TemporalNormalProcess");
 
 TemporalNormalProcess::TemporalNormalProcess(const String & name)
-  : ProcessImplementation(name),
-    covarianceModel_(),
-    choleskyFactorCovarianceMatrix_(0),
-    isInitialized_(false)
+  : ProcessImplementation(name)
+  , covarianceModel_()
+  , choleskyFactorCovarianceMatrix_(0)
+  , isInitialized_(false)
+  , hasStationaryTrend_(true)
+  , checkedStationaryTrend_(true)
+  , trend_()
+  , stationaryTrendValue_()
 {
   // Nothing to do
+}
+
+/* Standard constructor  */
+TemporalNormalProcess::TemporalNormalProcess(const TrendTransform & trend,
+					     const SecondOrderModel & model,
+                                             const RegularGrid & timeGrid,
+                                             const String & name)
+  : ProcessImplementation(name)
+  , covarianceModel_(model.getCovarianceModel())
+  , choleskyFactorCovarianceMatrix_(0)
+  , isInitialized_(false)
+  , hasStationaryTrend_(false)
+  , checkedStationaryTrend_(false)
+  , trend_(trend)
+  , stationaryTrendValue_()
+{
+  if (trend.getOutputDimension() != model.getDimension()) throw InvalidArgumentException(HERE) << "Error: the given trend has an output dimension=" << trend.getOutputDimension() << " different from the second order model dimension=" << model.getDimension();
+  setTimeGrid(timeGrid);
+  setDimension(model.getDimension());
+}
+
+/* Standard constructor  */
+TemporalNormalProcess::TemporalNormalProcess(const TrendTransform & trend,
+					     const CovarianceModel & covarianceModel,
+                                             const RegularGrid & timeGrid,
+                                             const String & name)
+  : ProcessImplementation(name)
+  , covarianceModel_(covarianceModel)
+  , choleskyFactorCovarianceMatrix_(0)
+  , isInitialized_(false)
+  , hasStationaryTrend_(false)
+  , checkedStationaryTrend_(false)
+  , trend_(trend)
+  , stationaryTrendValue_()
+{
+  if (trend.getOutputDimension() != covarianceModel.getDimension()) throw InvalidArgumentException(HERE) << "Error: the given trend has an output dimension=" << trend.getOutputDimension() << " different from the covariance model dimension=" << covarianceModel.getDimension();
+  setTimeGrid(timeGrid);
+  setDimension(covarianceModel.getDimension());
 }
 
 /* Standard constructor  */
 TemporalNormalProcess::TemporalNormalProcess(const SecondOrderModel & model,
                                              const RegularGrid & timeGrid,
                                              const String & name)
-  : ProcessImplementation(name),
-    covarianceModel_(model.getCovarianceModel()),
-    choleskyFactorCovarianceMatrix_(0),
-    isInitialized_(false)
+  : ProcessImplementation(name)
+  , covarianceModel_(model.getCovarianceModel())
+  , choleskyFactorCovarianceMatrix_(0)
+  , isInitialized_(false)
+  , hasStationaryTrend_(true)
+  , checkedStationaryTrend_(true)
+  , trend_(NumericalMathFunction(Description(1, "t"), Description(model.getDimension(), "0.0")))
+  , stationaryTrendValue_()
 {
   setTimeGrid(timeGrid);
   setDimension(model.getDimension());
@@ -65,10 +108,14 @@ TemporalNormalProcess::TemporalNormalProcess(const SecondOrderModel & model,
 TemporalNormalProcess::TemporalNormalProcess(const CovarianceModel & covarianceModel,
                                              const RegularGrid & timeGrid,
                                              const String & name)
-  : ProcessImplementation(name),
-    covarianceModel_(covarianceModel),
-    choleskyFactorCovarianceMatrix_(0),
-    isInitialized_(false)
+  : ProcessImplementation(name)
+  , covarianceModel_(covarianceModel)
+  , choleskyFactorCovarianceMatrix_(0)
+  , isInitialized_(false)
+  , hasStationaryTrend_(true)
+  , checkedStationaryTrend_(true)
+  , trend_(NumericalMathFunction(Description(1, "t"), Description(covarianceModel.getDimension(), "0.0")))
+  , stationaryTrendValue_()
 {
   setTimeGrid(timeGrid);
   setDimension(covarianceModel.getDimension());
@@ -128,22 +175,33 @@ void TemporalNormalProcess::initialize() const
 String TemporalNormalProcess::__repr__() const
 {
   OSS oss;
-  oss << "class = " << TemporalNormalProcess::GetClassName();
-  oss << " timeGrid = " << getTimeGrid()
-      << " covarianceModel = " << covarianceModel_
-      << " choleskyFactorCovarianceMatrix = " << choleskyFactorCovarianceMatrix_
-      << " isInitialized=" << isInitialized_;
+  oss << "class=" << TemporalNormalProcess::GetClassName();
+  oss << " timeGrid=" << getTimeGrid()
+      << " trend=" << trend_
+      << " covarianceModel=" << covarianceModel_
+      << " choleskyFactorCovarianceMatrix=" << choleskyFactorCovarianceMatrix_
+      << " isInitialized=" << isInitialized_
+      << " hasStationaryTrend=" << hasStationaryTrend_
+      << " checkedStationaryTrend=" << checkedStationaryTrend_;
   return oss;
 }
 
 String TemporalNormalProcess::__str__(const String & offset) const
 {
   OSS oss;
-  oss << " TemporalNormalProcess   = " << TemporalNormalProcess::GetClassName()
-      << " dimension = " << dimension_
-      << " timeGrid = " << timeGrid_.__str__(offset)
-      << " covarianceModel = " << covarianceModel_.__str__(offset);
+  oss << " TemporalNormalProcess=" << TemporalNormalProcess::GetClassName()
+      << " dimension=" << dimension_
+      << " timeGrid=" << timeGrid_.__str__(offset)
+      << " trend=" << trend_.__str__(offset)
+      << " covarianceModel=" << covarianceModel_.__str__(offset);
   return oss;
+}
+
+/* TimeGrid accessor */
+void TemporalNormalProcess::setTimeGrid(const RegularGrid & timeGrid)
+{
+  checkedStationaryTrend_ = false;
+  ProcessImplementation::setTimeGrid(timeGrid);
 }
 
 /* Realization accessor */
@@ -190,7 +248,10 @@ TimeSeries TemporalNormalProcess::getRealization() const
           ++position;
         }
     }
-  return TimeSeries(timeGrid_, gaussianSample);
+  // If null trend
+  if (isTrendStationary() && (stationaryTrendValue_.norm() == 0.0)) return TimeSeries(timeGrid_, gaussianSample);
+  // else apply the trend
+  return trend_(TimeSeries(timeGrid_, gaussianSample));
 }
 
 /* Covariance model accessor */
@@ -199,10 +260,43 @@ CovarianceModel TemporalNormalProcess::getCovarianceModel() const
   return covarianceModel_;
 }
 
+/* Trend accessor */
+TrendTransform TemporalNormalProcess::getTrend() const
+{
+  return trend_;
+}
+
 /* Check if the process is stationary */
 Bool TemporalNormalProcess::isStationary() const
 {
-  return covarianceModel_.isStationary();
+  return covarianceModel_.isStationary() && isTrendStationary();
+}
+
+/* Tell if the process is trend stationary */
+Bool TemporalNormalProcess::isTrendStationary() const
+{
+  if (!checkedStationaryTrend_) checkStationaryTrend();
+  return hasStationaryTrend_;
+}
+
+/* Check if the process is trend stationary */
+void TemporalNormalProcess::checkStationaryTrend() const
+{
+  hasStationaryTrend_ = true;
+  checkedStationaryTrend_ = true;
+  const RegularGrid timeGrid(getTimeGrid());
+  const UnsignedLong n(timeGrid.getN());
+  if (n == 0) return;
+  const NumericalPoint stationaryTrendValue_((*trend_.getEvaluation())(NumericalPoint(1, timeGrid.getValue(0))));
+  for (UnsignedLong i = 1; i < n; ++i)
+    {
+      if ((*trend_.getEvaluation())(NumericalPoint(1, timeGrid.getValue(i))) != stationaryTrendValue_)
+	{
+	  hasStationaryTrend_ = false;
+	  return;
+	}
+    }
+  return;
 }
 
 /* Check if the process is Normal */
@@ -210,6 +304,7 @@ Bool TemporalNormalProcess::isNormal() const
 {
   return true;
 }
+
 
 /* Method save() stores the object through the StorageManager */
 void TemporalNormalProcess::save(Advocate & adv) const

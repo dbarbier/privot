@@ -119,7 +119,7 @@ NumericalPoint ExpertMixture::operator() (const NumericalPoint & inP) const
   // Build the point (x, f(x)) for the first class and grade it according to the classifier
   NumericalPoint mixedPoint(inP);
   NumericalPoint bestValue(experts_[0](inP));
-  for (UnsignedLong i = 0; i < outputDimension; ++i) mixedPoint.add(bestValue[i]);
+  mixedPoint.add(bestValue);
   NumericalScalar bestGrade(classifier_.grade(mixedPoint, bestClass));
   LOGDEBUG(OSS() << "Class index=" << 0 << ", grade=" << bestGrade << ", value=" << bestValue);
   for (UnsignedLong classIndex = 1; classIndex < size; ++classIndex)

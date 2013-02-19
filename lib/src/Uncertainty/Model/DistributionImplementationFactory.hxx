@@ -80,6 +80,7 @@ public:
   UnsignedLong getBootstrapSize() const;
   void setBootstrapSize(const UnsignedLong bootstrapSize);
 
+
 protected:
   /* Execute a R script */
   virtual NumericalPoint runRFactory(const NumericalSample & sample,

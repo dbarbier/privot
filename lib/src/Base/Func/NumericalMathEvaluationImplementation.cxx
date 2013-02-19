@@ -224,10 +224,7 @@ NumericalSample NumericalMathEvaluationImplementation::getCacheInput() const
   if ( ! cacheEnabled )
     disableCache();
   NumericalSample inSample(0, getInputDimension());
-  for ( UnsignedLong i = 0; i < keyColl.getSize(); ++ i )
-    {
-      inSample.add( keyColl[i] );
-    }
+  for ( UnsignedLong i = 0; i < keyColl.getSize(); ++ i ) inSample.add( keyColl[i] );
   return inSample;
 }
 

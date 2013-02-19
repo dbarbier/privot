@@ -409,12 +409,9 @@ Graph AnalyticalResult::drawSensitivity(const Sensitivity & sensitivity,
 
   BarPlot sensitivityBarPlot(NumericalSample(0, 2), shift, "");
 
-  const Description colors(BarPlot::GetValidColors());
-  Description::const_iterator colorsIterator;
-  colorsIterator = colors.begin();
-
   // Create the barplots
   const UnsignedLong sensitivitySize(sensitivity.getSize());
+  const Description colors(BarPlot::BuildDefaultPalette(sensitivitySize));
   for (UnsignedLong collectionIndex = 0; collectionIndex < sensitivitySize; ++collectionIndex)
     {
       NumericalSample data(sensitivity[collectionIndex].getDimension(), 2);
@@ -427,10 +424,7 @@ Graph AnalyticalResult::drawSensitivity(const Sensitivity & sensitivity,
       // Add the barplot to the graph
       OSS oss;
       oss << sensitivity[collectionIndex].getName() << " " << sensitivity[collectionIndex].getDescription();
-      sensitivityGraph.add(BarPlot(data, shift, (*colorsIterator), "solid", "solid", oss));
-      ++ colorsIterator;
-      if (colorsIterator == colors.end())
-        colorsIterator = colors.begin();
+      sensitivityGraph.add(BarPlot(data, shift, colors[collectionIndex], "solid", "solid", oss));
       shift += width * (1 + dataSize);
     }
   return sensitivityGraph;

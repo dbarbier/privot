@@ -30,8 +30,6 @@
 
 BEGIN_NAMESPACE_OPENTURNS
 
-
-
 /*
  * @class Compact
  */
@@ -42,22 +40,22 @@ static Factory<Compact> RegisteredFactory("Compact");
 
 /* Constructor with parameters */
 Compact::Compact()
-  : HistoryStrategyImplementation(),
-    halfMaximumSize_(ResourceMap::GetAsUnsignedLong( "Compact-DefaultHalfMaximumSize" )),
-    index_(0),
-    step_(1),
-    throwingCounter_(0)
+  : HistoryStrategyImplementation()
+  , halfMaximumSize_(ResourceMap::GetAsUnsignedLong( "Compact-DefaultHalfMaximumSize" ))
+  , index_(0)
+  , step_(1)
+  , throwingCounter_(0)
 {
   // Nothing to do
 }
 
 /* Constructor with parameters */
 Compact::Compact(const UnsignedLong halfMaximumSize)
-  : HistoryStrategyImplementation(),
-    halfMaximumSize_(halfMaximumSize),
-    index_(0),
-    step_(1),
-    throwingCounter_(0)
+  : HistoryStrategyImplementation()
+  , halfMaximumSize_(halfMaximumSize)
+  , index_(0)
+  , step_(1)
+  , throwingCounter_(0)
 {
   // Nothing to do
 }
@@ -90,10 +88,7 @@ void Compact::store(const NumericalPoint & point)
   // Check if one needs compression
   if (index_ == 2 * halfMaximumSize_)
     {
-      for (UnsignedLong i = 0; i < halfMaximumSize_; ++i)
-        {
-          sample_[i] = sample_[2 * i + 1];
-        }
+      for (UnsignedLong i = 0; i < halfMaximumSize_; ++i) sample_[i] = sample_[2 * i + 1];
       step_ *= 2;
       throwingCounter_ = step_;
       index_ = halfMaximumSize_;

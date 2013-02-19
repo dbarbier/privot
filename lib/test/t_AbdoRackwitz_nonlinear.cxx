@@ -47,43 +47,35 @@ int main(int argc, char *argv[])
 
   try
     {
-
-      try
-        {
-          // Test function operator ()
-          NumericalMathFunction levelFunction("TestOptimNonLinear");
-          // Activate the cache as we will use an analytical method
-          levelFunction.enableCache();
-          // Add a finite difference gradient to the function, as Abdo Rackwitz algorithm
-          // needs it
-          NonCenteredFiniteDifferenceGradient myGradient(1e-7, levelFunction.getEvaluationImplementation());
-          fullprint << "myGradient=" << myGradient << std::endl;
-          /** Substitute the gradient */
-          levelFunction.setGradientImplementation(new NonCenteredFiniteDifferenceGradient(myGradient));
-          AbdoRackwitzSpecificParameters specific;
-          NumericalPoint startingPoint(4, 0.0);
-          AbdoRackwitz myAlgorithm(specific, levelFunction);
-          myAlgorithm.setStartingPoint(startingPoint);
-          myAlgorithm.setLevelValue(-0.5);
-          fullprint << "myAlgorithm = " << myAlgorithm << std::endl;
-          myAlgorithm.run();
-          fullprint << "result = " << printNumericalPoint(myAlgorithm.getResult().getMinimizer(), 4) << std::endl;
-          fullprint << "evaluation calls number=" << levelFunction.getEvaluationCallsNumber() << std::endl;
-          fullprint << "gradient   calls number=" << levelFunction.getGradientCallsNumber() << std::endl;
-          fullprint << "hessian    calls number=" << levelFunction.getHessianCallsNumber() << std::endl;
-        }
-      catch (NoWrapperFileFoundException & ex)
-        {
-          throw TestFailed(ex.__repr__());
-        }
-
-
+      NumericalMathFunction levelFunction("TestOptimNonLinear");
+      // Activate the cache as we will use an analytical method
+      levelFunction.enableCache();
+      // Add a finite difference gradient to the function, as Abdo Rackwitz algorithm
+      // needs it
+      NonCenteredFiniteDifferenceGradient myGradient(1e-7, levelFunction.getEvaluationImplementation());
+      fullprint << "myGradient=" << myGradient << std::endl;
+      /** Substitute the gradient */
+      levelFunction.setGradientImplementation(new NonCenteredFiniteDifferenceGradient(myGradient));
+      AbdoRackwitzSpecificParameters specific;
+      NumericalPoint startingPoint(4, 0.0);
+      AbdoRackwitz myAlgorithm(specific, levelFunction);
+      myAlgorithm.setStartingPoint(startingPoint);
+      myAlgorithm.setLevelValue(-0.5);
+      fullprint << "myAlgorithm = " << myAlgorithm << std::endl;
+      myAlgorithm.run();
+      NearestPointAlgorithmImplementationResult result(myAlgorithm.getResult());
+      fullprint << "result = " << printNumericalPoint(result.getMinimizer(), 4) << std::endl;
+      Graph convergence(result.getErrorHistory());
+      convergence.draw("AbdoRackwitzConvergence");
+      fullprint << "evaluation calls number=" << levelFunction.getEvaluationCallsNumber() << std::endl;
+      fullprint << "gradient   calls number=" << levelFunction.getGradientCallsNumber() << std::endl;
+      fullprint << "hessian    calls number=" << levelFunction.getHessianCallsNumber() << std::endl;
     }
   catch (TestFailed & ex)
     {
       std::cerr << ex << std::endl;
       return ExitCode::Error;
     }
-
+  
   return ExitCode::Success;
 }
