@@ -44,84 +44,84 @@ def hasCatalog(major, minor, revision):
     versionOTWithCatalog  = major * 100 + minor * 10 + revision
     return openturnsVersion >= versionOTWithCatalog
 
-# Function to be used with version <= 1.1
-def _GetAllFactories():
-    """ Return a dictionnary with DistributionFactory objects of OT with the distinction
-    'AllContinuousFactory' and 'AllDiscreteFactory'
-    Care! May be incorrect with too older version because of SWIG modules were
-    differents (no dist maybe?)
-    """
-    allDist = dir(ot.dist)
-    result = {}
-    AllContinuousFactoryName = []
-    AllContinuousFactory =[]
-    AllDiscreteFactoryName = []
-    AllDiscreteFactory =[]
-    AllFactoryName = []
-    for elt in allDist:
-        if ('Factory' in elt) and ('_' not in elt) and ('Histogram' not in elt):
-            factoryName = 'ot.' + elt
-            StrDist = factoryName.replace('Factory','()')
-            Dist = eval(StrDist)
-            if Dist.isContinuous():
-                 factoryName = factoryName.replace('Factory','Factory()')
-                 AllContinuousFactoryName.append(factoryName)
-                 factory = eval(factoryName)
-                 AllContinuousFactory.append(factory)
-            else :
-                 factoryName = factoryName.replace('Factory','Factory()')
-                 AllDiscreteFactoryName.append(factoryName)
-                 factory = eval(factoryName)
-                 AllDiscreteFactory.append(factory)
-    result['AllContinuousFactoryName'] = AllContinuousFactoryName
-    result['AllContinuousFactory'] = AllContinuousFactory
-    result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
-    result['AllDiscreteFactory'] = AllDiscreteFactory
-    return(result)
+if hasCatalog:
+    # Function to be used with version <= 1.1
+    def GetAllFactories():
+	""" Return a dictionnary with DistributionFactory objects of OT with the distinction
+	'AllContinuousFactory' and 'AllDiscreteFactory'
+	Care! May be incorrect with too older version because of SWIG modules were
+	differents (no dist maybe?)
+	"""
+	allDist = dir(ot.dist)
+	result = {}
+	AllContinuousFactoryName = []
+	AllContinuousFactory =[]
+	AllDiscreteFactoryName = []
+	AllDiscreteFactory =[]
+	AllFactoryName = []
+	for elt in allDist:
+	    if ('Factory' in elt) and ('_' not in elt) and ('Histogram' not in elt):
+		factoryName = 'ot.' + elt
+		StrDist = factoryName.replace('Factory','()')
+		Dist = eval(StrDist)
+		if Dist.isContinuous():
+		    factoryName = factoryName.replace('Factory','Factory()')
+		    AllContinuousFactoryName.append(factoryName)
+		    factory = eval(factoryName)
+		    AllContinuousFactory.append(factory)
+		else :
+		    factoryName = factoryName.replace('Factory','Factory()')
+		    AllDiscreteFactoryName.append(factoryName)
+		    factory = eval(factoryName)
+		    AllDiscreteFactory.append(factory)
+	result['AllContinuousFactoryName'] = AllContinuousFactoryName
+	result['AllContinuousFactory'] = AllContinuousFactory
+	result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
+	result['AllDiscreteFactory'] = AllDiscreteFactory
+	return(result)
 
-# Function to be used with version >= 1.2
-def _GetAllContinuousFactories():
-    """ Return a dictionnary with DistributionFactory objects of OT with the distinction
-    'AllContinuousFactory' and 'AllDiscreteFactory'
-    """
-    AllContinuousFactory = ot.DistributionFactory.GetContinuousUniVariateFactories()
-    AllContinuousFactoryName = []
-    for i, dist in enumerate(AllContinuousFactory):
-        factoryName = dist.getImplementation().getClassName()
-        if (factoryName == 'HistogramFactory'):
-            del AllContinuousFactory[i]
-        else :
-            AllContinuousFactoryName.append(factoryName)
+    resultAllFactory = GetAllFactories()
 
-    result = {}
-    result['AllContinuousFactoryName'] = AllContinuousFactoryName
-    result['AllContinuousFactory'] = AllContinuousFactory
-    return result
+    def GetAllContinuousFactories():
+	return {'AllContinuousFactory' : resultAllFactory['AllContinuousFactory'], 'AllContinuousFactoryName' : resultAllFactory['AllContinuousFactoryName']}
 
-def _GetAllDiscreteFactories():
-    """ Return a dictionnary with DistributionFactory objects of OT with the distinction
-    'AllDiscreteFactory' and 'AllDiscreteFactory'
-    """
-    AllDiscreteFactory = ot.DistributionFactory.GetDiscreteUniVariateFactories()
-    AllDiscreteFactoryName = []
-    for i, dist in enumerate(AllDiscreteFactory):
-        factoryName = dist.getImplementation().getClassName()
-        if (factoryName == 'HistogramFactory'):
-            del AllDiscreteFactory[i]
-        else :
-            AllDiscreteFactoryName.append(factoryName)
+    def GetAllDiscreteFactories():
+	return {'AllDiscreteFactory' : resultAllFactory['AllDiscreteFactory'], 'AllDiscreteFactoryName' : resultAllFactory['AllDiscreteFactoryName']}
 
-    result = {}
-    result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
-    result['AllDiscreteFactory'] = AllDiscreteFactory
-    return result
+else :
+    # Function to be used with version >= 1.2
+    def GetAllContinuousFactories():
+	""" Return a dictionnary with DistributionFactory objects of OT with the distinction
+	'AllContinuousFactory' and 'AllDiscreteFactory'
+	"""
+	AllContinuousFactory = ot.DistributionFactory.GetContinuousUniVariateFactories()
+	AllContinuousFactoryName = []
+	for i, dist in enumerate(AllContinuousFactory):
+	    factoryName = dist.getImplementation().getClassName()
+	    if (factoryName == 'HistogramFactory'):
+		del AllContinuousFactory[i]
+	    else :
+		AllContinuousFactoryName.append(factoryName)
 
-def _GetAllFactories():
-    """ Return a dictionnary with DistributionFactory objects of OT with the distinction
-    'AllContinuousFactory' and 'AllDiscreteFactory'
-    Care! May be incorrect with too older version because of SWIG modules were
-    differents (no dist maybe?)
-    """
-    continuousDict = _GetAllContinuousFactories()
-    discreteDict = _GetAllDiscreteFactories()
-    return 1
+	result = {}
+	result['AllContinuousFactoryName'] = AllContinuousFactoryName
+	result['AllContinuousFactory'] = AllContinuousFactory
+	return result
+
+    def GetAllDiscreteFactories():
+	""" Return a dictionnary with DistributionFactory objects of OT with the distinction
+	'AllDiscreteFactory' and 'AllDiscreteFactory'
+	"""
+	AllDiscreteFactory = ot.DistributionFactory.GetDiscreteUniVariateFactories()
+	AllDiscreteFactoryName = []
+	for i, dist in enumerate(AllDiscreteFactory):
+	    factoryName = dist.getImplementation().getClassName()
+	    if (factoryName == 'HistogramFactory'):
+		del AllDiscreteFactory[i]
+	    else :
+		AllDiscreteFactoryName.append(factoryName)
+
+	result = {}
+	result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
+	result['AllDiscreteFactory'] = AllDiscreteFactory
+	return result
