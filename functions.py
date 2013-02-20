@@ -31,8 +31,8 @@ def getOTVersion():
 
 def ListAllFactoryName():
     """ Return the name of all the DistributionFactory in OT
-        Care! May be incorrect with too older version because of SWIG modules were
-        differents (no dist maybe?)
+    Care! May be incorrect with too older version because of SWIG modules were
+    differents (no dist maybe?)
     """
     return(AllFactoryName)
 
@@ -40,9 +40,9 @@ def ListAllFactoryName():
 
 def ListAllFactory():
     """ Return a dictionnary with DistributionFactory objects of OT with the distinction
-        'AllContinuousFactory' and 'AllDiscreteFactory'
-        Care! May be incorrect with too older version because of SWIG modules were
-        differents (no dist maybe?)
+    'AllContinuousFactory' and 'AllDiscreteFactory'
+    Care! May be incorrect with too older version because of SWIG modules were
+    differents (no dist maybe?)
     """
     allDist = dir(ot.dist)
     result = {}
