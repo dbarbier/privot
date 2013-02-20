@@ -1,0 +1,33 @@
+myFunction=class=NumericalMathFunction name=Unnamed implementation=class=NumericalMathFunctionImplementation name=Unnamed description=[x1,x2,x3,y,z] evaluationImplementation=class=ProductNumericalMathEvaluationImplementation name=Unnamed leftEvaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y] formulas=[x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)] rightEvaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y,z] formulas=[exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1),sin(x2+x3*x1^2)] gradientImplementation=class=ProductNumericalMathGradientImplementation name=Unnamed leftEvaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y] formulas=[x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)] leftGradient=class=AnalyticalNumericalMathGradientImplementation name=Unnamed evaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y] formulas=[x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)] rightEvaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y,z] formulas=[exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1),sin(x2+x3*x1^2)] rightGradient=class=AnalyticalNumericalMathGradientImplementation name=Unnamed evaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y,z] formulas=[exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1),sin(x2+x3*x1^2)] hessianImplementation=class=ProductNumericalMathHessianImplementation name=Unnamed leftEvaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y] formulas=[x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)] leftGradient=class=AnalyticalNumericalMathGradientImplementation name=Unnamed evaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y] formulas=[x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)] leftHessian=class=AnalyticalNumericalMathHessianImplementation name=Unnamed evaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y] formulas=[x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)] rightEvaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y,z] formulas=[exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1),sin(x2+x3*x1^2)] rightGradient=class=AnalyticalNumericalMathGradientImplementation name=Unnamed evaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y,z] formulas=[exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1),sin(x2+x3*x1^2)] rightHessian=class=AnalyticalNumericalMathHessianImplementation name=Unnamed evaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x1,x2,x3] outputVariablesNames=[y,z] formulas=[exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1),sin(x2+x3*x1^2)]
+myFunction=NumericalMathFunction :
+  input  : [x1,x2,x3]
+  output : [y,z]
+  evaluation :   
+(  x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)) * ((  
+
+  | y = exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1)
+  | z = sin(x2+x3*x1^2)
+)
+  gradient   :   NumericalMathGradientImplementation
+  hessian    :   NumericalMathHessianImplementation
+Value at class=NumericalPoint name=Unnamed dimension=3 values=[1.2,2.3,3.4]=
+class=NumericalPoint name=Unnamed dimension=2 values=[-21.8428,-2.11288]
+Value at class=NumericalPoint name=Unnamed dimension=3 values=[1.2,2.3,3.4]=
+[-21.8428,-2.11288]
+Gradient at class=NumericalPoint name=Unnamed dimension=3 values=[1.2,2.3,3.4]=
+class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=3 columns=2 values=[102.66,-292.68,-235.169,-17.1191,-2.33966,-2.59795]
+Gradient at class=NumericalPoint name=Unnamed dimension=3 values=[1.2,2.3,3.4]=
+[[  102.66     -17.1191  ]
+ [ -292.68      -2.33966 ]
+ [ -235.169     -2.59795 ]]
+Hessian at class=NumericalPoint name=Unnamed dimension=3 values=[1.2,2.3,3.4]=
+class=SymmetricTensor implementation=class=TensorImplementation name=Unnamed rows=3 columns=3 sheets=2 values=[-877.48,2783.92,2029.73,0,-8603.97,-6382.33,0,0,-4597.9,76.0147,9.0619,13.7095,0,2.23573,5.65728,0,0,11.8856]
+Hessian at class=NumericalPoint name=Unnamed dimension=3 values=[1.2,2.3,3.4]=
+sheet #0
+[[  -877.48     2783.92     2029.73    ]
+ [  2783.92    -8603.97    -6382.33    ]
+ [  2029.73    -6382.33    -4597.9     ]]
+sheet #1
+[[    76.0147      9.0619     13.7095  ]
+ [     9.0619      2.23573     5.65728 ]
+ [    13.7095      5.65728    11.8856  ]]

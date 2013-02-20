@@ -1,0 +1,438 @@
+//                                               -*- C++ -*-
+/**
+ *  @file  Weibull.cxx
+ *  @brief The Weibull distribution
+ *
+ *  Copyright (C) 2005-2013 EDF-EADS-Phimeca
+ *
+ *  This library is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  @author schueller
+ *  @date   2012-02-17 19:35:43 +0100 (Fri, 17 Feb 2012)
+ */
+#include <cmath>
+#include "Weibull.hxx"
+#include "SpecFunc.hxx"
+#include "RandomGenerator.hxx"
+#include "SpecFunc.hxx"
+#include "PersistentObjectFactory.hxx"
+
+BEGIN_NAMESPACE_OPENTURNS
+
+CLASSNAMEINIT(Weibull);
+
+static Factory<Weibull> RegisteredFactory("Weibull");
+
+/* Default constructor */
+Weibull::Weibull()
+  : NonEllipticalDistribution("Weibull"),
+    alpha_(1.0), beta_(1.0), gamma_(0.0)
+{
+  setDimension(1);
+  computeRange();
+}
+
+/* Parameters constructor */
+Weibull::Weibull(const NumericalScalar arg1,
+                 const NumericalScalar arg2,
+                 const NumericalScalar gamma,
+                 const ParameterSet set)
+  : NonEllipticalDistribution("Weibull"),
+    alpha_(0.0), beta_(0.0), gamma_(gamma)
+{
+  switch (set)
+    {
+    case ALPHABETA:
+      // This call set also the range
+      setAlphaBeta(arg1, arg2);
+      break;
+
+    case MUSIGMA:
+      // This call set also the range
+      setMuSigma(arg1, arg2);
+      break;
+
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid parameter set argument";
+
+    } /* end switch */
+
+  setDimension(1);
+}
+
+/* Comparison operator */
+Bool Weibull::operator ==(const Weibull & other) const
+{
+  if (this == &other) return true;
+  return (alpha_ == other.alpha_) && (beta_ == other.beta_) && (gamma_ == other.gamma_);
+}
+
+/* String converter */
+String Weibull::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << Weibull::GetClassName()
+      << " name=" << getName()
+      << " dimension=" << getDimension()
+      << " alpha=" << alpha_
+      << " beta=" << beta_
+      << " gamma=" << gamma_;
+  return oss;
+}
+
+String Weibull::__str__(const String & offset) const
+{
+  OSS oss;
+  oss << offset << getClassName() << "(alpha = " << alpha_ << ", beta = " << beta_ << ", gamma = " << gamma_ << ")";
+  return oss;
+}
+
+/* Virtual constructor */
+Weibull * Weibull::clone() const
+{
+  return new Weibull(*this);
+}
+
+/* Compute the numerical range of the distribution given the parameters values */
+void Weibull::computeRange()
+{
+  const NumericalPoint lowerBound(1, gamma_);
+  const NumericalPoint upperBound(computeUpperBound());
+  const Interval::BoolCollection finiteLowerBound(1, true);
+  const Interval::BoolCollection finiteUpperBound(1, false);
+  setRange(Interval(lowerBound, upperBound, finiteLowerBound, finiteUpperBound));
+}
+
+
+/* Get one realization of the distribution */
+NumericalPoint Weibull::getRealization() const
+{
+  return NumericalPoint(1, gamma_ + alpha_ * pow(-log(1.0 - RandomGenerator::Generate()), 1.0 / beta_));
+}
+
+
+/* Get the DDF of the distribution */
+NumericalPoint Weibull::computeDDF(const NumericalPoint & point) const
+{
+  const NumericalScalar x(point[0] - gamma_);
+  if (x <= 0.0) return NumericalPoint(1, 0.0);
+  const NumericalScalar powX(pow(x / alpha_, beta_));
+  return NumericalPoint(1, (beta_ * (1.0 - powX) - 1.0) / (x * x) * beta_ * powX * exp(-powX));
+}
+
+
+/* Get the PDF of the distribution */
+NumericalScalar Weibull::computePDF(const NumericalPoint & point) const
+{
+  const NumericalScalar x(point[0] - gamma_);
+  if (x <= 0.0) return 0.0;
+  const NumericalScalar y(x / alpha_);
+  return exp(log(beta_) + (beta_ - 1.0) * log(y) - log(alpha_) - pow(y, beta_));
+}
+
+
+/* Get the CDF of the distribution */
+NumericalScalar Weibull::computeCDF(const NumericalPoint & point) const
+{
+  const NumericalScalar x(point[0] - gamma_);
+  if (x <= 0.0) return 0.0;
+  return 1.0 - exp(-pow(x / alpha_, beta_));
+}
+
+/* Get the PDFGradient of the distribution */
+NumericalPoint Weibull::computePDFGradient(const NumericalPoint & point) const
+{
+  const NumericalScalar x(point[0] - gamma_);
+  NumericalPoint pdfGradient(3, 0.0);
+  if (x <= 0.0) return pdfGradient;
+  const NumericalScalar powX(pow(x / alpha_, beta_));
+  const NumericalScalar factor(powX / x * exp(-powX));
+  pdfGradient[0] = factor * (powX - 1.0) * beta_ * beta_ / alpha_;
+  pdfGradient[1] = factor * (1.0 + (1.0 - powX) * log(powX));
+  pdfGradient[2] = factor * (1.0 - beta_ + beta_ * powX) / x * beta_;
+  return pdfGradient;
+}
+
+/* Get the CDFGradient of the distribution */
+NumericalPoint Weibull::computeCDFGradient(const NumericalPoint & point) const
+{
+  const NumericalScalar x(point[0] - gamma_);
+  NumericalPoint cdfGradient(3, 0.0);
+  if (x <= 0.0) return cdfGradient;
+  const NumericalScalar powX(pow(x / alpha_, beta_));
+  const NumericalScalar factor(powX * exp(-powX));
+  cdfGradient[0] = -factor * beta_ / alpha_;
+  cdfGradient[1] = factor * log(x / alpha_);
+  cdfGradient[2] = -factor * beta_ / x;
+  return cdfGradient;
+}
+
+/* Get the quantile of the distribution */
+NumericalScalar Weibull::computeScalarQuantile(const NumericalScalar prob,
+                                               const Bool tail,
+                                               const NumericalScalar precision) const
+{
+  if (tail) return gamma_ + alpha_ * pow(-log(prob), 1.0 / beta_);
+  return gamma_ + alpha_ * pow(-log(1.0 - prob), 1.0 / beta_);
+}
+
+/* compute the mean of the distribution */
+void Weibull::computeMean() const
+{
+  mean_ =  NumericalPoint(1, getMu());
+  isAlreadyComputedMean_ = true;
+}
+
+/* Get the standard deviation of the distribution */
+NumericalPoint Weibull::getStandardDeviation() const
+{
+  return NumericalPoint(1, getSigma());
+}
+
+/* Get the skewness of the distribution */
+NumericalPoint Weibull::getSkewness() const
+{
+  const NumericalScalar gamma1(SpecFunc::Gamma(1.0 + 1.0 / beta_));
+  const NumericalScalar gamma1_2(gamma1 * gamma1);
+  const NumericalScalar gamma2(SpecFunc::Gamma(1.0 + 2.0 / beta_));
+  const NumericalScalar gamma3(SpecFunc::Gamma(1.0 + 3.0 / beta_));
+  return NumericalPoint(1, (2.0 * gamma1_2 * gamma1 - 3.0 * gamma1 * gamma2 + gamma3) / pow((gamma2 - gamma1_2), 1.5));
+}
+
+/* Get the kurtosis of the distribution */
+NumericalPoint Weibull::getKurtosis() const
+{
+  const NumericalScalar gamma1(SpecFunc::Gamma(1.0 + 1.0 / beta_));
+  const NumericalScalar gamma1_2(gamma1 * gamma1);
+  const NumericalScalar gamma2(SpecFunc::Gamma(1.0 + 2.0 / beta_));
+  const NumericalScalar gamma3(SpecFunc::Gamma(1.0 + 3.0 / beta_));
+  const NumericalScalar gamma4(SpecFunc::Gamma(1.0 + 4.0 / beta_));
+  return NumericalPoint(1, (6.0 * gamma1_2 * gamma2 + gamma4 - 4.0 * gamma1 * gamma3 - 3.0 * gamma1_2 * gamma1_2) / pow(gamma2 - gamma1_2, 2.0));
+}
+
+/* Compute the covariance of the distribution */
+void Weibull::computeCovariance() const
+{
+  covariance_ = CovarianceMatrix(1);
+  covariance_(0, 0) = pow(getSigma(), 2.0);
+  isAlreadyComputedCovariance_ = true;
+}
+
+/* Get the moments of the standardized distribution */
+NumericalPoint Weibull::getStandardMoment(const UnsignedLong n) const
+{
+  return NumericalPoint(1, SpecFunc::Gamma(1.0 + n / beta_));
+}
+
+/* Get the standard representative in the parametric family, associated with the standard moments */
+Weibull::Implementation Weibull::getStandardRepresentative() const
+{
+  return Weibull(1.0, beta_, 0.0).clone();
+}
+
+/* Parameters value and description accessor */
+Weibull::NumericalPointWithDescriptionCollection Weibull::getParametersCollection() const
+{
+  NumericalPointWithDescriptionCollection parameters(1);
+  NumericalPointWithDescription point(3);
+  Description description(point.getDimension());
+  point[0] = alpha_;
+  point[1] = beta_;
+  point[2] = gamma_;
+  description[0] = "alpha";
+  description[1] = "beta";
+  description[2] = "gamma";
+  point.setDescription(description);
+  point.setName(getDescription()[0]);
+  parameters[0] = point;
+  return parameters;
+}
+
+void Weibull::setParametersCollection(const NumericalPointCollection & parametersCollection)
+{
+  *this = Weibull(parametersCollection[0][0], parametersCollection[0][1], parametersCollection[0][2]);
+}
+
+
+/* Beta accessor */
+void Weibull::setBeta(const NumericalScalar beta)
+{
+  if (beta <= 0.0) throw InvalidArgumentException(HERE) << "Beta MUST be positive";
+  if (beta != beta_)
+    {
+      beta_ = beta;
+      isAlreadyComputedMean_ = false;
+      isAlreadyComputedCovariance_ = false;
+      computeRange();
+    }
+}
+
+NumericalScalar Weibull::getBeta() const
+{
+  return beta_;
+}
+
+
+/* Alpha accessor */
+void Weibull::setAlpha(const NumericalScalar alpha)
+{
+  if (alpha <= 0.0) throw InvalidArgumentException(HERE) << "Alpha MUST be positive";
+  if (alpha != alpha_)
+    {
+      alpha_ = alpha;
+      isAlreadyComputedMean_ = false;
+      isAlreadyComputedCovariance_ = false;
+      computeRange();
+    }
+}
+
+NumericalScalar Weibull::getAlpha() const
+{
+  return alpha_;
+}
+
+/* Alpha Beta accessor */
+void Weibull::setAlphaBeta(const NumericalScalar alpha,
+                           const NumericalScalar beta)
+{
+  if (alpha <= 0.0) throw InvalidArgumentException(HERE) << "Alpha MUST be positive";
+  if (beta <= 0.0) throw InvalidArgumentException(HERE) << "Beta MUST be positive";
+  if ((alpha != alpha_) || (beta != beta_))
+    {
+      alpha_ = alpha;
+      beta_ = beta;
+      isAlreadyComputedMean_ = false;
+      isAlreadyComputedCovariance_ = false;
+      computeRange();
+    }
+}
+
+
+/* MuSigma accessor */
+/* To compute (alpha, beta) from (mu, sigma), we proceed as follows:
+   1 + var_ / (mu_ - gamma_)^2 = GAMMA(1 + 2 / beta_) / GAMMA(1 + 1 / beta_)^2
+   = t(beta_)
+   This function is strictly decreasing and takes arbitrary large values near 0.
+   We solve the equation t(beta) = 1 + var_ / (mu_ - gamma_)^2 using Bisection's method, as it is very robust and we don't really have a speed constraint here. Then, we find alpha_ thanks to:
+   alpha_ = (mu_ - gamma_) / GAMMA(1 + 1 / beta_)
+*/
+void Weibull::setMuSigma(const NumericalScalar mu,
+                         const NumericalScalar sigma)
+{
+  if (mu <= gamma_) throw InvalidArgumentException(HERE) << "Mu MUST be > gamma, here mu=" << mu << " and gamma=" << gamma_;
+  if (sigma <= 0.0) throw InvalidArgumentException(HERE) << "Sigma MUST be > 0.0, here sigma=" << sigma;
+  const NumericalScalar ratio(1.0 + pow(sigma / (mu - gamma_), 2.0));
+  NumericalScalar t;
+  NumericalScalar betaMin(1.0);
+  NumericalScalar betaMax(1.0);
+  NumericalScalar step(0.5);
+  // Bracketing interval
+  // Case beta < 1, i.e. ratio > 2
+  if (ratio > 2)
+    {
+      do
+        {
+          betaMin -= step;
+          step *= 0.5;
+          t = exp(SpecFunc::LnGamma(1.0 + 2.0 / betaMin) - 2.0 * SpecFunc::LnGamma(1.0 + 1.0 / betaMin));
+        }
+      while (t < ratio);
+      // Here, we know that betaMin <= beta < betaMin + 2.0 * step
+      betaMax = betaMin + 2.0 * step;
+    }
+  // Case beta >= 1, i.e. ratio <= 2
+  else
+    {
+      do
+        {
+          betaMax += step;
+          step *= 2.0;
+          t = exp(SpecFunc::LnGamma(1.0 + 2.0 / betaMax) - 2.0 * SpecFunc::LnGamma(1.0 + 1.0 / betaMax));
+        }
+      while (t >= ratio);
+      // Here, we know that betaMax - 0.5 * step <= beta < betaMax
+      betaMin = betaMax - 0.5 * step;
+    }
+  // Bisection loop
+  const NumericalScalar epsilon(ResourceMap::GetAsNumericalScalar("DistributionImplementation-DefaultQuantileEpsilon"));
+  for (;;)
+    {
+      beta_ = 0.5 * (betaMin + betaMax);
+      // Convergence
+      if (betaMax - betaMin <= epsilon * (1.0 + fabs(betaMax + betaMin)))
+        {
+          alpha_ = (mu - gamma_) / SpecFunc::Gamma(1.0 + 1.0 / beta_);
+          computeRange();
+          return;
+        }
+      // Non convergence, one step further
+      t = exp(SpecFunc::LnGamma(1.0 + 2.0 / beta_) - 2.0 * SpecFunc::LnGamma(1.0 + 1.0 / beta_));
+      if (t < ratio) betaMax = beta_;
+      else betaMin = beta_;
+    }
+  isAlreadyComputedMean_ = false;
+  isAlreadyComputedCovariance_ = false;
+  computeRange();
+}
+
+NumericalScalar Weibull::getMu() const
+{
+  return gamma_ + alpha_ * SpecFunc::Gamma(1.0 + 1.0 / beta_);
+}
+
+
+NumericalScalar Weibull::getSigma() const
+{
+  return alpha_ * sqrt(SpecFunc::Gamma(1.0 + 2.0 / beta_) - pow(SpecFunc::Gamma(1.0 + 1.0 / beta_), 2.0));
+}
+
+
+/* Gamma accessor */
+void Weibull::setGamma(const NumericalScalar gamma)
+{
+  if (gamma != gamma_)
+    {
+      gamma_ = gamma;
+      isAlreadyComputedMean_ = false;
+      // The covariance does not depend on gamma
+      computeRange();
+    }
+}
+
+NumericalScalar Weibull::getGamma() const
+{
+  return gamma_;
+}
+
+
+/* Method save() stores the object through the StorageManager */
+void Weibull::save(Advocate & adv) const
+{
+  NonEllipticalDistribution::save(adv);
+  adv.saveAttribute( "alpha_", alpha_ );
+  adv.saveAttribute( "beta_", beta_ );
+  adv.saveAttribute( "gamma_", gamma_ );
+}
+
+/* Method load() reloads the object from the StorageManager */
+void Weibull::load(Advocate & adv)
+{
+  NonEllipticalDistribution::load(adv);
+  adv.loadAttribute( "alpha_", alpha_ );
+  adv.loadAttribute( "beta_", beta_ );
+  adv.loadAttribute( "gamma_", gamma_ );
+  computeRange();
+}
+
+END_NAMESPACE_OPENTURNS

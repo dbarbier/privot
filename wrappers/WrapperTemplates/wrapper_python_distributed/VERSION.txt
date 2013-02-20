@@ -1,0 +1,29 @@
+# Distributed python wrapper version
++improvment
+-bugfix
+
+r2761
+  +remove python-paramiko dependancy
+  +login and ssh port options for each hosts (through ~/.ssh/config file)
+  -Fix do not remove workdir on sigint
+
+r2753
+  +Possibility to get the sample/point from any pickle file.
+  +Improve modularity (i.e. in order to add sysfera support), improve in and out pickle data structure.
+
+r2718
+  +Stop subprocesses (remote ones too) when stopping openturns script (CTRL-c)
+  +Get hosts from PBS scheduler.
+  +Add coupling_tools module
+  +Return error msg if the core_dispatcher_launcher fail to start on remote hosts (needs Debug OT log enabled).
+  +Add wrapper name to the workdir.
+  +wrapper_launcher.py is present on each point's workdir (permit to restart point's compute)
+  +Access to remote hosts.
+  +Adjust nb of core (global).
+  -Fix compute on a point.
+  -Fix n_cores when remote computing.
+  -Remove hosts that appears twice.
+  -Fix errors when setting tmpdir on NFS.
+
+
+

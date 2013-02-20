@@ -1,0 +1,54 @@
+This package was debianized by Christophe Prud'homme <prudhomm@debian.org> on
+Sun, 06 Jul 2008 18:12:15 +0200.
+
+It was downloaded from 
+http://switch.dl.sourceforge.net/sourceforge/openturns/
+
+The upstream authors are:
+  * Électricité de France (EDF)
+  * European Aeronautic Defence and Space company (EADS)
+  * Phimeca
+
+Copyright:
+
+Since the beginning of 2005, a partnership of three companies has been
+working on building together on a tool designed to perform reliability
+analyses:
+
+    * Électricité de France (EDF), the main electricity generation and
+      distribution company in France;
+
+    * European Aeronautic Defence and Space company (EADS), a large
+      European aerospace corporation,
+
+    * Phimeca, an Engineering Consultancy company specialised in
+      Structural Reliability analysis.
+
+    Copyright (C) 2005-2013 Électricité de France (EDF)
+
+    Copyright (C) 2005-2013 European Aeronautic Defence and Space
+    company (EADS)
+
+    Copyright (C) 2005-2013 Phimeca
+
+License:
+
+    This library is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+ 
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    along with this library.  If not, see <http://www.gnu.org/licenses/>.
+
+On Debian systems, the complete text of the GNU Lesser General Public
+License version 2.1 can be found in `/usr/share/common-licenses/LGPL-2.1'.
+
+The Debian packaging is (C) 2008, Christophe Prud'homme
+<prudhomm@debian.org> and is licensed under the GPL, see
+`/usr/share/common-licenses/GPL-2'.

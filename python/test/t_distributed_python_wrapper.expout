@@ -1,0 +1,12 @@
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:ok,  make_error:False,  tmpdir:,  sample_size:5,  work_time:1,  hosts:None, nb_output:1
+Compute
+Results
+    [ y0 ]
+0 : [  2 ]
+1 : [  4 ]
+2 : [  6 ]
+3 : [  8 ]
+4 : [ 10 ]
+Results are OK.
+Workdir not found: ok.
+

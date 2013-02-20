@@ -1,0 +1,27 @@
+Description: Disable WrapperFile_std test
+ It does not work when installing in DESTDIR.
+Author: Denis Barbier <bouzim@gmail.com>
+Origin: Debian
+Forwarded: http://trac.openturns.org/ticket/476
+Last-Update: 2012-11-28
+
+Index: openturns/python/test/CMakeLists.txt
+===================================================================
+--- openturns.orig/python/test/CMakeLists.txt  (revision 2907)
++++ openturns/python/test/CMakeLists.txt  (working copy)
+@@ -632,10 +632,10 @@
+
+
+ ## Distributed python wrapper
+-ot_pyinstallcheck_test ( coupling_tools )
+-ot_pyinstallcheck_test ( wrapper_data )
+-ot_pyinstallcheck_test ( distributed_python_wrapper_std PARAMS "${CMAKE_CURRENT_SOURCE_DIR}" )
+-ot_pyinstallcheck_test ( distributed_python_wrapper_template PARAMS "${CMAKE_CURRENT_SOURCE_DIR}" )
++#DEB#ot_pyinstallcheck_test ( coupling_tools )
++#DEB#ot_pyinstallcheck_test ( wrapper_data )
++#DEB#ot_pyinstallcheck_test ( distributed_python_wrapper_std PARAMS "${CMAKE_CURRENT_SOURCE_DIR}" )
++#DEB#ot_pyinstallcheck_test ( distributed_python_wrapper_template PARAMS "${CMAKE_CURRENT_SOURCE_DIR}" )
+ if ( ENABLE_DISTRIBUTED_TEST )
+   ot_pyinstallcheck_test ( remote_communicator )
+   ot_pyinstallcheck_test ( distributed_python_wrapper_remote PARAMS "${CMAKE_CURRENT_SOURCE_DIR}" )
+ 

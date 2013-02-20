@@ -1,0 +1,8 @@
+distribution= class=FisherSnedecor name=FisherSnedecor dimension=1 d1=4.5 d2=8.4
+Estimated distribution= class=FisherSnedecor name=FisherSnedecor dimension=1 d1=5.08198 d2=8.23154
+Default distribution= FisherSnedecor(d1 = 1, d2 = 1)
+Distribution from parameters= FisherSnedecor(d1 = 4.5, d2 = 8.4)
+FisherSnedecor          = FisherSnedecor(d1 = 4.5, d2 = 8.4)
+Estimated fisherSnedecor= FisherSnedecor(d1 = 5.08198, d2 = 8.23154)
+Default fisherSnedecor= FisherSnedecor(d1 = 1, d2 = 1)
+FisherSnedecor from parameters= FisherSnedecor(d1 = 4.5, d2 = 8.4)

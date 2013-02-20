@@ -1,0 +1,3 @@
+restricted gradient=class=RestrictedGradientImplementation name=Unnamed gradient=class=AnalyticalNumericalMathGradientImplementation name=Unnamed evaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x0,x1,x2] outputVariablesNames=[y0] formulas=[x0^2+2*x1+3*x2^3] restrictionIndices=[1,2] referencePoint=class=NumericalPoint name=Unnamed dimension=3 values=[-1,1,3]
+value at class=NumericalPoint name=Unnamed dimension=2 values=[4,-4]=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[2,144]
+reference value=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=3 columns=1 values=[-2,2,144]

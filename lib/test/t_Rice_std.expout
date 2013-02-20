@@ -1,0 +1,50 @@
+Testing class Rice
+checkConstructorAndDestructor()
+checkCopyConstructor()
+streamObject(const T & anObject)
+class=Rice name=Rice dimension=1 sigma=5 nu=4
+streamObject(const T & anObject)
+class=Rice name=Rice dimension=1 sigma=5 nu=4
+areSameObjects(const T & firstObject, const T & secondObject)
+areDifferentObjects(const T & firstObject, const T & secondObject)
+checkNameFeature()
+checkNameConstructor()
+streamObject(const T & anObject)
+class=Rice name=myName dimension=1 sigma=5 nu=4
+checkNameAccessors()
+streamObject(const T & anObject)
+class=Rice name=myNewName dimension=1 sigma=5 nu=4
+Distribution class=Rice name=Rice dimension=1 sigma=5 nu=4
+Distribution Rice(sigma = 5, nu = 4)
+Elliptical = false
+Continuous = true
+oneRealization=class=NumericalPoint name=Unnamed dimension=1 values=[8.76728]
+oneSample first=class=NumericalPoint name=Unnamed dimension=1 values=[13.769] last=class=NumericalPoint name=Unnamed dimension=1 values=[18.2056]
+mean=class=NumericalPoint name=Unnamed dimension=1 values=[7.24923]
+covariance=class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[13.4599]
+Point= class=NumericalPoint name=Unnamed dimension=1 values=[10]
+ddf     =class=NumericalPoint name=Unnamed dimension=1 values=[-0.0138143]
+ddf (FD)=class=NumericalPoint name=Unnamed dimension=1 values=[-0.0138143]
+log pdf=-2.67669
+pdf     =0.0687907
+pdf (FD)=0.0687907
+cdf=0.778505
+ccdf=0.221495
+pdf gradient (FD)=class=NumericalPoint name=Unnamed dimension=2 values=[0.0216536,0.0291769]
+cdf gradient (FD)=class=NumericalPoint name=Unnamed dimension=2 values=[-0.108268,-0.0686515]
+quantile=class=NumericalPoint name=Unnamed dimension=1 values=[13.9273]
+cdf(quantile)=0.95
+mean=class=NumericalPoint name=Unnamed dimension=1 values=[7.23115]
+covariance=class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[13.7104]
+parameters=[[sigma : 5, nu : 4]]
+standard moment n=0, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=1, value=class=NumericalPoint name=Unnamed dimension=1 values=[1.44623]
+standard moment n=2, value=class=NumericalPoint name=Unnamed dimension=1 values=[2.64]
+standard moment n=3, value=class=NumericalPoint name=Unnamed dimension=1 values=[5.63566]
+standard moment n=4, value=class=NumericalPoint name=Unnamed dimension=1 values=[13.5296]
+standard moment n=5, value=class=NumericalPoint name=Unnamed dimension=1 values=[35.676]
+Standard representative=Rice(sigma = 1, nu = 0.8)
+nu=4
+standard deviation=class=NumericalPoint name=Unnamed dimension=1 values=[3.70276]
+skewness=class=NumericalPoint name=Unnamed dimension=1 values=[0.569607]
+kurtosis=class=NumericalPoint name=Unnamed dimension=1 values=[3.10633]

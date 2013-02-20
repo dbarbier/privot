@@ -1,0 +1,8 @@
+evaluation= 
+
+| y0 = x0^2+2*x1+3*x2^3
+| y1 = cos(x0-sin(x1 * x2))
+
+value at  [-1.0, 4.0, -4.0] = [-183,0.279135]
+marginal 0 = x0^2+2*x1+3*x2^3
+marginal 1 = cos(x0-sin(x1 * x2))

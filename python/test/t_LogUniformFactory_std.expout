@@ -1,0 +1,1 @@
+t_LogUniformFactory_std.py <type 'exceptions.TypeError'> unbound method build() must be called with LogUniformFactory instance as first argument (got NumericalSample instance instead)

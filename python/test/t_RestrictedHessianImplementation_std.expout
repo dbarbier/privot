@@ -1,0 +1,8 @@
+restricted evaluation= class=RestrictedHessianImplementation name=Unnamed hessian=class=AnalyticalNumericalMathHessianImplementation name=Unnamed evaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x0,x1,x2] outputVariablesNames=[y0] formulas=[x0^2+2*x1+3*x2^3] restrictionIndices=[1,2] referencePoint=class=NumericalPoint name=Unnamed dimension=3 values=[-1,1,3]
+value at  [4.0, -4.0] = sheet #0
+[[   0   0 ]
+ [   0 -72 ]]
+reference value= sheet #0
+[[   2   0   0 ]
+ [   0   0   0 ]
+ [   0   0 -72 ]]

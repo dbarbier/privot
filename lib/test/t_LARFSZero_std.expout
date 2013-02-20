@@ -1,0 +1,2 @@
+factory = class=LARFSZero
+sequence = class=BasisSequence implementation=class=BasisSequenceImplementation collection=[] masterBasis=class=Basis coll=[]

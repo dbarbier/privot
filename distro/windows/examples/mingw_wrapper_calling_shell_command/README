@@ -1,0 +1,8 @@
+This is an example for building and installing a new wrapper for OpenTURNS.
+
+* First, compile the wrapper
+  make.bat (double click on it)
+
+* Then launch the python script 
+  launch.bat (double click on it)
+  

@@ -1,0 +1,62 @@
+Copula =  class=IndependentCopula name=Independent copula dimension=3
+Copula =  IndependentCopula(dimension = 3)
+Distribution =  class=ComposedDistribution name=myDist dimension=3 copula=class=IndependentCopula name=Independent copula dimension=3 marginal[0]=class=Normal name=First dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[1] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[2] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] marginal[1]=class=Normal name=Second dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[2] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[3] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] marginal[2]=class=Normal name=Third dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[3] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[4] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+Distribution =  ComposedDistribution(Normal(mu = 1, sigma = 2), Normal(mu = 2, sigma = 3), Normal(mu = 3, sigma = 4), IndependentCopula(dimension = 3))
+Parameters =  [class=NumericalPointWithDescription name=One dimension=2 description=[mean,standard deviation] values=[1,2],class=NumericalPointWithDescription name=Two dimension=2 description=[mean,standard deviation] values=[2,3],class=NumericalPointWithDescription name=Three dimension=2 description=[mean,standard deviation] values=[3,4],class=NumericalPointWithDescription name=Independent copula dimension=0 description=[] values=[]]
+Mean =  class=NumericalPoint name=Unnamed dimension=3 values=[1,2,3]
+Covariance =  class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[4,0,0,0,9,0,0,0,16]
+Elliptical =  True
+Elliptical copula =  True
+Independent copula =  True
+oneRealization= class=NumericalPoint name=Unnamed dimension=3 values=[2.2164,-1.7985,1.2469]
+oneSample= class=NumericalSample name=myDist description=[One,Two,Three] implementation=class=NumericalSampleImplementation name=myDist size=10 dimension=3 data=[class=NumericalPoint name=Unnamed dimension=3 values=[3.411,-4.5442,4.4002],class=NumericalPoint name=Unnamed dimension=3 values=[0.28999,6.3117,6.2427],class=NumericalPoint name=Unnamed dimension=3 values=[2.5863,0.58842,4.0441],class=NumericalPoint name=Unnamed dimension=3 values=[-3.5801,-1.8487,-2.2471],class=NumericalPoint name=Unnamed dimension=3 values=[0.81843,4.9874,2.4422],class=NumericalPoint name=Unnamed dimension=3 values=[-0.12041,3.3365,4.2917],class=NumericalPoint name=Unnamed dimension=3 values=[1.8916,-1.1142,-0.42685],class=NumericalPoint name=Unnamed dimension=3 values=[1.9472,1.6235,4.4057],class=NumericalPoint name=Unnamed dimension=3 values=[4.5647,2.2106,-0.12547],class=NumericalPoint name=Unnamed dimension=3 values=[-0.44307,1.2763,-4.1519]]
+anotherSample mean= class=NumericalPoint name=Unnamed dimension=3 values=[0.97555,1.9768,3.0156]
+anotherSample covariance= class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[3.9389,-0.10848,0.02525,-0.10848,9.162,-0.15841,0.02525,-0.15841,16.281]
+Zero point=  class=NumericalPoint name=Unnamed dimension=3 values=[0,0,0]  pdf=0.001411  cdf=0.017655
+Quantile= class=NumericalPoint name=Unnamed dimension=3 values=[5.2424,8.3636,11.485]
+CDF(quantile)=0.950000
+Reference=
+Zero point=  class=NumericalPoint name=Unnamed dimension=3 values=[0,0,0]  pdf= 0.001411  cdf= 0.017655  quantile=  class=NumericalPoint name=Unnamed dimension=3 values=[5.2424,8.3636,11.485]
+margin= class=Normal name=First dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[1] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[2] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.176033
+margin CDF=0.308538
+margin quantile= class=NumericalPoint name=Unnamed dimension=1 values=[1]
+margin realization= class=NumericalPoint name=Unnamed dimension=1 values=[-0.25313]
+margin= class=Normal name=Second dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[2] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[3] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.106483
+margin CDF=0.252493
+margin quantile= class=NumericalPoint name=Unnamed dimension=1 values=[2]
+margin realization= class=NumericalPoint name=Unnamed dimension=1 values=[1.6826]
+margin= class=Normal name=Third dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[3] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[4] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.075284
+margin CDF=0.226627
+margin quantile= class=NumericalPoint name=Unnamed dimension=1 values=[3]
+margin realization= class=NumericalPoint name=Unnamed dimension=1 values=[4.1999]
+indices= [1,0]
+margins= class=ComposedDistribution name=ComposedDistribution dimension=2 copula=class=IndependentCopula name=IndependentCopula dimension=2 marginal[0]=class=Normal name=Second dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[2] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[3] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] marginal[1]=class=Normal name=First dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[1] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[2] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margins PDF=0.018744
+margins CDF=0.077903
+margins quantile= class=NumericalPoint name=Unnamed dimension=2 values=[3.6349,2.0899]
+margins CDF(qantile)=0.500000
+margins realization= class=NumericalPoint name=Unnamed dimension=2 values=[2.8045,-2.4028]
+Distribution  class=ComposedDistribution name=myDist dimension=3 copula=class=NormalCopula name=Normal copula dimension=3 correlation=class=CorrelationMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[1,0.25,0,0.25,1,0.25,0,0.25,1] marginal[0]=class=Normal name=First dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[1] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[2] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] marginal[1]=class=Normal name=Second dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[2] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[3] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1] marginal[2]=class=Normal name=Third dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[3] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[4] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+Parameters  [class=NumericalPointWithDescription name=One dimension=2 description=[mean,standard deviation] values=[1,2],class=NumericalPointWithDescription name=Two dimension=2 description=[mean,standard deviation] values=[2,3],class=NumericalPointWithDescription name=Three dimension=2 description=[mean,standard deviation] values=[3,4],class=NumericalPointWithDescription name=Normal copula dimension=3 description=[R_2_1,R_3_1,R_3_2] values=[0.25,0,0.25]]
+PDF      =0.001754
+PDF (ref)=0.001754
+CDF      =0.033495
+CDF (ref)=0.033495
+Quantile      = class=NumericalPoint name=Unnamed dimension=3 values=[5.2177,8.3266,11.435]
+Quantile (ref)= class=NumericalPoint name=Unnamed dimension=3 values=[5.2177,8.3266,11.435]
+CDF(quantile)=0.950000
+Mean      = class=NumericalPoint name=Unnamed dimension=3 values=[1,2,3]
+Mean (ref)= class=NumericalPoint name=Unnamed dimension=3 values=[1,2,3]
+Standard deviation      = class=NumericalPoint name=Unnamed dimension=3 values=[2,3,4]
+Standard deviation (ref)= class=NumericalPoint name=Unnamed dimension=3 values=[2,3,4]
+Skewness      = class=NumericalPoint name=Unnamed dimension=3 values=[0,0,0]
+Skewness (ref)= class=NumericalPoint name=Unnamed dimension=3 values=[0,0,0]
+Kurtosis      = class=NumericalPoint name=Unnamed dimension=3 values=[3,3,3]
+Kurtosis (ref)= class=NumericalPoint name=Unnamed dimension=3 values=[3,3,3]
+Covariance      = class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[4,1.4999,0,1.4999,9,2.9998,0,2.9998,16]
+Covariance (ref)= class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[4,1.5,0,1.5,9,3,0,3,16]
+anotherSample mean= class=NumericalPoint name=Unnamed dimension=3 values=[1.0094,1.9591,3.022]
+anotherSample covariance= class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[3.9732,1.4789,-0.076027,1.4789,9.0962,3.047,-0.076027,3.047,16.185]

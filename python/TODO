@@ -1,0 +1,9 @@
+rev. 410:
+src/Uncertainty/Distribution/TruncatedNormal: better algorithm for getRealization() based on mixed rejection algorithms
+src/Uncertainty/Distribution/TruncatedNormalFactory: Better algorithm based on the resolution of the implicit relations between the moments and the parameters
+rev. 418:
+Promote all the structs Pair to classes with save/load mechanisms
+Add a NumericalFunction constructor based on a Distribution, with a selector between CDF, PDF and DDF for the wrapped method. It will allow to:
++ use all the solvers in the Solver hierarchy;
++ compose specific parts of the IsoProbabilistic transformation
++ build methods to find modes of a distribution.

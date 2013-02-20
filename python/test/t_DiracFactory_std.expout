@@ -1,0 +1,8 @@
+Distribution          = Dirac(point = class=NumericalPoint name=Unnamed dimension=1 values=[0.7])
+Estimated distribution= Dirac(point = class=NumericalPoint name=Unnamed dimension=1 values=[0.7])
+Default distribution= Dirac(point = class=NumericalPoint name=Unnamed dimension=1 values=[0])
+Distribution from parameters= Dirac(point = class=NumericalPoint name=Unnamed dimension=1 values=[0.7])
+Dirac          = Dirac(point = class=NumericalPoint name=Unnamed dimension=1 values=[0.7])
+Estimated dirac= Dirac(point = class=NumericalPoint name=Unnamed dimension=1 values=[0.7])
+Default dirac= Dirac(point = class=NumericalPoint name=Unnamed dimension=1 values=[0])
+Dirac from parameters= Dirac(point = class=NumericalPoint name=Unnamed dimension=1 values=[0.7])

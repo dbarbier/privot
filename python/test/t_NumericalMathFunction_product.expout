@@ -1,0 +1,52 @@
+myFunction= NumericalMathFunction :
+  input  : [x1,x2,x3]
+  output : [y,z]
+  evaluation :   
+(  x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)) * ((  
+
+  | y = exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1)
+  | z = sin(x2+x3*x1^2)
+)
+  gradient   :   NumericalMathGradientImplementation
+  hessian    :   NumericalMathHessianImplementation
+myFunction= NumericalMathFunction :
+  input  : [x1,x2,x3]
+  output : [y,z]
+  evaluation :   
+(  x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)) * ((  
+
+  | y = exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1)
+  | z = sin(x2+x3*x1^2)
+)
+  gradient   :   NumericalMathGradientImplementation
+  hessian    :   NumericalMathHessianImplementation
+Value at  [1.2,2.3,3.4] =
+[-21.8428,-2.11288]
+Value at  [1.2,2.3,3.4] =
+[-21.8428,-2.11288]
+Gradient at  [1.2,2.3,3.4] =
+[[  102.66     -17.1191  ]
+ [ -292.68      -2.33966 ]
+ [ -235.169     -2.59795 ]]
+Gradient at  [1.2,2.3,3.4] =
+[[  102.66     -17.1191  ]
+ [ -292.68      -2.33966 ]
+ [ -235.169     -2.59795 ]]
+Hessian at  [1.2,2.3,3.4] =
+sheet #0
+[[  -877.48     2783.92     2029.73    ]
+ [  2783.92    -8603.97    -6382.33    ]
+ [  2029.73    -6382.33    -4597.9     ]]
+sheet #1
+[[    76.0147      9.0619     13.7095  ]
+ [     9.0619      2.23573     5.65728 ]
+ [    13.7095      5.65728    11.8856  ]]
+Hessian at  [1.2,2.3,3.4] =
+sheet #0
+[[  -877.48     2783.92     2029.73    ]
+ [  2783.92    -8603.97    -6382.33    ]
+ [  2029.73    -6382.33    -4597.9     ]]
+sheet #1
+[[    76.0147      9.0619     13.7095  ]
+ [     9.0619      2.23573     5.65728 ]
+ [    13.7095      5.65728    11.8856  ]]

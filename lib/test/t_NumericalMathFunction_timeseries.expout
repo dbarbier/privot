@@ -1,0 +1,1 @@
+deviation time series = class=TimeSeries name=Unnamed description=[,] implementation=class=TimeSeriesImplementation name=Unnamed start=0 timeStep=1 n=3 dimension=1 data=[class=NumericalPoint name=Unnamed dimension=2 values=[0,-0.00217778],class=NumericalPoint name=Unnamed dimension=2 values=[1,-0.00267857],class=NumericalPoint name=Unnamed dimension=2 values=[2,-0.00325079]]

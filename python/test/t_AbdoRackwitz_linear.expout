@@ -1,0 +1,2 @@
+myGradient =  class=NonCenteredFiniteDifferenceGradient name=Unnamed epsilon=class=NumericalPoint name=Unnamed dimension=4 values=[1e-07,1e-07,1e-07,1e-07] evaluation=class=ComputedNumericalMathEvaluationImplementation name=TestOptimLinear
+result =  [0.100000,0.200000,-0.300000,0.400000]

@@ -1,0 +1,297 @@
+
+*** Case 1 ***
+
+Parameters collection=[[mean : 0, standard deviation : 1]]
+standard moment n=0, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=1, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=2, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=3, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=4, value=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+standard moment n=5, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+Standard representative=Normal(mu = 0, sigma = 1)
+Distribution class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+Distribution Normal(mu = 0, sigma = 1)
+Elliptical = true
+Continuous = true
+oneRealization=class=NumericalPoint name=Unnamed dimension=1 values=[0.608202]
+oneSample first=class=NumericalPoint name=Unnamed dimension=1 values=[-1.26617] last=class=NumericalPoint name=Unnamed dimension=1 values=[1.5244]
+mean=class=NumericalPoint name=Unnamed dimension=1 values=[-0.0132171]
+covariance=class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1.0005]
+Point= class=NumericalPoint name=Unnamed dimension=1 values=[0.5]
+ddf     =class=NumericalPoint name=Unnamed dimension=1 values=[-0.176033]
+ddf (FD)=class=NumericalPoint name=Unnamed dimension=1 values=[-0.176033]
+log pdf=-1.0439
+pdf     =0.35207
+pdf (FD)=0.35207
+cdf=0.69146
+ccdf=0.30854
+characteristic function=(0.8825,0)
+log characteristic function=(-0.125,0)
+pdf gradient     =class=NumericalPoint name=Unnamed dimension=2 values=[0.176033,-0.264049]
+pdf gradient (FD)=class=NumericalPoint name=Unnamed dimension=2 values=[0.176033,-0.264049]
+cdf gradient     =class=NumericalPoint name=Unnamed dimension=2 values=[-0.352065,-0.176033]
+quantile=class=NumericalPoint name=Unnamed dimension=1 values=[1.645]
+cdf(quantile)=0.95
+mean=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard deviation=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+skewness=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+kurtosis=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+covariance=class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+parameters=[[mean : 0, standard deviation : 1]]
+standard moment n=0, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=1, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=2, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=3, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=4, value=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+standard moment n=5, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+Standard representative=Normal(mu = 0, sigma = 1)
+density generator=0.35207
+pdf via density generator=0.35207
+density generator derivative     =-0.17603
+density generator derivative (FD)=-0.17603
+density generator second derivative     =0.088016
+density generator second derivative (FD)=0.088016
+Radial CDF(2)=0.9545
+margin=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.35207
+margin CDF=0.69146
+margin quantile=class=NumericalPoint name=Unnamed dimension=1 values=[1.64485]
+margin realization=class=NumericalPoint name=Unnamed dimension=1 values=[-0.743779]
+chol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+invchol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+chol*t(chol)=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+chol*invchol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+
+*** Case 2 ***
+
+Parameters collection=[[mean : 0, standard deviation : 1],[mean : 0, standard deviation : 2],[R_1_0 : 0.5]]
+standard moment n=0, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=1, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=2, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=3, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=4, value=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+standard moment n=5, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+Standard representative=Normal(mu = 0, sigma = 1)
+Distribution class=Normal name=Normal dimension=2 mean=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] sigma=class=NumericalPoint name=Unnamed dimension=2 values=[1,2] correlationMatrix=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0.5,0.5,1]
+Distribution Normal(mu = [0,0], sigma = [1,2], R = [[ 1   0.5 ]
+ [ 0.5 1   ]])
+Elliptical = true
+Continuous = true
+oneRealization=class=NumericalPoint name=Unnamed dimension=2 values=[2.08034,5.6813]
+oneSample first=class=NumericalPoint name=Unnamed dimension=2 values=[1.78486,2.1809] last=class=NumericalPoint name=Unnamed dimension=2 values=[-1.00806,-3.08182]
+mean=class=NumericalPoint name=Unnamed dimension=2 values=[-0.00328546,-0.00476368]
+covariance=class=CovarianceMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1.0098,0.981617,0.981617,3.98105]
+Point= class=NumericalPoint name=Unnamed dimension=2 values=[0.5,0.5]
+ddf     =class=NumericalPoint name=Unnamed dimension=2 values=[-0.0405455,0]
+ddf (FD)=class=NumericalPoint name=Unnamed dimension=2 values=[-0.0405455,0]
+log pdf=-2.5122
+pdf     =0.081091
+cdf=0.48677
+pdf gradient     =class=NumericalPoint name=Unnamed dimension=4 values=[0.0405455,0,-0.0608183,-0.0405455]
+pdf gradient (FD)=class=NumericalPoint name=Unnamed dimension=4 values=[0.0405455,0,-0.0608183,-0.0405455]
+cdf gradient     =class=NumericalPoint name=Unnamed dimension=4 values=[0,0,0,0]
+quantile=class=NumericalPoint name=Unnamed dimension=2 values=[1.916,3.833]
+cdf(quantile)=0.95
+mean=class=NumericalPoint name=Unnamed dimension=2 values=[0,0]
+standard deviation=class=NumericalPoint name=Unnamed dimension=2 values=[1,2]
+skewness=class=NumericalPoint name=Unnamed dimension=2 values=[0,0]
+kurtosis=class=NumericalPoint name=Unnamed dimension=2 values=[3,3]
+covariance=class=CovarianceMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,1,1,4]
+parameters=[[mean : 0, standard deviation : 1],[mean : 0, standard deviation : 2],[R_1_0 : 0.5]]
+standard moment n=0, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=1, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=2, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=3, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=4, value=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+standard moment n=5, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+Standard representative=Normal(mu = 0, sigma = 1)
+density generator=0.12395
+pdf via density generator=0.081091
+density generator derivative     =-0.061975
+density generator derivative (FD)=-0.061975
+density generator second derivative     =0.030987
+density generator second derivative (FD)=0.030987
+Radial CDF(2)=0.86466
+margin=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.35207
+margin CDF=0.69146
+margin quantile=class=NumericalPoint name=Unnamed dimension=1 values=[1.64485]
+margin realization=class=NumericalPoint name=Unnamed dimension=1 values=[-0.58197]
+margin=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[2] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.19333
+margin CDF=0.59871
+margin quantile=class=NumericalPoint name=Unnamed dimension=1 values=[3.28971]
+margin realization=class=NumericalPoint name=Unnamed dimension=1 values=[-3.48427]
+indices=[1,0]
+margins=class=Normal name=Normal dimension=2 mean=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] sigma=class=NumericalPoint name=Unnamed dimension=2 values=[2,1] correlationMatrix=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0.5,0.5,1]
+margins PDF=0.081091
+margins CDF=0.48677
+margins quantile=class=NumericalPoint name=Unnamed dimension=2 values=[3.83266,1.91633]
+margins CDF(quantile)=0.95
+margins realization=class=NumericalPoint name=Unnamed dimension=2 values=[0.525897,-0.684103]
+chol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,1,0,1.73205]
+invchol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,-0.57735,0,0.57735]
+chol*t(chol)=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,1,1,4]
+chol*invchol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0,0,1]
+
+*** Case 3 ***
+
+Parameters collection=[[mean : 0, standard deviation : 1],[mean : 0, standard deviation : 2],[mean : 0, standard deviation : 3],[R_1_0 : 0.5, R_2_0 : 0, R_2_1 : 0.5]]
+standard moment n=0, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=1, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=2, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=3, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=4, value=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+standard moment n=5, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+Standard representative=Normal(mu = 0, sigma = 1)
+Distribution class=Normal name=Normal dimension=3 mean=class=NumericalPoint name=Unnamed dimension=3 values=[0,0,0] sigma=class=NumericalPoint name=Unnamed dimension=3 values=[1,2,3] correlationMatrix=class=CorrelationMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[1,0.5,0,0.5,1,0.5,0,0.5,1]
+Distribution Normal(mu = [0,0,0], sigma = [1,2,3], R = [[ 1   0.5 0   ]
+ [ 0.5 1   0.5 ]
+ [ 0   0.5 1   ]])
+Elliptical = true
+Continuous = true
+oneRealization=class=NumericalPoint name=Unnamed dimension=3 values=[1.43583,1.16934,-1.99204]
+oneSample first=class=NumericalPoint name=Unnamed dimension=3 values=[1.2816,2.0115,2.09273] last=class=NumericalPoint name=Unnamed dimension=3 values=[-0.395283,0.394708,-0.899267]
+mean=class=NumericalPoint name=Unnamed dimension=3 values=[0.00539158,-0.0220038,-0.00311627]
+covariance=class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[0.993392,0.990136,-0.0244142,0.990136,4.02286,3.02622,-0.0244142,3.02622,9.12479]
+Point= class=NumericalPoint name=Unnamed dimension=3 values=[0.5,0.5,0.5]
+ddf     =class=NumericalPoint name=Unnamed dimension=3 values=[-0.00754529,0.0010779,-0.0010779]
+ddf (FD)=class=NumericalPoint name=Unnamed dimension=3 values=[-0.00754529,0.0010779,-0.0010779]
+log pdf=-4.3478
+pdf     =0.012935
+cdf=0.32981
+pdf gradient     =class=NumericalPoint name=Unnamed dimension=6 values=[0.00754529,-0.0010779,0.0010779,-0.00916214,-0.00673687,-0.00413195]
+pdf gradient (FD)=class=NumericalPoint name=Unnamed dimension=6 values=[0.00754529,-0.0010779,0.0010779,-0.00916214,-0.00673687,-0.00413195]
+cdf gradient     =class=NumericalPoint name=Unnamed dimension=6 values=[0,0,0,0,0,0]
+quantile=class=NumericalPoint name=Unnamed dimension=3 values=[2.08,4.16,6.239]
+cdf(quantile)=0.95
+mean=class=NumericalPoint name=Unnamed dimension=3 values=[0,0,0]
+standard deviation=class=NumericalPoint name=Unnamed dimension=3 values=[1,2,3]
+skewness=class=NumericalPoint name=Unnamed dimension=3 values=[0,0,0]
+kurtosis=class=NumericalPoint name=Unnamed dimension=3 values=[3,3,3]
+covariance=class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[1,1,0,1,4,3,0,3,9]
+parameters=[[mean : 0, standard deviation : 1],[mean : 0, standard deviation : 2],[mean : 0, standard deviation : 3],[R_1_0 : 0.5, R_2_0 : 0, R_2_1 : 0.5]]
+standard moment n=0, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=1, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=2, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=3, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=4, value=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+standard moment n=5, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+Standard representative=Normal(mu = 0, sigma = 1)
+density generator=0.043638
+pdf via density generator=0.012935
+density generator derivative     =-0.021819
+density generator derivative (FD)=-0.021819
+density generator second derivative     =0.01091
+density generator second derivative (FD)=0.01091
+Radial CDF(2)=0.73854
+margin=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.35207
+margin CDF=0.69146
+margin quantile=class=NumericalPoint name=Unnamed dimension=1 values=[1.64485]
+margin realization=class=NumericalPoint name=Unnamed dimension=1 values=[-1.46352]
+margin=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[2] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.19333
+margin CDF=0.59871
+margin quantile=class=NumericalPoint name=Unnamed dimension=1 values=[3.28971]
+margin realization=class=NumericalPoint name=Unnamed dimension=1 values=[0.113672]
+margin=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[3] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.13115
+margin CDF=0.56618
+margin quantile=class=NumericalPoint name=Unnamed dimension=1 values=[4.93456]
+margin realization=class=NumericalPoint name=Unnamed dimension=1 values=[1.65984]
+indices=[1,0]
+margins=class=Normal name=Normal dimension=2 mean=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] sigma=class=NumericalPoint name=Unnamed dimension=2 values=[2,1] correlationMatrix=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0.5,0.5,1]
+margins PDF=0.081091
+margins CDF=0.48677
+margins quantile=class=NumericalPoint name=Unnamed dimension=2 values=[3.83266,1.91633]
+margins CDF(quantile)=0.95
+margins realization=class=NumericalPoint name=Unnamed dimension=2 values=[-2.27301,0.271388]
+chol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[1,1,0,0,1.73205,1.73205,0,0,2.44949]
+invchol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[1,-0.57735,0.408248,0,0.57735,-0.408248,0,0,0.408248]
+chol*t(chol)=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[1,1,0,1,4,3,0,3,9]
+chol*invchol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[1,0,0,0,1,0,0,0,1]
+
+*** Case 4 ***
+
+Parameters collection=[[mean : 0, standard deviation : 1],[mean : 0, standard deviation : 2],[mean : 0, standard deviation : 3],[mean : 0, standard deviation : 4],[R_1_0 : 0.5, R_2_0 : 0, R_2_1 : 0.5, R_3_0 : 0, R_3_1 : 0, R_3_2 : 0.5]]
+standard moment n=0, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=1, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=2, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=3, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=4, value=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+standard moment n=5, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+Standard representative=Normal(mu = 0, sigma = 1)
+Distribution class=Normal name=Normal dimension=4 mean=class=NumericalPoint name=Unnamed dimension=4 values=[0,0,0,0] sigma=class=NumericalPoint name=Unnamed dimension=4 values=[1,2,3,4] correlationMatrix=class=CorrelationMatrix dimension=4 implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,0.5,0,0,0.5,1,0.5,0,0,0.5,1,0.5,0,0,0.5,1]
+Distribution Normal(mu = [0,0,0,0], sigma = [1,2,3,4], R = [[ 1   0.5 0   0   ]
+ [ 0.5 1   0.5 0   ]
+ [ 0   0.5 1   0.5 ]
+ [ 0   0   0.5 1   ]])
+Elliptical = true
+Continuous = true
+oneRealization=class=NumericalPoint name=Unnamed dimension=4 values=[1.21488,0.0218133,3.31713,4.09476]
+oneSample first=class=NumericalPoint name=Unnamed dimension=4 values=[1.24309,3.15289,-0.565196,-0.291657] last=class=NumericalPoint name=Unnamed dimension=4 values=[2.40996,0.0230345,3.12725,9.60962]
+mean=class=NumericalPoint name=Unnamed dimension=4 values=[0.00118577,0.0152079,0.00728132,0.0319167]
+covariance=class=CovarianceMatrix dimension=4 implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1.01454,1.02365,0.0140841,-0.0024982,1.02365,4.10542,3.03835,0.102345,0.0140841,3.03835,8.86668,6.11764,-0.0024982,0.102345,6.11764,16.3125]
+Point= class=NumericalPoint name=Unnamed dimension=4 values=[0.5,0.5,0.5,0.5]
+ddf     =class=NumericalPoint name=Unnamed dimension=4 values=[-0.000951889,0.000135984,-0.000135984,0]
+ddf (FD)=class=NumericalPoint name=Unnamed dimension=4 values=[-0.000951889,0.000135984,-0.000135984,0]
+log pdf=-6.4181
+pdf     =0.0016318
+cdf=0.22145
+pdf gradient     =class=NumericalPoint name=Unnamed dimension=8 values=[0.000951889,-0.000135984,0.000135984,0,-0.00115586,-0.000849901,-0.000521272,-0.000407952]
+pdf gradient (FD)=class=NumericalPoint name=Unnamed dimension=8 values=[0.000951889,-0.000135984,0.000135984,0,-0.00115586,-0.000849901,-0.000521272,-0.000407952]
+cdf gradient     =class=NumericalPoint name=Unnamed dimension=8 values=[0,0,0,0,0,0,0,0]
+quantile=class=NumericalPoint name=Unnamed dimension=4 values=[2.193,4.387,6.58,8.774]
+cdf(quantile)=0.95
+mean=class=NumericalPoint name=Unnamed dimension=4 values=[0,0,0,0]
+standard deviation=class=NumericalPoint name=Unnamed dimension=4 values=[1,2,3,4]
+skewness=class=NumericalPoint name=Unnamed dimension=4 values=[0,0,0,0]
+kurtosis=class=NumericalPoint name=Unnamed dimension=4 values=[3,3,3,3]
+covariance=class=CovarianceMatrix dimension=4 implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,1,0,0,1,4,3,0,0,3,9,6,0,0,6,16]
+parameters=[[mean : 0, standard deviation : 1],[mean : 0, standard deviation : 2],[mean : 0, standard deviation : 3],[mean : 0, standard deviation : 4],[R_1_0 : 0.5, R_2_0 : 0, R_2_1 : 0.5, R_3_0 : 0, R_3_1 : 0, R_3_2 : 0.5]]
+standard moment n=0, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=1, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=2, value=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+standard moment n=3, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+standard moment n=4, value=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+standard moment n=5, value=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+Standard representative=Normal(mu = 0, sigma = 1)
+density generator=0.015364
+pdf via density generator=0.0016318
+density generator derivative     =-0.0076818
+density generator derivative (FD)=-0.0076818
+density generator second derivative     =0.0038409
+density generator second derivative (FD)=0.0038409
+Radial CDF(2)=0.59399
+margin=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.35207
+margin CDF=0.69146
+margin quantile=class=NumericalPoint name=Unnamed dimension=1 values=[1.64485]
+margin realization=class=NumericalPoint name=Unnamed dimension=1 values=[-0.087618]
+margin=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[2] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.19333
+margin CDF=0.59871
+margin quantile=class=NumericalPoint name=Unnamed dimension=1 values=[3.28971]
+margin realization=class=NumericalPoint name=Unnamed dimension=1 values=[-1.16034]
+margin=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[3] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.13115
+margin CDF=0.56618
+margin quantile=class=NumericalPoint name=Unnamed dimension=1 values=[4.93456]
+margin realization=class=NumericalPoint name=Unnamed dimension=1 values=[1.463]
+margin=class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[4] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]
+margin PDF=0.098959
+margin CDF=0.54974
+margin quantile=class=NumericalPoint name=Unnamed dimension=1 values=[6.57941]
+margin realization=class=NumericalPoint name=Unnamed dimension=1 values=[-1.53268]
+indices=[1,0]
+margins=class=Normal name=Normal dimension=2 mean=class=NumericalPoint name=Unnamed dimension=2 values=[0,0] sigma=class=NumericalPoint name=Unnamed dimension=2 values=[2,1] correlationMatrix=class=CorrelationMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[1,0.5,0.5,1]
+margins PDF=0.081091
+margins CDF=0.48677
+margins quantile=class=NumericalPoint name=Unnamed dimension=2 values=[3.83266,1.91633]
+margins CDF(quantile)=0.95
+margins realization=class=NumericalPoint name=Unnamed dimension=2 values=[0.36609,0.421104]
+chol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,1,0,0,0,1.73205,1.73205,0,0,0,2.44949,2.44949,0,0,0,3.16228]
+invchol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,-0.57735,0.408248,-0.316228,0,0.57735,-0.408248,0.316228,0,0,0.408248,-0.316228,0,0,0,0.316228]
+chol*t(chol)=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,1,0,0,1,4,3,0,0,3,9,6,0,0,6,16]
+chol*invchol=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]

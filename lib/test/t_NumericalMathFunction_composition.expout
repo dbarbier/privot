@@ -1,0 +1,23 @@
+right=class=NumericalMathFunction name=TestCompositionRight implementation=class=NumericalMathFunctionImplementation name=TestCompositionRight description=[x1,x2,x3,x4,y1,y2] evaluationImplementation=class=ComputedNumericalMathEvaluationImplementation name=TestCompositionRight gradientImplementation=class=ComputedNumericalMathGradientImplementation name=TestCompositionRight hessianImplementation=class=ComputedNumericalMathHessianImplementation name=TestCompositionRight
+left=class=NumericalMathFunction name=TestCompositionLeft implementation=class=NumericalMathFunctionImplementation name=TestCompositionLeft description=[x1,x2,y1,y2,y3] evaluationImplementation=class=ComputedNumericalMathEvaluationImplementation name=TestCompositionLeft gradientImplementation=class=ComputedNumericalMathGradientImplementation name=TestCompositionLeft hessianImplementation=class=ComputedNumericalMathHessianImplementation name=TestCompositionLeft
+composed=class=NumericalMathFunction name=Unnamed implementation=class=ComposedNumericalMathFunction name=Unnamed description=[x1,x2,x3,x4,y1,y2,y3] left function=class=NumericalMathFunctionImplementation name=TestCompositionLeft description=[x1,x2,y1,y2,y3] evaluationImplementation=class=ComputedNumericalMathEvaluationImplementation name=TestCompositionLeft gradientImplementation=class=ComputedNumericalMathGradientImplementation name=TestCompositionLeft hessianImplementation=class=ComputedNumericalMathHessianImplementation name=TestCompositionLeft right function=class=NumericalMathFunctionImplementation name=TestCompositionRight description=[x1,x2,x3,x4,y1,y2] evaluationImplementation=class=ComputedNumericalMathEvaluationImplementation name=TestCompositionRight gradientImplementation=class=ComputedNumericalMathGradientImplementation name=TestCompositionRight hessianImplementation=class=ComputedNumericalMathHessianImplementation name=TestCompositionRight
+x=class=NumericalPoint name=Unnamed dimension=4 values=[1,1,1,1] y=right(x)=class=NumericalPoint name=Unnamed dimension=2 values=[0.5,-0.138716] z=left(y)=class=NumericalPoint name=Unnamed dimension=3 values=[-0.0691356,0.935444,1.87405]
+left(right(x))=class=NumericalPoint name=Unnamed dimension=3 values=[-0.0691356,0.935444,1.87405]
+D(right)(x)=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=4 columns=2 values=[0.75,0.75,-0.5,-0.5,0.0924771,-0.606198,0.184954,-0.303099] D(left)(y)=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=3 values=[-0.138271,0.495197,-0.353476,-0.353476,1.87405,-1.57222] prod=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=4 columns=3 values=[-0.057909,-0.403891,0.160724,-0.0809583,-0.297795,-0.0508305,0.111361,0.283876,1.26014,2.35861,-1.22781,-0.460485]
+D(left(right(x)))=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=4 columns=3 values=[-0.057909,-0.403891,0.160724,-0.0809583,-0.297795,-0.0508305,0.111361,0.283876,1.26014,2.35861,-1.22781,-0.460485]
+DD(left(right(x)))=
+  5.357403e-02 -2.890439e-01  7.435629e-02 -6.910706e-02
+ -2.890439e-01 -1.107986e+00  9.337731e-01  3.288363e-01
+  7.435629e-02  9.337731e-01 -2.194186e-01  1.164833e-01
+ -6.910706e-02  3.288363e-01  1.164833e-01  4.443663e-01
+
+ -8.297894e-01 -5.212867e-01  6.005606e-01  8.265957e-01
+ -5.212867e-01 -5.314120e-01  2.178440e-02  2.750733e-01
+  6.005606e-01  2.178440e-02 -2.913767e-01 -7.330065e-01
+  8.265957e-01  2.750733e-01 -7.330065e-01 -4.756260e-01
+
+  1.811224e+00  2.497746e+00 -1.886630e+00 -1.962054e+00
+  2.497746e+00  4.931892e+00 -3.938341e+00 -2.885451e+00
+ -1.886630e+00 -3.938341e+00  1.558095e+00  1.681981e+00
+ -1.962054e+00 -2.885451e+00  1.681981e+00 -1.274057e+00
+

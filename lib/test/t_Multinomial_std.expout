@@ -1,0 +1,34 @@
+Testing class Multinomial
+checkConstructorAndDestructor()
+checkCopyConstructor()
+streamObject(const T & anObject)
+class=Multinomial name=Multinomial dimension=3 p=class=NumericalPoint name=Unnamed dimension=3 values=[0.25,0.25,0.25] n=5
+streamObject(const T & anObject)
+class=Multinomial name=Multinomial dimension=3 p=class=NumericalPoint name=Unnamed dimension=3 values=[0.25,0.25,0.25] n=5
+areSameObjects(const T & firstObject, const T & secondObject)
+areDifferentObjects(const T & firstObject, const T & secondObject)
+checkNameFeature()
+checkNameConstructor()
+streamObject(const T & anObject)
+class=Multinomial name=myName dimension=3 p=class=NumericalPoint name=Unnamed dimension=3 values=[0.25,0.25,0.25] n=5
+checkNameAccessors()
+streamObject(const T & anObject)
+class=Multinomial name=myNewName dimension=3 p=class=NumericalPoint name=Unnamed dimension=3 values=[0.25,0.25,0.25] n=5
+Distribution class=Multinomial name=Multinomial dimension=3 p=class=NumericalPoint name=Unnamed dimension=3 values=[0.25,0.25,0.25] n=5
+Distribution Multinomial(n = 5, p = [0.25,0.25,0.25])
+Elliptical = false
+Continuous = false
+oneRealization=class=NumericalPoint name=Unnamed dimension=3 values=[1,2,0]
+oneSample first=class=NumericalPoint name=Unnamed dimension=3 values=[0,1,4] last=class=NumericalPoint name=Unnamed dimension=3 values=[1,1,3]
+mean=class=NumericalPoint name=Unnamed dimension=3 values=[1.2635,1.2335,1.2564]
+covariance=class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[0.937762,-0.300457,-0.315593,-0.300457,0.930871,-0.314301,-0.315593,-0.314301,0.947554]
+Point= class=NumericalPoint name=Unnamed dimension=3 values=[1,1,1]
+log pdf=-2.83713
+pdf     =0.0585937
+cdf=0.132813
+ccdf=0.867187
+quantile=class=NumericalPoint name=Unnamed dimension=3 values=[3,3,3]
+cdf(quantile)=0.953125
+mean=class=NumericalPoint name=Unnamed dimension=3 values=[1.25,1.25,1.25]
+covariance=class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[0.9375,-0.3125,-0.3125,-0.3125,0.9375,-0.3125,-0.3125,-0.3125,0.9375]
+parameters=[[n : 5, p_0 : 0.25],[n : 5, p_1 : 0.25],[n : 5, p_2 : 0.25],[n : 5, p_0 : 0.25, p_1 : 0.25, p_2 : 0.25]]

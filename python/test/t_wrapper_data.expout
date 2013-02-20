@@ -1,0 +1,31 @@
+==  test WrapperDataCoreIn
+read [1, 2]
+A core_in point has been found.
+[1, 2]
+== test WrapperDataCoreOut
+read [2, 3]
+read an error
+A core_out point has been found.
+[2, 3]
+== test WrapperDataHostIn
+tata
+[[2, 3, 4], [5]]
+2
+temp132
+/temp/tmp56
+None
+/temp
+2
+['us.py']
+False
+all
+An input sample has been found.
+[[2, 3, 4], [5]]
+== test WrapperDataHostOut
+[[4, 3, 2], [8]]
+log
+  D:start point
+  ERR:[2, 'error on point']
+  P:[3, 45]
+An Output sample has been found.
+[[4, 3, 2], [8]]

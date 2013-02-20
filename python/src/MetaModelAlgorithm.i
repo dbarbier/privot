@@ -1,0 +1,10 @@
+// SWIG file MetaModelAlgorithm.i
+// @author schueller
+// @date   2012-01-02 11:44:01 +0100 (Mon, 02 Jan 2012)
+
+%{
+#include "MetaModelAlgorithm.hxx"
+%}
+
+%include MetaModelAlgorithm.hxx
+namespace OT{ %extend MetaModelAlgorithm { MetaModelAlgorithm(const MetaModelAlgorithm & other) { return new OT::MetaModelAlgorithm(other); } } }

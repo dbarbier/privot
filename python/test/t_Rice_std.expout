@@ -1,0 +1,31 @@
+Distribution  class=Rice name=Rice dimension=1 sigma=5 nu=4
+Distribution  Rice(sigma = 5, nu = 4)
+Elliptical =  False
+Continuous =  True
+oneRealization= class=NumericalPoint name=Unnamed dimension=1 values=[8.76728]
+oneSample first= class=NumericalPoint name=Unnamed dimension=1 values=[13.769]  last= class=NumericalPoint name=Unnamed dimension=1 values=[18.2056]
+mean= class=NumericalPoint name=Unnamed dimension=1 values=[7.24923]
+covariance= class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[13.4599]
+Point=  class=NumericalPoint name=Unnamed dimension=1 values=[1]
+pdf     = 0.0286533178617
+pdf (FD)= 0.028653318
+cdf= 0.0144246216851
+pdf gradient (FD)= class=NumericalPoint name=Unnamed dimension=2 values=[-0.0153695,-0.029342]
+cdf gradient (FD)= class=NumericalPoint name=Unnamed dimension=2 values=[-0.00784159,-0.0151443]
+quantile= class=NumericalPoint name=Unnamed dimension=1 values=[13.9273]
+cdf(quantile)= 0.95
+mean= class=NumericalPoint name=Unnamed dimension=1 values=[7.23115]
+covariance= class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[13.7104]
+parameters= [class=NumericalPointWithDescription name=marginal 1 dimension=2 description=[sigma,nu] values=[5,4]]
+standard moment n= 0  value= [1]
+standard moment n= 1  value= [1.44623]
+standard moment n= 2  value= [2.64]
+standard moment n= 3  value= [5.63566]
+standard moment n= 4  value= [13.5296]
+standard moment n= 5  value= [35.676]
+Standard representative= Rice(sigma = 1, nu = 0.8)
+nu= 4.0
+standard deviation= class=NumericalPoint name=Unnamed dimension=1 values=[3.70276]
+skewness= class=NumericalPoint name=Unnamed dimension=1 values=[0.569607]
+kurtosis= class=NumericalPoint name=Unnamed dimension=1 values=[3.10633]
+sigma= 5.0

@@ -1,0 +1,8 @@
+myFunc=class=NumericalMathFunction name=TestCompositionLeft implementation=class=NumericalMathFunctionImplementation name=TestCompositionLeft description=[x1,x2,y1,y2,y3] evaluationImplementation=class=ComputedNumericalMathEvaluationImplementation name=TestCompositionLeft gradientImplementation=class=ComputedNumericalMathGradientImplementation name=TestCompositionLeft hessianImplementation=class=ComputedNumericalMathHessianImplementation name=TestCompositionLeft
+myFunc(point)=class=NumericalPoint name=Unnamed dimension=3 values=[1.11845,-0.737394,0.662627]
+myFunc input parameter(s)=x1,x2
+myFunc output parameter(s)=y1,y2,y3
+myFunc marginal 0(point)=class=NumericalPoint name=Unnamed dimension=1 values=[1.11845]
+myFunc marginal 1(point)=class=NumericalPoint name=Unnamed dimension=1 values=[-0.737394]
+myFunc marginal 2(point)=class=NumericalPoint name=Unnamed dimension=1 values=[0.662627]
+myFunc marginal [2,0](point)=class=NumericalPoint name=Unnamed dimension=2 values=[0.662627,1.11845]

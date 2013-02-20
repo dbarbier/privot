@@ -1,0 +1,59 @@
+#                                               -*- cmake -*-
+#
+#  OpenTURNSConfig.cmake(.in)
+#
+#  Find OpenTURNS includes and libraries
+#
+#  Copyright (C) 2005-2013 EDF-EADS-Phimeca
+#
+#  This library is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This library is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public
+#  along with this library.  If not, see <http://www.gnu.org/licenses/>.
+#
+#  @author schueller
+#  @date   2010-02-04 16:44:49 +0100 (Thu, 04 Feb 2010)
+#
+
+# Use the following variables to compile and link against Open TURNS:
+#  OPENTURNS_FOUND              - True if Open TURNS was found on your system
+#  OPENTURNS_USE_FILE           - The file making Open TURNS usable
+#  OPENTURNS_DEFINITIONS        - Definitions needed to build with Open TURNS
+#  OPENTURNS_INCLUDE_DIRS       - List of directories where Open TURNS' header file are
+#  OPENTURNS_LIBRARY            - Open TURNS library location
+#  OPENTURNS_LIBRARIES          - List of libraries to link against
+#  OPENTURNS_LIBRARY_DIRS       - List of directories containing Open TURNS' libraries
+#  OPENTURNS_ROOT_DIR           - The base directory of Open TURNS
+#  OPENTURNS_VERSION_STRING     - A human-readable string containing the version
+#  OPENTURNS_VERSION_MAJOR      - The major version of Open TURNS
+#  OPENTURNS_VERSION_MINOR      - The minor version of Open TURNS
+#  OPENTURNS_VERSION_PATCH      - The patch version of Open TURNS
+#  OPENTURNS_SWIG_INCLUDE_DIRS  - Location of swig interface files
+#  OPENTURNS_SWIG_DEFINITIONS   - Definitions to compile the swig generated source
+
+set ( OPENTURNS_FOUND 1 )
+set ( OPENTURNS_USE_FILE     "@OPENTURNS_USE_FILE@" )
+
+set ( OPENTURNS_DEFINITIONS  "@OPENTURNS_DEFINITIONS@" )
+set ( OPENTURNS_INCLUDE_DIRS "@OPENTURNS_INCLUDE_DIRS@" )
+set ( OPENTURNS_LIBRARIES    "@OPENTURNS_LIBRARIES@" )
+set ( OPENTURNS_LIBRARY_DIRS "@OPENTURNS_LIBRARY_DIRS@" )
+set ( OPENTURNS_ROOT_DIR     "@OPENTURNS_ROOT_DIR@" )
+
+set ( OPENTURNS_VERSION_STRING "@OPENTURNS_VERSION_STRING@" )
+set ( OPENTURNS_VERSION_MAJOR  "@OPENTURNS_VERSION_MAJOR@" )
+set ( OPENTURNS_VERSION_MINOR  "@OPENTURNS_VERSION_MINOR@" )
+set ( OPENTURNS_VERSION_PATCH  "@OPENTURNS_VERSION_PATCH@" )
+
+set ( OPENTURNS_SWIG_INCLUDE_DIRS "@OPENTURNS_SWIG_INCLUDE_DIRS@" )
+set ( OPENTURNS_SWIG_DEFINITIONS "@OPENTURNS_SWIG_DEFINITIONS@" )
+set ( OPENTURNS_PYTHON_MODULE_PATH "@PYTHON_MODULE_PATH@" )
+

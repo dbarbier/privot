@@ -1,0 +1,11 @@
+//                                               -*- C++ -*-
+// This file contains Doxygen extra comments
+/**
+ * @defgroup Wrapper
+ * All classes and functions related to wrapper manipulation are members of this group
+ */
+
+/**
+ * @defgroup Function
+ * All classes and functions related to wrapper manipulation are members of this group
+ */

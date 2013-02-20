@@ -1,0 +1,1 @@
+deviation sample = class=NumericalSample name=Unnamed description=[d] implementation=class=NumericalSampleImplementation name=Unnamed size=3 dimension=1 data=[class=NumericalPoint name=Unnamed dimension=1 values=[-0.00217778],class=NumericalPoint name=Unnamed dimension=1 values=[-0.00267857],class=NumericalPoint name=Unnamed dimension=1 values=[-0.00325079]]

@@ -1,0 +1,2 @@
+usr/lib/python*/*-packages/openturns/*.py
+usr/lib/python*/*-packages/openturns/*.so

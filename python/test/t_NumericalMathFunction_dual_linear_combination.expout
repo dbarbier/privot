@@ -1,0 +1,18 @@
+myFunction= NumericalMathFunction :
+  input  : [x1,x2,x3]
+  output : [y0,y1]
+  evaluation :   [1.5,2.5] * (x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)) + [-3.5,0.5] * (exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1))
+  gradient   :   NumericalMathGradientImplementation
+  hessian    :   NumericalMathHessianImplementation
+Value at  [1.2,2.3,3.4] = [-32.6345,-2.5861]
+Gradient at  [1.2,2.3,3.4] = [[  178.768   -38.5532 ]
+ [ -375.374    51.2006 ]
+ [ -305.359    42.7773 ]]
+Hessian at  [1.2,2.3,3.4] = sheet #0
+[[  -1751.33    4267.45    3202.67  ]
+ [   4267.45  -11041      -8261.43  ]
+ [   3202.67   -8261.43   -6049.09  ]]
+sheet #1
+[[    230.587   -612.346   -462.402 ]
+ [   -612.346   1581.45    1192.53  ]
+ [   -462.402   1192.53     891.781 ]]

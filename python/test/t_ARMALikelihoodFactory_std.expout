@@ -1,0 +1,13 @@
+factory= class= ARMALikelihoodFactory
+implementation = class= ARMAFactoryImplementation p=[2] current p=2 q=[1] current q=1 invertible=true
+dimension = 2
+original process =   ARMA process dimension = 2
+X_1,t - 0.5 X_{0,t-1} - 0.1 X_{1,t-1} = E_{1,t} - 0.4 E_{0,t-1}
+X_2,t - 0.4 X_{0,t-1} - 0.5 X_{1,t-1} - 0.25 X_{0,t-2} = E_{2,t} - 0.4 E_{1,t-1}
+with E_t ~ Normal(mu = [0,0], sigma = [0.316228,0.447214], R = [[ 1 0 ]
+ [ 0 1 ]])
+Estimated ARMA=   ARMA process dimension = 2
+X_1,t - 0.514965 X_{0,t-1} - 0.10527 X_{1,t-1} + 0.0219774 X_{0,t-2} - 0.0159485 X_{1,t-2} = E_{1,t} - 0.404026 E_{0,t-1} - 0.00624322 E_{1,t-1}
+X_2,t - 0.394894 X_{0,t-1} - 0.50857 X_{1,t-1} - 0.247696 X_{0,t-2} + 0.0103615 X_{1,t-2} = E_{2,t} + 0.00614262 E_{0,t-1} - 0.384584 E_{1,t-1}
+with E_t ~ Normal(mu = [0,0], sigma = [0.356024,0.512514], R = [[ 1 0 ]
+ [ 0 1 ]])

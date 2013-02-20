@@ -1,0 +1,3 @@
+restricted hessian=class=RestrictedHessianImplementation name=Unnamed hessian=class=AnalyticalNumericalMathHessianImplementation name=Unnamed evaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x0,x1,x2] outputVariablesNames=[y0] formulas=[x0^2+2*x1+3*x2^3] restrictionIndices=[1,2] referencePoint=class=NumericalPoint name=Unnamed dimension=3 values=[-1,1,3]
+value at class=NumericalPoint name=Unnamed dimension=2 values=[4,-4]=class=SymmetricTensor implementation=class=TensorImplementation name=Unnamed rows=2 columns=2 sheets=1 values=[0,0,0,-72]
+reference value=class=SymmetricTensor implementation=class=TensorImplementation name=Unnamed rows=3 columns=3 sheets=1 values=[2,0,0,0,0,0,0,0,-72]

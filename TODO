@@ -1,0 +1,5 @@
+Remove deprecated methods getNumericalSample in Distribution, RandomVector, TimeSeries, and TimeSeries::asNumericalSample.
+Remove deprecated methods HistoryStrategy::reset, and resetHistory in NumericalMathFunction, NumericalMathFunctionImplementation, NumericalMathEvaluationImplementation
+Remove deprecated method Distribution::computeCharacteristicFunction(NumericalScalar x, Bool logScale)
+Remove deprecated method Distribution::computeGeneratingFunction(NumericalComplex z, Bool logScale)
+Remove deprecated method Distribution::computeCDF(x, Bool tail)

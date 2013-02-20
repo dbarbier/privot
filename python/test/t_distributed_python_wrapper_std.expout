@@ -1,0 +1,152 @@
+test_type:local,  test_point:True,  test_analytical:False,  cleanup:ok,  make_error:False,  tmpdir:,  sample_size:5,  work_time:1,  hosts:None, nb_output:1
+Compute
+Results
+[class=NumericalPoint name=Unnamed dimension=1 values=[2]]
+Results are OK.
+Workdir not found: ok.
+
+test_type:local,  test_point:False,  test_analytical:True,  cleanup:ok,  make_error:False,  tmpdir:,  sample_size:5,  work_time:1,  hosts:None, nb_output:1
+Compute
+Results
+    [ y0 ]
+0 : [  2 ]
+1 : [  4 ]
+2 : [  6 ]
+3 : [  8 ]
+4 : [ 10 ]
+Results are OK.
+Workdir not found: ok.
+
+test_type:local,  test_point:True,  test_analytical:True,  cleanup:ok,  make_error:False,  tmpdir:,  sample_size:5,  work_time:1,  hosts:None, nb_output:1
+Compute
+Results
+[class=NumericalPoint name=Unnamed dimension=1 values=[2]]
+Results are OK.
+Workdir not found: ok.
+
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:ok,  make_error:False,  tmpdir:,  sample_size:50,  work_time:0.1,  hosts:None, nb_output:1
+Compute
+Results
+     [ y0  ]
+ 0 : [   2 ]
+ 1 : [   4 ]
+ 2 : [   6 ]
+ 3 : [   8 ]
+ 4 : [  10 ]
+ 5 : [  12 ]
+ 6 : [  14 ]
+ 7 : [  16 ]
+ 8 : [  18 ]
+ 9 : [  20 ]
+10 : [  22 ]
+11 : [  24 ]
+12 : [  26 ]
+13 : [  28 ]
+14 : [  30 ]
+15 : [  32 ]
+16 : [  34 ]
+17 : [  36 ]
+18 : [  38 ]
+19 : [  40 ]
+20 : [  42 ]
+21 : [  44 ]
+22 : [  46 ]
+23 : [  48 ]
+24 : [  50 ]
+25 : [  52 ]
+26 : [  54 ]
+27 : [  56 ]
+28 : [  58 ]
+29 : [  60 ]
+30 : [  62 ]
+31 : [  64 ]
+32 : [  66 ]
+33 : [  68 ]
+34 : [  70 ]
+35 : [  72 ]
+36 : [  74 ]
+37 : [  76 ]
+38 : [  78 ]
+39 : [  80 ]
+40 : [  82 ]
+41 : [  84 ]
+42 : [  86 ]
+43 : [  88 ]
+44 : [  90 ]
+45 : [  92 ]
+46 : [  94 ]
+47 : [  96 ]
+48 : [  98 ]
+49 : [ 100 ]
+Results are OK.
+Workdir not found: ok.
+
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:ok,  make_error:False,  tmpdir:,  sample_size:10,  work_time:1,  hosts:None, nb_output:1000
+Compute
+Results
+Results are OK.
+Workdir not found: ok.
+
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:ok,  make_error:False,  tmpdir:,  sample_size:1,  work_time:1,  hosts:None, nb_output:1
+Compute
+Results
+    [ y0 ]
+0 : [ 2  ]
+Results are OK.
+Workdir not found: ok.
+
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:no,  make_error:False,  tmpdir:,  sample_size:5,  work_time:0.1,  hosts:None, nb_output:1
+Compute
+Results
+    [ y0 ]
+0 : [  2 ]
+1 : [  4 ]
+2 : [  6 ]
+3 : [  8 ]
+4 : [ 10 ]
+Results are OK.
+Workdir found. Cleaned.
+
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:no,  make_error:False,  tmpdir:,  sample_size:1,  work_time:1,  hosts:None, nb_output:1
+Compute
+Results
+    [ y0 ]
+0 : [ 2  ]
+Results are OK.
+Workdir found. Cleaned.
+
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:all,  make_error:False,  tmpdir:,  sample_size:5,  work_time:0.1,  hosts:None, nb_output:1
+Compute
+Results
+    [ y0 ]
+0 : [  2 ]
+1 : [  4 ]
+2 : [  6 ]
+3 : [  8 ]
+4 : [ 10 ]
+Results are OK.
+Workdir not found: ok.
+
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:all,  make_error:False,  tmpdir:,  sample_size:1,  work_time:1,  hosts:None, nb_output:1
+Compute
+Results
+    [ y0 ]
+0 : [ 2  ]
+Results are OK.
+Workdir not found: ok.
+
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:ok,  make_error:True,  tmpdir:,  sample_size:10,  work_time:0.1,  hosts:None, nb_output:1
+Compute
+====== An error raised, that's ok ======
+Workdir found. Cleaned.
+
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:no,  make_error:True,  tmpdir:,  sample_size:4,  work_time:0.1,  hosts:None, nb_output:1
+Compute
+====== An error raised, that's ok ======
+Workdir found. Cleaned.
+
+test_type:local,  test_point:False,  test_analytical:False,  cleanup:all,  make_error:True,  tmpdir:,  sample_size:4,  work_time:0.1,  hosts:None, nb_output:1
+Compute
+====== An error raised, that's ok ======
+Workdir not found: ok.
+

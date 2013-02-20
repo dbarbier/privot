@@ -1,0 +1,241 @@
+2007-12-03 09:53  conty
+
+	* [r700] trunk/ChangeLog, trunk/doc/ChangeLog, trunk/gui/ChangeLog,
+	  trunk/lib/ChangeLog, trunk/python/ChangeLog,
+	  trunk/validation/ChangeLog, ChangeLog,
+	  trunk/wrappers/WrapperTemplate/ChangeLog: Update ChangeLog with
+	  svn2cl
+
+2007-11-09 11:28  dutka
+
+	* [r632] trunk/Makefile.am, trunk/configure.ac,
+	  trunk/debian/changelog, trunk/debian/changelog.dapper,
+	  trunk/debian/changelog.edgy, trunk/debian/changelog.feisty,
+	  trunk/debian/changelog.gutsy, trunk/debian/changelog.ubuntu,
+	  trunk/doc/configure.ac, trunk/doc/m4/ot_check_openturns.m4,
+	  trunk/doc/src/UseCasesGuide/GenericInformation.tex,
+	  trunk/gentoo/sci-mathematics/openturns/openturns-0.10.0.ebuild,
+	  trunk/gentoo/sci-mathematics/openturns/openturns-0.11.0.ebuild,
+	  trunk/gentoo/sci-mathematics/rot/rot-1.4.3.ebuild,
+	  trunk/gui/configure.ac, trunk/gui/m4/ot_check_openturns.m4,
+	  trunk/lib/Makefile.am, trunk/lib/configure.ac,
+	  trunk/lib/m4/ot_check_openturns.m4, trunk/python/configure.ac,
+	  trunk/python/m4/ot_check_openturns.m4,
+	  trunk/validation/configure.ac,
+	  trunk/validation/m4/ot_check_openturns.m4, ot_check_openturns.m4,
+	  trunk/wrappers/DistributedWrapper/config/ot_check_openturns.m4,
+	  trunk/wrappers/WrapperTemplate/m4/ot_check_openturns.m4: Change
+	  version number from 0.10.0 to 0.11.0.
+	  Better installation of some files (especially documentation).
+	  Closes #32.
+
+2007-11-09 08:20  dutka
+
+	* [r631] trunk/config, trunk/doc, trunk/doc/config,
+	  trunk/doc/m4/ot_check_openturns.m4, trunk/gui,
+	  trunk/gui/m4/ot_check_openturns.m4, trunk/lib,
+	  trunk/lib/configure.ac, trunk/lib/etc/openturns.conf.in,
+	  trunk/lib/include/Makefile.am, trunk/lib/include/OT.hxx,
+	  trunk/lib/include/OTdebug.h, trunk/lib/m4/Makefile.am,
+	  trunk/lib/m4/ot_check_openturns.m4,
+	  trunk/lib/src/Base/Common/Makefile.am,
+	  trunk/lib/src/Base/Common/OSS.cxx,
+	  trunk/lib/src/Base/Common/OSS.hxx,
+	  trunk/lib/src/Base/Common/ResourceMap.cxx,
+	  trunk/lib/src/Base/Common/WrapperCommon.cxx,
+	  trunk/lib/src/Base/Common/WrapperCommon.h,
+	  trunk/lib/src/Base/Common/WrapperData.cxx,
+	  trunk/lib/src/Base/Common/WrapperFile.cxx,
+	  trunk/lib/src/Base/Common/WrapperInterface.h,
+	  trunk/lib/src/Base/Common/XMLStorageManager.cxx,
+	  trunk/lib/src/Base/Func/WrapperObject.cxx,
+	  trunk/lib/src/Uncertainty/Algorithm/Simulation/Result.cxx,
+	  trunk/lib/test/poutre.cxx, trunk/lib/test/poutre_external.xml,
+	  trunk/lib/test/poutre_external_infile1,
+	  trunk/lib/test/poutre_external_infile2, trunk/python,
+	  trunk/python/config, trunk/python/m4/ot_check_openturns.m4,
+	  trunk/python/test/poutre_external.xml, trunk/validation,
+	  trunk/validation/config,
+	  trunk/validation/m4/ot_check_openturns.m4, ot_check_openturns.m4,
+	  trunk/wrappers/DistributedWrapper/config/ot_check_openturns.m4,
+	  trunk/wrappers/WrapperTemplate/configure.ac,
+	  trunk/wrappers/WrapperTemplate/m4/ot_check_openturns.m4,
+	  trunk/wrappers/WrapperTemplate/m4/ot_debug.m4: MERGE: merging
+	  from dutka/devel into trunk (rev. 572:629)
+	  trunk> svn merge -r 572:629 http://.../branch/dutka/devel
+	  
+	  Change data retrieving in wrapper output variable (format nows
+	  support \nnn).
+	  Add new entries for regexp shortcuts in configuration file.
+	  Fix typos.
+	  Add installation path substituted variable in
+	  ot_check_openturns.m4 macro.
+	  Add user readable error messages produced by wrapper.
+	  Fix bug in WrapperFile.cxx (state = "specific" wasn't correctly
+	  handled).
+	  Add new error return code for wrapper when a function is not
+	  implemented.
+	  Fix typo in ResourceMap.cxx.
+	  Fix bug in XMLStorageManager.cxx that prevent reloading of file
+	  saved under an absolute path. Close #25.
+	  Better precision managment in study XML files.
+	  Add --enable-debug option in WrapperTemplate.
+	  Suppress warnings in WrapperCommon.cxx.
+	  Add regular expression shortcut support. Now support \R, \I and
+	  \S shortcuts for easy regular expression writting.
+
+2007-10-05 21:15  dutka
+
+	* [r556] trunk/doc/configure.ac,
+	  trunk/doc/m4/ot_check_openturns.m4, trunk/gui/configure.ac,
+	  trunk/gui/m4/ot_check_openturns.m4, trunk/lib/configure.ac,
+	  trunk/lib/m4/ot_check_openturns.m4, trunk/python/configure.ac,
+	  trunk/python/m4/bnv_have_qt.m4,
+	  trunk/python/m4/ot_check_openturns.m4,
+	  trunk/python/m4/ot_check_qt.m4, trunk/validation/configure.ac,
+	  trunk/validation/m4/ot_check_openturns.m4, ot_check_openturns.m4,
+	  trunk/wrappers/DistributedWrapper/config/ot_check_openturns.m4,
+	  trunk/wrappers/WrapperTemplate/Makefile.am,
+	  trunk/wrappers/WrapperTemplate/m4/ot_check_openturns.m4,
+	  trunk/wrappers/WrapperTemplate/test_wcode.py,
+	  trunk/wrappers/WrapperTemplate/wcode.xml.in,
+	  trunk/wrappers/WrapperTemplate/wrapper.c: WARNING: partial commit
+	  when restructuring repository. Bug fixes in template
+	  implementation.
+
+2007-10-02 13:54  dutka
+
+	* [r552] trunk/bootstrap, trunk/configure.ac,
+	  trunk/doc/Makefile.am, trunk/doc/configure.ac,
+	  trunk/doc/m4/ot_check_openturns.m4, trunk/doc/src/Makefile.am,
+	  trunk/doc/src/logoOpenTURNS.pdf, trunk/gui/Makefile.am,
+	  trunk/gui/configure.ac, trunk/gui/m4/ot_check_openturns.m4,
+	  trunk/gui/src/Makefile.am, trunk/lib/configure.ac,
+	  trunk/lib/m4/ot_check_openturns.m4, trunk/python/Makefile.am,
+	  trunk/python/configure.ac, trunk/python/m4/ot_check_openturns.m4,
+	  trunk/python/src/Makefile.am, trunk/validation/Makefile.am,
+	  trunk/validation/configure.ac,
+	  trunk/validation/m4/ot_check_openturns.m4,
+	  trunk/validation/src/Makefile.am, ot_check_openturns.m4,
+	  trunk/wrappers/DistributedWrapper/OpenTURNSWrapper/Makefile.am,
+	  trunk/wrappers/DistributedWrapper/config/ot_check_openturns.m4,
+	  trunk/wrappers/MyWrapper/Makefile.am,
+	  trunk/wrappers/MyWrapper/ot_check_openturns.m4: WARNING: partial
+	  commit when restructuring repository. Many bugs fixes
+
+2007-05-24 10:02  dutka
+
+	* [r446] trunk/COPYING, trunk/config/ot_debug.m4,
+	  trunk/src/Base/Common/PersistentObject.cxx,
+	  trunk/src/Base/Common/PersistentObject.hxx,
+	  trunk/src/Base/Common/PlatformInfo.cxx,
+	  trunk/src/Base/Common/PlatformInfo.hxx,
+	  trunk/src/Base/Common/ResourceMap.cxx,
+	  trunk/src/Base/Diff/CenteredFiniteDifferenceGradient.cxx,
+	  trunk/src/Base/Diff/CenteredFiniteDifferenceGradient.hxx,
+	  trunk/src/Base/Diff/CenteredFiniteDifferenceHessian.cxx,
+	  trunk/src/Base/Diff/CenteredFiniteDifferenceHessian.hxx,
+	  trunk/src/Base/Diff/NonCenteredFiniteDifferenceGradient.cxx,
+	  trunk/src/Base/Diff/NonCenteredFiniteDifferenceGradient.hxx,
+	  trunk/src/Base/Func/ComposedNumericalMathFunction.cxx,
+	  trunk/src/Base/Func/ComputedNumericalMathEvaluationImplementation.cxx,
+	  trunk/src/Base/Func/ComputedNumericalMathEvaluationImplementation.hxx,
+	  trunk/src/Base/Func/ComputedNumericalMathGradientImplementation.cxx,
+	  trunk/src/Base/Func/ComputedNumericalMathGradientImplementation.hxx,
+	  trunk/src/Base/Func/ComputedNumericalMathHessianImplementation.cxx,
+	  trunk/src/Base/Func/ComputedNumericalMathHessianImplementation.hxx,
+	  trunk/src/Base/Func/NoNumericalMathEvaluationImplementation.cxx,
+	  trunk/src/Base/Func/NoNumericalMathEvaluationImplementation.hxx,
+	  trunk/src/Base/Func/NoNumericalMathGradientImplementation.cxx,
+	  trunk/src/Base/Func/NoNumericalMathGradientImplementation.hxx,
+	  trunk/src/Base/Func/NoNumericalMathHessianImplementation.cxx,
+	  trunk/src/Base/Func/NoNumericalMathHessianImplementation.hxx,
+	  trunk/src/Base/Func/NumericalMathFunctionImplementation.cxx,
+	  trunk/src/Base/Graph/GraphImplementation.hxx,
+	  trunk/src/Base/Optim/AbdoRackwitz/AbdoRackwitz.cxx,
+	  trunk/src/Base/Optim/AbdoRackwitz/AbdoRackwitzSpecificParameters.cxx,
+	  trunk/src/Base/Optim/Cobyla/CobylaSpecificParameters.cxx,
+	  trunk/src/Base/Optim/NearestPointAlgorithmImplementation.hxx,
+	  trunk/src/Base/Type/Indices.cxx,
+	  trunk/src/UI/GUI/CalculationC3.cxx,
+	  trunk/src/UI/GUI/DistributionProperty.cxx,
+	  trunk/src/UI/TUI/Makefile.am, trunk/src/UI/TUI/TemplateDefs.i,
+	  trunk/src/UI/TUI/openturns.i,
+	  trunk/src/Uncertainty/Algorithm/Analytical/AnalyticalResult.cxx,
+	  trunk/src/Uncertainty/Algorithm/Simulation/Result.cxx,
+	  trunk/src/Uncertainty/Distribution/NormalCopula.cxx,
+	  trunk/src/Uncertainty/StatTests/FittingTest.cxx,
+	  trunk/src/Uncertainty/StatTests/HypothesisTest.cxx,
+	  trunk/src/Uncertainty/StatTests/VisualTest.cxx,
+	  trunk/test/poutre_threads.cxx, trunk/test/poutre_threads.xml,
+	  trunk/test/python_installcheck_testsuite.at,
+	  trunk/test/t_FittingTest_std.at,
+	  trunk/test/t_FittingTest_std.atpy,
+	  trunk/test/t_KernelSmoothing_std.atpy,
+	  trunk/test/t_KernelSmoothing_std.py, trunk/test/t_Study_load.py,
+	  trunk/test/t_Study_save.py, ., AUTHORS, COPYING, ChangeLog,
+	  INSTALL, Makefile.am, NEWS, README, aclocal.m4, bootstrap,
+	  configure.ac, ot_check_openturns.m4, src,
+	  src/AnalyticalFunctionCompiler.cxx,
+	  src/AnalyticalFunctionCompiler.hxx, src/CreateLibrary.cxx,
+	  src/CreateSourceCode.cxx, src/CreateWrapper.cxx, src/Main.cxx,
+	  src/Makefile.am: MERGE: merging from experiments into trunk (rev.
+	  433:445)
+	  trunk> svn merge -r 433:445 http://.../branches/experiments
+	  
+	  Add save/load methods for FORM::Result class.
+	  Add save/load methods for SORM::Result class.
+	  Fix a bug in FittingTest class.
+	  Fix a small bug in GraphImplementation class.
+	  Remove debug information in LinearModelTest class.
+	  Add AnalyticalFunctionCompiler tool in wrapper/ directory.
+	  Fix a small bug in FittingTest class.
+	  Complete poutre_thread.cxx, which is an example of multi-threaded
+	  OT wrapper.
+	  Fix a bug in NormalCopula class.
+	  Add factories for the following classes:
+	  ComputedNumericalMathEvaluationImplementation
+	  ComputedNumericalMathGradientImplementation
+	  ComputedNumericalMathHessianImplementation
+	  NoNumericalMathEvaluationImplementation
+	  NoNumericalMathGradientImplementation
+	  NoNumericalMathHessianImplementation
+	  to make save/load methodes of Event class work.
+	  Fix bug in poutre.cxx wrapper
+	  Add save/load methods to the following classes:
+	  ComputedNumericalMathEvaluationImplementation
+	  ComputedNumericalMathGradientImplementation
+	  ComputedNumericalMathHessianImplementation
+	  NoNumericalMathEvaluationImplementation
+	  NoNumericalMathGradientImplementation
+	  NoNumericalMathHessianImplementation
+	  Add template definitions to TUI.
+	  Add PlatformInfo to TUI.
+
+2007-05-16 12:32  lebrun
+
+	* [r441]
+	  branches/experiments/src/Uncertainty/StatTests/FittingTest.cxx,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/AUTHORS,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/COPYING,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/ChangeLog,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/INSTALL,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/Makefile.am,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/NEWS,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/README,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/aclocal.m4,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/bootstrap,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/configure.ac,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/ot_check_openturns.m4,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/src,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/src/AnalyticalFunctionCompiler.cxx,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/src/AnalyticalFunctionCompiler.hxx,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/src/CreateLibrary.cxx,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/src/CreateSourceCode.cxx,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/src/CreateWrapper.cxx,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/src/Main.cxx,
+	  branches/experiments/wrappers/AnalyticalFunctionCompiler/src/Makefile.am:
+	  Add AnalyticalFunctionCompiler tool in wrapper/ directory.
+	  Fix a small bug in FittingTest class.
+

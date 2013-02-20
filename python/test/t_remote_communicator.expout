@@ -1,0 +1,44 @@
+== mkdir
+== send existing file
+== check file there
+== read all with handle
+coucou
+salut
+ouech?
+== cleanup
+== write
+== read step by step
+couc
+o
+u
+salut
+ouech?
+== read by line
+coucou
+
+salut
+
+ouech?
+== rmdir
+== mkdir
+== send existing file
+== check file there
+== read all with handle
+coucou
+salut
+ouech?
+== cleanup
+== write
+== read step by step
+couc
+o
+u
+salut
+ouech?
+== read by line
+coucou
+
+salut
+
+ouech?
+== rmdir

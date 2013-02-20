@@ -1,0 +1,4 @@
+sinGraph (ALL)=sinGraph_ALL.png, sinGraph_ALL.eps, sinGraph_ALL.fig
+sinGraph (PNG)=sinGraph_PNG.png
+sinGraph (EPS)=sinGraph_EPS.eps
+sinGraph (FIG)=sinGraph_FIG.fig

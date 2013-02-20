@@ -1,0 +1,77 @@
+myDefautModel = class=UserDefinedSpectralModel DSPCollection=[] frequencyGrid=class=RegularGrid name=Unnamed start=0 step=1 n=1
+myModel=class=UserDefinedSpectralModel DSPCollection=[class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(4,0),(2.66667,0),(0,0),(2,0)],class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)],class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0391908,0),(0.058075,0),(0,0),(0.0761435,0)],class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0175135,0),(0.0261272,0),(0,0),(0.0345728,0)],class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.00987023,0),(0.0147598,0),(0,0),(0.0195954,0)]] frequencyGrid=class=RegularGrid name=Unnamed start=0 step=0.4 n=5
+frequency=-0.4, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)]
+frequency=-0.333333, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.21568,0),(0.303092,0),(0,0),(0.371299,0)]
+frequency=-0.266667, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.32708,0),(0.445123,0),(0,0),(0.525299,0)]
+frequency=-0.2, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(4,0),(2.66667,0),(0,0),(2,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.546706,0),(0.700399,0),(0,0),(0.775453,0)]
+frequency=-0.133333, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(4,0),(2.66667,0),(0,0),(2,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(1.0506,0),(1.18639,0),(0,0),(1.1752,0)]
+frequency=-0.0666667, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(4,0),(2.66667,0),(0,0),(2,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(2.3504,0),(2.03263,0),(0,0),(1.70146,0)]
+frequency=0, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(4,0),(2.66667,0),(0,0),(2,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(4,0),(2.66667,0),(0,0),(2,0)]
+frequency=0.0666667, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(4,0),(2.66667,0),(0,0),(2,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(2.3504,0),(2.03263,0),(0,0),(1.70146,0)]
+frequency=0.133333, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(4,0),(2.66667,0),(0,0),(2,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(1.0506,0),(1.18639,0),(0,0),(1.1752,0)]
+frequency=0.2, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(4,0),(2.66667,0),(0,0),(2,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.546706,0),(0.700399,0),(0,0),(0.775453,0)]
+frequency=0.266667, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.32708,0),(0.445123,0),(0,0),(0.525299,0)]
+frequency=0.333333, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.21568,0),(0.303092,0),(0,0),(0.371299,0)]
+frequency=0.4, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)]
+frequency=0.466667, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.113026,0),(0.163755,0),(0,0),(0.208387,0)]
+frequency=0.533333, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0871124,0),(0.127206,0),(0,0),(0.16354,0)]
+frequency=0.6, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.152287,0),(0.218053,0),(0,0),(0.273353,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0691456,0),(0.101525,0),(0,0),(0.131473,0)]
+frequency=0.666667, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0391908,0),(0.058075,0),(0,0),(0.0761435,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0561925,0),(0.0828342,0),(0,0),(0.10784,0)]
+frequency=0.733333, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0391908,0),(0.058075,0),(0,0),(0.0761435,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0465536,0),(0.0688291,0),(0,0),(0.089966,0)]
+frequency=0.8, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0391908,0),(0.058075,0),(0,0),(0.0761435,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0391908,0),(0.058075,0),(0,0),(0.0761435,0)]
+frequency=0.866667, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0391908,0),(0.058075,0),(0,0),(0.0761435,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0334418,0),(0.0496439,0),(0,0),(0.0652472,0)]
+frequency=0.933333, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0391908,0),(0.058075,0),(0,0),(0.0761435,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0288683,0),(0.0429153,0),(0,0),(0.056513,0)]
+frequency=1, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0391908,0),(0.058075,0),(0,0),(0.0761435,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0251709,0),(0.0374617,0),(0,0),(0.049409,0)]
+frequency=1.06667, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0175135,0),(0.0261272,0),(0,0),(0.0345728,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0221397,0),(0.0329814,0),(0,0),(0.0435562,0)]
+frequency=1.13333, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0175135,0),(0.0261272,0),(0,0),(0.0345728,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0196241,0),(0.0292567,0),(0,0),(0.0386789,0)]
+frequency=1.2, myModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0175135,0),(0.0261272,0),(0,0),(0.0345728,0)], referenceModel=
+class=HermitianMatrix dimension=2 implementation=class=ComplexMatrixImplementation name=Unnamed rows=2 columns=2 values=[(0.0175135,0),(0.0261272,0),(0,0),(0.0345728,0)]

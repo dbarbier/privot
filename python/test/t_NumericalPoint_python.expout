@@ -1,0 +1,5 @@
+class=NumericalPoint name=Unnamed dimension=3 values=[1.1,2.2,3.3]
+class=NumericalPoint name=Unnamed dimension=3 values=[1.1,2.2,3.3]
+Equality ?  True
+rslice[:]= [1.1,2.2,3.3]
+rslice[1:4]= [2.2,3.3]

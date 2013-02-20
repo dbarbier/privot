@@ -1,0 +1,36 @@
+# Distributed python wrapper todo list
+
+detect NFS if available
+improve tranfert on localhost
+get remote file
+progress bar during file transfer
+parallel fetch: try to get results of each hosts anytimes
+
+print less logs (threads that print a summary every 5 minutes (nb of points), at the end: max moy min compute time, speedup.
+put a log summary every 2 minutes to avoid ssh freeze. or give an option tune summmary frequency
+
+test relaunch compute?
+handle ssh communication error
+
+warning if localhost != hostname, or localhost != localcompute, hostname hostname...
+weight on nodes : change the params n_cores to a list of cores (one per host) OR give RAM and CPU of a single compute and compute the max nb of parallel compute launchable at a time OR call a user define function on each machine
+
+be able to relaunch on a point or on a sample in order to relaunch from any point
+on error, possibility to wait a correct point (the user would relaunch the point manually) 
+choose behavior on point error : crash on any point error; return default settable value (i.e. NaN) on point error; crash if nb point > x% (OT trow the whole sample if an error arise : no cache of the point that succeed (perhaps to be modified in OT))
+on coupling_tools.execute function add a walltime argument : kill the process if it last longer than x seconds.
+
+launch through a frontale
+launch with some more scheduler (SGE, ...)
+compress (tar or ssh -C) before send/receive them
+
+improve pickle perf (use cpickle on file < 1GB)
+
+improve when computing arithmetic function : python threading is really slow : _exec_sample + multiprocessing + numpy in wrapper?
+
+reliable stop of subprocess (especially windows) when stopping OT script (e.g. CTRL-c)
+improvment: multiprocessing or threading module? multiprocessing would permit os.chdir? would avoid pickling between core_dispatcher and wrapper_launcher?
+
+remove / at the end of tmpdir if user put it too
+
+

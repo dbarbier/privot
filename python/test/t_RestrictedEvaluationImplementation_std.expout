@@ -1,0 +1,3 @@
+restricted evaluation= class=RestrictedEvaluationImplementation name=Unnamed evaluation=class=AnalyticalNumericalMathEvaluationImplementation name=Unnamed inputVariablesNames=[x0,x1,x2] outputVariablesNames=[y0] formulas=[x0^2+2*x1+3*x2^3] restrictionIndices=[1,2] referencePoint=class=NumericalPoint name=Unnamed dimension=3 values=[-1,1,3]
+value at  [4.0, -4.0] = [-183]
+reference value= [-183]

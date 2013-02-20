@@ -1,0 +1,8 @@
+.svn
+configure
+autom4te.cache
+aclocal.m4
+Makefile.in
+build
+svn.log
+

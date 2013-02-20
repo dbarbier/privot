@@ -1,0 +1,17 @@
+Distribution  class=Multinomial name=Multinomial dimension=3 p=class=NumericalPoint name=Unnamed dimension=3 values=[0.25,0.25,0.25] n=5
+Distribution  Multinomial(n = 5, p = [0.25,0.25,0.25])
+Elliptical =  False
+Continuous =  False
+oneRealization= [1,2,0]
+oneSample first= class=NumericalPoint name=Unnamed dimension=3 values=[0,1,4]  last= class=NumericalPoint name=Unnamed dimension=3 values=[3,1,0]
+mean= class=NumericalPoint name=Unnamed dimension=3 values=[1.2635,1.2335,1.2564]
+covariance= class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[0.937762,-0.300457,-0.315593,-0.300457,0.930871,-0.314301,-0.315593,-0.314301,0.947554]
+Point=  class=NumericalPoint name=Unnamed dimension=3 values=[1,1,1]
+log pdf=-2.837127
+pdf     =0.058594
+cdf=0.13281
+quantile= class=NumericalPoint name=Unnamed dimension=3 values=[3,3,3]
+cdf(quantile)= 0.953125
+mean= class=NumericalPoint name=Unnamed dimension=3 values=[1.25,1.25,1.25]
+covariance= class=CovarianceMatrix dimension=3 implementation=class=MatrixImplementation name=Unnamed rows=3 columns=3 values=[0.9375,-0.3125,-0.3125,-0.3125,0.9375,-0.3125,-0.3125,-0.3125,0.9375]
+parameters= [class=NumericalPointWithDescription name=marginal 1 dimension=2 description=[n,p_0] values=[5,0.25],class=NumericalPointWithDescription name=marginal 2 dimension=2 description=[n,p_1] values=[5,0.25],class=NumericalPointWithDescription name=marginal 3 dimension=2 description=[n,p_2] values=[5,0.25],class=NumericalPointWithDescription name=dependence dimension=4 description=[n,p_0,p_1,p_2] values=[5,0.25,0.25,0.25]]

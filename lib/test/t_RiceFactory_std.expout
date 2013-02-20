@@ -1,0 +1,8 @@
+Distribution          =class=Rice name=Rice dimension=1 sigma=0.5 nu=1.5
+Estimated distribution=class=Rice name=Rice dimension=1 sigma=0.498265 nu=1.5057
+Distribution from parameters=class=Rice name=Rice dimension=1 sigma=0.5 nu=1.5
+Default distribution=class=Rice name=Rice dimension=1 sigma=1 nu=0
+Rice          =class=Rice name=Rice dimension=1 sigma=0.5 nu=1.5
+Estimated rice=class=Rice name=Rice dimension=1 sigma=0.498265 nu=1.5057
+Rice from parameters=class=Rice name=Rice dimension=1 sigma=0.5 nu=1.5
+Default rice=class=Rice name=Rice dimension=1 sigma=1 nu=0

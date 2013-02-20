@@ -1,0 +1,14 @@
+database= NumericalMathFunction :
+  input  : [x0,x1]
+  output : [y0]
+  evaluation : DatabaseNumericalMathEvaluationImplementation
+    input sample :
+0 : [ 1 1 ]
+1 : [ 2 2 ]
+    output sample :
+0 : [ 4 ]
+1 : [ 5 ]
+  gradient   :   NumericalMathGradientImplementation
+  hessian    :   NumericalMathHessianImplementation
+x= [1.8,1.8]
+database(x)= [5]

@@ -1,0 +1,9 @@
+Default 1D mesh=class=Mesh name=Unnamed dimension=1 vertices=class=NumericalSample name=Unnamed description=[] implementation=class=NumericalSampleImplementation name=Unnamed size=2 dimension=1 data=[class=NumericalPoint name=Unnamed dimension=1 values=[0],class=NumericalPoint name=Unnamed dimension=1 values=[1]] simplices=[[0,1]]
+1D mesh=class=Mesh name=Unnamed dimension=1 vertices=class=NumericalSample name=Unnamed description=[] implementation=class=NumericalSampleImplementation name=Unnamed size=4 dimension=1 data=[class=NumericalPoint name=Unnamed dimension=1 values=[0.5],class=NumericalPoint name=Unnamed dimension=1 values=[1.5],class=NumericalPoint name=Unnamed dimension=1 values=[2.1],class=NumericalPoint name=Unnamed dimension=1 values=[2.7]] simplices=[[0,1],[1,2],[2,3]]
+Is empty? false
+vertices=class=NumericalSample name=Unnamed description=[] implementation=class=NumericalSampleImplementation name=Unnamed size=4 dimension=1 data=[class=NumericalPoint name=Unnamed dimension=1 values=[0.5],class=NumericalPoint name=Unnamed dimension=1 values=[1.5],class=NumericalPoint name=Unnamed dimension=1 values=[2.1],class=NumericalPoint name=Unnamed dimension=1 values=[2.7]]
+simplices=[[0,1],[1,2],[2,3]]
+volume=2.2
+First simplex volume=1
+is p=class=NumericalPoint name=Unnamed dimension=1 values=[1.3] in mesh? true
+2D mesh=class=Mesh name=Unnamed dimension=2 vertices=class=NumericalSample name=Unnamed description=[,] implementation=class=NumericalSampleImplementation name=Unnamed size=6 dimension=2 data=[class=NumericalPoint name=Unnamed dimension=2 values=[0,0],class=NumericalPoint name=Unnamed dimension=2 values=[1,0],class=NumericalPoint name=Unnamed dimension=2 values=[1,1],class=NumericalPoint name=Unnamed dimension=2 values=[1.5,1],class=NumericalPoint name=Unnamed dimension=2 values=[2,1.5],class=NumericalPoint name=Unnamed dimension=2 values=[0.5,1.5]] simplices=[[0,1,2],[1,2,3],[2,3,4],[2,4,5],[0,2,5]]

@@ -1,0 +1,156 @@
+//                                               -*- C++ -*-
+/**
+ *  @file  Laplace.hxx
+ *  @brief The Laplace distribution
+ *
+ *  Copyright (C) 2005-2013 EDF-EADS-Phimeca
+ *
+ *  This library is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  @author lebrun
+ *  @date   2008-11-23 16:03:50 +0100 (dim, 23 nov 2008)
+ *  Id      Laplace.hxx 1026 2008-11-23 15:03:50Z lebrun
+ */
+#ifndef OPENTURNS_LAPLACE_HXX
+#define OPENTURNS_LAPLACE_HXX
+
+#include "NonEllipticalDistribution.hxx"
+#include "ResourceMap.hxx"
+
+BEGIN_NAMESPACE_OPENTURNS
+
+/**
+ * @class Laplace
+ *
+ * The Laplace distribution.
+ */
+class Laplace
+  : public NonEllipticalDistribution
+{
+  CLASSNAME;
+public:
+
+  typedef Pointer<DistributionImplementation> Implementation;
+
+  /** Default constructor */
+  Laplace();
+
+  /** Parameters constructor */
+  Laplace(const NumericalScalar lambda,
+          const NumericalScalar mu = 0.0);
+
+  /** Comparison operator */
+  Bool operator ==(const Laplace & other) const;
+
+  /** String converter */
+  String __repr__() const;
+  String __str__(const String & offset = "") const;
+
+
+
+  /* Interface inherited from Distribution */
+  /** Virtual constructor */
+  virtual Laplace * clone() const;
+
+  /** Get one realization of the distribution */
+  NumericalPoint getRealization() const;
+
+  /** Get the DDF of the distribution */
+  using NonEllipticalDistribution::computeDDF;
+  NumericalPoint computeDDF(const NumericalPoint & point) const;
+
+  /** Get the PDF of the distribution */
+  using NonEllipticalDistribution::computePDF;
+  NumericalScalar computePDF(const NumericalPoint & point) const;
+  using NonEllipticalDistribution::computeLogPDF;
+  NumericalScalar computeLogPDF(const NumericalPoint & point) const;
+
+  /** Get the CDF of the distribution */
+  using NonEllipticalDistribution::computeCDF;
+  NumericalScalar computeCDF(const NumericalPoint & point) const;
+
+  /** Get the characteristic function of the distribution, i.e. phi(u) = E(exp(I*u*X)) */
+  NumericalComplex computeCharacteristicFunction(const NumericalScalar x) const;
+  NumericalComplex computeLogCharacteristicFunction(const NumericalScalar x) const;
+
+  /** Get the PDFGradient of the distribution */
+  NumericalPoint computePDFGradient(const NumericalPoint & point) const;
+
+  /** Get the CDFGradient of the distribution */
+  NumericalPoint computeCDFGradient(const NumericalPoint & point) const;
+
+  /** Get the standard deviation of the distribution */
+  NumericalPoint getStandardDeviation() const;
+
+  /** Get the skewness of the distribution */
+  NumericalPoint getSkewness() const;
+
+  /** Get the kurtosis of the distribution */
+  NumericalPoint getKurtosis() const;
+
+  /** Get the raw moments of the standardized distribution */
+  NumericalPoint getStandardMoment(const UnsignedLong n) const;
+
+  /** Get the standard representative in the parametric family, associated with the standard moments */
+  Implementation getStandardRepresentative() const;
+
+  /** Parameters value and description accessor */
+  NumericalPointWithDescriptionCollection getParametersCollection() const;
+  using NonEllipticalDistribution::setParametersCollection;
+  void setParametersCollection(const NumericalPointCollection & parametersCollection);
+
+  /* Interface specific to Laplace */
+
+  /** Mu accessor */
+  void setMu(const NumericalScalar mu);
+  NumericalScalar getMu() const;
+
+  /** Lambda accessor */
+  void setLambda(const NumericalScalar lambda);
+  NumericalScalar getLambda() const;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(Advocate & adv);
+
+protected:
+
+
+private:
+
+  /** Compute the mean of the distribution */
+  void computeMean() const;
+
+  /** Compute the covariance of the distribution */
+  void computeCovariance() const;
+
+  /** Get the quantile of the distribution */
+  NumericalScalar computeScalarQuantile(const NumericalScalar prob,
+                                        const Bool tail = false,
+                                        const NumericalScalar precision = ResourceMap::GetAsNumericalScalar("DistributionImplementation-DefaultQuantileEpsilon")) const;
+
+  /** The lamdbda of the Laplace distribution */
+  NumericalScalar lambda_;
+
+  /** The mu of the Laplace distribution */
+  NumericalScalar mu_;
+
+}; /* class Laplace */
+
+
+END_NAMESPACE_OPENTURNS
+
+#endif /* OPENTURNS_LAPLACE_HXX */

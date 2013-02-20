@@ -1,0 +1,35 @@
+pKolmogorov( 1 ,  0.1 )=0 , complementary=1
+pKolmogorov( 1 ,  0.3 )=0 , complementary=1
+pKolmogorov( 1 ,  0.5 )=0 , complementary=1
+pKolmogorov( 1 ,  0.7 )=0.4 , complementary=0.6
+pKolmogorov( 1 ,  0.9 )=0.8 , complementary=0.2
+pKolmogorov( 2 ,  0.1 )=0 , complementary=1
+pKolmogorov( 2 ,  0.3 )=0.02 , complementary=0.98
+pKolmogorov( 2 ,  0.5 )=0.5 , complementary=0.5
+pKolmogorov( 2 ,  0.7 )=0.82 , complementary=0.18
+pKolmogorov( 2 ,  0.9 )=0.98 , complementary=0.02
+pKolmogorov( 3 ,  0.1 )=0 , complementary=1
+pKolmogorov( 3 ,  0.3 )=0.113778 , complementary=0.886222
+pKolmogorov( 3 ,  0.5 )=0.666667 , complementary=0.333333
+pKolmogorov( 3 ,  0.7 )=0.946 , complementary=0.054
+pKolmogorov( 3 ,  0.9 )=0.998 , complementary=0.002
+pKolmogorov( 4 ,  0.1 )=0 , complementary=1
+pKolmogorov( 4 ,  0.3 )=0.2292 , complementary=0.7708
+pKolmogorov( 4 ,  0.5 )=0.8125 , complementary=0.1875
+pKolmogorov( 4 ,  0.7 )=0.9831 , complementary=0.0169
+pKolmogorov( 4 ,  0.9 )=0.9998 , complementary=0.0002
+pKolmogorov( 5 ,  0.1 )=0 , complementary=1
+pKolmogorov( 5 ,  0.3 )=0.336 , complementary=0.664
+pKolmogorov( 5 ,  0.5 )=0.888 , complementary=0.112
+pKolmogorov( 5 ,  0.7 )=0.99444 , complementary=0.00556
+pKolmogorov( 5 ,  0.9 )=0.99998 , complementary=2e-05
+pKolmogorov( 6 ,  0.1 )=9.87654e-07 , complementary=0.999999
+pKolmogorov( 6 ,  0.3 )=0.444985 , complementary=0.555015
+pKolmogorov( 6 ,  0.5 )=0.934414 , complementary=0.0655864
+pKolmogorov( 6 ,  0.7 )=0.998188 , complementary=0.00181198
+pKolmogorov( 6 ,  0.9 )=0.999998 , complementary=2e-06
+pKolmogorovAsymptotic( 0.1 )=6.60931e-53 , complementary=1
+pKolmogorovAsymptotic( 0.3 )=9.3058e-06 , complementary=0.999991
+pKolmogorovAsymptotic( 0.5 )=0.0360548 , complementary=0.963945
+pKolmogorovAsymptotic( 0.7 )=0.288765 , complementary=0.711235
+pKolmogorovAsymptotic( 0.9 )=0.607266 , complementary=0.392734

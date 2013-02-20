@@ -1,0 +1,28 @@
+** Welcome to Open TURNS ! **
+
+Before trying to compile and install the software, be sure to get access to some
+mandatory tools Open TURNS relies upon. These are (at least):
+* R (available at http://r-project.org)
+* BOOST (available at http://www.boost.org)
+* Xerces library (available at http://www.apache.org)
+* Qt (available at http://www.trolltech.com)
+* etc.
+
+You may check the full list with the corresponding version at our website:
+http://www.openturns.org
+in the "Downloading and installing" section.
+
+When you are done with those dependencies, you can process with the compilation and installation.
+See the INSTALL file for instructions.
+
+For the quick readers:
+./configure --prefix=<your_local_path>
+make
+make check
+make install
+make installcheck
+
+Don't skip the check stages. They assure you the software you've just compiled behaves correctly.
+
+Enjoy !
+The OpenTURNS' development TEAM.

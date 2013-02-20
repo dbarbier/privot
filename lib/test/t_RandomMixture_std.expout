@@ -1,0 +1,134 @@
+testCases=[[class=Uniform name=Uniform dimension=1 a=-1 b=3,class=Uniform name=Uniform dimension=1 a=-1 b=3],[class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[0] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[1] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1],class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[1] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[2] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1],class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[-2] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[2] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]],[class=Exponential name=Exponential dimension=1 lambda=1 gamma=0,class=Exponential name=Exponential dimension=1 lambda=1 gamma=0,class=Exponential name=Exponential dimension=1 lambda=1 gamma=0]]
+references=[Triangular(a = -2, m = 2, b = 6),Normal(mu = -1, sigma = 3),Gamma(k = 3, lambda = 1, gamma = 0)]
+Distribution class=RandomMixture name=RandomMixture distribution collection=[class=Uniform name=Uniform dimension=1 a=-1 b=3,class=Uniform name=Uniform dimension=1 a=-1 b=3] constant=0
+Distribution RandomMixture(Uniform(a = -1, b = 3) + Uniform(a = -1, b = 3))
+Elliptical = false
+Continuous = true
+oneRealization=class=NumericalPoint name=Unnamed dimension=1 values=[4.05073]
+oneSample first=class=NumericalPoint name=Unnamed dimension=1 values=[-1.32888] last=class=NumericalPoint name=Unnamed dimension=1 values=[1.127]
+mean=class=NumericalPoint name=Unnamed dimension=1 values=[2.01098]
+covariance=class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[2.69551]
+Point= class=NumericalPoint name=Unnamed dimension=1 values=[0.5]
+ddf      =class=NumericalPoint name=Unnamed dimension=1 values=[0.0624961]
+ddf (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[0.0625]
+pdf      =0.15625
+pdf  (FD)=0.15625
+pdf (ref)=0.15625
+cdf      =0.195313
+cdf (ref)=0.195312
+characteristic function=(0.382574,0.595823)
+log characteristic function=(-0.345207,1)
+quantile      =class=NumericalPoint name=Unnamed dimension=1 values=[4.73509]
+quantile (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[4.73509]
+cdf(quantile)=0.95
+mean      =class=NumericalPoint name=Unnamed dimension=1 values=[2]
+mean (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[2]
+standard deviation      =class=NumericalPoint name=Unnamed dimension=1 values=[1.63299]
+standard deviation (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[1.63299]
+skewness      =class=NumericalPoint name=Unnamed dimension=1 values=[0]
+skewness (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+kurtosis      =class=NumericalPoint name=Unnamed dimension=1 values=[2.4]
+kurtosis (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[2.4]
+covariance      =class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[2.66667]
+covariance (ref)=class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[2.66667]
+parameters=[[Uniform_a : -1, Uniform_b : 3, Uniform_a : -1, Uniform_b : 3]]
+Standard representative=RandomMixture(Uniform(a = -1, b = 3) + Uniform(a = -1, b = 3))
+weights=class=NumericalPoint name=Unnamed dimension=2 values=[1,1]
+new weights=class=NumericalPoint name=Unnamed dimension=2 values=[2,2]
+blockMin=5
+blockMax=20
+maxSize=65536
+alpha=5
+beta=1447.81
+Distribution class=RandomMixture name=RandomMixture distribution collection=[class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[-1] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[3] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]] constant=0
+Distribution RandomMixture(Normal(mu = -1, sigma = 3))
+Elliptical = false
+Continuous = true
+oneRealization=class=NumericalPoint name=Unnamed dimension=1 values=[6.90993]
+oneSample first=class=NumericalPoint name=Unnamed dimension=1 values=[0.39896] last=class=NumericalPoint name=Unnamed dimension=1 values=[3.51942]
+mean=class=NumericalPoint name=Unnamed dimension=1 values=[-0.99718]
+covariance=class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[8.99894]
+Point= class=NumericalPoint name=Unnamed dimension=1 values=[0.5]
+ddf      =class=NumericalPoint name=Unnamed dimension=1 values=[-0.0195592]
+ddf (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[-0.0195592]
+pdf      =0.117355
+pdf  (FD)=0.117355
+pdf (ref)=0.117355
+cdf      =0.691462
+cdf (ref)=0.691462
+characteristic function=(0.284909,-0.155647)
+log characteristic function=(-1.125,-0.5)
+quantile      =class=NumericalPoint name=Unnamed dimension=1 values=[3.93456]
+quantile (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[3.93456]
+cdf(quantile)=0.95
+mean      =class=NumericalPoint name=Unnamed dimension=1 values=[-1]
+mean (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[-1]
+standard deviation      =class=NumericalPoint name=Unnamed dimension=1 values=[3]
+standard deviation (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+skewness      =class=NumericalPoint name=Unnamed dimension=1 values=[0]
+skewness (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[0]
+kurtosis      =class=NumericalPoint name=Unnamed dimension=1 values=[3]
+kurtosis (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+covariance      =class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[9]
+covariance (ref)=class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[9]
+parameters=[[Normal_mean : -1, Normal_standard deviation : 3]]
+Standard representative=RandomMixture(Normal(mu = -1, sigma = 3))
+weights=class=NumericalPoint name=Unnamed dimension=1 values=[1]
+new weights=class=NumericalPoint name=Unnamed dimension=1 values=[2]
+blockMin=5
+blockMax=20
+maxSize=65536
+alpha=5
+beta=10
+Distribution class=RandomMixture name=RandomMixture distribution collection=[class=Exponential name=Exponential dimension=1 lambda=1 gamma=0,class=Exponential name=Exponential dimension=1 lambda=1 gamma=0,class=Exponential name=Exponential dimension=1 lambda=1 gamma=0] constant=0
+Distribution RandomMixture(Exponential(lambda = 1, gamma = 0) + Exponential(lambda = 1, gamma = 0) + Exponential(lambda = 1, gamma = 0))
+Elliptical = false
+Continuous = true
+oneRealization=class=NumericalPoint name=Unnamed dimension=1 values=[4.56784]
+oneSample first=class=NumericalPoint name=Unnamed dimension=1 values=[3.74816] last=class=NumericalPoint name=Unnamed dimension=1 values=[1.66611]
+mean=class=NumericalPoint name=Unnamed dimension=1 values=[2.98622]
+covariance=class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[2.89388]
+Point= class=NumericalPoint name=Unnamed dimension=1 values=[0.5]
+ddf      =class=NumericalPoint name=Unnamed dimension=1 values=[0.227448]
+ddf (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[0.227449]
+pdf      =0.0758163
+pdf  (FD)=0.0758163
+pdf (ref)=0.0758163
+cdf      =0.0143877
+cdf (ref)=0.0143877
+characteristic function=(0.128,0.704)
+log characteristic function=(-0.334715,1.39094)
+quantile      =class=NumericalPoint name=Unnamed dimension=1 values=[6.29579]
+quantile (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[6.29579]
+cdf(quantile)=0.95
+mean      =class=NumericalPoint name=Unnamed dimension=1 values=[3]
+mean (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[3]
+standard deviation      =class=NumericalPoint name=Unnamed dimension=1 values=[1.73205]
+standard deviation (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[1.73205]
+skewness      =class=NumericalPoint name=Unnamed dimension=1 values=[1.1547]
+skewness (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[1.1547]
+kurtosis      =class=NumericalPoint name=Unnamed dimension=1 values=[5]
+kurtosis (ref)=class=NumericalPoint name=Unnamed dimension=1 values=[5]
+covariance      =class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[3]
+covariance (ref)=class=CovarianceMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[3]
+parameters=[[Exponential_lambda : 1, Exponential_gamma : 0, Exponential_lambda : 1, Exponential_gamma : 0, Exponential_lambda : 1, Exponential_gamma : 0]]
+Standard representative=RandomMixture(Exponential(lambda = 1, gamma = 0) + Exponential(lambda = 1, gamma = 0) + Exponential(lambda = 1, gamma = 0))
+weights=class=NumericalPoint name=Unnamed dimension=3 values=[1,1,1]
+new weights=class=NumericalPoint name=Unnamed dimension=3 values=[2,2,2]
+blockMin=5
+blockMax=20
+maxSize=65536
+alpha=5
+beta=608.254
+distribution=class=RandomMixture name=RandomMixture distribution collection=[class=Uniform name=Uniform dimension=1 a=-2 b=2,class=Exponential name=Exponential dimension=1 lambda=2 gamma=-3,class=Uniform name=Uniform dimension=1 a=-2 b=2,class=Exponential name=Exponential dimension=1 lambda=2 gamma=-3,class=Gamma name=Gamma dimension=1 k=3 lambda=4 gamma=-2,class=Normal name=Normal dimension=1 mean=class=NumericalPoint name=Unnamed dimension=1 values=[6] sigma=class=NumericalPoint name=Unnamed dimension=1 values=[13.4629] correlationMatrix=class=CorrelationMatrix dimension=1 implementation=class=MatrixImplementation name=Unnamed rows=1 columns=1 values=[1]] constant=-0.75
+distribution=RandomMixture(-Uniform(a = -2, b = 2) + 1.5 * Exponential(lambda = 2, gamma = -3) + 2.5 * Uniform(a = -2, b = 2) - 3.75 * Exponential(lambda = 2, gamma = -3) + 2.5 * Gamma(k = 3, lambda = 4, gamma = -2) + Normal(mu = 6, sigma = 13.4629))
+pdf(18.756)=0.0284128
+pdf(19.4226)=0.0282863
+pdf(20.0893)=0.0280966
+pdf(20.756)=0.027845
+pdf(21.4226)=0.0275332
+pdf(22.0893)=0.0271632
+pdf(22.756)=0.0267375
+pdf(23.4226)=0.0262588
+pdf(24.0893)=0.0257303
+pdf(24.756)=0.0251552

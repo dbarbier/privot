@@ -1,0 +1,7 @@
+InputDistribution = class=Normal name=Normal dimension=4 mean=class=NumericalPoint name=Unnamed dimension=4 values=[0.1,0.1,0.1,0.1] sigma=class=NumericalPoint name=Unnamed dimension=4 values=[1,1,1,1] correlationMatrix=class=CorrelationMatrix dimension=4 implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,0.25,0,0,0.25,1,0.25,0,0,0.25,1,0.25,0,0,0.25,1]
+First order mean=class=NumericalPoint name=Unnamed dimension=4 values=[0.1,0.1,0.1,0.1]
+Second order mean=class=NumericalPoint name=Unnamed dimension=4 values=[0.1,0.1,0.1,0.1]
+Covariance=class=CovarianceMatrix dimension=4 implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,0.25,0,0,0.25,1,0.25,0,0,0.25,1,0.25,0,0,0.25,1]
+Value at mean=class=NumericalPoint name=Unnamed dimension=4 values=[0.1,0.1,0.1,0.1]
+Gradient at mean=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=4 columns=4 values=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
+Hessian at mean=class=SymmetricTensor implementation=class=TensorImplementation name=Unnamed rows=4 columns=4 sheets=4 values=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]

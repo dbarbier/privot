@@ -1,0 +1,412 @@
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   sin(x)
+  gradient   :   
+  | d(y) / d(x) = cos(x) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-(sin(x))) 
+
+f( 0.4 )=3.8942e-01
+df( 0.4 )=9.2106e-01
+d2f( 0.4 )=-3.8942e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   cos(x)
+  gradient   :   
+  | d(y) / d(x) = (-(sin(x))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-(cos(x))) 
+
+f( 0.4 )=9.2106e-01
+df( 0.4 )=-3.8942e-01
+d2f( 0.4 )=-9.2106e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   tan(x)
+  gradient   :   
+  | d(y) / d(x) = (1)+((tan(x))^(2)) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (2*(((1)+((tan(x))^(2)))*(tan(x)))) 
+
+f( 0.4 )=4.2279e-01
+df( 0.4 )=1.1788e+00
+d2f( 0.4 )=9.9674e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   asin(x)
+  gradient   :   
+  | d(y) / d(x) = (1)/(sqrt((1)+(-1*x^2))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = ((x)/(sqrt((1)+(-1*x^2))))/((sqrt((1)+(-1*x^2)))^(2)) 
+
+f( 0.4 )=4.1152e-01
+df( 0.4 )=1.0911e+00
+d2f( 0.4 )=5.1957e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   acos(x)
+  gradient   :   
+  | d(y) / d(x) = (-1)/(sqrt((1)+(-1*x^2))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-(((x)/(sqrt((1)+(-1*x^2))))/((sqrt((1)+(-1*x^2)))^(2)))) 
+
+f( 0.4 )=1.1593e+00
+df( 0.4 )=-1.0911e+00
+d2f( 0.4 )=-5.1957e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   atan(x)
+  gradient   :   
+  | d(y) / d(x) = (1.54308)/((x^2)+(1)) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-3.08616*((x)/(((x^2)+(1))^(2)))) 
+
+f( 0.4 )=3.8051e-01
+df( 0.4 )=1.3302e+00
+d2f( 0.4 )=-9.1741e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   sinh(x)
+  gradient   :   
+  | d(y) / d(x) = cosh(x) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = sinh(x) 
+
+f( 0.4 )=4.1075e-01
+df( 0.4 )=1.0811e+00
+d2f( 0.4 )=4.1075e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   cosh(x)
+  gradient   :   
+  | d(y) / d(x) = sinh(x) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = cosh(x) 
+
+f( 0.4 )=1.0811e+00
+df( 0.4 )=4.1075e-01
+d2f( 0.4 )=1.0811e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   tanh(x)
+  gradient   :   
+  | d(y) / d(x) = (1)+((-((tanh(x))^(2)))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-2*(((1)+((-((tanh(x))^(2)))))*(tanh(x)))) 
+
+f( 0.4 )=3.7995e-01
+df( 0.4 )=8.5564e-01
+d2f( 0.4 )=-6.5020e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   asinh(x)
+  gradient   :   
+  | d(y) / d(x) = (1)/(sqrt((1)+(x^2))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-(((x)/(sqrt((1)+(x^2))))/((sqrt((1)+(x^2)))^(2)))) 
+
+f( 0.4 )=3.9004e-01
+df( 0.4 )=9.2848e-01
+d2f( 0.4 )=-3.2016e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   acosh(x)
+  gradient   :   
+  | d(y) / d(x) = (-1)/(sqrt((x^2)+(-1))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = ((x)/(sqrt((x^2)+(-1))))/((sqrt((x^2)+(-1)))^(2)) 
+
+f( 1.4 )=8.6701e-01
+df( 1.4 )=-1.0206e+00
+d2f( 1.4 )=1.4884e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   atanh(x)
+  gradient   :   
+  | d(y) / d(x) = (1)/((1)+(-1*x^2)) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (2*((x)/(((1)+(-1*x^2))^(2)))) 
+
+f( 0.4 )=4.2365e-01
+df( 0.4 )=1.1905e+00
+d2f( 0.4 )=1.1338e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   log2(x)
+  gradient   :   
+  | d(y) / d(x) = (1.4427*((1)/(x))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-1.4427*((1)/(x^2))) 
+
+f( 0.4 )=-1.3219e+00
+df( 0.4 )=3.6068e+00
+d2f( 0.4 )=-9.0169e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   log10(x)
+  gradient   :   
+  | d(y) / d(x) = (0.434294*((1)/(x))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-0.434294*((1)/(x^2))) 
+
+f( 0.4 )=-3.9794e-01
+df( 0.4 )=1.0857e+00
+d2f( 0.4 )=-2.7143e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   log(x)
+  gradient   :   
+  | d(y) / d(x) = (1)/(x) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-((1)/(x^2))) 
+
+f( 0.4 )=-9.1629e-01
+df( 0.4 )=2.5000e+00
+d2f( 0.4 )=-6.2500e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   ln(x)
+  gradient   :   
+  | d(y) / d(x) = (1)/(x) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-((1)/(x^2))) 
+
+f( 0.4 )=-9.1629e-01
+df( 0.4 )=2.5000e+00
+d2f( 0.4 )=-6.2500e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   lngamma(x)
+  gradient   :   
+  No analytical gradient available. Try using finite difference instead.
+  hessian    :   
+  No analytical hessian available. Try using finite difference instead.
+f( 0.4 )=7.9668e-01
+df( 0.4 )=-2.5614e+00
+d2f( 0.4 )=7.2754e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   gamma(x)
+  gradient   :   
+  No analytical gradient available. Try using finite difference instead.
+  hessian    :   
+  No analytical hessian available. Try using finite difference instead.
+f( 0.4 )=2.2182e+00
+df( 0.4 )=-5.6816e+00
+d2f( 0.4 )=3.0691e+01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   exp(x)
+  gradient   :   
+  | d(y) / d(x) = exp(x) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = exp(x) 
+
+f( 0.4 )=1.4918e+00
+df( 0.4 )=1.4918e+00
+d2f( 0.4 )=1.4918e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   erf(x)
+  gradient   :   
+  | d(y) / d(x) = (1.12838*(exp(-1*x^2))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-2.54648*((x)*(exp(-1*x^2)))) 
+
+f( 0.4 )=4.2839e-01
+df( 0.4 )=9.6154e-01
+d2f( 0.4 )=-8.6799e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   erfc(x)
+  gradient   :   
+  | d(y) / d(x) = (-1.12838*(exp(-1*x^2))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-2.54648*((x)*(exp(-1*x^2)))) 
+
+f( 0.4 )=5.7161e-01
+df( 0.4 )=-9.6154e-01
+d2f( 0.4 )=-8.6799e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   sqrt(x)
+  gradient   :   
+  | d(y) / d(x) = (0.5)/(sqrt(x)) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = (-0.5*(((0.5)/(sqrt(x)))/((sqrt(x))^(2)))) 
+
+f( 0.4 )=6.3246e-01
+df( 0.4 )=7.9057e-01
+d2f( 0.4 )=-9.8821e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   cbrt(x)
+  gradient   :   
+  | d(y) / d(x) = (0.333333)/(x^0.666667) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = -0.222222*x^-1.66667 
+
+f( 0.4 )=7.3681e-01
+df( 0.4 )=6.1400e-01
+d2f( 0.4 )=-1.0233e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   besselJ0(x)
+  gradient   :   
+  | d(y) / d(x) = (-(besselJ1(x))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = ((-(besselJ0(x))))+((besselJ1(x))/(x)) 
+
+f( 0.4 )=9.6040e-01
+df( 0.4 )=-1.9603e-01
+d2f( 0.4 )=-4.7033e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   besselJ1(x)
+  gradient   :   
+  | d(y) / d(x) = (besselJ0(x))+((-((besselJ1(x))/(x)))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = ((-(((besselJ0(x))+((-((besselJ1(x))/(x)))))/(x))))+((besselJ1(x))/(x^2))+((-(besselJ1(x)))) 
+
+f( 0.4 )=1.9603e-01
+df( 0.4 )=4.7033e-01
+d2f( 0.4 )=-1.4669e-01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   besselY0(x)
+  gradient   :   
+  | d(y) / d(x) = (-(besselY1(x))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = ((-(besselY0(x))))+((besselY1(x))/(x)) 
+
+f( 0.4 )=-6.0602e-01
+df( 0.4 )=1.7809e+00
+d2f( 0.4 )=-3.8462e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   besselY1(x)
+  gradient   :   
+  | d(y) / d(x) = (besselY0(x))+((-((besselY1(x))/(x)))) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = ((-(((besselY0(x))+((-((besselY1(x))/(x)))))/(x))))+((besselY1(x))/(x^2))+((-(besselY1(x)))) 
+
+f( 0.4 )=-1.7809e+00
+df( 0.4 )=3.8462e+00
+d2f( 0.4 )=-1.8965e+01
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   sign(x)
+  gradient   :   
+  | d(y) / d(x) = 0 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = 0 
+
+f( 0.4 )=1.0000e+00
+df( 0.4 )=0.0000e+00
+d2f( 0.4 )=0.0000e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   rint(x)
+  gradient   :   
+  | d(y) / d(x) = 0 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = 0 
+
+f( 0.4 )=0.0000e+00
+df( 0.4 )=0.0000e+00
+d2f( 0.4 )=0.0000e+00
+f= NumericalMathFunction :
+  input  : [x]
+  output : [y]
+  evaluation :   abs(x)
+  gradient   :   
+  | d(y) / d(x) = sign(x) 
+
+  hessian    :   
+  | d^2(y) / d(x)^2 = 0 
+
+f( 0.4 )=4.0000e-01
+df( 0.4 )=1.0000e+00
+d2f( 0.4 )=0.0000e+00
+marginal 0= NumericalMathFunction :
+  input  : [x0,x1]
+  output : [y0]
+  evaluation :   x0+x1
+  gradient   :   
+  | d(y0) / d(x0) = 1 
+  | d(y0) / d(x1) = 1 
+
+  hessian    :   
+  |    d^2(y0) / d(x0)^2 = 0 
+  | d^2(y0) / d(x1)d(x0) = 0 
+  |    d^2(y0) / d(x1)^2 = 0 
+
+marginal 1= NumericalMathFunction :
+  input  : [x0,x1]
+  output : [y1]
+  evaluation :   x0-x1
+  gradient   :   
+  | d(y1) / d(x0) = 1 
+  | d(y1) / d(x1) = -1 
+
+  hessian    :   
+  |    d^2(y1) / d(x0)^2 = 0 
+  | d^2(y1) / d(x1)d(x0) = 0 
+  |    d^2(y1) / d(x1)^2 = 0 
+

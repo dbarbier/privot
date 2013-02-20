@@ -1,0 +1,145 @@
+//                                               -*- C++ -*-
+/**
+ *  @file  RandomVectorImplementation.hxx
+ *  @brief An interface for all implementation class of random vectors
+ *
+ *  Copyright (C) 2005-2013 EDF-EADS-Phimeca
+ *
+ *  This library is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  @author schueller
+ *  @date   2012-07-16 15:59:45 +0200 (Mon, 16 Jul 2012)
+ *  Id      RandomVectorImplementation.hxx 2608 2012-07-16 13:59:45Z schueller
+ */
+#ifndef OPENTURNS_RANDOMVECTORIMPLEMENTATION_HXX
+#define OPENTURNS_RANDOMVECTORIMPLEMENTATION_HXX
+
+#include "PersistentObject.hxx"
+#include "NumericalPoint.hxx"
+#include "NumericalSample.hxx"
+#include "Indices.hxx"
+#include "NumericalMathFunction.hxx"
+#include "CovarianceMatrix.hxx"
+#include "Distribution.hxx"
+#include "ComparisonOperator.hxx"
+#include "FunctionalChaosResult.hxx"
+#include "Domain.hxx"
+#include "Process.hxx"
+
+BEGIN_NAMESPACE_OPENTURNS
+
+/**
+ * @class RandomVectorImplementation
+ *
+ * An interface for all implementation class of random vectors
+ */
+class RandomVectorImplementation
+  : public PersistentObject
+{
+  CLASSNAME;
+
+public:
+
+  /** Some typedefs to ease reading */
+  typedef Pointer<RandomVectorImplementation> Antecedent;
+  typedef Antecedent                          Implementation;
+
+  /** Default constructor */
+  RandomVectorImplementation(const String & name = DefaultName);
+
+  /** Virtual constructor */
+  virtual RandomVectorImplementation * clone() const;
+
+  /** String converter */
+  String __repr__() const;
+
+
+
+
+  /* Here is the interface that all derived class must implement */
+
+  /** Is the underlying random vector composite ? */
+  virtual Bool isComposite() const;
+
+  /** Dimension accessor */
+  virtual UnsignedLong getDimension() const;
+
+  /** Realization accessor */
+  virtual NumericalPoint getRealization() const;
+
+  /** Numerical sample accessor */
+  virtual NumericalSample getSample(const UnsignedLong size) const;
+
+  /** Numerical sample accessor
+   * @deprecated
+   */
+  virtual NumericalSample getNumericalSample(const UnsignedLong size) const;
+
+  /** Mean accessor */
+  virtual NumericalPoint getMean() const;
+
+  /** Covariance accessor */
+  virtual CovarianceMatrix getCovariance() const;
+
+  /** Get the random vector corresponding to the i-th marginal component */
+  virtual Implementation getMarginal(const UnsignedLong i) const;
+
+  /** Get the marginal random vector corresponding to indices components */
+  virtual Implementation getMarginal(const Indices & indices) const;
+
+  /** Fake method due to pbs with dynamic_cast and Pointer */
+  virtual Antecedent getAntecedent() const;
+
+  /** Fake method due to pbs with dynamic_cast and Pointer */
+  virtual NumericalMathFunction getFunction() const;
+
+  /** Fake method due to pbs with dynamic_cast and Pointer */
+  virtual Distribution getDistribution() const;
+
+  /** Fake method due to pbs with dynamic_cast and Pointer */
+  virtual ComparisonOperator getOperator() const;
+
+  /** Fake method due to pbs with dynamic_cast and Pointer */
+  virtual Domain getDomain() const;
+
+  /** Fake method due to pbs with dynamic_cast and Pointer */
+  virtual Process getProcess() const;
+
+  /** Fake method due to pbs with dynamic_cast and Pointer */
+  virtual NumericalScalar getThreshold() const;
+
+  /** Description accessor */
+  virtual void setDescription(const Description & description);
+  virtual Description getDescription() const;
+
+  /** Method save() stores the object through the StorageManager */
+  virtual void save(Advocate & adv) const;
+
+  /** Method load() reloads the object from the StorageManager */
+  virtual void load(Advocate & adv);
+
+protected:
+
+
+private:
+
+  /** Description of each component */
+  Description description_;
+
+}; /* class RandomVectorImplementation */
+
+
+END_NAMESPACE_OPENTURNS
+
+#endif /* OPENTURNS_RANDOMVECTORIMPLEMENTATION_HXX */

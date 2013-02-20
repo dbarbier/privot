@@ -1,0 +1,32 @@
+distribution= class=TruncatedNormal name=TruncatedNormal dimension=1 mu=0 sigma=1 a=-4 b=4
+Estimated distribution= class=TruncatedNormal name=TruncatedNormal dimension=1 mu=-0.01341 sigma=1.003 a=-3.55 b=3.56
+Default distribution= TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 1)
+Distribution from parameters= TruncatedNormal(mu = 0, sigma = 1, a = -4, b = 4)
+TruncatedNormal          = TruncatedNormal(mu = 0, sigma = 1, a = -4, b = 4)
+Estimated TruncatedNormal= TruncatedNormal(mu = -0.01341, sigma = 1.003, a = -3.55, b = 3.56)
+Default TruncatedNormal= TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 1)
+TruncatedNormal from parameters= TruncatedNormal(mu = 0, sigma = 1, a = -4, b = 4)
+distribution= class=TruncatedNormal name=TruncatedNormal dimension=1 mu=0 sigma=1 a=-1 b=4
+Estimated distribution= class=TruncatedNormal name=TruncatedNormal dimension=1 mu=0.008835 sigma=1.002 a=-0.9998 b=3.293
+Default distribution= TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 1)
+Distribution from parameters= TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 4)
+TruncatedNormal          = TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 4)
+Estimated TruncatedNormal= TruncatedNormal(mu = 0.008835, sigma = 1.002, a = -0.9998, b = 3.293)
+Default TruncatedNormal= TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 1)
+TruncatedNormal from parameters= TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 4)
+distribution= class=TruncatedNormal name=TruncatedNormal dimension=1 mu=0 sigma=1 a=1 b=2
+Estimated distribution= class=TruncatedNormal name=TruncatedNormal dimension=1 mu=-0.09258 sigma=1.03 a=1 b=2
+Default distribution= TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 1)
+Distribution from parameters= TruncatedNormal(mu = 0, sigma = 1, a = 1, b = 2)
+TruncatedNormal          = TruncatedNormal(mu = 0, sigma = 1, a = 1, b = 2)
+Estimated TruncatedNormal= TruncatedNormal(mu = -0.09258, sigma = 1.03, a = 1, b = 2)
+Default TruncatedNormal= TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 1)
+TruncatedNormal from parameters= TruncatedNormal(mu = 0, sigma = 1, a = 1, b = 2)
+distribution= class=TruncatedNormal name=TruncatedNormal dimension=1 mu=0 sigma=1 a=3 b=6
+Estimated distribution= class=TruncatedNormal name=TruncatedNormal dimension=1 mu=-0.09949 sigma=1.015 a=3 b=5.049
+Default distribution= TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 1)
+Distribution from parameters= TruncatedNormal(mu = 0, sigma = 1, a = 3, b = 6)
+TruncatedNormal          = TruncatedNormal(mu = 0, sigma = 1, a = 3, b = 6)
+Estimated TruncatedNormal= TruncatedNormal(mu = -0.09949, sigma = 1.015, a = 3, b = 5.049)
+Default TruncatedNormal= TruncatedNormal(mu = 0, sigma = 1, a = -1, b = 1)
+TruncatedNormal from parameters= TruncatedNormal(mu = 0, sigma = 1, a = 3, b = 6)

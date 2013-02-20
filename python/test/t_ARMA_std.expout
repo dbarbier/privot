@@ -1,0 +1,47 @@
+coefficientsP =  class=ARMACoefficients, shift=0, value=class=SquareMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[0.2,0.3,0.7,0.4]
+coefficientsQ =  class=ARMACoefficients, shift=0, value=class=SquareMatrix dimension=2 implementation=class=MatrixImplementation name=Unnamed rows=2 columns=2 values=[0.1,0,0,0.5]
+dist =  ComposedDistribution(Normal(mu = 0, sigma = 0.01), Normal(mu = 0, sigma = 0.02), IndependentCopula(dimension = 2))
+Last values of the process =  0 : [ 0.629877 0.135276 ]
+Last innovations of the process =  0 : [ 0.882805  0.0325028 ]
+process =   ARMA process dimension = 2
+X_{0,t} + 0.2 X_{0,t-1} + 0.7 X_{1,t-1} = E_{0,t} + 0.1 E_{0,t-1}
+X_{1,t} + 0.3 X_{0,t-1} + 0.4 X_{1,t-1} = E_{1,t} + 0.5 E_{1,t-1}
+with E_t ~ ComposedDistribution(Normal(mu = 0, sigma = 0.01), Normal(mu = 0, sigma = 0.02), IndependentCopula(dimension = 2))
+ARMA process =   ARMA process dimension = 2
+X_{0,t} + 0.2 X_{0,t-1} + 0.7 X_{1,t-1} = E_{0,t} + 0.1 E_{0,t-1}
+X_{1,t} + 0.3 X_{0,t-1} + 0.4 X_{1,t-1} = E_{1,t} + 0.5 E_{1,t-1}
+with E_t ~ ComposedDistribution(Normal(mu = 0, sigma = 0.01), Normal(mu = 0, sigma = 0.02), IndependentCopula(dimension = 2))
+ARMA process with ARMAstate =   ARMA process dimension = 2
+X_{0,t} + 0.2 X_{0,t-1} + 0.7 X_{1,t-1} = E_{0,t} + 0.1 E_{0,t-1}
+X_{1,t} + 0.3 X_{0,t-1} + 0.4 X_{1,t-1} = E_{1,t} + 0.5 E_{1,t-1}
+with E_t ~ ComposedDistribution(Normal(mu = 0, sigma = 0.01), Normal(mu = 0, sigma = 0.02), IndependentCopula(dimension = 2))
+One realization=  0 : [  0           0.0201978  -0.00540263 ]
+ 1 : [  0.1        -0.00253338 -0.00620256 ]
+ 2 : [  0.2         0.0179309   0.0207505  ]
+ 3 : [  0.3        -0.0172495  -0.0334299  ]
+ 4 : [  0.4         0.0251391  -0.00231125 ]
+ 5 : [  0.5        -0.02353    -0.0122268  ]
+ 6 : [  0.6        -0.00282297  0.00822124 ]
+ 7 : [  0.7        -0.0105994  -0.0204793  ]
+ 8 : [  0.8         0.0196362   0.0254155  ]
+ 9 : [  0.9        -0.0232637  -0.0258155  ]
+10 : [  1           0.0218391   0.0172978  ]
+One future= 0 : [  1.1         -0.014861    -0.0409096   ]
+1 : [  1.2          0.03547      0.0232662   ]
+2 : [  1.3         -0.0214096    0.00396632  ]
+3 : [  1.4          0.000260844  0.00948317  ]
+Some futures= [time series 0:
+0 : [  1.1        -0.0100094  -0.0176635  ]
+1 : [  1.2         0.0295373   0.00746876 ]
+2 : [  1.3        -0.00465503 -0.0287489  ]
+3 : [  1.4         0.0236698  -0.0215939  ]
+time series 1:
+0 : [  1.1        -0.0229309   0.00482736 ]
+1 : [  1.2        -0.0189556   0.00388688 ]
+2 : [  1.3        -0.00723313 -0.0179737  ]
+3 : [  1.4         0.018409    0.00279171 ]
+time series 2:
+0 : [  1.1        -0.0149966   0.0146515  ]
+1 : [  1.2         0.00472763 -0.0109748  ]
+2 : [  1.3        -0.0027748   0.0254906  ]
+3 : [  1.4        -0.0201746   0.00322508 ]]

@@ -1,0 +1,24 @@
+This is an example for creating, building and installing a new wrapper for OpenTURNS.
+Please follow the instructions below before calling for help.
+
+Getting started:
+* First, run
+  ./configure --prefix=the_path_where_your_wrapper_will_be_installed --with-openturns=the_path_where_openturns_is_installed
+
+* Then, build your wrapper (here, named 'wcode'. You can change the name in configure.ac and Makefile.am)
+  make
+
+* At last, install your wrapper in 'the_path_where_your_wrapper_will_be_installed'
+  make install
+ 
+To get your wrapper seen by OpenTURNS, you should set the environment variable OPENTURNS_WRAPPER_PATH
+in sh-like shells (sh, bash, ksh, etc.):
+OPENTURNS_WRAPPER_PATH=the_path_where_your_wrapper_will_be_installed/wrappers
+export OPENTURNS_WRAPPER_PATH
+
+in csh-like shells (csh, tcsh, etc.):
+setenv OPENTURNS_WRAPPER_PATH the_path_where_your_wrapper_will_be_installed/wrappers
+
+That's all !
+
+Ivan DUTKA-MALEN
