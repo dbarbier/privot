@@ -37,7 +37,7 @@ revision = 0
 # Check if function contains catalog or if it should make it here self!
 def hasCatalog(major, minor, revision):
     ''' The  function checks if the used library version has catalog or if we need to check
-        swig module.
+    swig module.
     '''
     # OpenTURNS version
     openturnsVersion = getOTVersion()
@@ -95,30 +95,30 @@ else :
 	'AllContinuousFactory' and 'AllDiscreteFactory'
 	"""
 	# Current list includes parametric and non parametric
-	ParamNonParamContinuousFactory = ot.DistributionFactory.GetContinuousUniVariateFactories()
-	AllContinuousFactory = []
-	AllContinuousFactoryName = []
-	for i in range(len(ParamNonParamContinuousFactory)):
-	    dist = ParamNonParamContinuousFactory[i]
-	    factoryName = dist.getImplementation().getClassName()
-	    if (factoryName != 'HistogramFactory'):
-		AllContinuousFactory.append(dist)
-		AllContinuousFactoryName.append(factoryName)
+        ParamNonParamContinuousFactory = ot.DistributionFactory.GetContinuousUniVariateFactories()
+        AllContinuousFactory = []
+        AllContinuousFactoryName = []
+        for i in range(len(ParamNonParamContinuousFactory)):
+            dist = ParamNonParamContinuousFactory[i]
+            factoryName = dist.getImplementation().getClassName()
+            if (factoryName != 'HistogramFactory'):
+                AllContinuousFactory.append(dist)
+                AllContinuousFactoryName.append(factoryName)
 
-	result = {}
-	result['AllContinuousFactoryName'] = AllContinuousFactoryName
-	result['AllContinuousFactory'] = AllContinuousFactory
-	return result
+        result = {}
+        result['AllContinuousFactoryName'] = AllContinuousFactoryName
+        result['AllContinuousFactory'] = AllContinuousFactory
+        return result
 
     def GetAllDiscreteFactories():
-	""" Return a dictionnary with DistributionFactory objects of OT with the distinction
-	'AllDiscreteFactory' and 'AllDiscreteFactory'
-	"""
-	AllDiscreteFactory = ot.DistributionFactory.GetDiscreteUniVariateFactories()
-	AllDiscreteFactoryName = []
-	for i, dist in enumerate(AllDiscreteFactory):
-             factoryName = dist.getImplementation().getClassName()
-             AllDiscreteFactoryName.append(factoryName)
+        """ Return a dictionnary with DistributionFactory objects of OT with the distinction
+        'AllDiscreteFactory' and 'AllDiscreteFactory'
+        """
+        AllDiscreteFactory = ot.DistributionFactory.GetDiscreteUniVariateFactories()
+        AllDiscreteFactoryName = []
+        for i, dist in enumerate(AllDiscreteFactory):
+            factoryName = dist.getImplementation().getClassName()
+            AllDiscreteFactoryName.append(factoryName)
 
 	result = {}
 	result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
