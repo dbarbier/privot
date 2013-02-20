@@ -74,7 +74,7 @@ class Fit_Continuous_1D_Distribution:
             (classe par ordre decroissant du critere Arg ou Arg = BIC ou KS)
         '''
         upperArg = self.checkArg(arg)
-        if (upperArg == "BIC")
+        if (upperArg == "BIC"):
             print self.__printTestedDistributionBIC
         else:
             print self.__printTestedDistributionKS
