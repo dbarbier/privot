@@ -44,7 +44,7 @@ def hasCatalog(major, minor, revision):
     versionOTWithCatalog  = major * 100 + minor * 10 + revision
     return openturnsVersion >= versionOTWithCatalog
 
-if hasCatalog:
+if hasCatalog(major, minor, revision) is True:
     # Function to be used with version <= 1.1
     def GetAllFactories():
 	""" Return a dictionnary with DistributionFactory objects of OT with the distinction
@@ -94,13 +94,15 @@ else :
 	""" Return a dictionnary with DistributionFactory objects of OT with the distinction
 	'AllContinuousFactory' and 'AllDiscreteFactory'
 	"""
-	AllContinuousFactory = ot.DistributionFactory.GetContinuousUniVariateFactories()
+	# Current list includes parametric and non parametric
+	ParamNonParamContinuousFactory = ot.DistributionFactory.GetContinuousUniVariateFactories()
+	AllContinuousFactory = []
 	AllContinuousFactoryName = []
-	for i, dist in enumerate(AllContinuousFactory):
+	for i in range(len(ParamNonParamContinuousFactory)):
+	    dist = ParamNonParamContinuousFactory[i]
 	    factoryName = dist.getImplementation().getClassName()
-	    if (factoryName == 'HistogramFactory'):
-		del AllContinuousFactory[i]
-	    else :
+	    if (factoryName != 'HistogramFactory'):
+		AllContinuousFactory.append(dist)
 		AllContinuousFactoryName.append(factoryName)
 
 	result = {}
@@ -115,11 +117,8 @@ else :
 	AllDiscreteFactory = ot.DistributionFactory.GetDiscreteUniVariateFactories()
 	AllDiscreteFactoryName = []
 	for i, dist in enumerate(AllDiscreteFactory):
-	    factoryName = dist.getImplementation().getClassName()
-	    if (factoryName == 'HistogramFactory'):
-		del AllDiscreteFactory[i]
-	    else :
-		AllDiscreteFactoryName.append(factoryName)
+             factoryName = dist.getImplementation().getClassName()
+             AllDiscreteFactoryName.append(factoryName)
 
 	result = {}
 	result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
