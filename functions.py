@@ -1,7 +1,9 @@
 import openturns as ot
 
 def getOTVersion():
-    ''' Get the openturns version for PlatformInfo as a list of three integer : (major, minor, revision) '''
+    ''' 
+    Get the openturns version for PlatformInfo as a list of three integer : (major, minor, revision)
+    '''
     openturnsVersion = ot.PlatformInfo.GetVersion()
     # check if current software version is a devel one!
     if (openturnsVersion.count('based-devel') > 0):
@@ -29,14 +31,17 @@ def getOTVersion():
         revisionInt = 0
     return majorInt * 100 +  minorInt * 10 + revisionInt
 
-# Fixing the software version that has catalog
+#--------------------------------------------------#
+#-- Fixing the software version that has catalog --#
+#--------------------------------------------------#
 major = 1
 minor = 2
 revision = 0
 
 # Check if function contains catalog or if it should make it here self!
 def hasCatalog(major, minor, revision):
-    ''' The  function checks if the used library version has catalog or if we need to check
+    '''
+    The function checks if the used library version has catalog or if we need to check
     swig module.
     '''
     # OpenTURNS version
@@ -47,54 +52,56 @@ def hasCatalog(major, minor, revision):
 if hasCatalog(major, minor, revision) is False:
     # Function to be used with version <= 1.1
     def GetAllFactories():
-	""" Return a dictionnary with DistributionFactory objects of OT with the distinction
-	'AllContinuousFactory' and 'AllDiscreteFactory'
-	Care! May be incorrect with too older version because of SWIG modules were
-	differents (no dist maybe?)
-	"""
-	allDist = dir(ot.dist)
-	result = {}
-	AllContinuousFactoryName = []
-	AllContinuousFactory =[]
-	AllDiscreteFactoryName = []
-	AllDiscreteFactory =[]
-	AllFactoryName = []
-	for elt in allDist:
-	    if ('Factory' in elt) and ('_' not in elt) and ('Histogram' not in elt):
-		factoryName = 'ot.' + elt
-		StrDist = factoryName.replace('Factory','()')
-		Dist = eval(StrDist)
-		if Dist.isContinuous():
-		    factoryName = factoryName.replace('Factory','Factory()')
-		    factory = eval(factoryName)
-		    AllContinuousFactory.append(factory)
-		    AllContinuousFactoryName.append(factoryName[3:].replace('Factory()','Factory'))
-		else :
-		    factoryName = factoryName.replace('Factory','Factory()')
-		    AllDiscreteFactoryName.append(factoryName)
-		    factory = eval(factoryName)
-		    AllDiscreteFactory.append(factory)
-	result['AllContinuousFactoryName'] = AllContinuousFactoryName
-	result['AllContinuousFactory'] = AllContinuousFactory
-	result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
-	result['AllDiscreteFactory'] = AllDiscreteFactory
-	return(result)
+        """ 
+        Return a dictionnary with DistributionFactory objects of OT with the distinction
+        'AllContinuousFactory' and 'AllDiscreteFactory'
+        Care! May be incorrect with too older version because of SWIG modules were
+        differents (no dist maybe?)
+        """
+        allDist = dir(ot.dist)
+        result = {}
+        AllContinuousFactoryName = []
+        AllContinuousFactory =[]
+        AllDiscreteFactoryName = []
+        AllDiscreteFactory =[]
+        AllFactoryName = []
+        for elt in allDist:
+            if ('Factory' in elt) and ('_' not in elt) and ('Histogram' not in elt):
+                factoryName = 'ot.' + elt
+                StrDist = factoryName.replace('Factory','()')
+                Dist = eval(StrDist)
+                if Dist.isContinuous():
+                    factoryName = factoryName.replace('Factory','Factory()')
+                    factory = eval(factoryName)
+                    AllContinuousFactory.append(factory)
+                    AllContinuousFactoryName.append(factoryName[3:].replace('Factory()','Factory'))
+                else :
+                    factoryName = factoryName.replace('Factory','Factory()')
+                    factory = eval(factoryName)
+                    AllDiscreteFactory.append(factory[3:].replace('Factory()','Factory'))
+                    AllDiscreteFactoryName.append(factoryName)
+        result['AllContinuousFactoryName'] = AllContinuousFactoryName
+        result['AllContinuousFactory'] = AllContinuousFactory
+        result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
+        result['AllDiscreteFactory'] = AllDiscreteFactory
+        return(result)
 
     resultAllFactory = GetAllFactories()
 
     def GetAllContinuousFactories():
-	return {'AllContinuousFactory' : resultAllFactory['AllContinuousFactory'], 'AllContinuousFactoryName' : resultAllFactory['AllContinuousFactoryName']}
+        return {'AllContinuousFactory' : resultAllFactory['AllContinuousFactory'], 'AllContinuousFactoryName' : resultAllFactory['AllContinuousFactoryName']}
 
     def GetAllDiscreteFactories():
-	return {'AllDiscreteFactory' : resultAllFactory['AllDiscreteFactory'], 'AllDiscreteFactoryName' : resultAllFactory['AllDiscreteFactoryName']}
+        return {'AllDiscreteFactory' : resultAllFactory['AllDiscreteFactory'], 'AllDiscreteFactoryName' : resultAllFactory['AllDiscreteFactoryName']}
 
 else :
     # Function to be used with version >= 1.2
     def GetAllContinuousFactories():
-	""" Return a dictionnary with DistributionFactory objects of OT with the distinction
-	'AllContinuousFactory' and 'AllDiscreteFactory'
-	"""
-	# Current list includes parametric and non parametric
+        """ 
+        Return a dictionnary with DistributionFactory objects of OT with the distinction
+        'AllContinuousFactory' and 'AllDiscreteFactory'
+        """
+        # Current list includes parametric and non parametric
         ParamNonParamContinuousFactory = ot.DistributionFactory.GetContinuousUniVariateFactories()
         AllContinuousFactory = []
         AllContinuousFactoryName = []
@@ -120,7 +127,7 @@ else :
             factoryName = dist.getImplementation().getClassName()
             AllDiscreteFactoryName.append(factoryName)
 
-	result = {}
-	result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
-	result['AllDiscreteFactory'] = AllDiscreteFactory
-	return result
+        result = {}
+        result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
+        result['AllDiscreteFactory'] = AllDiscreteFactory
+        return result
