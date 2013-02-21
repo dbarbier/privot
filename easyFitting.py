@@ -8,21 +8,21 @@ class Fit_Continuous_1D_Distribution:
     DESCRIPTION
      Fit_Continuous_1D_Distribution allows to perform statistical fitting tests on a numerical sample or an array of dimension 1.
      For that purpose, the class loads the catalog of all continuous distribution factories implemented in the OpenTURNS library.
-     Then, using the numerical data, a fit of the most coherant parameter of the considered distribution is done thanks to the maximum 
+     Then, using the numerical data, a fit of the most coherant parameter of the considered distribution is done thanks to the maximum
      likelihood principle or the moment based method.
      If the estimation is done, two important criteria are computed in order to help making decision:
-      * The Bayesian Criterion Information (BIC): This value is in fact the corrected likelihood, the 
+      * The Bayesian Criterion Information (BIC): This value is in fact the corrected likelihood, the
      correction terme is issued from the sample size and number of parameters of the distribution.
       * The Kolmogorov pValue is also computed. This value is issued from the Kolmogorov statistical table and the statistical criterion
       is based on the max norm of difference between empirical/theoritical cumulative functions
     '''
     @staticmethod
-    def __checkCriterionArg(Arg):
-      assert isinstance(Arg, str)
-      upperArg = Arg.upper()
+    def __checkCriterionArg(criterion):
+      assert isinstance(criterion, str)
+      uppercriterion = criterion.upper()
       if (upperArg not in ["BIC", "KS"]):
           raise ValueError('Expected BIC or KS argument')
-      return upperArg
+      return uppercriterion
 
     def __init__(self, sample, pvalue = 0.05):
         assert isinstance(pvalue, float)
@@ -33,7 +33,7 @@ class Fit_Continuous_1D_Distribution:
         # Get the catalog of all continuous and non parametric factories
         ContinuousDistributionOT = GetAllContinuousFactories()
         self.__ContinuousDistributionOTFactory = ContinuousDistributionOT['AllContinuousFactory']
-        self.__ContinuousDistributionOTNames =  ContinuousDistributionOT['AllContinuousFactoryName']  
+        self.__ContinuousDistributionOTNames =  ContinuousDistributionOT['AllContinuousFactoryName']
         self.__distributionNames = []
         self.__TestedDistribution = {}
         self.__nbTestedDistributions = 0
@@ -98,57 +98,52 @@ class Fit_Continuous_1D_Distribution:
 	    if distElem[1]['Accepted']:
 	      self.__printAcceptedDistributionBIC += str(distElem[0])+ '\t' + str(distElem[1]['pValue']) + '\t' + str(distElem[1]['BIC']) + '\n'
 
-    def printExceptedDistribution(self) :
-        ''' The method print the distributions that have not been tested, with the reason error
-        '''
-        print self.__printExceptedDistribution
-
-    def printTestedDistribution(self, arg = "BIC"):
-        '''Print a table of tested distributions :
-            "Nom Distribution  Parmetres de la distribution" (pretty print de la dist) | Accepted | p-value | Bic
-            (classe par ordre decroissant du critere Arg ou Arg = BIC ou KS)
-        '''
-        upperArg = self.__checkCriterionArg(arg)
-        if (upperArg == "BIC"):
-            print self.__printTestedDistributionBIC
-        else:
-            print self.__printTestedDistributionKS
-
-    def printAccptededDistribution(self, arg = "BIC") :
-        '''
-        TODO Documentation
-        '''
-        upperArg = self.__checkCriterionArg(arg)
-        if (upperArg == "BIC"):
-            print self.__printAcceptedDistributionBIC
-        else:
-            print self.__printAcceptedDistributionKS
-
-    def getTestedDistribution(self, Arg):
+    def getAcceptedDistribution(self, criterion = 'BIC'):
         ''' DistributionCollection ==> des distributions acceptees classee selon (Arg=BIC ou Arg=KS)'''
-        upperArg = self.__checkCriterionArg(arg)
-        return self.__TestedDistribution
+        # TODO
+        uppercriterion = self.__checkCriterionArg(criterion)
+        if (uppercriterion == 'BIC'):
+            return self.getBestBICDistribution(range(self.__nbAcceptedDistributions))
+        else:
+            return self.getBestKSDistribution(range(self.__nbAcceptedDistributions))
 
-    def getBestKSDistribution(self, Arg):
+    def getBestBICDistribution(self, index):
         '''
         TODO Documentation
         '''
-        assert (isinstance(Arg, int) or isinstance(Arg, tuple) or isinstance(Arg, list))
+        assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
+        if isinstance(index, int):
+            listIndex = self.__SortedDistributionAccordingToBIC[index, 0]
+            keyValue = self.__distributionNames[int(listIndex)]
+            return self.__TestedDistribution[keyValue][0]
+        else :
+            collection = ot.DistributionCollection()
+            for point in index:
+                ind = self.__SortedDistributionAccordingToBIC[point, 0]
+                keyValue = self.__distributionNames[int(ind)]
+                collection.add(self.__TestedDistribution[keyValue][0])
+            return collection
+
+    def getBestKSDistribution(self, index):
+        '''
+        TODO Documentation
+        '''
+        assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
         size = self.__nbTestedDistributions - 1
-        if isinstance(Arg, int):
-            if Arg >= size:
+        if isinstance(index, int):
+            if index >= size:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
-            listIndex = self.__SortedDistributionAccordingToKS[size - Arg, 0]
+            listIndex = self.__SortedDistributionAccordingToKS[size - index, 0]
             name = self.__distributionNames[int(listIndex)]
             distReturned = self.__TestedDistribution[name]
             if distReturned[1]["Accepted"] is False:
                 ot.Log.Warn('Care! The distribution has not been accepted by the KS test')
             return distReturned[0]
         else :
-            if max(Arg) >= size:
+            if max(index) >= size:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
             collection = ot.DistributionCollection()
-            for point in Arg:
+            for point in index:
                 ind = self.__SortedDistributionAccordingToKS[size - point, 0]
                 name = self.__distributionNames[int(ind)]
                 distReturned = self.__TestedDistribution[name]
@@ -157,29 +152,36 @@ class Fit_Continuous_1D_Distribution:
                 collection.add(distReturned[0])
             return collection
 
-    def getBestBICDistribution(self, Arg):
+    def getTestedDistribution(self, criterion = 'BIC'):
+        ''' DistributionCollection ==> des distributions acceptees classee selon (Arg=BIC ou Arg=KS)'''
+        uppercriterion = self.__checkCriterionArg(criterion)
+        if (uppercriterion == 'BIC'):
+            return self.getBestBICDistribution(range(self.__nbTestedDistributions))
+        else:
+            return self.getBestKSDistribution(range(self.__nbTestedDistributions))
+
+    def printAccptededDistribution(self, criterion = "BIC") :
         '''
         TODO Documentation
         '''
-        assert (isinstance(Arg, int) or isinstance(Arg, tuple) or isinstance(Arg, list))
-        if isinstance(Arg, int):
-            listIndex = self.__SortedDistributionAccordingToBIC[Arg, 0]
-            keyValue = self.__distributionNames[int(listIndex)]
-            return self.__TestedDistribution[keyValue][0]
-        else :
-            collection = ot.DistributionCollection()
-            for point in Arg:
-                ind = self.__SortedDistributionAccordingToBIC[point, 0]
-                keyValue = self.__distributionNames[int(ind)]
-                collection.add(self.__TestedDistribution[keyValue][0])
-            return collection
-
-
-    def getAcceptedDistribution(self, arg):
-        ''' DistributionCollection ==> des distributions acceptees classee selon (Arg=BIC ou Arg=KS)'''
-        # TODO
-        upperArg = self.__checkCriterionArg(arg)
-        if (upperArg == 'BIC'):
-            return self.getBestBICDistribution(range(self.__nbAcceptedDistributions))
+        uppercriterion = self.__checkCriterionArg(criterion)
+        if (uppercriterion == "BIC"):
+            print self.__printAcceptedDistributionBIC
         else:
-            return self.getBestKSDistribution(range(self.__nbAcceptedDistributions))
+            print self.__printAcceptedDistributionKS
+
+    def printExceptedDistribution(self) :
+        ''' The method print the distributions that have not been tested, with the reason error
+        '''
+        print self.__printExceptedDistribution
+
+    def printTestedDistribution(self, criterion = "BIC"):
+        '''Print a table of tested distributions :
+            "Nom Distribution  Parmetres de la distribution" (pretty print de la dist) | Accepted | p-value | Bic
+            (classe par ordre decroissant du critere Arg ou Arg = BIC ou KS)
+        '''
+        uppercriterion = self.__checkCriterionArg(criterion)
+        if (uppercriterion == "BIC"):
+            print self.__printTestedDistributionBIC
+        else:
+            print self.__printTestedDistributionKS
