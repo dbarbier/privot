@@ -19,7 +19,7 @@ class Fit_Continuous_1D_Distribution:
       * The Kolmogorov pValue is also computed. This value is issued from the Kolmogorov statistical table and the statistical criterion
         is based on the max norm of difference between empirical/theoritical cumulative functions.
      If the estimation could not be done, the considered distribution name is stored as "excepted distribution"
-    The computed models are ranked according to one of the criteria
+    The computed models are ranked according to one of the criteria.
     '''
     @staticmethod
     def __checkCriterionArg(criterion):
@@ -81,6 +81,8 @@ class Fit_Continuous_1D_Distribution:
         printing_numerical_precision = 3
         ot.PlatformInfo.SetNumericalPrecision(printing_numerical_precision)
         nbFactory = len(self.__ContinuousDistributionOTFactory)
+        maxLenTestedDist = 0
+        maxLenAcceptedDist = 0
         for i in xrange(nbFactory):
              factory = self.__ContinuousDistributionOTFactory[i]
              Name = self.__ContinuousDistributionOTNames[i]
@@ -90,8 +92,10 @@ class Fit_Continuous_1D_Distribution:
                  BIC = ot.FittingTest.BIC(self.__sample, distribution, distribution.getParametersNumber())
                  pValue = ot.FittingTest.Kolmogorov(self.__sample, distribution).getPValue()
                  accepted = pValue >= self.__pvalue
+                 maxLenTestedDist = max(maxLenTestedDist, len(str(distribution)))
                  if accepted:
                      self.__nbAcceptedDistributions += 1
+                     maxLenAcceptedDist = max(maxLenAcceptedDist, len(str(distribution)))
                  dict_elem_res = {"Accepted" : accepted, "BIC": BIC, "pValue" : pValue}
                  # Complete the sample of pValues/BIC ranking
                  self.__SortedDistributionAccordingToBIC.add([i, BIC])
@@ -109,18 +113,29 @@ class Fit_Continuous_1D_Distribution:
         self.__SortedDistributionAccordingToBIC = self.__SortedDistributionAccordingToBIC.sortAccordingToAComponent(1)
         self.__SortedDistributionAccordingToKS = self.__SortedDistributionAccordingToKS.sortAccordingToAComponent(1)
         # Creating string values according to the previous ranking
+        ws = ' '
         for k in xrange(self.__nbTestedDistributions):
             index = int(self.__SortedDistributionAccordingToKS[self.__nbTestedDistributions - 1 - k, 0])
             key = self.__distributionNames[index]
             distElem = self.__TestedDistribution[key]
-            self.__printTestedDistributionKS += str(distElem[0])+ '\t' + str(distElem[1]['Accepted']) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            accepted = distElem[1]['Accepted']
+            if accepted:
+                acceptedStr = 'Accepted'
+            else :
+                acceptedStr = 'Rejected'
+            self.__printTestedDistributionKS += str(distElem[0]) + (maxLenTestedDist - len(str(distElem[0]))) * ws + '\t' + acceptedStr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
             if distElem[1]['Accepted']:
-                self.__printAcceptedDistributionKS += str(distElem[0]) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+                self.__printAcceptedDistributionKS += str(distElem[0]) + (maxLenAcceptedDist - len(str(distElem[0]))) * ws + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
              # Ranking according to BIC
             index = int(self.__SortedDistributionAccordingToBIC[k, 0])
             key = self.__distributionNames[index]
             distElem = self.__TestedDistribution[key]
-            self.__printTestedDistributionBIC += str(distElem[0])+ '\t' + str(distElem[1]['Accepted']) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            accepted = distElem[1]['Accepted']
+            if accepted:
+                acceptedStr = 'Accepted'
+            else :
+                acceptedStr = 'Rejected'
+            self.__printTestedDistributionBIC += str(distElem[0]) + '\t' + acceptedStr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
             if distElem[1]['Accepted']:
                 self.__printAcceptedDistributionBIC += str(distElem[0]) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
         # Set default precision
