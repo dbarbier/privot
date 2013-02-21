@@ -9,16 +9,16 @@ class Fit_Continuous_1D_Distribution:
      Fit_Continuous_1D_Distribution allows to perform statistical fitting tests on a numerical sample or an array of dimension 1.
      The objective is to get a parametric estimation of some distribution models.
      For that purpose, a catalog of all continuous distribution factories implemented in the OpenTURNS library is used.
-     From the numerical data and for a fixed distribution model, the parameters have to be estimated. This is done thanks to the maximum 
+     From the numerical data and for a fixed distribution model, the parameters have to be estimated. This is done thanks to the maximum
      likelihood principle.
      If the estimation is done, two criteria are computed in order to help making decision:
       * The Bayesian Criterion Information (BIC): This value is in fact the corrected likelihood.
-        When fitting some distributions, the likelihood may increase by adding parameters, but doing so may result in overfitting. 
+        When fitting some distributions, the likelihood may increase by adding parameters, but doing so may result in overfitting.
         The BIC resolves this problem by introducing a penalty term for the number of parameters in the distribution. The likelihood is also
         normalized by the size of data sample.
       * The Kolmogorov pValue is also computed. This value is issued from the Kolmogorov statistical table and the statistical criterion
         is based on the max norm of difference between empirical/theoritical cumulative functions.
-     If the estimation could not be done, the considered distribution name is stored as "excepted distribution" 
+     If the estimation could not be done, the considered distribution name is stored as "excepted distribution"
     The computed models are ranked according to one of the criteria
     '''
     @staticmethod
@@ -110,19 +110,19 @@ class Fit_Continuous_1D_Distribution:
         self.__SortedDistributionAccordingToKS = self.__SortedDistributionAccordingToKS.sortAccordingToAComponent(1)
         # Creating string values according to the previous ranking
         for k in xrange(self.__nbTestedDistributions):
-	    index = int(self.__SortedDistributionAccordingToKS[self.__nbTestedDistributions - 1 - k, 0])
-	    key = self.__distributionNames[index]
-	    distElem = self.__TestedDistribution[key]
-	    self.__printTestedDistributionKS += str(distElem[0])+ '\t' + str(distElem[1]['Accepted']) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
-	    if distElem[1]['Accepted']:
-	      self.__printAcceptedDistributionKS += str(distElem[0]) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            index = int(self.__SortedDistributionAccordingToKS[self.__nbTestedDistributions - 1 - k, 0])
+            key = self.__distributionNames[index]
+            distElem = self.__TestedDistribution[key]
+            self.__printTestedDistributionKS += str(distElem[0])+ '\t' + str(distElem[1]['Accepted']) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            if distElem[1]['Accepted']:
+                self.__printAcceptedDistributionKS += str(distElem[0]) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
              # Ranking according to BIC
-	    index = int(self.__SortedDistributionAccordingToBIC[k, 0])
-	    key = self.__distributionNames[index]
-	    distElem = self.__TestedDistribution[key]
-	    self.__printTestedDistributionBIC += str(distElem[0])+ '\t' + str(distElem[1]['Accepted']) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
-	    if distElem[1]['Accepted']:
-	      self.__printAcceptedDistributionBIC += str(distElem[0]) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            index = int(self.__SortedDistributionAccordingToBIC[k, 0])
+            key = self.__distributionNames[index]
+            distElem = self.__TestedDistribution[key]
+            self.__printTestedDistributionBIC += str(distElem[0])+ '\t' + str(distElem[1]['Accepted']) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            if distElem[1]['Accepted']:
+                self.__printAcceptedDistributionBIC += str(distElem[0]) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
         # Set default precision
         ot.PlatformInfo.SetNumericalPrecision(numerical_precision)
 
