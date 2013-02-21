@@ -7,25 +7,43 @@ class Fit_Continuous_1D_Distribution:
       Fit_Continuous_1D_Distribution
     DESCRIPTION
      Fit_Continuous_1D_Distribution allows to perform statistical fitting tests on a numerical sample or an array of dimension 1.
-     For that purpose, the class loads the catalog of all continuous distribution factories implemented in the OpenTURNS library.
-     Then, using the numerical data, a fit of the most coherant parameter of the considered distribution is done thanks to the maximum
-     likelihood principle or the moment based method.
-     If the estimation is done, two important criteria are computed in order to help making decision:
-      * The Bayesian Criterion Information (BIC): This value is in fact the corrected likelihood, the
-     correction terme is issued from the sample size and number of parameters of the distribution.
+     The objective is to get a parametric estimation of some distribution models.
+     For that purpose, a catalog of all continuous distribution factories implemented in the OpenTURNS library is used.
+     From the numerical data and for a fixed distribution model, the parameters have to be estimated. This is done thanks to the maximum 
+     likelihood principle.
+     If the estimation is done, two criteria are computed in order to help making decision:
+      * The Bayesian Criterion Information (BIC): This value is in fact the corrected likelihood.
+        When fitting some distributions, the likelihood may increase by adding parameters, but doing so may result in overfitting. 
+        The BIC resolves this problem by introducing a penalty term for the number of parameters in the distribution. The likelihood is also
+        normalized by the size of data sample.
       * The Kolmogorov pValue is also computed. This value is issued from the Kolmogorov statistical table and the statistical criterion
-      is based on the max norm of difference between empirical/theoritical cumulative functions
+        is based on the max norm of difference between empirical/theoritical cumulative functions.
+     If the estimation could not be done, the considered distribution name is stored as "excepted distribution" 
+    The computed models are ranked according to one of the criteria
     '''
     @staticmethod
     def __checkCriterionArg(criterion):
       assert isinstance(criterion, str)
       uppercriterion = criterion.upper()
-      if (upperArg not in ["BIC", "KS"]):
+      if (uppercriterion not in ["BIC", "KS"]):
           raise ValueError('Expected BIC or KS argument')
       return uppercriterion
 
     def __init__(self, sample, pvalue = 0.05):
+        '''
+        ARGUMENTS
+            sample : NumericalSample sample of dimension 1
+                     Numpy 1D-array
+            pvalue : float in ]0, 1[, pValue fixed for Kolmogorov statistical test
+                     Default pValue is 5%
+        EXAMPLE :
+            import openturns as ot
+            x = ot.Normal().getSample(100)
+            fit = Fit_Continuous_1D_Distribution(x, 0.10)
+        '''
         assert isinstance(pvalue, float)
+        assert pvalue > 0
+        assert pvalue < 1
         self.__pvalue = pvalue
         self.__sample = ot.NumericalSample(sample)
         assert self.__sample.getDimension() == 1
@@ -52,8 +70,16 @@ class Fit_Continuous_1D_Distribution:
         self.__run()
 
     def __run(self):
-        ''' Run method '''
-        # Loop over all known distributions
+        '''
+        The method is used to start the statistical computation & fitting.
+        No need to call the method since it is automatically launched at the init
+        Private ==> not available for users
+        '''
+        # Default numerical precision
+        numerical_precision = ot.PlatformInfo.GetNumericalPrecision()
+        # Set precision for numerical printing
+        printing_numerical_precision = 3
+        ot.PlatformInfo.SetNumericalPrecision(printing_numerical_precision)
         nbFactory = len(self.__ContinuousDistributionOTFactory)
         for i in xrange(nbFactory):
              factory = self.__ContinuousDistributionOTFactory[i]
@@ -87,20 +113,46 @@ class Fit_Continuous_1D_Distribution:
 	    index = int(self.__SortedDistributionAccordingToKS[self.__nbTestedDistributions - 1 - k, 0])
 	    key = self.__distributionNames[index]
 	    distElem = self.__TestedDistribution[key]
-	    self.__printTestedDistributionKS += str(distElem[0])+ '\t' + str(distElem[1]['Accepted']) + '\t' + str(distElem[1]['pValue']) + '\t' + str(distElem[1]['BIC']) + '\n'
+	    self.__printTestedDistributionKS += str(distElem[0])+ '\t' + str(distElem[1]['Accepted']) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
 	    if distElem[1]['Accepted']:
-	      self.__printAcceptedDistributionKS += str(distElem[0])+ '\t' + str(distElem[1]['pValue']) + '\t' + str(distElem[1]['BIC']) + '\n'
+	      self.__printAcceptedDistributionKS += str(distElem[0]) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
              # Ranking according to BIC
 	    index = int(self.__SortedDistributionAccordingToBIC[k, 0])
 	    key = self.__distributionNames[index]
 	    distElem = self.__TestedDistribution[key]
-	    self.__printTestedDistributionBIC += str(distElem[0])+ '\t' + str(distElem[1]['Accepted']) + '\t' + str(distElem[1]['pValue']) + '\t' + str(distElem[1]['BIC']) + '\n'
+	    self.__printTestedDistributionBIC += str(distElem[0])+ '\t' + str(distElem[1]['Accepted']) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
 	    if distElem[1]['Accepted']:
-	      self.__printAcceptedDistributionBIC += str(distElem[0])+ '\t' + str(distElem[1]['pValue']) + '\t' + str(distElem[1]['BIC']) + '\n'
+	      self.__printAcceptedDistributionBIC += str(distElem[0]) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+        # Set default precision
+        ot.PlatformInfo.SetNumericalPrecision(numerical_precision)
 
     def getAcceptedDistribution(self, criterion = 'BIC'):
-        ''' DistributionCollection ==> des distributions acceptees classee selon (Arg=BIC ou Arg=KS)'''
-        # TODO
+        '''
+        INPUTS
+            criterion : string value
+                        Should be BIC or KS
+                        Default argument is BIC
+
+        OUTPUTS
+            collection : DistributionCollection
+
+        DESCRIPTION:
+            The method returns the list of distributions that have been tested and accepted
+            according to the Kolmogorov test.
+            The list is ranked according to this criterion (in that case, input parameter argument should be 'KS')
+            or to the BIC criterion (input parameter argument should be 'BIC')
+
+        EXAMPLE :
+            import openturns as ot
+            x = ot.Normal().getSample(100)
+            fit = Fit_Continuous_1D_Distribution(x, 0.10)
+            # All accepted distributions ranked using BIC values
+            acceptedDistribution = f.getAcceptedDistribution('BIC')
+            # Equivalent to :
+            acceptedDistribution = f.getAcceptedDistribution()
+            # All accepted distributions ranked using KS p-values
+            acceptedDistribution = f.getAcceptedDistribution('KS')
+        '''
         uppercriterion = self.__checkCriterionArg(criterion)
         if (uppercriterion == 'BIC'):
             return self.getBestBICDistribution(range(self.__nbAcceptedDistributions))
@@ -153,7 +205,31 @@ class Fit_Continuous_1D_Distribution:
             return collection
 
     def getTestedDistribution(self, criterion = 'BIC'):
-        ''' DistributionCollection ==> des distributions acceptees classee selon (Arg=BIC ou Arg=KS)'''
+        '''
+        INPUTS
+            criterion : string value
+                        Should be BIC or KS
+                        Default argument is BIC
+
+        OUTPUTS
+            collection : DistributionCollection
+
+        DESCRIPTION:
+            The method returns the list of distributions that have been tested.
+            The returned list (DistributionCollection) is ranked according to the BIC or Kolmogorov criterion
+            The argument fixes the way to rank the collection
+
+        EXAMPLE :
+            import openturns as ot
+            sample = ot.Uniform().getSample(100)
+            fit = Fit_Continuous_1D_Distribution(sample)
+            # All tested distributions
+            testedDistribution = f.getTestedDistribution('BIC')
+            # or
+            testedDistribution = f.getTestedDistribution()
+            # KS p-values as criterion of ranking
+            testedDistribution = f.getTestedDistribution('KS')
+        '''
         uppercriterion = self.__checkCriterionArg(criterion)
         if (uppercriterion == 'BIC'):
             return self.getBestBICDistribution(range(self.__nbTestedDistributions))
@@ -162,8 +238,33 @@ class Fit_Continuous_1D_Distribution:
 
     def printAccptededDistribution(self, criterion = "BIC") :
         '''
-        TODO Documentation
+        INPUTS
+            criterion : string value
+                        Should be BIC or KS
+                        Default argument is BIC
+
+        OUTPUTS
+            None
+
+        DESCRIPTION:
+            The method prints the list of distributions that have been tested and accepted according
+            to the Kolmogorov test.
+            The print is done using the following scheme:
+              Distribution name | Value1 | Value2
+            Where :
+              Distribution name : Pretty print of the distribution name
+              Value1            : pValue of the Kolmogorov test
+              Value2            : BIC value
+
+        EXAMPLE :
+            import openturns as ot
+            sample = ot.Uniform(0, 1).getSample(100)
+            fit = Fit_Continuous_1D_Distribution(sample)
+            fit.printAccptededDistribution('BIC')
+            fit.printAccptededDistribution()
+            fit.printAccptededDistribution('KS')
         '''
+
         uppercriterion = self.__checkCriterionArg(criterion)
         if (uppercriterion == "BIC"):
             print self.__printAcceptedDistributionBIC
@@ -176,9 +277,32 @@ class Fit_Continuous_1D_Distribution:
         print self.__printExceptedDistribution
 
     def printTestedDistribution(self, criterion = "BIC"):
-        '''Print a table of tested distributions :
-            "Nom Distribution  Parmetres de la distribution" (pretty print de la dist) | Accepted | p-value | Bic
-            (classe par ordre decroissant du critere Arg ou Arg = BIC ou KS)
+        '''
+        INPUTS
+            criterion : string value
+                        Should be BIC or KS
+                        Default argument is BIC
+
+        OUTPUTS
+            None
+
+        DESCRIPTION:
+            The method prints the list of distributions that have been tested
+            The print is done using the following scheme:
+              Distribution name | Boolean | Value1 | Value2
+            Where :
+              Distribution name : Pretty print of the distribution name
+              Boolean           : Boolean value (Kolmogorov test Accepted / Rejected)
+              Value1            : pValue of the Kolmogorov test
+              Value2            : BIC value
+
+        EXAMPLE :
+            import openturns as ot
+            sample = ot.Uniform(0, 1).getSample(100)
+            fit = Fit_Continuous_1D_Distribution(sample)
+            fit.printTestedDistribution('BIC')
+            fit.printTestedDistribution()
+            fit.printTestedDistribution('KS')
         '''
         uppercriterion = self.__checkCriterionArg(criterion)
         if (uppercriterion == "BIC"):
