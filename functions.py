@@ -44,7 +44,7 @@ def hasCatalog(major, minor, revision):
     versionOTWithCatalog  = major * 100 + minor * 10 + revision
     return openturnsVersion >= versionOTWithCatalog
 
-if hasCatalog(major, minor, revision) is True:
+if hasCatalog(major, minor, revision) is False:
     # Function to be used with version <= 1.1
     def GetAllFactories():
 	""" Return a dictionnary with DistributionFactory objects of OT with the distinction
@@ -66,9 +66,9 @@ if hasCatalog(major, minor, revision) is True:
 		Dist = eval(StrDist)
 		if Dist.isContinuous():
 		    factoryName = factoryName.replace('Factory','Factory()')
-		    AllContinuousFactoryName.append(factoryName)
 		    factory = eval(factoryName)
 		    AllContinuousFactory.append(factory)
+		    AllContinuousFactoryName.append(factoryName[3:].replace('Factory()','Factory'))
 		else :
 		    factoryName = factoryName.replace('Factory','Factory()')
 		    AllDiscreteFactoryName.append(factoryName)
