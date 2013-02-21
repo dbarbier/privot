@@ -112,8 +112,9 @@ class Fit_Continuous_1D_Distribution:
         # Rank according to BIC/pValues
         self.__SortedDistributionAccordingToBIC = self.__SortedDistributionAccordingToBIC.sortAccordingToAComponent(1)
         self.__SortedDistributionAccordingToKS = self.__SortedDistributionAccordingToKS.sortAccordingToAComponent(1)
-        # Creating string values according to the previous ranking
+        # WhiteSpace ==> Organize the pretty print
         ws = ' '
+        # Creating string values according to the previous ranking
         for k in xrange(self.__nbTestedDistributions):
             index = int(self.__SortedDistributionAccordingToKS[self.__nbTestedDistributions - 1 - k, 0])
             key = self.__distributionNames[index]
