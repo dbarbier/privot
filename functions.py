@@ -7,27 +7,28 @@ def GetAllContinuousFactories():
     """
     # Current list includes parametric and non parametric
     try:
-        ParamNonParamContinuousFactory = ot.DistributionFactory.GetContinuousUniVariateFactories()
+        factories = ot.DistributionFactory.GetContinuousUniVariateFactories()
     except AttributeError:
-        #  DistributionFactory.GetContinuousUniVariateFactories() does not exist before OT 1.2
+        #  DistributionFactory.GetContinuousUniVariateFactories() does not
+        #  exist before OT 1.2.
         #  Emulate it by looping over all distributions
-        ParamNonParamContinuousFactory =[]
+        factories = []
         for elt in dir(ot.dist):
             if elt.endswith('Factory'):
-                factoryName = 'ot.' + elt
-                StrDist = factoryName.replace('Factory','()')
-                Dist = eval(StrDist)
-                if Dist.isContinuous():
-                    factory = eval(factoryName+'()')
-                    #  WARNING: Mimic ot.DistributionFactory.GetContinuousUniVariateFactories()
-                    ParamNonParamContinuousFactory.append(ot.DistributionFactory(factory))
+                factory_name = 'ot.' + elt
+                str_dist = factory_name.replace('Factory','()')
+                dist = eval(str_dist)
+                if dist.isContinuous():
+                    factory = eval(factory_name+'()')
+                    #  WARNING: Mimic GetContinuousUniVariateFactories()
+                    factories.append(ot.DistributionFactory(factory))
 
     #  Filter out HistogramFactory
     AllContinuousFactory = []
-    for dist in ParamNonParamContinuousFactory:
-        factoryName = dist.getImplementation().getClassName()
-        if (factoryName != 'HistogramFactory'):
-            AllContinuousFactory.append(dist)
+    for factory in factories:
+        factory_name = factory.getImplementation().getClassName()
+        if (factory_name != 'HistogramFactory'):
+            AllContinuousFactory.append(factory)
 
     return AllContinuousFactory
 
@@ -37,25 +38,25 @@ def GetAllDiscreteFactories():
     discrete distributions
     """
     try:
-        AllDiscreteFactory = ot.DistributionFactory.GetDiscreteUniVariateFactories()
+        factories = ot.DistributionFactory.GetDiscreteUniVariateFactories()
     except AttributeError:
-        AllDiscreteFactory =[]
+        factories = []
         for elt in dir(ot.dist):
             if elt.endswith('Factory'):
-                factoryName = 'ot.' + elt
-                StrDist = factoryName.replace('Factory','()')
-                Dist = eval(StrDist)
-                if not Dist.isContinuous():
-                    factory = eval(factoryName+'()')
-                    #  WARNING: Mimic ot.DistributionFactory.GetContinuousUniVariateFactories()
-                    AllDiscreteFactory.append(ot.DistributionFactory(factory))
+                factory_name = 'ot.' + elt
+                str_dist = factory_name.replace('Factory','()')
+                dist = eval(str_dist)
+                if not dist.isContinuous():
+                    factory = eval(factory_name+'()')
+                    #  WARNING: Mimic GetContinuousUniVariateFactories()
+                    factories.append(ot.DistributionFactory(factory))
 
-    return AllDiscreteFactory
+    return factories
 
 
 if __name__ == "__main__":
-    continuousFactories = GetAllContinuousFactories()
-    print("Factories: %s" % continuousFactories)
-    for dist in continuousFactories:
-        print(" factory name: %s" % dist.getImplementation().getClassName())
+    CONTINUOUS_FACTORIES = GetAllContinuousFactories()
+    print("Factories: %s" % CONTINUOUS_FACTORIES)
+    for DIST in CONTINUOUS_FACTORIES:
+        print(" factory name: %s" % DIST.getImplementation().getClassName())
 
