@@ -8,10 +8,15 @@ import openturns as ot
 from easyfitting import FitContinuousDistribution1D
 
 # Size of sample
-size = [10, 100, 1000, 10000]
+SIZE = [10, 100, 1000, 10000]
 
-""" """
-for N in size:
+
+# Loop over size
+# For each size of sample, the fitting test
+# is done. The size play a major role, mainly
+# with the Kolmogorov pValue.
+
+for N in SIZE:
     # Uniform model
     model1 = ot.Uniform(20, 22)
     
