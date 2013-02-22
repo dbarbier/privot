@@ -71,15 +71,13 @@ if hasCatalog(major, minor, revision) is False:
                 StrDist = factoryName.replace('Factory','()')
                 Dist = eval(StrDist)
                 if Dist.isContinuous():
-                    factoryName = factoryName.replace('Factory','Factory()')
-                    factory = eval(factoryName)
+                    AllContinuousFactoryName.append(elt)
+                    factory = eval(factoryName+'()')
                     AllContinuousFactory.append(factory)
-                    AllContinuousFactoryName.append(factoryName[3:].replace('Factory()','Factory'))
                 else :
-                    factoryName = factoryName.replace('Factory','Factory()')
-                    factory = eval(factoryName)
-                    AllDiscreteFactory.append(factory[3:].replace('Factory()','Factory'))
-                    AllDiscreteFactoryName.append(factoryName)
+                    AllDiscreteFactoryName.append(elt)
+                    factory = eval(factoryName+'()')
+                    AllDiscreteFactory.append(factory)
         result['AllContinuousFactoryName'] = AllContinuousFactoryName
         result['AllContinuousFactory'] = AllContinuousFactory
         result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
