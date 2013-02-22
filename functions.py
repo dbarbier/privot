@@ -65,8 +65,9 @@ if hasCatalog(major, minor, revision) is False:
         AllDiscreteFactoryName = []
         AllDiscreteFactory =[]
         AllFactoryName = []
+        excludedFactories = ['HistogramFactory']
         for elt in allDist:
-            if ('Factory' in elt) and ('_' not in elt) and ('Histogram' not in elt):
+            if elt.endswith('Factory') and elt not in excludedFactories:
                 factoryName = 'ot.' + elt
                 StrDist = factoryName.replace('Factory','()')
                 Dist = eval(StrDist)
