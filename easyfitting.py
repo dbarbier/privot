@@ -87,8 +87,10 @@ class FitContinuousDistribution1D:
         assert self.__sample.getSize() > 1
         # Get the catalog of all continuous and non parametric factories
         ContinuousDistributionOT = GetAllContinuousFactories()
-        self.__ContinuousDistributionOTFactory = ContinuousDistributionOT['AllContinuousFactory']
-        self.__ContinuousDistributionOTNames =  ContinuousDistributionOT['AllContinuousFactoryName']
+        self.__ContinuousDistributionOTFactory = \
+            ContinuousDistributionOT['AllContinuousFactory']
+        self.__ContinuousDistributionOTNames =  \
+            ContinuousDistributionOT['AllContinuousFactoryName']
         self.__distributionNames = []
         self.__testeddistribution = {}
         self.__nbTestedDistributions = 0
@@ -98,7 +100,10 @@ class FitContinuousDistribution1D:
         self.__printtesteddistributionbykolmogorovranking = str()
         self.__printAcceptedDistributionBIC = str()
         self.__printAcceptedDistributionKS = str()
-        self.__printExceptedDistribution = '\n---------------- NOT TESTED DISTRIBUTIONS  -------------------------------\n'
+        self.__printExceptedDistribution = \
+            '\n---------------- '\
+            + 'NOT TESTED DISTRIBUTIONS' + \
+            '  -------------------------------\n'
         # Used for ranking ==> we may also use python dict or numpy
         # The second option requires numpy
         self.__sorteddistributionbybic = ot.NumericalSample(0, 2)
@@ -108,7 +113,7 @@ class FitContinuousDistribution1D:
     def __run(self):
         '''
         The method is used to start the statistical computation & fitting.
-        No need to call the method since it is automatically launched at the init
+        It is automatically called at the init
         Private ==> not available for users
         '''
         # Default numerical precision
@@ -125,55 +130,83 @@ class FitContinuousDistribution1D:
             self.__distributionNames.append( Name.replace('Factory', '') )
             try:
                 distribution = factory.build(self.__sample)
-                BIC = ot.FittingTest.BIC(self.__sample, distribution, distribution.getParametersNumber())
-                pValue = ot.FittingTest.Kolmogorov(self.__sample, distribution).getPValue()
+                nbparameters = distribution.getParametersNumber()
+                distribution_name = distribution.getName()
+                BIC = ot.FittingTest.BIC(self.__sample,
+                                         distribution,
+                                         nbparameters)
+                statisticaltest = ot.FittingTest.Kolmogorov(self.__sample,
+                                  distribution)
+                pValue = statisticaltest.getPValue()
                 accepted = pValue >= self.__pvalue
                 maxLenTestedDist = max(maxLenTestedDist, len(str(distribution)))
                 if accepted:
                     self.__nbAcceptedDistributions += 1
-                    maxLenAcceptedDist = max(maxLenAcceptedDist, len(str(distribution)))
-                dict_elem_res = {"Accepted" : accepted, "BIC": BIC, "pValue" : pValue}
+                    maxLenAcceptedDist = max(maxLenAcceptedDist,
+                                             len(str(distribution)))
+                dict_elem_res = {"Accepted" : accepted,
+                                 "BIC": BIC,
+                                 "pValue" : pValue}
                 # Complete the sample of pValues/BIC ranking
                 self.__sorteddistributionbybic.add([i, BIC])
                 self.__sorteddistributionbykolmogorov.add([i, pValue])
                 # Complete the dictionary
-                self.__testeddistribution[distribution.getName()] = [distribution, dict_elem_res]
+                self.__testeddistribution[distribution_name] = [distribution,
+                                                                dict_elem_res]
                 self.__nbTestedDistributions += 1
             except Exception as e :
-                reasonError = e.message.replace('InvalidArgumentException : ', '')
-                self.__printExceptedDistribution += Name.replace('Factory', ' - ')
-                self.__printExceptedDistribution += '' + reasonError
-                self.__printExceptedDistribution += '\n'
-        self.__printExceptedDistribution += '--------------------------------------------------------------------------\n'
+                reasonError = \
+                    e.message.replace('InvalidArgumentException : ', '')
+                self.__printExceptedDistribution += \
+                    Name.replace('Factory', ' - ')
+                self.__printExceptedDistribution += \
+                    '' + reasonError
+                self.__printExceptedDistribution += \
+                    '\n'
+        self.__printExceptedDistribution += 74 * '-' + '\n'
         # Rank according to BIC/pValues
-        self.__sorteddistributionbybic = self.__sorteddistributionbybic.sortAccordingToAComponent(1)
-        self.__sorteddistributionbykolmogorov = self.__sorteddistributionbykolmogorov.sortAccordingToAComponent(1)
+        self.__sorteddistributionbybic = \
+            self.__sorteddistributionbybic.sortAccordingToAComponent(1)
+        self.__sorteddistributionbykolmogorov = \
+            self.__sorteddistributionbykolmogorov.sortAccordingToAComponent(1)
         # WhiteSpace ==> Organize the pretty print
         ws = ' '
+        size = self.__nbTestedDistributions - 1
         # Creating string values according to the previous ranking
         for k in xrange(self.__nbTestedDistributions):
-            index = int(self.__sorteddistributionbykolmogorov[self.__nbTestedDistributions - 1 - k, 0])
+            index = self.__sorteddistributionbykolmogorov[size - k, 0]
+            index = int(index)
             key = self.__distributionNames[index]
             distElem = self.__testeddistribution[key]
-            accepted = distElem[1]['Accepted']
-            if accepted:
+            distribution = distElem[0]
+            distribution_print = str(distribution)
+            datadistribution = distElem[1]
+            if datadistribution['Accepted']:
                 acceptedstr = 'Accepted'
             else :
                 acceptedstr = 'Rejected'
-            self.__printtesteddistributionbykolmogorovranking += str(distElem[0]) + (maxLenTestedDist - len(str(distElem[0]))) * ws + '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
-            if distElem[1]['Accepted']:
-                self.__printAcceptedDistributionKS += str(distElem[0]) + (maxLenAcceptedDist - len(str(distElem[0]))) * ws + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            self.__printtesteddistributionbykolmogorovranking += \
+                distribution_print + \
+                (maxLenTestedDist - len(distribution_print)) * ws + \
+                '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) +\
+                '\t' + str(round(datadistribution['BIC'], printing_numerical_precision)) + '\n'
+            if datadistribution['Accepted']:
+                self.__printAcceptedDistributionKS += str(distribution) +\
+                    (maxLenAcceptedDist - len(str(distribution))) * ws +\
+                    '\t' + str(round(datadistribution['pValue'], printing_numerical_precision)) +\
+                    '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
 
              # Ranking according to BIC
             index = int(self.__sorteddistributionbybic[k, 0])
             key = self.__distributionNames[index]
             distElem = self.__testeddistribution[key]
-            accepted = distElem[1]['Accepted']
-            if accepted:
+            distribution = distElem[0]
+            datadistribution = distElem[1]
+            if datadistribution['Accepted']:
                 acceptedstr = 'Accepted'
             else :
                 acceptedstr = 'Rejected'
-            self.__printtesteddistributionbybicranking += str(distElem[0]) + (maxLenTestedDist - len(str(distElem[0]))) * ws  + '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            self.__printtesteddistributionbybicranking += str(distribution) + (maxLenTestedDist - len(str(distribution))) * ws  + '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
             if distElem[1]['Accepted']:
                 self.__printAcceptedDistributionBIC += str(distElem[0])+ (maxLenAcceptedDist - len(str(distElem[0]))) * ws  + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
         # Set default precision
