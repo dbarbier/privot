@@ -66,7 +66,7 @@ class Fit_Continuous_1D_Distribution:
             raise ValueError('Expected BIC or KS argument')
         return uppercriterion
 
-    def __init__(self, sample, pvalue = 0.05):
+    def __init__(self, sample, pvalue=0.05):
         '''
         ARGUMENTS
             sample : NumericalSample sample of dimension 1
@@ -158,28 +158,29 @@ class Fit_Continuous_1D_Distribution:
             distElem = self.__TestedDistribution[key]
             accepted = distElem[1]['Accepted']
             if accepted:
-                acceptedStr = 'Accepted'
+                acceptedstr = 'Accepted'
             else :
-                acceptedStr = 'Rejected'
-            self.__printTestedDistributionKS += str(distElem[0]) + (maxLenTestedDist - len(str(distElem[0]))) * ws + '\t' + acceptedStr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+                acceptedstr = 'Rejected'
+            self.__printTestedDistributionKS += str(distElem[0]) + (maxLenTestedDist - len(str(distElem[0]))) * ws + '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
             if distElem[1]['Accepted']:
                 self.__printAcceptedDistributionKS += str(distElem[0]) + (maxLenAcceptedDist - len(str(distElem[0]))) * ws + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+
              # Ranking according to BIC
             index = int(self.__SortedDistributionAccordingToBIC[k, 0])
             key = self.__distributionNames[index]
             distElem = self.__TestedDistribution[key]
             accepted = distElem[1]['Accepted']
             if accepted:
-                acceptedStr = 'Accepted'
+                acceptedstr = 'Accepted'
             else :
-                acceptedStr = 'Rejected'
-            self.__printTestedDistributionBIC += str(distElem[0]) + '\t' + acceptedStr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+                acceptedstr = 'Rejected'
+            self.__printTestedDistributionBIC += str(distElem[0]) + (maxLenTestedDist - len(str(distElem[0]))) * ws  + '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
             if distElem[1]['Accepted']:
-                self.__printAcceptedDistributionBIC += str(distElem[0]) + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+                self.__printAcceptedDistributionBIC += str(distElem[0])+ (maxLenAcceptedDist - len(str(distElem[0]))) * ws  + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
         # Set default precision
         ot.PlatformInfo.SetNumericalPrecision(numerical_precision)
 
-    def getAcceptedDistribution(self, criterion = 'BIC'):
+    def getAcceptedDistribution(self, criterion='BIC'):
         '''
         INPUTS
             criterion : string value
@@ -257,7 +258,7 @@ class Fit_Continuous_1D_Distribution:
                 collection.add(distReturned[0])
             return collection
 
-    def getTestedDistribution(self, criterion = 'BIC'):
+    def getTestedDistribution(self, criterion='BIC'):
         '''
         INPUTS
             criterion : string value
@@ -329,7 +330,7 @@ class Fit_Continuous_1D_Distribution:
         '''
         print self.__printExceptedDistribution
 
-    def printTestedDistribution(self, criterion = "BIC"):
+    def printTestedDistribution(self, criterion="BIC"):
         '''
         INPUTS
             criterion : string value
