@@ -60,11 +60,8 @@ if hasCatalog(major, minor, revision) is False:
         """
         allDist = dir(ot.dist)
         result = {}
-        AllContinuousFactoryName = []
         AllContinuousFactory =[]
-        AllDiscreteFactoryName = []
         AllDiscreteFactory =[]
-        AllFactoryName = []
         excludedFactories = ['HistogramFactory']
         for elt in allDist:
             if elt.endswith('Factory') and elt not in excludedFactories:
@@ -72,26 +69,22 @@ if hasCatalog(major, minor, revision) is False:
                 StrDist = factoryName.replace('Factory','()')
                 Dist = eval(StrDist)
                 if Dist.isContinuous():
-                    AllContinuousFactoryName.append(elt)
                     factory = eval(factoryName+'()')
                     AllContinuousFactory.append(factory)
                 else :
-                    AllDiscreteFactoryName.append(elt)
                     factory = eval(factoryName+'()')
                     AllDiscreteFactory.append(factory)
-        result['AllContinuousFactoryName'] = AllContinuousFactoryName
         result['AllContinuousFactory'] = AllContinuousFactory
-        result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
         result['AllDiscreteFactory'] = AllDiscreteFactory
         return(result)
 
     resultAllFactory = GetAllFactories()
 
     def GetAllContinuousFactories():
-        return {'AllContinuousFactory' : resultAllFactory['AllContinuousFactory'], 'AllContinuousFactoryName' : resultAllFactory['AllContinuousFactoryName']}
+        return resultAllFactory['AllContinuousFactory']
 
     def GetAllDiscreteFactories():
-        return {'AllDiscreteFactory' : resultAllFactory['AllDiscreteFactory'], 'AllDiscreteFactoryName' : resultAllFactory['AllDiscreteFactoryName']}
+        return resultAllFactory['AllDiscreteFactory']
 
 else :
     # Function to be used with version >= 1.2
@@ -103,38 +96,24 @@ else :
         # Current list includes parametric and non parametric
         ParamNonParamContinuousFactory = ot.DistributionFactory.GetContinuousUniVariateFactories()
         AllContinuousFactory = []
-        AllContinuousFactoryName = []
-        for i in range(len(ParamNonParamContinuousFactory)):
-            dist = ParamNonParamContinuousFactory[i]
+        for dist in ParamNonParamContinuousFactory:
             factoryName = dist.getImplementation().getClassName()
             if (factoryName != 'HistogramFactory'):
                 AllContinuousFactory.append(dist)
-                AllContinuousFactoryName.append(factoryName)
 
-        result = {}
-        result['AllContinuousFactoryName'] = AllContinuousFactoryName
-        result['AllContinuousFactory'] = AllContinuousFactory
-        return result
+        return AllContinuousFactory
 
     def GetAllDiscreteFactories():
         """ Return a dictionnary with DistributionFactory objects of OT with the distinction
         'AllDiscreteFactory' and 'AllDiscreteFactory'
         """
-        AllDiscreteFactory = ot.DistributionFactory.GetDiscreteUniVariateFactories()
-        AllDiscreteFactoryName = []
-        for i, dist in enumerate(AllDiscreteFactory):
-            factoryName = dist.getImplementation().getClassName()
-            AllDiscreteFactoryName.append(factoryName)
-
-        result = {}
-        result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
-        result['AllDiscreteFactory'] = AllDiscreteFactory
-        return result
+        return ot.DistributionFactory.GetDiscreteUniVariateFactories()
 
 
 if __name__ == "__main__":
     print("DistributionFactory has method GetDiscreteUniVariateFactories()? "+str(hasCatalog(major, minor, revision)))
     continuousFactories = GetAllContinuousFactories()
-    print("Factory names: %s" % (continuousFactories['AllContinuousFactoryName']))
-    print("Factories: %s" % (continuousFactories['AllContinuousFactory']))
+    print("Factories: %s" % continuousFactories)
+    for dist in continuousFactories:
+        print(" factory name: %s" % dist.getImplementation().getClassName())
 

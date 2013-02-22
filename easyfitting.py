@@ -86,11 +86,7 @@ class FitContinuousDistribution1D:
         assert self.__sample.getDimension() == 1
         assert self.__sample.getSize() > 1
         # Get the catalog of all continuous and non parametric factories
-        ContinuousDistributionOT = GetAllContinuousFactories()
-        self.__ContinuousDistributionOTFactory = \
-            ContinuousDistributionOT['AllContinuousFactory']
-        self.__ContinuousDistributionOTNames =  \
-            ContinuousDistributionOT['AllContinuousFactoryName']
+        self.__ContinuousDistributionOTFactory = GetAllContinuousFactories()
         self.__distributionNames = []
         self.__testeddistribution = {}
         self.__nbTestedDistributions = 0
@@ -126,7 +122,7 @@ class FitContinuousDistribution1D:
         maxLenAcceptedDist = 0
         for i in xrange(nbFactory):
             factory = self.__ContinuousDistributionOTFactory[i]
-            Name = self.__ContinuousDistributionOTNames[i]
+            Name = factory.getImplementation().getClassName()
             self.__distributionNames.append( Name.replace('Factory', '') )
             try:
                 distribution = factory.build(self.__sample)
