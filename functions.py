@@ -1,7 +1,8 @@
 import openturns as ot
 
+
 def GetAllContinuousFactories():
-    """ 
+    """
     Return a dictionary with DistributionFactory objects of OT which generate
     continuous distributions
     """
@@ -16,21 +17,22 @@ def GetAllContinuousFactories():
         for elt in dir(ot.dist):
             if elt.endswith('Factory'):
                 factory_name = 'ot.' + elt
-                str_dist = factory_name.replace('Factory','()')
+                str_dist = factory_name.replace('Factory', '()')
                 dist = eval(str_dist)
                 if dist.isContinuous():
-                    factory = eval(factory_name+'()')
+                    factory = eval(factory_name + '()')
                     #  WARNING: Mimic GetContinuousUniVariateFactories()
                     factories.append(ot.DistributionFactory(factory))
 
     #  Filter out HistogramFactory
-    AllContinuousFactory = []
+    continuous_factories = []
     for factory in factories:
         factory_name = factory.getImplementation().getClassName()
         if (factory_name != 'HistogramFactory'):
-            AllContinuousFactory.append(factory)
+            continuous_factories.append(factory)
 
-    return AllContinuousFactory
+    return continuous_factories
+
 
 def GetAllDiscreteFactories():
     """
@@ -44,10 +46,10 @@ def GetAllDiscreteFactories():
         for elt in dir(ot.dist):
             if elt.endswith('Factory'):
                 factory_name = 'ot.' + elt
-                str_dist = factory_name.replace('Factory','()')
+                str_dist = factory_name.replace('Factory', '()')
                 dist = eval(str_dist)
                 if not dist.isContinuous():
-                    factory = eval(factory_name+'()')
+                    factory = eval(factory_name + '()')
                     #  WARNING: Mimic GetContinuousUniVariateFactories()
                     factories.append(ot.DistributionFactory(factory))
 
@@ -59,4 +61,3 @@ if __name__ == "__main__":
     print("Factories: %s" % CONTINUOUS_FACTORIES)
     for DIST in CONTINUOUS_FACTORIES:
         print(" factory name: %s" % DIST.getImplementation().getClassName())
-
