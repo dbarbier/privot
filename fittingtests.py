@@ -1,6 +1,8 @@
-""" This file contains tests of easyfitting module
-    The FitContinuousDistribution1D class is tested and results are printed
-    Methods of the class are illustrated
+"""
+The test file contains validation and illustrations of
+easyfitting module capabilities.
+Both the print and get methods of FitContinuousDistribution1D
+class are tested.
 """
 import openturns as ot
 from easyfitting import FitContinuousDistribution1D
