@@ -23,11 +23,11 @@ class Fit_Continuous_1D_Distribution:
     '''
     @staticmethod
     def __checkCriterionArg(criterion):
-      assert isinstance(criterion, str)
-      uppercriterion = criterion.upper()
-      if (uppercriterion not in ["BIC", "KS"]):
-          raise ValueError('Expected BIC or KS argument')
-      return uppercriterion
+        assert isinstance(criterion, str)
+        uppercriterion = criterion.upper()
+        if (uppercriterion not in ["BIC", "KS"]):
+            raise ValueError('Expected BIC or KS argument')
+        return uppercriterion
 
     def __init__(self, sample, pvalue = 0.05):
         '''
@@ -84,30 +84,30 @@ class Fit_Continuous_1D_Distribution:
         maxLenTestedDist = 0
         maxLenAcceptedDist = 0
         for i in xrange(nbFactory):
-             factory = self.__ContinuousDistributionOTFactory[i]
-             Name = self.__ContinuousDistributionOTNames[i]
-             self.__distributionNames.append( Name.replace('Factory', '') )
-             try:
-                 distribution = factory.build(self.__sample)
-                 BIC = ot.FittingTest.BIC(self.__sample, distribution, distribution.getParametersNumber())
-                 pValue = ot.FittingTest.Kolmogorov(self.__sample, distribution).getPValue()
-                 accepted = pValue >= self.__pvalue
-                 maxLenTestedDist = max(maxLenTestedDist, len(str(distribution)))
-                 if accepted:
-                     self.__nbAcceptedDistributions += 1
-                     maxLenAcceptedDist = max(maxLenAcceptedDist, len(str(distribution)))
-                 dict_elem_res = {"Accepted" : accepted, "BIC": BIC, "pValue" : pValue}
-                 # Complete the sample of pValues/BIC ranking
-                 self.__SortedDistributionAccordingToBIC.add([i, BIC])
-                 self.__SortedDistributionAccordingToKS.add([i, pValue])
-                 # Complete the dictionary
-                 self.__TestedDistribution[distribution.getName()] = [distribution, dict_elem_res]
-                 self.__nbTestedDistributions += 1
-             except Exception as e :
-                 reasonError = e.message.replace('InvalidArgumentException : ', '')
-                 self.__printExceptedDistribution += Name.replace('Factory', ' - ')
-                 self.__printExceptedDistribution += '' + reasonError
-                 self.__printExceptedDistribution += '\n'
+            factory = self.__ContinuousDistributionOTFactory[i]
+            Name = self.__ContinuousDistributionOTNames[i]
+            self.__distributionNames.append( Name.replace('Factory', '') )
+            try:
+                distribution = factory.build(self.__sample)
+                BIC = ot.FittingTest.BIC(self.__sample, distribution, distribution.getParametersNumber())
+                pValue = ot.FittingTest.Kolmogorov(self.__sample, distribution).getPValue()
+                accepted = pValue >= self.__pvalue
+                maxLenTestedDist = max(maxLenTestedDist, len(str(distribution)))
+                if accepted:
+                    self.__nbAcceptedDistributions += 1
+                    maxLenAcceptedDist = max(maxLenAcceptedDist, len(str(distribution)))
+                dict_elem_res = {"Accepted" : accepted, "BIC": BIC, "pValue" : pValue}
+                # Complete the sample of pValues/BIC ranking
+                self.__SortedDistributionAccordingToBIC.add([i, BIC])
+                self.__SortedDistributionAccordingToKS.add([i, pValue])
+                # Complete the dictionary
+                self.__TestedDistribution[distribution.getName()] = [distribution, dict_elem_res]
+                self.__nbTestedDistributions += 1
+            except Exception as e :
+                reasonError = e.message.replace('InvalidArgumentException : ', '')
+                self.__printExceptedDistribution += Name.replace('Factory', ' - ')
+                self.__printExceptedDistribution += '' + reasonError
+                self.__printExceptedDistribution += '\n'
         self.__printExceptedDistribution += '--------------------------------------------------------------------------\n'
         # Rank according to BIC/pValues
         self.__SortedDistributionAccordingToBIC = self.__SortedDistributionAccordingToBIC.sortAccordingToAComponent(1)
