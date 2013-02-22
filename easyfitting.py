@@ -126,8 +126,9 @@ class FitContinuousDistribution1D:
             self.__distributionNames.append( Name.replace('Factory', '') )
             try:
                 distribution = factory.build(self.__sample)
-                nbparameters = distribution.getParametersNumber()
+                distribution_print = str(distribution)
                 distribution_name = distribution.getName()
+                nbparameters = distribution.getParametersNumber()
                 BIC = ot.FittingTest.BIC(self.__sample,
                                          distribution,
                                          nbparameters)
@@ -135,11 +136,11 @@ class FitContinuousDistribution1D:
                                   distribution)
                 pValue = statisticaltest.getPValue()
                 accepted = pValue >= self.__pvalue
-                maxLenTestedDist = max(maxLenTestedDist, len(str(distribution)))
+                maxLenTestedDist = max(maxLenTestedDist, len(distribution_print))
                 if accepted:
                     self.__nbAcceptedDistributions += 1
                     maxLenAcceptedDist = max(maxLenAcceptedDist,
-                                             len(str(distribution)))
+                                             len(distribution_print))
                 dict_elem_res = {"Accepted" : accepted,
                                  "BIC": BIC,
                                  "pValue" : pValue}
@@ -179,32 +180,38 @@ class FitContinuousDistribution1D:
             datadistribution = distElem[1]
             if datadistribution['Accepted']:
                 acceptedstr = 'Accepted'
+                self.__printAcceptedDistributionKS += distribution_print +\
+                    (maxLenAcceptedDist - len(distribution_print)) * ws +\
+                    '\t' + str(round(datadistribution['pValue'], printing_numerical_precision)) +\
+                    '\t' + str(round(datadistribution['BIC'], printing_numerical_precision)) + '\n'
             else :
                 acceptedstr = 'Rejected'
             self.__printtesteddistributionbykolmogorovranking += \
                 distribution_print + \
                 (maxLenTestedDist - len(distribution_print)) * ws + \
-                '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) +\
+                '\t' + acceptedstr + '\t' + str(round(datadistribution['pValue'], printing_numerical_precision)) +\
                 '\t' + str(round(datadistribution['BIC'], printing_numerical_precision)) + '\n'
-            if datadistribution['Accepted']:
-                self.__printAcceptedDistributionKS += str(distribution) +\
-                    (maxLenAcceptedDist - len(str(distribution))) * ws +\
-                    '\t' + str(round(datadistribution['pValue'], printing_numerical_precision)) +\
-                    '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
 
              # Ranking according to BIC
             index = int(self.__sorteddistributionbybic[k, 0])
             key = self.__distributionNames[index]
             distElem = self.__testeddistribution[key]
             distribution = distElem[0]
+            distribution_print = str(distribution)
             datadistribution = distElem[1]
             if datadistribution['Accepted']:
                 acceptedstr = 'Accepted'
+                self.__printAcceptedDistributionBIC += distribution_print + \
+                    (maxLenAcceptedDist - len(distribution_print)) * ws  +\
+                    '\t' + str(round(datadistribution['pValue'], printing_numerical_precision)) +\
+                    '\t' + str(round(datadistribution['BIC'], printing_numerical_precision)) + '\n'
             else :
                 acceptedstr = 'Rejected'
-            self.__printtesteddistributionbybicranking += str(distribution) + (maxLenTestedDist - len(str(distribution))) * ws  + '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
-            if distElem[1]['Accepted']:
-                self.__printAcceptedDistributionBIC += str(distElem[0])+ (maxLenAcceptedDist - len(str(distElem[0]))) * ws  + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            self.__printtesteddistributionbybicranking += distribution_print +\
+                (maxLenTestedDist - len(distribution_print)) * ws  +\
+                '\t' + acceptedstr + '\t' +\
+                str(round(datadistribution['pValue'], printing_numerical_precision)) +\
+                '\t' + str(round(datadistribution['BIC'], printing_numerical_precision)) + '\n'
         # Set default precision
         ot.PlatformInfo.SetNumericalPrecision(numerical_precision)
 
