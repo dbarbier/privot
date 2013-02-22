@@ -27,23 +27,23 @@
     Example
     --------
     >>> import openturns as ot
-    >>> from easyfitting import Fit_Continuous_1D_Distribution
+    >>> from easyfitting import FitContinuousDistribution1D
     >>> x = ot.Normal().getSample(100)
-    >>> fit = Fit_Continuous_1D_Distribution(x, 0.10)
+    >>> fit = FitContinuousDistribution1D(x, 0.10)
     >>> test = fit.getTestedDistribution()
     >>> accepted = fit.getAcceptedDistribution()
 
 """
 
 import openturns as ot
-from functions import *
+from functions import GetAllContinuousFactories
 
-class Fit_Continuous_1D_Distribution:
+class FitContinuousDistribution1D:
     '''
     NAME
-      Fit_Continuous_1D_Distribution
+      FitContinuousDistribution1D
     DESCRIPTION
-     Fit_Continuous_1D_Distribution allows to perform statistical fitting tests on a numerical sample or an array of dimension 1.
+     FitContinuousDistribution1D allows to perform statistical fitting tests on a numerical sample or an array of dimension 1.
      The objective is to get a parametric estimation of some distribution models.
      For that purpose, a catalog of all continuous distribution factories implemented in the OpenTURNS library is used.
      From the numerical data and for a fixed distribution model, the parameters have to be estimated. This is done thanks to the maximum
@@ -76,7 +76,7 @@ class Fit_Continuous_1D_Distribution:
         EXAMPLE :
             import openturns as ot
             x = ot.Normal().getSample(100)
-            fit = Fit_Continuous_1D_Distribution(x, 0.10)
+            fit = FitContinuousDistribution1D(x, 0.10)
         '''
         assert isinstance(pvalue, float)
         assert pvalue > 0
@@ -90,20 +90,19 @@ class Fit_Continuous_1D_Distribution:
         self.__ContinuousDistributionOTFactory = ContinuousDistributionOT['AllContinuousFactory']
         self.__ContinuousDistributionOTNames =  ContinuousDistributionOT['AllContinuousFactoryName']
         self.__distributionNames = []
-        self.__TestedDistribution = {}
+        self.__testeddistribution = {}
         self.__nbTestedDistributions = 0
         self.__nbAcceptedDistributions = 0
-        self.__AcceptedDistribution = None
         # Str attributs
-        self.__printTestedDistributionBIC = str()
-        self.__printTestedDistributionKS = str()
+        self.__printtesteddistributionbybicranking = str()
+        self.__printtesteddistributionbykolmogorovranking = str()
         self.__printAcceptedDistributionBIC = str()
         self.__printAcceptedDistributionKS = str()
         self.__printExceptedDistribution = '\n---------------- NOT TESTED DISTRIBUTIONS  -------------------------------\n'
         # Used for ranking ==> we may also use python dict or numpy
         # The second option requires numpy
-        self.__SortedDistributionAccordingToBIC = ot.NumericalSample(0, 2)
-        self.__SortedDistributionAccordingToKS = ot.NumericalSample(0, 2)
+        self.__sorteddistributionbybic = ot.NumericalSample(0, 2)
+        self.__sorteddistributionbykolmogorov = ot.NumericalSample(0, 2)
         self.__run()
 
     def __run(self):
@@ -135,10 +134,10 @@ class Fit_Continuous_1D_Distribution:
                     maxLenAcceptedDist = max(maxLenAcceptedDist, len(str(distribution)))
                 dict_elem_res = {"Accepted" : accepted, "BIC": BIC, "pValue" : pValue}
                 # Complete the sample of pValues/BIC ranking
-                self.__SortedDistributionAccordingToBIC.add([i, BIC])
-                self.__SortedDistributionAccordingToKS.add([i, pValue])
+                self.__sorteddistributionbybic.add([i, BIC])
+                self.__sorteddistributionbykolmogorov.add([i, pValue])
                 # Complete the dictionary
-                self.__TestedDistribution[distribution.getName()] = [distribution, dict_elem_res]
+                self.__testeddistribution[distribution.getName()] = [distribution, dict_elem_res]
                 self.__nbTestedDistributions += 1
             except Exception as e :
                 reasonError = e.message.replace('InvalidArgumentException : ', '')
@@ -147,34 +146,34 @@ class Fit_Continuous_1D_Distribution:
                 self.__printExceptedDistribution += '\n'
         self.__printExceptedDistribution += '--------------------------------------------------------------------------\n'
         # Rank according to BIC/pValues
-        self.__SortedDistributionAccordingToBIC = self.__SortedDistributionAccordingToBIC.sortAccordingToAComponent(1)
-        self.__SortedDistributionAccordingToKS = self.__SortedDistributionAccordingToKS.sortAccordingToAComponent(1)
+        self.__sorteddistributionbybic = self.__sorteddistributionbybic.sortAccordingToAComponent(1)
+        self.__sorteddistributionbykolmogorov = self.__sorteddistributionbykolmogorov.sortAccordingToAComponent(1)
         # WhiteSpace ==> Organize the pretty print
         ws = ' '
         # Creating string values according to the previous ranking
         for k in xrange(self.__nbTestedDistributions):
-            index = int(self.__SortedDistributionAccordingToKS[self.__nbTestedDistributions - 1 - k, 0])
+            index = int(self.__sorteddistributionbykolmogorov[self.__nbTestedDistributions - 1 - k, 0])
             key = self.__distributionNames[index]
-            distElem = self.__TestedDistribution[key]
+            distElem = self.__testeddistribution[key]
             accepted = distElem[1]['Accepted']
             if accepted:
                 acceptedstr = 'Accepted'
             else :
                 acceptedstr = 'Rejected'
-            self.__printTestedDistributionKS += str(distElem[0]) + (maxLenTestedDist - len(str(distElem[0]))) * ws + '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            self.__printtesteddistributionbykolmogorovranking += str(distElem[0]) + (maxLenTestedDist - len(str(distElem[0]))) * ws + '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
             if distElem[1]['Accepted']:
                 self.__printAcceptedDistributionKS += str(distElem[0]) + (maxLenAcceptedDist - len(str(distElem[0]))) * ws + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
 
              # Ranking according to BIC
-            index = int(self.__SortedDistributionAccordingToBIC[k, 0])
+            index = int(self.__sorteddistributionbybic[k, 0])
             key = self.__distributionNames[index]
-            distElem = self.__TestedDistribution[key]
+            distElem = self.__testeddistribution[key]
             accepted = distElem[1]['Accepted']
             if accepted:
                 acceptedstr = 'Accepted'
             else :
                 acceptedstr = 'Rejected'
-            self.__printTestedDistributionBIC += str(distElem[0]) + (maxLenTestedDist - len(str(distElem[0]))) * ws  + '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
+            self.__printtesteddistributionbybicranking += str(distElem[0]) + (maxLenTestedDist - len(str(distElem[0]))) * ws  + '\t' + acceptedstr + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
             if distElem[1]['Accepted']:
                 self.__printAcceptedDistributionBIC += str(distElem[0])+ (maxLenAcceptedDist - len(str(distElem[0]))) * ws  + '\t' + str(round(distElem[1]['pValue'], printing_numerical_precision)) + '\t' + str(round(distElem[1]['BIC'], printing_numerical_precision)) + '\n'
         # Set default precision
@@ -199,7 +198,7 @@ class Fit_Continuous_1D_Distribution:
         EXAMPLE :
             import openturns as ot
             x = ot.Normal().getSample(100)
-            fit = Fit_Continuous_1D_Distribution(x, 0.10)
+            fit = FitContinuousDistribution1D(x, 0.10)
             # All accepted distributions ranked using BIC values
             acceptedDistribution = f.getAcceptedDistribution('BIC')
             # Equivalent to :
@@ -215,33 +214,33 @@ class Fit_Continuous_1D_Distribution:
 
     def getBestBICDistribution(self, index):
         '''
-        TODO Documentation
+        Documentation
         '''
         assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
         if isinstance(index, int):
-            listIndex = self.__SortedDistributionAccordingToBIC[index, 0]
+            listIndex = self.__sorteddistributionbybic[index, 0]
             keyValue = self.__distributionNames[int(listIndex)]
-            return self.__TestedDistribution[keyValue][0]
+            return self.__testeddistribution[keyValue][0]
         else :
             collection = ot.DistributionCollection()
             for point in index:
-                ind = self.__SortedDistributionAccordingToBIC[point, 0]
+                ind = self.__sorteddistributionbybic[point, 0]
                 keyValue = self.__distributionNames[int(ind)]
-                collection.add(self.__TestedDistribution[keyValue][0])
+                collection.add(self.__testeddistribution[keyValue][0])
             return collection
 
     def getBestKSDistribution(self, index):
         '''
-        TODO Documentation
+        Documentation
         '''
         assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
         size = self.__nbTestedDistributions - 1
         if isinstance(index, int):
             if index >= size:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
-            listIndex = self.__SortedDistributionAccordingToKS[size - index, 0]
+            listIndex = self.__sorteddistributionbykolmogorov[size - index, 0]
             name = self.__distributionNames[int(listIndex)]
-            distReturned = self.__TestedDistribution[name]
+            distReturned = self.__testeddistribution[name]
             if distReturned[1]["Accepted"] is False:
                 ot.Log.Warn('Care! The distribution has not been accepted by the KS test')
             return distReturned[0]
@@ -250,9 +249,9 @@ class Fit_Continuous_1D_Distribution:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
             collection = ot.DistributionCollection()
             for point in index:
-                ind = self.__SortedDistributionAccordingToKS[size - point, 0]
+                ind = self.__sorteddistributionbykolmogorov[size - point, 0]
                 name = self.__distributionNames[int(ind)]
-                distReturned = self.__TestedDistribution[name]
+                distReturned = self.__testeddistribution[name]
                 if distReturned[1]["Accepted"] is False:
                     ot.Log.Warn('Care! The distribution has not been accepted by the KS test')
                 collection.add(distReturned[0])
@@ -276,7 +275,7 @@ class Fit_Continuous_1D_Distribution:
         EXAMPLE :
             import openturns as ot
             sample = ot.Uniform().getSample(100)
-            fit = Fit_Continuous_1D_Distribution(sample)
+            fit = FitContinuousDistribution1D(sample)
             # All tested distributions
             testedDistribution = f.getTestedDistribution('BIC')
             # or
@@ -313,7 +312,7 @@ class Fit_Continuous_1D_Distribution:
         EXAMPLE :
             import openturns as ot
             sample = ot.Uniform(0, 1).getSample(100)
-            fit = Fit_Continuous_1D_Distribution(sample)
+            fit = FitContinuousDistribution1D(sample)
             fit.printAcceptedDistribution('BIC')
             fit.printAcceptedDistribution()
             fit.printAcceptedDistribution('KS')
@@ -353,13 +352,13 @@ class Fit_Continuous_1D_Distribution:
         EXAMPLE :
             import openturns as ot
             sample = ot.Uniform(0, 1).getSample(100)
-            fit = Fit_Continuous_1D_Distribution(sample)
+            fit = FitContinuousDistribution1D(sample)
             fit.printTestedDistribution('BIC')
             fit.printTestedDistribution()
             fit.printTestedDistribution('KS')
         '''
         uppercriterion = self.__checkCriterionArg(criterion)
         if (uppercriterion == "BIC"):
-            print self.__printTestedDistributionBIC
+            print self.__printtesteddistributionbybicranking
         else:
-            print self.__printTestedDistributionKS
+            print self.__printtesteddistributionbykolmogorovranking
