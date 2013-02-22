@@ -252,7 +252,7 @@ class Fit_Continuous_1D_Distribution:
         else:
             return self.getBestKSDistribution(range(self.__nbTestedDistributions))
 
-    def printAccptededDistribution(self, criterion = "BIC") :
+    def printAcceptedDistribution(self, criterion = "BIC") :
         '''
         INPUTS
             criterion : string value
@@ -276,9 +276,9 @@ class Fit_Continuous_1D_Distribution:
             import openturns as ot
             sample = ot.Uniform(0, 1).getSample(100)
             fit = Fit_Continuous_1D_Distribution(sample)
-            fit.printAccptededDistribution('BIC')
-            fit.printAccptededDistribution()
-            fit.printAccptededDistribution('KS')
+            fit.printAcceptedDistribution('BIC')
+            fit.printAcceptedDistribution()
+            fit.printAcceptedDistribution('KS')
         '''
 
         uppercriterion = self.__checkCriterionArg(criterion)
