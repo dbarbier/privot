@@ -275,7 +275,7 @@ class FitContinuousDistribution1D:
         uppercriterion = self.__checkCriterionArg(criterion)
         size = self._nrTestedDistributions - 1
         if isinstance(index, int):
-            if index >= size:
+            if index > size:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
             if (uppercriterion == 'BIC'):
                 listIndex = self._sorted_distribution_by_bic[index, 0]
@@ -287,7 +287,7 @@ class FitContinuousDistribution1D:
                 ot.Log.Warn('Care! The distribution has been rejected by the KS test')
             return distReturned[0]
         else:   # python sequence
-            if max(index) >= size:
+            if max(index) > size:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
             collection = ot.DistributionCollection()
             for point in index:
