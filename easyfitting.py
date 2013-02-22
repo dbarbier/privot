@@ -244,54 +244,45 @@ class FitContinuousDistribution1D:
         '''
         uppercriterion = self.__checkCriterionArg(criterion)
         if (uppercriterion == 'BIC'):
-            return self.getBestBICDistribution(range(self.__nbAcceptedDistributions))
+            return self.getBestDistribution(range(self.__nbAcceptedDistributions), 'BIC')
         else:
-            return self.getBestKSDistribution(range(self.__nbAcceptedDistributions))
+            return self.getBestDistribution(range(self.__nbAcceptedDistributions), 'KS')
 
-    def getBestBICDistribution(self, index):
+    def getBestDistribution(self, index=0, criterion='BIC'):
         '''
         Documentation
         '''
         assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
-        if isinstance(index, int):
-            listIndex = self.__sorteddistributionbybic[index, 0]
-            keyValue = self.__distributionNames[int(listIndex)]
-            return self.__testeddistribution[keyValue][0]
-        else :
-            collection = ot.DistributionCollection()
-            for point in index:
-                ind = self.__sorteddistributionbybic[point, 0]
-                keyValue = self.__distributionNames[int(ind)]
-                collection.add(self.__testeddistribution[keyValue][0])
-            return collection
-
-    def getBestKSDistribution(self, index):
-        '''
-        Documentation
-        '''
-        assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
+        uppercriterion = self.__checkCriterionArg(criterion)
         size = self.__nbTestedDistributions - 1
         if isinstance(index, int):
             if index >= size:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
-            listIndex = self.__sorteddistributionbykolmogorov[size - index, 0]
-            name = self.__distributionNames[int(listIndex)]
-            distReturned = self.__testeddistribution[name]
+            if (uppercriterion == 'BIC'):
+                listIndex = self.__sorteddistributionbybic[index, 0]
+            else:
+                listIndex = self.__sorteddistributionbykolmogorov[size - index, 0]
+            keyValue = self.__distributionNames[int(listIndex)]
+            distReturned = self.__testeddistribution[keyValue]
             if distReturned[1]["Accepted"] is False:
                 ot.Log.Warn('Care! The distribution has not been accepted by the KS test')
             return distReturned[0]
-        else :
+        else : # python sequence
             if max(index) >= size:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
             collection = ot.DistributionCollection()
             for point in index:
-                ind = self.__sorteddistributionbykolmogorov[size - point, 0]
+                if (uppercriterion == 'BIC'):
+                    ind = self.__sorteddistributionbybic[point, 0]
+                else:
+                    ind = self.__sorteddistributionbykolmogorov[size - point, 0]
                 name = self.__distributionNames[int(ind)]
                 distReturned = self.__testeddistribution[name]
                 if distReturned[1]["Accepted"] is False:
                     ot.Log.Warn('Care! The distribution has not been accepted by the KS test')
                 collection.add(distReturned[0])
             return collection
+
 
     def getTestedDistribution(self, criterion='BIC'):
         '''
@@ -321,9 +312,9 @@ class FitContinuousDistribution1D:
         '''
         uppercriterion = self.__checkCriterionArg(criterion)
         if (uppercriterion == 'BIC'):
-            return self.getBestBICDistribution(range(self.__nbTestedDistributions))
+            return self.getBestDistribution(range(self.__nbTestedDistributions), 'BIC')
         else:
-            return self.getBestKSDistribution(range(self.__nbTestedDistributions))
+            return self.getBestDistribution(range(self.__nbTestedDistributions), 'KS')
 
     def printAcceptedDistribution(self, criterion = "BIC") :
         '''
