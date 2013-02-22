@@ -130,3 +130,11 @@ else :
         result['AllDiscreteFactoryName'] = AllDiscreteFactoryName
         result['AllDiscreteFactory'] = AllDiscreteFactory
         return result
+
+
+if __name__ == "__main__":
+    print("DistributionFactory has method GetDiscreteUniVariateFactories()? "+str(hasCatalog(major, minor, revision)))
+    continuousFactories = GetAllContinuousFactories()
+    print("Factory names: %s" % (continuousFactories['AllContinuousFactoryName']))
+    print("Factories: %s" % (continuousFactories['AllContinuousFactory']))
+
