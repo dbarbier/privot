@@ -268,9 +268,38 @@ class FitContinuousDistribution1D:
             return self.getBestDistribution(range(self._nrAcceptedDistributions), 'KS')
 
     def getBestDistribution(self, index=0, criterion='BIC'):
-        """
-        Documentation
-        """
+        '''
+        The method returns a distribution (in case that index is integer) or a collection
+        of distributions (index is a python sequence) ranked according to criterion.
+        This last one should be BIC or KS, default one is BIC
+        The default index is 0
+
+        Parameters
+        ----------
+        index : int or python sequence
+        criterion : string
+            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+
+        Returns
+        -------
+        out : OpenTURNS Distribution or OpenTURNS DistributionCollection
+
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> x = ot.Normal().getSample(100)
+        >>> fit = FitContinuousDistribution1D(x, 0.10)
+        >>> # best bic distribution
+        >>> bestDistribution = f.getBestDistribution(0, 'BIC')
+        >>> # Similar to
+        >>> bestDistribution = f.getBestDistribution()
+        >>> # Get the best KS collection
+        >>> bestDistribution = f.getBestDistribution(0, 'KS')
+        >>> # Get a collection of the two best distributions
+        >>> bestDistribution = f.getBestDistribution([0,1] 'BIC')
+
+        '''
         assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
         uppercriterion = self.__checkCriterionArg(criterion)
         size = self._nrTestedDistributions - 1
