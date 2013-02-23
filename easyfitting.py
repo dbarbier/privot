@@ -90,6 +90,7 @@ class FitContinuousDistribution1D:
         Example
         -------
         >>> import openturns as ot
+        >>> from easyfitting import FitContinuousDistribution1D
         >>> x = ot.Normal().getSample(100)
         >>> fit = FitContinuousDistribution1D(x, 0.10)
 
@@ -252,6 +253,7 @@ class FitContinuousDistribution1D:
         Example
         -------
         >>> import openturns as ot
+        >>> from easyfitting import FitContinuousDistribution1D
         >>> x = ot.Normal().getSample(100)
         >>> fit = FitContinuousDistribution1D(x, 0.10)
         >>> # All accepted distributions ranked using BIC values
@@ -288,16 +290,17 @@ class FitContinuousDistribution1D:
         Example
         -------
         >>> import openturns as ot
+        >>> from easyfitting import FitContinuousDistribution1D
         >>> x = ot.Normal().getSample(100)
         >>> fit = FitContinuousDistribution1D(x, 0.10)
         >>> # best bic distribution
-        >>> bestDistribution = f.getBestDistribution(0, 'BIC')
+        >>> bestDistribution = fit.getBestDistribution(0, 'BIC')
         >>> # Similar to
-        >>> bestDistribution = f.getBestDistribution()
+        >>> bestDistribution = fit.getBestDistribution()
         >>> # Get the best KS collection
-        >>> bestDistribution = f.getBestDistribution(0, 'KS')
+        >>> bestDistribution = fit.getBestDistribution(0, 'KS')
         >>> # Get a collection of the two best distributions
-        >>> bestDistribution = f.getBestDistribution([0,1] 'BIC')
+        >>> bestDistribution = fit.getBestDistribution([0,1], 'BIC')
 
         '''
         assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
@@ -351,14 +354,15 @@ class FitContinuousDistribution1D:
         Example
         -------
         >>> import openturns as ot
+        >>> from easyfitting import FitContinuousDistribution1D
         >>> sample = ot.Uniform().getSample(100)
         >>> fit = FitContinuousDistribution1D(sample)
         >>> # All tested distributions
-        >>> testedDistribution = f.getTestedDistribution('BIC')
+        >>> testedDistribution = fit.getTestedDistribution('BIC')
         >>> # or
-        >>> testedDistribution = f.getTestedDistribution()
+        >>> testedDistribution = fit.getTestedDistribution()
         >>> # KS p-values as criterion of ranking
-        >>> testedDistribution = f.getTestedDistribution('KS')
+        >>> testedDistribution = fit.getTestedDistribution('KS')
 
         """
         uppercriterion = self.__checkCriterionArg(criterion)
@@ -389,6 +393,7 @@ class FitContinuousDistribution1D:
         Example
         -------
         >>> import openturns as ot
+        >>> from easyfitting import FitContinuousDistribution1D
         >>> sample = ot.Uniform(0, 1).getSample(100)
         >>> fit = FitContinuousDistribution1D(sample)
         >>> fit.printAcceptedDistribution('BIC')
@@ -433,6 +438,7 @@ class FitContinuousDistribution1D:
         Example
         -------
         >>> import openturns as ot
+        >>> from easyfitting import FitContinuousDistribution1D
         >>> sample = ot.Uniform(0, 1).getSample(100)
         >>> fit = FitContinuousDistribution1D(sample)
         >>> fit.printTestedDistribution('BIC')
