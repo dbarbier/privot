@@ -257,11 +257,11 @@ class FitContinuousDistribution1D:
         >>> x = ot.Normal().getSample(100)
         >>> fit = FitContinuousDistribution1D(x, 0.10)
         >>> # All accepted distributions ranked using BIC values
-        >>> acceptedDistribution = f.getAcceptedDistribution('BIC')
+        >>> acceptedDistribution = fit.getAcceptedDistribution('BIC')
         >>> # Equivalent to :
-        >>> acceptedDistribution = f.getAcceptedDistribution()
+        >>> acceptedDistribution = fit.getAcceptedDistribution()
         >>> # All accepted distributions ranked using KS p-values
-        >>> acceptedDistribution = f.getAcceptedDistribution('KS')
+        >>> acceptedDistribution = fit.getAcceptedDistribution('KS')
         """
         uppercriterion = self.__checkCriterionArg(criterion)
         if (uppercriterion == 'BIC'):
