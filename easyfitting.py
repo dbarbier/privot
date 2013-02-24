@@ -3,7 +3,9 @@
 #  @file  easyfitting.py
 #  @brief Helps to fit continuous OpenTURNS distributions
 #
-#  Copyright (C) 2013 IMACS
+#  Copyright (C) 2013 EADS IW France
+#
+#  Written by Sofiane Haddad, IMACS
 #
 #  This program is free software; you can redistribute it and/or
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -49,11 +51,12 @@ class _TestedDistribution:
         self.message = message
 
     def __str__(self):
-        return "distribution=" + self.distribution + \
+        return "distribution=" + str(self.distribution) + \
             " class=" + self.class_name + \
             " status=" + str(self.status) + \
             " pvalue=" + str(self.pvalue) + " " + \
-            self.message + " " + str(self.bic)
+            " bic=" + str(self.bic) + " " + \
+            self.message
 
 class FitContinuousDistribution1D:
     """
@@ -141,15 +144,17 @@ class FitContinuousDistribution1D:
                     accepted = 0
             except Exception as e:
                 accepted = 2
+                distribution = 'Illegal ' + name
                 reason = e.message.replace('InvalidArgumentException : ', '')
             self._catalog.append(_TestedDistribution(distribution, name, BIC, pValue, accepted, reason))
 
     def _getSortedCatalog(self, criterion='BIC'):
         uppercriterion = self.__checkCriterionArg(criterion)
-        if criterion == 'BIC':
-            sorted_list = sorted(self._catalog, reverse=True, key=lambda t: t.bic)
+        valid_list = filter(lambda k: k.status < 2, self._catalog)
+        if uppercriterion == 'BIC':
+            sorted_list = sorted(valid_list, reverse=False, key=lambda t: t.bic)
         else:
-            sorted_list = sorted(self._catalog, reverse=True, key=lambda t: t.pvalue)
+            sorted_list = sorted(valid_list, reverse=True,  key=lambda t: t.pvalue)
         return sorted_list
 
     def getAcceptedDistribution(self, criterion='BIC'):
@@ -187,10 +192,10 @@ class FitContinuousDistribution1D:
 
     def getBestDistribution(self, index=0, criterion='BIC'):
         '''
-        The method returns a distribution (in case that index is integer) or a collection
+        Return a distribution (in case that index is integer) or a collection
         of distributions (index is a python sequence) ranked according to criterion.
-        This last one should be BIC or KS, default one is BIC
-        The default index is 0
+        This last one should be 'BIC' or 'KS', default is 'BIC'.
+        The default index is 0.
 
         Parameters
         ----------
@@ -201,7 +206,6 @@ class FitContinuousDistribution1D:
         Returns
         -------
         out : OpenTURNS Distribution or OpenTURNS DistributionCollection
-
 
         Example
         -------
@@ -224,14 +228,14 @@ class FitContinuousDistribution1D:
         sorted_list = self._getSortedCatalog(uppercriterion)
         size = len(sorted_list)
         if isinstance(index, int):
-            if index > size:
+            if index >= size:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
             distReturned = sorted_list[index]
             if distReturned.status == 0:
                 ot.Log.Warn('Care! The distribution has been rejected by the KS test')
             return distReturned.distribution
         else:   # python sequence
-            if max(index) > size:
+            if max(index) >= size:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
             collection = ot.DistributionCollection()
             for point in index:
@@ -246,7 +250,7 @@ class FitContinuousDistribution1D:
         Return the list of distributions that have been tested.
 
         The returned list (DistributionCollection) is ranked according to the
-        BIC or Kolmogorov criterion The argument fixes the way to rank the
+        BIC or Kolmogorov criterion.  The argument fixes the way to rank the
         collection.
 
         Parameters
@@ -312,23 +316,27 @@ class FitContinuousDistribution1D:
         sorted_list = self._getSortedCatalog(uppercriterion)
         max_len = 0
         for key in sorted_list:
-            max_len = max(max_len, len(str(key.distribution)))
+            if key.status == 1:
+                max_len = max(max_len, len(str(key.distribution)))
         for key in sorted_list:
-            print(str(key.distribution) + ' '*(max_len + 1 - len(str(key.distribution))) + \
-                '\t' + str(round(key.pvalue, 3)) + \
-                '\t' + str(round(key.bic, 3)))
+            if key.status == 1:
+                print(str(key.distribution) + \
+                    ' '*(max_len + 1 - len(str(key.distribution))) + \
+                    '\t' + str(round(key.pvalue, 3)) + \
+                    '\t' + str(round(key.bic, 3)))
 
     def printExceptedDistribution(self):
         """
         Print the distributions that have not been tested, with the reason
         explaining why.
         """
-        print('\n---------------- '\
+        print('---------------- ' \
             + 'NOT TESTED DISTRIBUTIONS' \
-            + '  -------------------------------\n')
-        for distribution in self._catalog:
-            if distribution.status == 2:
-                print(distribution.class_name+" - "+distribution.message)
+            + '  -------------------------------')
+        for key in self._catalog:
+            if key.status == 2:
+                print(key.class_name+" - "+key.message)
+        print('-' * 74)
 
     def printTestedDistribution(self, criterion="BIC"):
         """
@@ -367,9 +375,12 @@ class FitContinuousDistribution1D:
         acceptedstr = ['Rejected', 'Accepted', 'Rejected']
         max_len = 0
         for key in sorted_list:
-            max_len = max(max_len, len(str(key.distribution)))
+            if key.status != 2:
+                max_len = max(max_len, len(str(key.distribution)))
         for key in sorted_list:
-            print(str(key.distribution) + ' '*(max_len + 1 - len(str(key.distribution))) + \
-                '\t' + acceptedstr[key.status] + \
-                '\t' + str(round(key.pvalue, 3)) + \
-                '\t' + str(round(key.bic, 3)))
+            if key.status != 2:
+                print(str(key.distribution) + \
+                    ' '*(max_len + 1 - len(str(key.distribution))) + \
+                    '\t' + acceptedstr[key.status] + \
+                    '\t' + str(round(key.pvalue, 3)) + \
+                    '\t' + str(round(key.bic, 3)))
