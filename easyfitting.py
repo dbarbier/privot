@@ -22,17 +22,16 @@
 #
 
 """
-    =====================
     OpenTURNS easyfitting
     =====================
-    easy use of statistical fitting
+    Easy use of statistical fitting
 
-    ==================== =========================================================
-    Fitting 1D distribution classes
-    ==============================================================================
-    FitContinuousDistribution1D  Fit continuous distributions of dimension 1
-    FitDiscreteDistribution1D    Fit discrete distributions of dimension 1
-    ==================== =========================================================
+    Available subpackages
+    ---------------------
+    FitContinuousDistribution1D
+        Fit continuous distributions of dimension 1
+    FitDiscreteDistribution1D
+        Fit continuous distributions of dimension 1
 
     Example
     --------
@@ -202,7 +201,7 @@ class FitContinuousDistribution1D:
         Return the list of distributions that have been tested and accepted
         according to the Kolmogorov test.
 
-        The list is ranked according to the parameter passed to the constructor.
+        The list is ranked according to the criterion parameter.
 
         Parameters
         ----------
@@ -464,7 +463,6 @@ class FitDiscreteDistribution1D:
         Return a dictionary with DistributionFactory objects of OT which generate
         discrete distributions
         """
-        # Current list includes parametric and non parametric
         try:
             factories = ot.DistributionFactory.GetDiscreteUniVariateFactories()
         except AttributeError:
@@ -506,7 +504,7 @@ class FitDiscreteDistribution1D:
         -------
         >>> import openturns as ot
         >>> from easyfitting import FitDiscreteDistribution1D
-        >>> x = ot.Normal().getSample(100)
+        >>> x = ot.Poisson().getSample(100)
         >>> fit = FitDiscreteDistribution1D(x, 0.10)
 
         """
@@ -550,7 +548,7 @@ class FitDiscreteDistribution1D:
         if uppercriterion == 'BIC':
             sorted_list = sorted(valid_list, reverse=False, key=lambda t: t.bic)
         else:
-            sorted_list = sorted(valid_list, reverse=False,  key=lambda t: t.pvalue)
+            sorted_list = sorted(valid_list, reverse=False, key=lambda t: t.pvalue)
         return sorted_list
 
     def getAcceptedDistribution(self, criterion='BIC'):
@@ -558,7 +556,7 @@ class FitDiscreteDistribution1D:
         Return the list of distributions that have been tested and accepted
         according to the Chi Squared test.
 
-        The list is ranked according to the parameter passed to the constructor.
+        The list is ranked according to the criterion parameter.
 
         Parameters
         ----------
@@ -573,7 +571,7 @@ class FitDiscreteDistribution1D:
         -------
         >>> import openturns as ot
         >>> from easyfitting import FitDiscreteDistribution1D
-        >>> x = ot.Normal().getSample(100)
+        >>> x = ot.Bernoulli().getSample(100)
         >>> fit = FitDiscreteDistribution1D(x, 0.10)
         >>> # All accepted distributions ranked using BIC values
         >>> acceptedDistribution = fit.getAcceptedDistribution('BIC')
