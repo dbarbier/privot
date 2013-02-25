@@ -504,7 +504,7 @@ class FitDiscreteDistribution1D:
         -------
         >>> import openturns as ot
         >>> from easyfitting import FitDiscreteDistribution1D
-        >>> x = ot.Poisson().getSample(100)
+        >>> x = ot.Poisson(3.0).getSample(100)
         >>> fit = FitDiscreteDistribution1D(x, 0.10)
 
         """
@@ -571,7 +571,7 @@ class FitDiscreteDistribution1D:
         -------
         >>> import openturns as ot
         >>> from easyfitting import FitDiscreteDistribution1D
-        >>> x = ot.Poisson().getSample(100)
+        >>> x = ot.Poisson(3.0).getSample(100)
         >>> fit = FitDiscreteDistribution1D(x, 0.10)
         >>> # All accepted distributions ranked using BIC values
         >>> acceptedDistribution = fit.getAcceptedDistribution('BIC')
@@ -605,7 +605,7 @@ class FitDiscreteDistribution1D:
         -------
         >>> import openturns as ot
         >>> from easyfitting import FitDiscreteDistribution1D
-        >>> x = ot.Binomial(1, 0.5).getSample(100)
+        >>> x = ot.Poisson(3.0).getSample(100)
         >>> fit = FitDiscreteDistribution1D(x, 0.10)
         >>> # best bic distribution
         >>> bestDistribution = fit.getBestDistribution(0, 'BIC')
@@ -660,7 +660,7 @@ class FitDiscreteDistribution1D:
         -------
         >>> import openturns as ot
         >>> from easyfitting import FitDiscreteDistribution1D
-        >>> sample = ot.Binomial(1, 0.5).getSample(100)
+        >>> sample = ot.Poisson(3.0).getSample(100)
         >>> fit = FitDiscreteDistribution1D(sample)
         >>> # All tested distributions
         >>> testedDistribution = fit.getTestedDistribution('BIC')
@@ -699,7 +699,7 @@ class FitDiscreteDistribution1D:
         -------
         >>> import openturns as ot
         >>> from easyfitting import FitDiscreteDistribution1D
-        >>> sample = ot.Binomial(1, 0.5).getSample(100)
+        >>> sample = ot.Poisson(3.0).getSample(100)
         >>> fit = FitDiscreteDistribution1D(sample)
         >>> fit.printAcceptedDistribution('BIC')
         >>> fit.printAcceptedDistribution()
@@ -757,7 +757,7 @@ class FitDiscreteDistribution1D:
         -------
         >>> import openturns as ot
         >>> from easyfitting import FitDiscreteDistribution1D
-        >>> sample = ot.Binomial(1, 0.5).getSample(100)
+        >>> sample = ot.Poisson(3.0).getSample(100)
         >>> fit = FitDiscreteDistribution1D(sample)
         >>> fit.printTestedDistribution('BIC')
         >>> fit.printTestedDistribution()
