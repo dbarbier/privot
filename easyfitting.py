@@ -454,8 +454,8 @@ class FitDiscreteDistribution1D:
     def checkCriterionArg(criterion):
         assert isinstance(criterion, str)
         uppercriterion = criterion.upper()
-        if (uppercriterion not in ["BIC", "KS"]):
-            raise ValueError('Expected BIC or KS argument')
+        if (uppercriterion not in ["BIC", "CHI2"]):
+            raise ValueError('Expected BIC or CHI2 argument')
         return uppercriterion
 
     @staticmethod
@@ -486,7 +486,7 @@ class FitDiscreteDistribution1D:
         discrete_factories = []
         for factory in factories:
             factory_name = factory.getImplementation().getClassName()
-            if (factory_name != 'UserDefinedFactory'):
+            if (factory_name != 'DiracFactory'):
                 discrete_factories.append(factory)
         # Returns
         return discrete_factories
@@ -563,7 +563,7 @@ class FitDiscreteDistribution1D:
         Parameters
         ----------
         criterion : string
-            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+            Must be either 'BIC' or 'CHI2'.  Default is 'BIC'.
 
         Returns
         -------
@@ -579,8 +579,8 @@ class FitDiscreteDistribution1D:
         >>> acceptedDistribution = fit.getAcceptedDistribution('BIC')
         >>> # Equivalent to :
         >>> acceptedDistribution = fit.getAcceptedDistribution()
-        >>> # All accepted distributions ranked using KS p-values
-        >>> acceptedDistribution = fit.getAcceptedDistribution('KS')
+        >>> # All accepted distributions ranked using CHI2 p-values
+        >>> acceptedDistribution = fit.getAcceptedDistribution('CHI2')
         """
         uppercriterion = self.checkCriterionArg(criterion)
         nrAcceptedDistributions = len(filter(lambda k: k.status < 2, self._catalog))
@@ -590,14 +590,14 @@ class FitDiscreteDistribution1D:
         '''
         Return a distribution (in case that index is integer) or a collection
         of distributions (index is a python sequence) ranked according to criterion.
-        This last one should be 'BIC' or 'KS', default is 'BIC'.
+        This last one should be 'BIC' or 'CHI2', default is 'BIC'.
         The default index is 0.
 
         Parameters
         ----------
         index : int or python sequence
         criterion : string
-            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+            Must be either 'BIC' or 'CHI2'.  Default is 'BIC'.
 
         Returns
         -------
@@ -613,8 +613,8 @@ class FitDiscreteDistribution1D:
         >>> bestDistribution = fit.getBestDistribution(0, 'BIC')
         >>> # Similar to
         >>> bestDistribution = fit.getBestDistribution()
-        >>> # Get the best KS collection
-        >>> bestDistribution = fit.getBestDistribution(0, 'KS')
+        >>> # Get the best CHI2 collection
+        >>> bestDistribution = fit.getBestDistribution(0, 'CHI2')
         >>> # Get a collection of the two best distributions
         >>> bestDistribution = fit.getBestDistribution([0,1], 'BIC')
 
@@ -628,7 +628,7 @@ class FitDiscreteDistribution1D:
                 raise ValueError('Only ' + str(size) + ' distributions have been tested')
             distReturned = sorted_list[index]
             if distReturned.status == 0:
-                ot.Log.Warn('Care! The distribution has been rejected by the KS test')
+                ot.Log.Warn('Care! The distribution has been rejected by the CHI2 test')
             return distReturned.distribution
         else:   # python sequence
             if max(index) >= size:
@@ -637,7 +637,7 @@ class FitDiscreteDistribution1D:
             for point in index:
                 distReturned = sorted_list[point]
                 if distReturned.status == 0:
-                    ot.Log.Warn('Care! The distribution has been rejected by the KS test')
+                    ot.Log.Warn('Care! The distribution has been rejected by the CHI2 test')
                 collection.add(distReturned.distribution)
             return collection
 
@@ -652,7 +652,7 @@ class FitDiscreteDistribution1D:
         Parameters
         ----------
         criterion : string
-            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+            Must be either 'BIC' or 'CHI2'.  Default is 'BIC'.
 
         Returns
         -------
@@ -668,8 +668,8 @@ class FitDiscreteDistribution1D:
         >>> testedDistribution = fit.getTestedDistribution('BIC')
         >>> # or
         >>> testedDistribution = fit.getTestedDistribution()
-        >>> # KS p-values as criterion of ranking
-        >>> testedDistribution = fit.getTestedDistribution('KS')
+        >>> # CHI2 p-values as criterion of ranking
+        >>> testedDistribution = fit.getTestedDistribution('CHI2')
 
         """
         uppercriterion = self.checkCriterionArg(criterion)
@@ -691,7 +691,7 @@ class FitDiscreteDistribution1D:
         Parameters
         ----------
         criterion : string
-            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+            Must be either 'BIC' or 'CHI2'.  Default is 'BIC'.
 
         Returns
         -------
@@ -705,7 +705,7 @@ class FitDiscreteDistribution1D:
         >>> fit = FitDiscreteDistribution1D(sample)
         >>> fit.printAcceptedDistribution('BIC')
         >>> fit.printAcceptedDistribution()
-        >>> fit.printAcceptedDistribution('KS')
+        >>> fit.printAcceptedDistribution('CHI2')
 
         """
         uppercriterion = self.checkCriterionArg(criterion)
@@ -749,7 +749,7 @@ class FitDiscreteDistribution1D:
         Parameters
         ----------
         criterion : string
-            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+            Must be either 'BIC' or 'CHI2'.  Default is 'BIC'.
 
         Returns
         -------
@@ -763,7 +763,7 @@ class FitDiscreteDistribution1D:
         >>> fit = FitDiscreteDistribution1D(sample)
         >>> fit.printTestedDistribution('BIC')
         >>> fit.printTestedDistribution()
-        >>> fit.printTestedDistribution('KS')
+        >>> fit.printTestedDistribution('CHI2')
 
         """
         uppercriterion = self.checkCriterionArg(criterion)
