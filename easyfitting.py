@@ -95,6 +95,39 @@ class FitContinuousDistribution1D:
             raise ValueError('Expected BIC or KS argument')
         return uppercriterion
 
+    @staticmethod
+    def __GetAllContinuousFactories():
+        """
+        Return a dictionary with DistributionFactory objects of OT which generate
+        continuous distributions
+        """
+        # Current list includes parametric and non parametric
+        try:
+            factories = ot.DistributionFactory.GetContinuousUniVariateFactories()
+        except AttributeError:
+            #  DistributionFactory.GetContinuousUniVariateFactories() does not
+            #  exist before OT 1.2.
+            #  Emulate it by looping over all distributions
+            factories = []
+            for elt in dir(ot.dist):
+                if elt.endswith('Factory'):
+                    factory_name = 'ot.' + elt
+                    str_dist = factory_name.replace('Factory', '()')
+                    dist = eval(str_dist)
+                    if dist.isContinuous():
+                        factory = eval(factory_name + '()')
+                        #  WARNING: Mimic GetContinuousUniVariateFactories()
+                        factories.append(ot.DistributionFactory(factory))
+
+        # Filter out HistogramFactory
+        continuous_factories = []
+        for factory in factories:
+            factory_name = factory.getImplementation().getClassName()
+            if (factory_name != 'HistogramFactory'):
+                continuous_factories.append(factory)
+        # Returns
+        return continuous_factories
+
     def __init__(self, sample, pvalue=0.05):
         """
         Parameters
@@ -123,7 +156,7 @@ class FitContinuousDistribution1D:
         assert self._sample.getSize() > 1
         # Get the catalog of all continuous and non parametric factories
         self._catalog = []
-        for factory in GetAllContinuousFactories():
+        for factory in self.__GetAllContinuousFactories():
             factory_name = factory.getImplementation().getClassName()
             name = factory_name.replace('Factory', '')
             reason = ''
