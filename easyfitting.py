@@ -416,3 +416,357 @@ class FitContinuousDistribution1D:
                     '\t' + acceptedstr[key.status] + \
                     '\t' + str(round(key.pvalue, 3)) + \
                     '\t' + str(round(key.bic, 3)))
+
+class FitDiscreteDistribution1D:
+    """
+    Perform statistical fitting tests on a numerical sample or an 1D array.
+
+    The objective is to get a parametric estimation of some distributions.
+    For that purpose, a catalog of all discrete distribution factories 
+    implemented in the OpenTURNS library is used.
+    From the numerical data and for a fixed distribution model, the
+    parameters have to be estimated. This is done thanks to the maximum
+    likelihood or method of moments principles.
+    If the estimation is done, two criteria are computed in order to help
+    making decision:
+     * The Bayesian Information Criterion (BIC): It is the penalized likelihood,
+       where the penalty term is the number of parameters of the distribution.
+       The penalization solves overfitting problem due to the increase of likelihood
+       proprtionaly to the increase of parameters.
+     * The Chi Squared pValue is also computed.
+
+    If the estimation could not be done, the considered distribution name is
+    stored as "excepted distribution".
+    The computed models are ranked according to one of the criteria.
+
+    """
+    @staticmethod
+    def checkCriterionArg(criterion):
+        assert isinstance(criterion, str)
+        uppercriterion = criterion.upper()
+        if (uppercriterion not in ["BIC", "KS"]):
+            raise ValueError('Expected BIC or KS argument')
+        return uppercriterion
+
+    @staticmethod
+    def GetAllDiscreteFactories():
+        """
+        Return a dictionary with DistributionFactory objects of OT which generate
+        discrete distributions
+        """
+        # Current list includes parametric and non parametric
+        try:
+            factories = ot.DistributionFactory.GetDiscreteUniVariateFactories()
+        except AttributeError:
+            #  DistributionFactory.GetDiscreteUniVariateFactories() does not
+            #  exist before OT 1.2.
+            #  Emulate it by looping over all distributions
+            factories = []
+            for elt in dir(ot.dist):
+                if elt.endswith('Factory'):
+                    factory_name = 'ot.' + elt
+                    str_dist = factory_name.replace('Factory', '()')
+                    dist = eval(str_dist)
+                    if dist.isDiscrete():
+                        factory = eval(factory_name + '()')
+                        #  WARNING: Mimic GetDiscreteUniVariateFactories()
+                        factories.append(ot.DistributionFactory(factory))
+
+        # Filter out UserDefinedFactory
+        discrete_factories = []
+        for factory in factories:
+            factory_name = factory.getImplementation().getClassName()
+            if (factory_name != 'UserDefinedFactory'):
+                discrete_factories.append(factory)
+        # Returns
+        return discrete_factories
+
+    def __init__(self, sample, pvalue=0.05):
+        """
+        Parameters
+        ----------
+        sample : 1D array-like
+            Either a OpenTURNS NumericalSample of dimension 1, or a
+            Numpy 1D-array
+        pvalue : float in ]0, 1[
+            pValue fixed for Chi Squared statistical test.
+            Default pValue is 5%.
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> from easyfitting import FitDiscreteDistribution1D
+        >>> x = ot.Normal().getSample(100)
+        >>> fit = FitDiscreteDistribution1D(x, 0.10)
+
+        """
+        assert isinstance(pvalue, float)
+        assert pvalue > 0
+        assert pvalue < 1
+        self._pvalue = pvalue
+        self._sample = ot.NumericalSample(sample)
+        assert self._sample.getDimension() == 1
+        assert self._sample.getSize() > 1
+        # Get the catalog of all discrete and non parametric factories
+        self._catalog = []
+        for factory in self.GetAllDiscreteFactories():
+            factory_name = factory.getImplementation().getClassName()
+            name = factory_name.replace('Factory', '')
+            reason = ''
+            pValue = 0
+            BIC = 0.0
+            try:
+                distribution = factory.build(self._sample)
+                nbparameters = distribution.getParametersNumber()
+                BIC = ot.FittingTest.BIC(self._sample,
+                                         distribution,
+                                         nbparameters)
+                statisticaltest = ot.FittingTest.ChiSquared(self._sample,
+                                  distribution)
+                pValue = statisticaltest.getPValue()
+                if pValue >= self._pvalue:
+                    accepted = 1
+                else:
+                    accepted = 0
+            except Exception as e:
+                accepted = 2
+                distribution = 'Illegal ' + name
+                reason = e.message.replace('InvalidArgumentException : ', '')
+            self._catalog.append(_TestedDistribution(distribution, name, BIC, pValue, accepted, reason))
+
+    def _getSortedCatalog(self, criterion='BIC'):
+        uppercriterion = self.checkCriterionArg(criterion)
+        valid_list = filter(lambda k: k.status < 2, self._catalog)
+        if uppercriterion == 'BIC':
+            sorted_list = sorted(valid_list, reverse=False, key=lambda t: t.bic)
+        else:
+            sorted_list = sorted(valid_list, reverse=True,  key=lambda t: t.pvalue)
+        return sorted_list
+
+    def getAcceptedDistribution(self, criterion='BIC'):
+        """
+        Return the list of distributions that have been tested and accepted
+        according to the Chi Squared test.
+
+        The list is ranked according to the parameter passed to the constructor.
+
+        Parameters
+        ----------
+        criterion : string
+            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+
+        Returns
+        -------
+        out : DistributionCollection
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> from easyfitting import FitDiscreteDistribution1D
+        >>> x = ot.Normal().getSample(100)
+        >>> fit = FitDiscreteDistribution1D(x, 0.10)
+        >>> # All accepted distributions ranked using BIC values
+        >>> acceptedDistribution = fit.getAcceptedDistribution('BIC')
+        >>> # Equivalent to :
+        >>> acceptedDistribution = fit.getAcceptedDistribution()
+        >>> # All accepted distributions ranked using KS p-values
+        >>> acceptedDistribution = fit.getAcceptedDistribution('KS')
+        """
+        uppercriterion = self.checkCriterionArg(criterion)
+        nrAcceptedDistributions = len(filter(lambda k: k.status < 2, self._catalog))
+        return self.getBestDistribution(range(nrAcceptedDistributions), uppercriterion)
+
+    def getBestDistribution(self, index=0, criterion='BIC'):
+        '''
+        Return a distribution (in case that index is integer) or a collection
+        of distributions (index is a python sequence) ranked according to criterion.
+        This last one should be 'BIC' or 'KS', default is 'BIC'.
+        The default index is 0.
+
+        Parameters
+        ----------
+        index : int or python sequence
+        criterion : string
+            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+
+        Returns
+        -------
+        out : OpenTURNS Distribution or OpenTURNS DistributionCollection
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> from easyfitting import FitDiscreteDistribution1D
+        >>> x = ot.Binomial(1, 0.5).getSample(100)
+        >>> fit = FitDiscreteDistribution1D(x, 0.10)
+        >>> # best bic distribution
+        >>> bestDistribution = fit.getBestDistribution(0, 'BIC')
+        >>> # Similar to
+        >>> bestDistribution = fit.getBestDistribution()
+        >>> # Get the best KS collection
+        >>> bestDistribution = fit.getBestDistribution(0, 'KS')
+        >>> # Get a collection of the two best distributions
+        >>> bestDistribution = fit.getBestDistribution([0,1], 'BIC')
+
+        '''
+        assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
+        uppercriterion = self.checkCriterionArg(criterion)
+        sorted_list = self._getSortedCatalog(uppercriterion)
+        size = len(sorted_list)
+        if isinstance(index, int):
+            if index >= size:
+                raise ValueError('Only ' + str(size) + ' distributions have been tested')
+            distReturned = sorted_list[index]
+            if distReturned.status == 0:
+                ot.Log.Warn('Care! The distribution has been rejected by the KS test')
+            return distReturned.distribution
+        else:   # python sequence
+            if max(index) >= size:
+                raise ValueError('Only ' + str(size) + ' distributions have been tested')
+            collection = ot.DistributionCollection()
+            for point in index:
+                distReturned = sorted_list[point]
+                if distReturned.status == 0:
+                    ot.Log.Warn('Care! The distribution has been rejected by the KS test')
+                collection.add(distReturned.distribution)
+            return collection
+
+    def getTestedDistribution(self, criterion='BIC'):
+        """
+        Return the list of distributions that have been tested.
+
+        The returned list (DistributionCollection) is ranked according to the
+        BIC or Chi Squared criterion.  The argument fixes the way to rank the
+        collection.
+
+        Parameters
+        ----------
+        criterion : string
+            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+
+        Returns
+        -------
+        A DistributionCollection instance.
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> from easyfitting import FitDiscreteDistribution1D
+        >>> sample = ot.Binomial(1, 0.5).getSample(100)
+        >>> fit = FitDiscreteDistribution1D(sample)
+        >>> # All tested distributions
+        >>> testedDistribution = fit.getTestedDistribution('BIC')
+        >>> # or
+        >>> testedDistribution = fit.getTestedDistribution()
+        >>> # KS p-values as criterion of ranking
+        >>> testedDistribution = fit.getTestedDistribution('KS')
+
+        """
+        uppercriterion = self.checkCriterionArg(criterion)
+        index = len(self._catalog)
+        return self.getBestDistribution(range(index), uppercriterion)
+
+    def printAcceptedDistribution(self, criterion="BIC"):
+        """
+        Print the list of distributions that have been tested and accepted
+        according to the Chi Squared test.
+
+        The print is done using the following scheme:
+          Distribution name | Value1 | Value2
+        where:
+          Distribution name : Pretty print of the distribution name
+          Value1            : pValue of the Chi Squared test
+          Value2            : BIC value
+
+        Parameters
+        ----------
+        criterion : string
+            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+
+        Returns
+        -------
+        Nothing.
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> from easyfitting import FitDiscreteDistribution1D
+        >>> sample = ot.Binomial(1, 0.5).getSample(100)
+        >>> fit = FitDiscreteDistribution1D(sample)
+        >>> fit.printAcceptedDistribution('BIC')
+        >>> fit.printAcceptedDistribution()
+        >>> fit.printAcceptedDistribution('KS')
+
+        """
+        uppercriterion = self.checkCriterionArg(criterion)
+        sorted_list = self._getSortedCatalog(uppercriterion)
+        max_len = 0
+        for key in sorted_list:
+            if key.status == 1:
+                max_len = max(max_len, len(str(key.distribution)))
+        for key in sorted_list:
+            if key.status == 1:
+                print(str(key.distribution) + \
+                    ' '*(max_len + 1 - len(str(key.distribution))) + \
+                    '\t' + str(round(key.pvalue, 3)) + \
+                    '\t' + str(round(key.bic, 3)))
+
+    def printExceptedDistribution(self):
+        """
+        Print the distributions that have not been tested, with the reason
+        explaining why.
+        """
+        print('---------------- ' \
+            + 'NOT TESTED DISTRIBUTIONS' \
+            + '  -------------------------------')
+        for key in self._catalog:
+            if key.status == 2:
+                print(key.class_name+" - "+key.message)
+        print('-' * 74)
+
+    def printTestedDistribution(self, criterion="BIC"):
+        """
+        Print the list of distributions that have been tested.
+
+        The print is done using the following scheme:
+          Distribution name | Boolean | Value1 | Value2
+        where :
+          Distribution name : Pretty print of the distribution name
+          Boolean           : Boolean value (Chi Squared test Accepted / Rejected)
+          Value1            : pValue of the Chi Squared test
+          Value2            : BIC value
+
+        Parameters
+        ----------
+        criterion : string
+            Must be either 'BIC' or 'KS'.  Default is 'BIC'.
+
+        Returns
+        -------
+        Nothing
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> from easyfitting import FitDiscreteDistribution1D
+        >>> sample = ot.Binomial(1, 0.5).getSample(100)
+        >>> fit = FitDiscreteDistribution1D(sample)
+        >>> fit.printTestedDistribution('BIC')
+        >>> fit.printTestedDistribution()
+        >>> fit.printTestedDistribution('KS')
+
+        """
+        uppercriterion = self.checkCriterionArg(criterion)
+        sorted_list = self._getSortedCatalog(uppercriterion)
+        acceptedstr = ['Rejected', 'Accepted', 'Rejected']
+        max_len = 0
+        for key in sorted_list:
+            if key.status != 2:
+                max_len = max(max_len, len(str(key.distribution)))
+        for key in sorted_list:
+            if key.status != 2:
+                print(str(key.distribution) + \
+                    ' '*(max_len + 1 - len(str(key.distribution))) + \
+                    '\t' + acceptedstr[key.status] + \
+                    '\t' + str(round(key.pvalue, 3)) + \
+                    '\t' + str(round(key.bic, 3)))
