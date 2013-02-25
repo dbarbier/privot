@@ -232,7 +232,7 @@ class FitContinuousDistribution1D:
         >>> acceptedDistribution = fit.getAcceptedDistribution('KS')
         """
         uppercriterion = self.checkCriterionArg(criterion)
-        nrAcceptedDistributions = len(filter(lambda k: k.status < 2, self._catalog))
+        nrAcceptedDistributions = len(filter(lambda k: k.status == 1, self._catalog))
         return self.getBestDistribution(range(nrAcceptedDistributions), uppercriterion)
 
     def getBestDistribution(self, index=0, criterion='BIC'):
@@ -587,7 +587,7 @@ class FitDiscreteDistribution1D:
         >>> acceptedDistribution = fit.getAcceptedDistribution('CHI2')
         """
         uppercriterion = self.checkCriterionArg(criterion)
-        nrAcceptedDistributions = len(filter(lambda k: k.status < 2, self._catalog))
+        nrAcceptedDistributions = len(filter(lambda k: k.status == 1, self._catalog))
         return self.getBestDistribution(range(nrAcceptedDistributions), uppercriterion)
 
     def getBestDistribution(self, index=0, criterion='BIC'):
