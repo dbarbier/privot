@@ -22,9 +22,17 @@
 #
 
 """
+    =====================
     OpenTURNS easyfitting
     =====================
     easy use of statistical fitting
+
+    ==================== =========================================================
+    Fitting 1D distribution classes
+    ==============================================================================
+    FitContinuousDistribution1D  Fit continuous distributions of dimension 1
+    FitDiscreteDistribution1D    Fit discrete distributions of dimension 1
+    ==================== =========================================================
 
     Example
     --------
@@ -416,6 +424,8 @@ class FitContinuousDistribution1D:
                     '\t' + acceptedstr[key.status] + \
                     '\t' + str(round(key.pvalue, 3)) + \
                     '\t' + str(round(key.bic, 3)))
+
+
 
 class FitDiscreteDistribution1D:
     """
