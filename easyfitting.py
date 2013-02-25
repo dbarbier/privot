@@ -571,7 +571,7 @@ class FitDiscreteDistribution1D:
         -------
         >>> import openturns as ot
         >>> from easyfitting import FitDiscreteDistribution1D
-        >>> x = ot.Bernoulli().getSample(100)
+        >>> x = ot.Poisson().getSample(100)
         >>> fit = FitDiscreteDistribution1D(x, 0.10)
         >>> # All accepted distributions ranked using BIC values
         >>> acceptedDistribution = fit.getAcceptedDistribution('BIC')
