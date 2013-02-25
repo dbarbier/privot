@@ -74,16 +74,21 @@ namespace OT {
     OT::CopulaImplementation * p_impl = reinterpret_cast< OT::CopulaImplementation * >( ptr );
     $1 = new OT::Copula( *p_impl );
   } else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIG_TypeQuery("OT::Pointer<OT::DistributionImplementation> *"), 0))) {
-    // From Pointer<Implementation>
+    // From Pointer<DistributionImplementation>
     OT::Pointer<OT::DistributionImplementation> * p_impl = reinterpret_cast< OT::Pointer<OT::DistributionImplementation> * >( ptr );
     $1 = new OT::Copula( **p_impl );
+  } else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_OT__DistributionImplementation, 0))) {
+    // From DistributionImplementation
+    OT::DistributionImplementation * p_impl = reinterpret_cast< OT::DistributionImplementation * >( ptr );
+    $1 = new OT::Copula( *p_impl );
   }
 }
 
 %typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const OT::Copula & {
   $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
     || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIGTYPE_p_OT__CopulaImplementation, 0))
-    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("OT::Pointer<OT::DistributionImplementation> *"), 0));
+    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("OT::Pointer<OT::DistributionImplementation> *"), 0))
+    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIGTYPE_p_OT__DistributionImplementation, 0));
 }
 
 %include Copula.hxx
