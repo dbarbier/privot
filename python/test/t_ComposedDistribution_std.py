@@ -17,7 +17,7 @@ try :
     sigma[2] = 4.0
 
     # Create a collection of distribution attente TUI
-    aCollection = DistributionCollection(3)
+    aCollection = []
     try:
         aCollection[10] = Normal()
     except:
@@ -29,23 +29,23 @@ try :
     component[0] = "One"
     marginal.setDescription(component)
     # Fill the first marginal of aCollection
-    aCollection[0] = Distribution(marginal, "First")
+    aCollection.append(Distribution(marginal, "First"))
     # Create a second marginal : distribution 1D
     marginal = Normal(mean[1], sigma[1])
     marginal.setName("Second")
     component[0] = "Two"
     marginal.setDescription(component)
     # Fill the second marginal of aCollection
-    aCollection[1] = Distribution(marginal, "Second")
+    aCollection.append(Distribution(marginal, "Second"))
     # Create a third marginal : distribution 1D
     marginal = Normal(mean[2], sigma[2])
     marginal.setName("Third")
     component[0] = "Three"
     marginal.setDescription(component)
     # Fill the third marginal of aCollection
-    aCollection[2] = Distribution(marginal, "Third")
+    aCollection.append(Distribution(marginal, "Third"))
     # Create a copula : IndependentCopula
-    dim = aCollection.getSize()
+    dim = len(aCollection)
     aCopula = IndependentCopula(dim)
     aCopula.setName("Independent copula")
     print "Copula = ", repr(aCopula)

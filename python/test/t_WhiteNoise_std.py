@@ -15,7 +15,7 @@ try :
     timeGrid = RegularGrid(Tmin, deltaT, N)
 
     # Fixing the distribution for the WhiteNoise
-    dist = Distribution(Uniform())
+    dist = Uniform()
     print "dist = " , dist
 
     # Building a process from a White Noise

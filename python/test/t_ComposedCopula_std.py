@@ -10,11 +10,8 @@ try :
     R = CorrelationMatrix(3)
     R[0, 1] = 0.5
     R[0, 2] = 0.25
-    collection = CopulaCollection(3)
-    collection[0] = FrankCopula(3.0)
-    collection[1] = NormalCopula(R)
-    collection[2] = ClaytonCopula(2.0)
-    copula = ComposedCopula(collection)
+    copula = ComposedCopula([FrankCopula(3.0), NormalCopula(R), ClaytonCopula(2.0)])
+
     print "Copula ", repr(copula)
     print "Copula ", copula
 

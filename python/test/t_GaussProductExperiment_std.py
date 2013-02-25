@@ -7,7 +7,7 @@ TESTPREAMBLE()
 try :
     distribution = ComposedDistribution(DistributionCollection([Exponential(), Triangular(-1.0, -0.5, 1.0)]))
     marginalDegrees = Indices([3, 6])
-    myPlane = GaussProductExperiment(Distribution(distribution), marginalDegrees)
+    myPlane = GaussProductExperiment(distribution, marginalDegrees)
     print "myPlane = ", myPlane
     weights = NumericalPoint(0)
     sample = NumericalSample(myPlane.generate(weights))

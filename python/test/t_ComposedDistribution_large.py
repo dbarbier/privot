@@ -17,9 +17,9 @@ try :
 # Create a collection of distribution
     dimension = 2000
     print "Creating a composed distribution of dimension ", dimension
-    aCollection = DistributionCollection(dimension, Normal(meanPoint, sigma, R))
+    aCollection = []
     for i in range(dimension) :
-        aCollection[i] = Normal(meanPoint, sigma, R)
+        aCollection.append(Normal(meanPoint, sigma, R))
 
 # Create a a copula
     aCopula = IndependentCopula(dimension)

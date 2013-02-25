@@ -52,15 +52,11 @@ try :
     timeGrid = RegularGrid(Tmin, deltaT, steps)
 
     # Distributions for the  choice
-    dist1 = Distribution(Normal(0.0, 0.01))
-    dist2 = Distribution(Normal(0.0, 0.02))
+    dist1 = Normal(0.0, 0.01)
+    dist2 = Normal(0.0, 0.02)
 
-    # Create a collection of distribution
-    aCollection = DistributionCollection()
-    aCollection.add( dist1 )
-    aCollection.add( dist2 )
-
-    dist  = Distribution(ComposedDistribution(aCollection))
+    # Create a composed distribution
+    dist  = ComposedDistribution([dist1, dist2])
     print  "dist = " ,  dist
 
     epsilon = WhiteNoise(dist)

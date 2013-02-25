@@ -12,7 +12,7 @@ try :
     factory = DiracFactory()
     covariance = CovarianceMatrix()
     # Distribution estimatedDistribution(factory.build(sample, covariance))
-    estimatedDistribution = Distribution(factory.build(sample))
+    estimatedDistribution = factory.build(sample)
     print "Distribution          =", distribution
     print "Estimated distribution=", estimatedDistribution
     # print "Covariance=", covariance

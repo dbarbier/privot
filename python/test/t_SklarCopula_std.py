@@ -11,7 +11,7 @@ try :
     R =  CorrelationMatrix(dim)
     for i in range(dim-1) :
         R[i, i + 1] = 0.25
-    copula = SklarCopula(Distribution(Normal([1.0, 2.0, 3.0], [2.0, 3.0, 1.0], R)))
+    copula = SklarCopula(Normal([1.0, 2.0, 3.0], [2.0, 3.0, 1.0], R))
     copulaRef = NormalCopula(R)
     print "Copula " , repr(copula)
     print "Copula " , copula

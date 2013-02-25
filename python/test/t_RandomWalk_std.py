@@ -15,7 +15,7 @@ try :
     timeGrid = RegularGrid(Tmin, deltaT, N)
 
     # Fixing the distribution for the RandomWalk
-    dist = Distribution(Uniform())
+    dist = Uniform()
     print "dist = " , dist
     origin = NumericalPoint(dist.getDimension())
 

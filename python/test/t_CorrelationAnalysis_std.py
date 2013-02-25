@@ -23,10 +23,10 @@ try :
     # we create a collection of uniform distributions over [-Pi Pi[
     aCollection = DistributionCollection()
     for i in range(dimension):
-        aCollection.add(Distribution(Normal()))
+        aCollection.add(Normal())
 
     # we create one distribution object
-    aDistribution = ComposedDistribution(aCollection, Copula(IndependentCopula(dimension)))
+    aDistribution = ComposedDistribution(aCollection, IndependentCopula(dimension))
 
     randomVector = RandomVector(aDistribution)
     composite = RandomVector(analytical, randomVector)

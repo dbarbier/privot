@@ -15,7 +15,7 @@ try :
     data = realDist.getSample(size)
 
     # calibration parameters
-    calibrationColl = CalibrationStrategyCollection(2)
+    calibrationColl = [ CalibrationStrategy(), CalibrationStrategy() ]
 
     # proposal distribution
     proposalColl = DistributionCollection()
