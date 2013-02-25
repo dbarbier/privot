@@ -233,7 +233,7 @@ class FitContinuousDistribution1D:
         """
         uppercriterion = self.checkCriterionArg(criterion)
         nrAcceptedDistributions = len(filter(lambda k: k.status == 1, self._catalog))
-        return self.getBestDistribution(range(nrAcceptedDistributions), uppercriterion)
+        return self._getBestDistribution(True, range(nrAcceptedDistributions), uppercriterion)
 
     def getBestDistribution(self, index=0, criterion='BIC'):
         '''
@@ -268,9 +268,14 @@ class FitContinuousDistribution1D:
         >>> bestDistribution = fit.getBestDistribution([0,1], 'BIC')
 
         '''
+        return self._getBestDistribution(False, index, criterion)
+
+    def _getBestDistribution(self, only_accepted, index=0, criterion='BIC'):
         assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
         uppercriterion = self.checkCriterionArg(criterion)
         sorted_list = self._getSortedCatalog(uppercriterion)
+        if only_accepted:
+            sorted_list = filter(lambda k: k.status == 1, sorted_list)
         size = len(sorted_list)
         if isinstance(index, int):
             if index >= size:
@@ -588,7 +593,7 @@ class FitDiscreteDistribution1D:
         """
         uppercriterion = self.checkCriterionArg(criterion)
         nrAcceptedDistributions = len(filter(lambda k: k.status == 1, self._catalog))
-        return self.getBestDistribution(range(nrAcceptedDistributions), uppercriterion)
+        return self._getBestDistribution(True, range(nrAcceptedDistributions), uppercriterion)
 
     def getBestDistribution(self, index=0, criterion='BIC'):
         '''
@@ -623,9 +628,14 @@ class FitDiscreteDistribution1D:
         >>> bestDistribution = fit.getBestDistribution([0,1], 'BIC')
 
         '''
+        return self._getBestDistribution(False, index, criterion)
+
+    def _getBestDistribution(self, only_accepted, index=0, criterion='BIC'):
         assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
         uppercriterion = self.checkCriterionArg(criterion)
         sorted_list = self._getSortedCatalog(uppercriterion)
+        if only_accepted:
+            sorted_list = filter(lambda k: k.status == 1, sorted_list)
         size = len(sorted_list)
         if isinstance(index, int):
             if index >= size:
