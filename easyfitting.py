@@ -88,7 +88,7 @@ class FitContinuousDistribution1D:
 
     """
     @staticmethod
-    def __checkCriterionArg(criterion):
+    def checkCriterionArg(criterion):
         assert isinstance(criterion, str)
         uppercriterion = criterion.upper()
         if (uppercriterion not in ["BIC", "KS"]):
@@ -96,7 +96,7 @@ class FitContinuousDistribution1D:
         return uppercriterion
 
     @staticmethod
-    def __GetAllContinuousFactories():
+    def GetAllContinuousFactories():
         """
         Return a dictionary with DistributionFactory objects of OT which generate
         continuous distributions
@@ -133,7 +133,7 @@ class FitContinuousDistribution1D:
         Parameters
         ----------
         sample : 1D array-like
-            Either a NumericalSample of dimension 1, or a
+            Either a OpenTURNS NumericalSample of dimension 1, or a
             Numpy 1D-array
         pvalue : float in ]0, 1[
             pValue fixed for Kolmogorov statistical test.
@@ -156,7 +156,7 @@ class FitContinuousDistribution1D:
         assert self._sample.getSize() > 1
         # Get the catalog of all continuous and non parametric factories
         self._catalog = []
-        for factory in self.__GetAllContinuousFactories():
+        for factory in self.GetAllContinuousFactories():
             factory_name = factory.getImplementation().getClassName()
             name = factory_name.replace('Factory', '')
             reason = ''
@@ -182,7 +182,7 @@ class FitContinuousDistribution1D:
             self._catalog.append(_TestedDistribution(distribution, name, BIC, pValue, accepted, reason))
 
     def _getSortedCatalog(self, criterion='BIC'):
-        uppercriterion = self.__checkCriterionArg(criterion)
+        uppercriterion = self.checkCriterionArg(criterion)
         valid_list = filter(lambda k: k.status < 2, self._catalog)
         if uppercriterion == 'BIC':
             sorted_list = sorted(valid_list, reverse=False, key=lambda t: t.bic)
@@ -219,7 +219,7 @@ class FitContinuousDistribution1D:
         >>> # All accepted distributions ranked using KS p-values
         >>> acceptedDistribution = fit.getAcceptedDistribution('KS')
         """
-        uppercriterion = self.__checkCriterionArg(criterion)
+        uppercriterion = self.checkCriterionArg(criterion)
         nrAcceptedDistributions = len(filter(lambda k: k.status < 2, self._catalog))
         return self.getBestDistribution(range(nrAcceptedDistributions), uppercriterion)
 
@@ -257,7 +257,7 @@ class FitContinuousDistribution1D:
 
         '''
         assert (isinstance(index, int) or isinstance(index, tuple) or isinstance(index, list))
-        uppercriterion = self.__checkCriterionArg(criterion)
+        uppercriterion = self.checkCriterionArg(criterion)
         sorted_list = self._getSortedCatalog(uppercriterion)
         size = len(sorted_list)
         if isinstance(index, int):
@@ -309,7 +309,7 @@ class FitContinuousDistribution1D:
         >>> testedDistribution = fit.getTestedDistribution('KS')
 
         """
-        uppercriterion = self.__checkCriterionArg(criterion)
+        uppercriterion = self.checkCriterionArg(criterion)
         index = len(self._catalog)
         return self.getBestDistribution(range(index), uppercriterion)
 
@@ -345,7 +345,7 @@ class FitContinuousDistribution1D:
         >>> fit.printAcceptedDistribution('KS')
 
         """
-        uppercriterion = self.__checkCriterionArg(criterion)
+        uppercriterion = self.checkCriterionArg(criterion)
         sorted_list = self._getSortedCatalog(uppercriterion)
         max_len = 0
         for key in sorted_list:
@@ -403,7 +403,7 @@ class FitContinuousDistribution1D:
         >>> fit.printTestedDistribution('KS')
 
         """
-        uppercriterion = self.__checkCriterionArg(criterion)
+        uppercriterion = self.checkCriterionArg(criterion)
         sorted_list = self._getSortedCatalog(uppercriterion)
         acceptedstr = ['Rejected', 'Accepted', 'Rejected']
         max_len = 0
