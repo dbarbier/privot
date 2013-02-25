@@ -6,7 +6,7 @@
 #include "OrthogonalBasis.hxx"
 %}
 
-%template(OrthogonalFunctionFactoryTypedInterfaceObject)           OT::TypedInterfaceObject<OT::OrthogonalFunctionFactory>;
+OTTypedInterfaceObjectImplementationHelper(OrthogonalBasis, OrthogonalFunctionFactory)
 
 %include OrthogonalBasis.hxx
 
