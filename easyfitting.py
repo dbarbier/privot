@@ -38,7 +38,6 @@
 """
 
 import openturns as ot
-from functions import GetAllContinuousFactories
 
 
 class _TestedDistribution:
