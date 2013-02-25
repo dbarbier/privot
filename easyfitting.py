@@ -31,16 +31,22 @@
     FitContinuousDistribution1D
         Fit continuous distributions of dimension 1
     FitDiscreteDistribution1D
-        Fit continuous distributions of dimension 1
+        Fit discrete distributions of dimension 1
 
     Example
     --------
     >>> import openturns as ot
     >>> from easyfitting import FitContinuousDistribution1D
+    >>> # Continuous case
     >>> x = ot.Normal().getSample(100)
-    >>> fit = FitContinuousDistribution1D(x, 0.10)
-    >>> test = fit.getTestedDistribution()
-    >>> accepted = fit.getAcceptedDistribution()
+    >>> fit_continuous = FitContinuousDistribution1D(x, 0.10)
+    >>> test = fit_continuous.getTestedDistribution()
+    >>> accepted = fit_continuous.getAcceptedDistribution()
+    >>> # Discrete case
+    >>> y = ot.Poisson(4.0).getSample(100)
+    >>> fit_discrete = FitDiscreteDistribution1D(y, 0.10)
+    >>> test = fit_discrete.getTestedDistribution()
+    >>> accepted = fit_discrete.getAcceptedDistribution()
 
 """
 
