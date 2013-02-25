@@ -149,7 +149,7 @@ class FitContinuousDistribution1D:
         assert isinstance(pvalue, float)
         assert pvalue > 0
         assert pvalue < 1
-        self.__pvalue = pvalue
+        self._pvalue = pvalue
         self._sample = ot.NumericalSample(sample)
         assert self._sample.getDimension() == 1
         assert self._sample.getSize() > 1
@@ -170,7 +170,7 @@ class FitContinuousDistribution1D:
                 statisticaltest = ot.FittingTest.Kolmogorov(self._sample,
                                   distribution)
                 pValue = statisticaltest.getPValue()
-                if pValue >= self.__pvalue:
+                if pValue >= self._pvalue:
                     accepted = 1
                 else:
                     accepted = 0
