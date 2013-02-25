@@ -550,7 +550,7 @@ class FitDiscreteDistribution1D:
         if uppercriterion == 'BIC':
             sorted_list = sorted(valid_list, reverse=False, key=lambda t: t.bic)
         else:
-            sorted_list = sorted(valid_list, reverse=True,  key=lambda t: t.pvalue)
+            sorted_list = sorted(valid_list, reverse=False,  key=lambda t: t.pvalue)
         return sorted_list
 
     def getAcceptedDistribution(self, criterion='BIC'):
