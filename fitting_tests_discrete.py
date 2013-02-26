@@ -49,12 +49,16 @@ for model in collection_distribution:
         # Get the best distribution according to the CHI2 criterion
         best_ks_distribution = fitting.getBestDistribution(0, 'CHI2')
         # print results
-        print ("\nDistribution tested")
+        print("")
+        print ("Distribution tested")
         fitting.printTestedDistribution('BIC')
-        print ("\nDistribution accepted")
+        print("")
+        print ("Distribution accepted")
         fitting.printAcceptedDistribution('BIC')
-        print ("\nBest BIC distribution: " + str(best_bic_distribution))
+        print("")
+        print ("Best BIC distribution: " + str(best_bic_distribution))
         print ("Best CHI2 distribution: " + str(best_ks_distribution))
-        print ("\nNot tested distribution")
+        print("")
+        print ("Not tested distribution")
         fitting.printExceptedDistribution()
 
