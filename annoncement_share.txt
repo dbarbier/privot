@@ -45,4 +45,5 @@ Regards,
 Denis
 Sofiane
 
-ps : For the discrete case, implementations 
+ps: For the discrete case, current OpenTURNS version is limited. Indeed, the library has not been updated due to recent changes in rot
+package. Thus only Poisson distribution has correctly been tested.
