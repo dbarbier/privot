@@ -1,0 +1,48 @@
+The development of python functionalities to easily fit statistical
+univariate distributions from 1D samples is proposed.
+
+These functionalities are available through two subpackages:
+* FitContinuousDistribution1D: fitting tests for continuous distributions.
+* FitDiscreteDistribution1D: fitting tests for discrete distributions
+
+In the two cases, the sample is tested using a catalog of all distribution
+factories implemented in the OpenTURNS library.
+The fitting object result gives access to several services:
+* Get the list of all distributions for which the test has been done,
+sorted according to BIC or Kolmogorov criterion.
+* Get the list of all distributions for which the test has been accepted
+according to the Kolmogorov criterion.
+This list is sorted according to BIC or Kolmogorov criterion;
+* Get the list of distributions for which the test could not be done and
+the reason.
+* Pretty print (Tested distributions, accepted distributions, not tested
+distributions).
+
+Here is an example of use :
+
+import openturns as ot
+from easyfitting import FitContinuousDistribution1D
+# Continuous case
+x = ot.Normal(0, 1).getSample(20)
+pvalue = 0.10
+fitting = FitContinuousDistribution1D(x, pvalue)
+# Print all distributions tested and ranked according to BIC criterion
+fitting.printTestedDistribution('BIC')
+# Get this list
+all_distributions_tested = fitting.getTestedDistribution()
+# Print all distributions accepted and ranked according to KS criterion
+fitting.printAcceptedDistribution('KS')
+# Get this list
+all_distributions_accepted = fitting.getAcceptedDistribution('KS')
+# Print distributions that could not be tested and the reason
+fitting.printExceptedDistribution()
+
+The sources could be downloaded here: easyfitting
+We welcome any comments.
+
+Regards,
+
+Denis
+Sofiane
+
+ps : For the discrete case, implementations 
