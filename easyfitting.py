@@ -37,6 +37,7 @@
     --------
     >>> import openturns as ot
     >>> from easyfitting import FitContinuousDistribution1D
+    >>> from easyfitting import FitDiscreteDistribution1D
     >>> # Continuous case
     >>> x = ot.Normal().getSample(100)
     >>> fit_continuous = FitContinuousDistribution1D(x, 0.10)
