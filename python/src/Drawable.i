@@ -4,43 +4,15 @@
 
 %{
 #include "Drawable.hxx"
-
-namespace OT { 
-
-  template <>
-  struct traitsPythonType< OT::Drawable >
-  {
-    typedef _PyObject_ Type;
-  };
-
-  template <>
-  inline
-  OT::Drawable
-  convert< _PyObject_, OT::Drawable >(PyObject * pyObj)
-  {
-    void * ptr = 0;
-    if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::DrawableImplementation *"), 0 |  0 ) ) ) {
-      OT::DrawableImplementation * p_dist = reinterpret_cast< OT::DrawableImplementation * >( ptr );
-      return *p_dist;
-    }
-    else if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::Drawable *"), 0 |  0 ) ) ) {
-      OT::Drawable * p_dist = reinterpret_cast< OT::Drawable * >( ptr );
-      return *p_dist;
-    }
-    else {
-      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a Drawable";  
-    }
-    return OT::Drawable();
-  }
-
-
-} /* namespace OT */
-
 %}
 
+OTDefaultCollectionConvertFunctions(Drawable)
+
 OTTypedInterfaceObjectHelper(Drawable)
+OTTypedCollectionInterfaceObjectHelper(Drawable)
 
 %include Drawable.hxx
+
 namespace OT{  
 
 %extend Drawable {

@@ -4,34 +4,12 @@
 
 %{
 #include "OrthogonalUniVariatePolynomialFamily.hxx"
-
-namespace OT { 
-
-  template <>
-  struct traitsPythonType<OT::OrthogonalUniVariatePolynomialFamily>
-  {
-    typedef _PyObject_ Type;
-  };
-
-
-  template <>
-  inline
-  OT::OrthogonalUniVariatePolynomialFamily
-  convert<_PyObject_,OT::OrthogonalUniVariatePolynomialFamily>(PyObject * pyObj)
-  {
-    void * ptr = 0;
-    if (! SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::OrthogonalUniVariatePolynomialFactory *"), 0 |  0 )))
-      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not an object convertible to an OrthogonalUniVariatePolynomialFactory";
-    OT::OrthogonalUniVariatePolynomialFactory * p_fact = reinterpret_cast< OT::OrthogonalUniVariatePolynomialFactory * >( ptr );
-    return *p_fact;
-  }
-
-} /* namespace OT */
-
-
 %}
 
+OTDefaultCollectionConvertFunctionsMisnamed(OrthogonalUniVariatePolynomialFamily, OrthogonalUniVariatePolynomialFactory)
+
 OTTypedInterfaceObjectImplementationHelper(OrthogonalUniVariatePolynomialFamily, OrthogonalUniVariatePolynomialFactory)
+OTTypedCollectionInterfaceObjectMisnamedHelper(OrthogonalUniVariatePolynomialFamily, PolynomialFamilyCollection)
 
 %include OrthogonalUniVariatePolynomialFamily.hxx
 

@@ -5,39 +5,6 @@
 %{
 #include "Distribution.hxx"
 #include "PythonDistributionImplementation.hxx"
-
-namespace OT { 
-
-  template <>
-  struct traitsPythonType< OT::Distribution >
-  {
-    typedef _PyObject_ Type;
-  };
-
-
-  template <>
-  inline
-  OT::Distribution
-  convert< _PyObject_, OT::Distribution >(PyObject * pyObj)
-  {
-    void * ptr = 0;
-    if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::DistributionImplementation *"), 0 |  0 ) ) ) {
-      OT::DistributionImplementation * p_dist = reinterpret_cast< OT::DistributionImplementation * >( ptr );
-      return *p_dist;
-    }
-    else if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::Distribution *"), 0 |  0 ) ) ) {
-      OT::Distribution * p_dist = reinterpret_cast< OT::Distribution * >( ptr );
-      return *p_dist;
-    }
-    else {
-      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a Distribution";  
-    }
-    return OT::Distribution();
-  }
-
-} /* namespace OT */
-
-
 %}
 
 %pythoncode %{
@@ -122,7 +89,10 @@ class SciPyDistribution(PythonDistribution):
         return [moment]  
 %}
 
+%include UncertaintyModelCopulaCollection.i
+
 OTTypedInterfaceObjectHelper(Distribution)
+OTTypedCollectionInterfaceObjectHelper(Distribution)
 
 %include Distribution.hxx
 //%copyctor Distribution;

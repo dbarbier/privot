@@ -4,41 +4,12 @@
 
 %{
 #include "DistributionFactory.hxx"
-
-namespace OT { 
-
-  template <>
-  struct traitsPythonType< OT::DistributionFactory >
-  {
-    typedef _PyObject_ Type;
-  };
-
-  template <>
-  inline
-  OT::DistributionFactory
-  convert< _PyObject_, OT::DistributionFactory >(PyObject * pyObj)
-  {
-    void * ptr = 0;
-    if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::DistributionImplementationFactory *"), 0 |  0 ) ) ) {
-      OT::DistributionImplementationFactory * p_distf = reinterpret_cast< OT::DistributionImplementationFactory * >( ptr );
-      return *p_distf;
-    }
-    else if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::DistributionFactory *"), 0 |  0 ) ) ) {
-      OT::DistributionFactory * p_distf = reinterpret_cast< OT::DistributionFactory * >( ptr );
-      return *p_distf;
-    }
-    else {
-      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a DistributionFactory";
-    }
-    return OT::DistributionFactory();
-  }
-
-
-} /* namespace OT */
-
 %}
 
+%include UncertaintyModelCopulaCollection.i
+
 OTTypedInterfaceObjectImplementationHelper(DistributionFactory, DistributionImplementationFactory)
+OTTypedCollectionInterfaceObjectHelper(DistributionFactory)
 
 %include DistributionFactory.hxx
 

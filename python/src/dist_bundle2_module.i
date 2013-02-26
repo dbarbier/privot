@@ -22,6 +22,7 @@
 %import typ_module.i
 %include TestResult.i
 %import base_module.i
+%include UncertaintyModelCopulaCollection.i
 %import model_copula_module.i
 
 /* Uncertainty/Distribution (except copulas) */
