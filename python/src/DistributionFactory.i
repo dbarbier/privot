@@ -38,8 +38,9 @@ namespace OT {
 
 %}
 
-%template(DistributionImplementationFactoryTypedInterfaceObject)           OT::TypedInterfaceObject<OT::DistributionImplementationFactory>;
 %include DistributionFactory.hxx
+
+OTTypedInterfaceObjectApply(DistributionFactory, DistributionImplementationFactory)
 
 namespace OT {  
 

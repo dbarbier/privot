@@ -31,9 +31,8 @@ namespace OT {
 
 %}
 
-%template(OrthogonalUniVariatePolynomialFactoryTypedInterfaceObject)           OT::TypedInterfaceObject<OT::OrthogonalUniVariatePolynomialFactory>;
-
 %include OrthogonalUniVariatePolynomialFamily.hxx
+OTTypedInterfaceObjectApply(OrthogonalUniVariatePolynomialFamily, OrthogonalUniVariatePolynomialFactory)
 
 namespace OT{  
 
