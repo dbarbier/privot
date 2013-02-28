@@ -36,7 +36,7 @@
 
 %define OTTypedInterfaceObjectApply(InterfaceType, Implementation)
 
-%template(InterfaceType ## ImplementationTypedInterfaceObject)           OT::TypedInterfaceObject<OT::ImplementationType>;
+%template(Implementation ## TypedInterfaceObject)           OT::TypedInterfaceObject<OT::ImplementationType>;
 
 %typemap(in) const OT::InterfaceType & {
   void * ptr = 0;
