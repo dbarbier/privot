@@ -121,7 +121,7 @@ try :
     # Create the orthogonal basis
     polynomialCollection = PolynomialFamilyCollection(inputDimension)
     for i in range(inputDimension):
-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+        polynomialCollection[i] = LegendreFactory()
     enumerateFunction = EnumerateFunction(inputDimension)
     productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
 

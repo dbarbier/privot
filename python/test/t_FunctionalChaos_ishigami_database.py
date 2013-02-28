@@ -40,9 +40,9 @@ try :
 
     # Create the orthogonal basis
     polynomialCollection = PolynomialFamilyCollection(dimension)
-    polynomialCollection[0] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
-    polynomialCollection[1] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
-    polynomialCollection[2] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+    polynomialCollection[0] = LegendreFactory()
+    polynomialCollection[1] = LegendreFactory()
+    polynomialCollection[2] = LegendreFactory()
     enumerateFunction = EnumerateFunction(dimension)
     productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
 

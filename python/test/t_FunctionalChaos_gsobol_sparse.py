@@ -46,7 +46,7 @@ try :
     # Create the orthogonal basis
     polynomialCollection = PolynomialFamilyCollection(dimension)
     for i in range(dimension):
-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+        polynomialCollection[i] = LegendreFactory()
     q = 0.4
     enumerateFunction = HyperbolicAnisotropicEnumerateFunction(dimension, q)
     productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))

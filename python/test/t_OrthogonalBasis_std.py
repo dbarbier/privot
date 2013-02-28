@@ -7,9 +7,9 @@ TESTPREAMBLE()
 try:
     dim = 3
     polynomCollection = PolynomialFamilyCollection(3)
-    polynomCollection[0] = OrthogonalUniVariatePolynomialFamily(LaguerreFactory(2.5))
-    polynomCollection[1] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
-    polynomCollection[2] = OrthogonalUniVariatePolynomialFamily(HermiteFactory())
+    polynomCollection[0] = LaguerreFactory(2.5)
+    polynomCollection[1] = LegendreFactory()
+    polynomCollection[2] = HermiteFactory()
     basisFactory = OrthogonalProductPolynomialFactory(polynomCollection)
     basis = OrthogonalBasis(basisFactory)
     print "Basis=", basis

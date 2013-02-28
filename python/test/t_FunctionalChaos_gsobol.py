@@ -43,7 +43,7 @@ try :
     # Create the orthogonal basis
     polynomialCollection = PolynomialFamilyCollection(dimension)
     for i in range(dimension):
-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+        polynomialCollection[i] = LegendreFactory()
     enumerateFunction = EnumerateFunction(dimension)
     productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, EnumerateFunction(enumerateFunction)))
 
