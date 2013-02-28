@@ -40,17 +40,17 @@ try :
 
     # Create the orthogonal basis
     polynomialCollection = PolynomialFamilyCollection(dimension)
-    polynomialCollection[0] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
-    polynomialCollection[1] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
-    polynomialCollection[2] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+    polynomialCollection[0] = LegendreFactory()
+    polynomialCollection[1] = LegendreFactory()
+    polynomialCollection[2] = LegendreFactory()
     enumerateFunction = EnumerateFunction(dimension)
-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
+    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
 
     # Create the projection strategy
     samplingSize = 250
     listProjectionStrategy = list()
     # Monte Carlo sampling
-    inputSample = LowDiscrepancyExperiment(LowDiscrepancySequence(SobolSequence()), distribution, samplingSize).generate()
+    inputSample = LowDiscrepancyExperiment(SobolSequence(), distribution, samplingSize).generate()
     outputSample = model(inputSample)
     # From here, the model is no more needed
     listProjectionStrategy.append(LeastSquaresStrategy())

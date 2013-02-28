@@ -12,7 +12,7 @@ try :
     print "algo=", repr(algo)
     for i in range(iMax):
         print distribution.getClassName() + " polynomial(", i, ")=", algo.getRecurrenceCoefficients(i)
-    algo.setReferenceFamily(OrthogonalUniVariatePolynomialFamily(HermiteFactory()))
+    algo.setReferenceFamily(HermiteFactory())
     print "algo=", repr(algo)
     for i in range(iMax):
         print distribution.getClassName() + " polynomial(", i, ")=", algo.getRecurrenceCoefficients(i)

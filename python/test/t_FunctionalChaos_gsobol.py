@@ -43,9 +43,9 @@ try :
     # Create the orthogonal basis
     polynomialCollection = PolynomialFamilyCollection(dimension)
     for i in range(dimension):
-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+        polynomialCollection[i] = LegendreFactory()
     enumerateFunction = EnumerateFunction(dimension)
-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, EnumerateFunction(enumerateFunction)))
+    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, EnumerateFunction(enumerateFunction))
 
     # Create the adaptive strategy
     # We can choose amongst several strategies
@@ -71,7 +71,7 @@ try :
         # LHS sampling
         listProjectionStrategy.append(LeastSquaresStrategy(LHSExperiment(samplingSize)))
         # Low Discrepancy sequence
-        listProjectionStrategy.append(LeastSquaresStrategy(LowDiscrepancyExperiment(LowDiscrepancySequence(SobolSequence()),samplingSize)))
+        listProjectionStrategy.append(LeastSquaresStrategy(LowDiscrepancyExperiment(SobolSequence(),samplingSize)))
         for projectionStrategyIndex in range(len(listProjectionStrategy)):
             projectionStrategy = listProjectionStrategy[projectionStrategyIndex]
             # Create the polynomial chaos algorithm

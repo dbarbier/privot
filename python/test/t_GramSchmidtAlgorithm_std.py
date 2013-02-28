@@ -19,7 +19,7 @@ try :
     print "algo=", repr(algo)
     for i in range(iMax):
         print distribution.getClassName() + " polynomial(", i, ")=", clean(algo.getRecurrenceCoefficients(i))
-    algo.setReferenceFamily(OrthogonalUniVariatePolynomialFamily(LegendreFactory()))
+    algo.setReferenceFamily(LegendreFactory())
     print "Reference family=", algo.getReferenceFamily()
 
 except :

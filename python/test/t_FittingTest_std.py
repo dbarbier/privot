@@ -104,9 +104,9 @@ try :
         sampleCollection[continuousDistributionNumber + i] = discreteSampleCollection[i]
 
     factoryCollection = DistributionFactoryCollection(3)
-    factoryCollection[0] = DistributionFactory(UniformFactory())
-    factoryCollection[1] = DistributionFactory(BetaFactory())
-    factoryCollection[2] = DistributionFactory(NormalFactory())
+    factoryCollection[0] = UniformFactory()
+    factoryCollection[1] = BetaFactory()
+    factoryCollection[2] = NormalFactory()
     aSample = Uniform(-1.5, 2.5).getSample(size)
     print "best model BIC=", repr(FittingTest().BestModelBIC(aSample, factoryCollection))
     print "best model Kolmogorov=", repr(FittingTest().BestModelKolmogorov(aSample, factoryCollection))

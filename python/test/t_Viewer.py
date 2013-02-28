@@ -113,7 +113,7 @@ size = 1000
 sample = distribution.getSample( size )
 graph = ot.Graph("Pairs", " ", " ", True, "topright")
 myPairs = ot.Pairs(sample, "Pairs example", sample.getDescription(), "green", "bullet")
-graph.add(ot.Drawable(myPairs))
+graph.add(myPairs)
 #graph.draw('curve9', width, height, ot.GraphImplementation.PNG)
 view = View(graph)
 #view.save('curve9.png', dpi=fdpi)

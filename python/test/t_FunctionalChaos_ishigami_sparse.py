@@ -41,9 +41,9 @@ try :
     # Create the orthogonal basis
     polynomialCollection = PolynomialFamilyCollection(dimension)
     for i in range(dimension):
-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+        polynomialCollection[i] = LegendreFactory()
     enumerateFunction = LinearEnumerateFunction(dimension)
-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
+    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
 
     # design experiment
     samplingSize = 75
@@ -62,7 +62,7 @@ try :
     for fittingAlgorithmIndex in range(len(listFittingAlgorithm)):
         fittingAlgorithm = listFittingAlgorithm[fittingAlgorithmIndex]
         adaptiveStrategy = FixedStrategy( productBasis, basisSize )
-        projectionStrategy = LeastSquaresStrategy( LowDiscrepancyExperiment( LowDiscrepancySequence(SobolSequence(dimension)), samplingSize), LeastSquaresMetaModelSelectionFactory ( LAR(), fittingAlgorithm) );
+        projectionStrategy = LeastSquaresStrategy( LowDiscrepancyExperiment( SobolSequence(dimension), samplingSize), LeastSquaresMetaModelSelectionFactory ( LAR(), fittingAlgorithm) );
         algo = FunctionalChaosAlgorithm(model, distribution, adaptiveStrategy, projectionStrategy)
         RandomGenerator.SetSeed(0)
         algo.run()

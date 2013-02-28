@@ -7,11 +7,10 @@ TESTPREAMBLE()
 try:
     dim = 3
     polynomCollection = PolynomialFamilyCollection(3)
-    polynomCollection[0] = OrthogonalUniVariatePolynomialFamily(LaguerreFactory(2.5))
-    polynomCollection[1] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
-    polynomCollection[2] = OrthogonalUniVariatePolynomialFamily(HermiteFactory())
-    basisFactory = OrthogonalProductPolynomialFactory(polynomCollection)
-    basis = OrthogonalBasis(basisFactory)
+    polynomCollection[0] = LaguerreFactory(2.5)
+    polynomCollection[1] = LegendreFactory()
+    polynomCollection[2] = HermiteFactory()
+    basis = OrthogonalProductPolynomialFactory(polynomCollection)
     print "Basis=", basis
     point = NumericalPoint(dim, 0.5)
     for i in range(10):
