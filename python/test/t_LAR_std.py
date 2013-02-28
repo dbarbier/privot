@@ -41,9 +41,9 @@ try :
     # Create the orthogonal basis
     polynomialCollection = PolynomialFamilyCollection(dimension)
     for i in range(dimension):
-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+        polynomialCollection[i] = LegendreFactory()
     enumerateFunction = LinearEnumerateFunction(dimension)
-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
+    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
 
     # design experiment
     samplingSize = 75
