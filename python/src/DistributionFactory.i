@@ -41,6 +41,23 @@ namespace OT {
 %template(DistributionImplementationFactoryTypedInterfaceObject)           OT::TypedInterfaceObject<OT::DistributionImplementationFactory>;
 %include DistributionFactory.hxx
 
+%typemap(in) const OT::DistributionFactory & {
+  void * ptr = 0;
+  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0)))
+  {
+   // Nothing to do here
+  } else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_OT__DistributionImplementationFactory, 0))) {
+    // From Implementation*
+    OT::DistributionImplementationFactory * p_impl = reinterpret_cast< OT::DistributionImplementationFactory * >( ptr );
+    $1 = new OT::DistributionFactory( *p_impl );
+  }
+}
+
+%typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const OT::DistributionFactory & {
+  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
+    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIGTYPE_p_OT__DistributionImplementationFactory, 0));
+}
+
 namespace OT {  
 
 %extend DistributionFactory {
