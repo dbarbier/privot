@@ -34,7 +34,7 @@
 
 %enddef
 
-%define OTTypedInterfaceObjectApply(InterfaceType, Implementation)
+%define OTTypedInterfaceObjectApply(InterfaceType, ImplementationType)
 
 %template(Implementation ## TypedInterfaceObject)           OT::TypedInterfaceObject<OT::ImplementationType>;
 
@@ -56,7 +56,7 @@
 %typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const OT::InterfaceType & {
   $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
     || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIGTYPE_p_OT__ ## ImplementationType, 0))
-    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("OT::Pointer<OT::Interface" "Implementation> *"), 0));
+    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("OT::Pointer<OT::ImplementationType> *"), 0));
 }
 
 %enddef
