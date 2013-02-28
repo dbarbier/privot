@@ -45,7 +45,7 @@ try :
     for i in range(dimension):
         polynomialCollection[i] = LegendreFactory()
     enumerateFunction = EnumerateFunction(dimension)
-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, EnumerateFunction(enumerateFunction)))
+    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, EnumerateFunction(enumerateFunction))
 
     # Create the adaptive strategy
     # We can choose amongst several strategies

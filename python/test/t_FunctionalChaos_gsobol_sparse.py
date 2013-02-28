@@ -49,7 +49,7 @@ try :
         polynomialCollection[i] = LegendreFactory()
     q = 0.4
     enumerateFunction = HyperbolicAnisotropicEnumerateFunction(dimension, q)
-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
+    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
 
 
     # design experiment

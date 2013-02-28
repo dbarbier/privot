@@ -43,7 +43,7 @@ try :
     for i in range(dimension):
         polynomialCollection[i] = LegendreFactory()
     enumerateFunction = LinearEnumerateFunction(dimension)
-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
+    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
 
     # design experiment
     samplingSize = 75

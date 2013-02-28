@@ -10,8 +10,7 @@ try:
     polynomCollection[0] = LaguerreFactory(2.5)
     polynomCollection[1] = LegendreFactory()
     polynomCollection[2] = HermiteFactory()
-    basisFactory = OrthogonalProductPolynomialFactory(polynomCollection)
-    basis = OrthogonalBasis(basisFactory)
+    basis = OrthogonalProductPolynomialFactory(polynomCollection)
     print "Basis=", basis
     point = NumericalPoint(dim, 0.5)
     for i in range(10):

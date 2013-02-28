@@ -44,7 +44,7 @@ try :
     polynomialCollection[1] = LegendreFactory()
     polynomialCollection[2] = LegendreFactory()
     enumerateFunction = EnumerateFunction(dimension)
-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
+    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
 
     # Create the projection strategy
     samplingSize = 250
