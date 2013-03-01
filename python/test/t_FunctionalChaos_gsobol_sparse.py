@@ -65,7 +65,7 @@ try :
     for fittingAlgorithmIndex in range(len(listFittingAlgorithm)):
         fittingAlgorithm = listFittingAlgorithm[fittingAlgorithmIndex]
         adaptiveStrategy = FixedStrategy( productBasis, basisSize )
-        projectionStrategy = LeastSquaresStrategy( LowDiscrepancyExperiment( LowDiscrepancySequence(SobolSequence(dimension)), samplingSize), LeastSquaresMetaModelSelectionFactory ( LAR(), fittingAlgorithm) );
+        projectionStrategy = LeastSquaresStrategy( LowDiscrepancyExperiment( SobolSequence(dimension), samplingSize), LeastSquaresMetaModelSelectionFactory ( LAR(), fittingAlgorithm) );
         algo = FunctionalChaosAlgorithm(model, distribution, adaptiveStrategy, projectionStrategy)
         RandomGenerator.SetSeed(0)
         algo.run()
