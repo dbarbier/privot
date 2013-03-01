@@ -47,7 +47,7 @@ try :
 
     # design experiment
     samplingSize = 75
-    experiment = Experiment(LowDiscrepancyExperiment(LowDiscrepancySequence(SobolSequence(dimension)), distribution, samplingSize))
+    experiment = Experiment(LowDiscrepancyExperiment(SobolSequence(dimension), distribution, samplingSize))
 
     # iso transfo
     algo = FunctionalChaosAlgorithm(model, distribution, AdaptiveStrategy(FixedStrategy(productBasis, enumerateFunction.getStrataCumulatedCardinal(1))))
