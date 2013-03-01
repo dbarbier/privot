@@ -50,7 +50,7 @@ try :
     samplingSize = 250
     listProjectionStrategy = list()
     # Monte Carlo sampling
-    inputSample = LowDiscrepancyExperiment(LowDiscrepancySequence(SobolSequence()), distribution, samplingSize).generate()
+    inputSample = LowDiscrepancyExperiment(SobolSequence(), distribution, samplingSize).generate()
     outputSample = model(inputSample)
     # From here, the model is no more needed
     listProjectionStrategy.append(LeastSquaresStrategy())
