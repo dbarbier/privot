@@ -31,8 +31,8 @@ namespace OT {
 
 %}
 
-%include OrthogonalUniVariatePolynomialFamily.hxx
 OTTypedInterfaceObjectApply(OrthogonalUniVariatePolynomialFamily, OrthogonalUniVariatePolynomialFactory)
+%include OrthogonalUniVariatePolynomialFamily.hxx
 
 namespace OT{  
 

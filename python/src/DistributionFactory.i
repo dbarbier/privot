@@ -38,9 +38,9 @@ namespace OT {
 
 %}
 
-%include DistributionFactory.hxx
-
 OTTypedInterfaceObjectApply(DistributionFactory, DistributionImplementationFactory)
+
+%include DistributionFactory.hxx
 
 namespace OT {  
 
