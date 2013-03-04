@@ -29,7 +29,7 @@ namespace OT {
 
 %}
 
-%template(NumericalMathFunctionImplementationTypedInterfaceObject) OT::TypedInterfaceObject<OT::NumericalMathFunctionImplementation>;
+OTTypedInterfaceObjectHelper(NumericalMathFunction)
 
 %include NumericalMathFunction.hxx
 //%copyctor NumericalMathFunction;
