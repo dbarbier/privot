@@ -30,6 +30,7 @@
 %import BaseTypTemplateDefs.i
 
 /* Base/Func */
+%include BaseFuncCollection.i
 %import func_module.i
 %import BaseFuncTemplateDefs.i
 

@@ -5,31 +5,12 @@
 %{
 #include "NumericalMathFunction.hxx"
 #include "PythonNumericalMathEvaluationImplementation.hxx"
-
-namespace OT { 
-
-  template <>
-  struct traitsPythonType< OT::NumericalMathFunction >
-  {
-    typedef _PyObject_ Type;
-  };
-
-  template <>
-  inline
-  OT::NumericalMathFunction
-  convert< _PyObject_, OT::NumericalMathFunction >(PyObject * pyObj)
-  {
-    if (!PyCallable_Check( pyObj )) {
-      throw OT::InvalidArgumentException(HERE) << "Argument is not a callable object (function or class)";
-    }
-    return OT::NumericalMathFunction(new OT::NumericalMathFunctionImplementation(new OT::PythonNumericalMathEvaluationImplementation(pyObj) ) );
-  }
-
-} /* namespace OT */
-
 %}
 
+%include BaseFuncCollection.i
+
 OTTypedInterfaceObjectHelper(NumericalMathFunction)
+OTTypedCollectionInterfaceObjectHelper(NumericalMathFunction)
 
 %include NumericalMathFunction.hxx
 //%copyctor NumericalMathFunction;

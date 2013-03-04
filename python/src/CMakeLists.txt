@@ -362,6 +362,7 @@ ot_add_python_module( algo algo_module.i
                       LeastSquaresMetaModelSelectionFactory.i
                       PenalizedLeastSquaresAlgorithm.i
                       PenalizedLeastSquaresAlgorithmFactory.i
+                      PythonNumericalMathEvaluationImplementation.cxx
                       BaseAlgoTemplateDefs.i
                       FFTImplementation.i
                       FFT.i
@@ -613,6 +614,7 @@ ot_add_python_module( metamodel metamodel_module.i
                       FunctionalChaosResult.i
                       FunctionalChaosAlgorithm.i
                       RandomVector.i
+                      PythonNumericalMathEvaluationImplementation.cxx
                       PythonRandomVectorImplementation.cxx
                       CompositeRandomVector.i
                       EventRandomVectorImplementation.i

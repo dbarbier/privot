@@ -24,6 +24,7 @@
 %import common_module.i
 %import typ_module.i
 %include TestResult.i
+%include BaseFuncCollection.i
 %import base_module.i
 
 /* Uncertainty/Model */
