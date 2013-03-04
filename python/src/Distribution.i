@@ -123,10 +123,10 @@ class SciPyDistribution(PythonDistribution):
 %}
 
 OTTypedInterfaceObjectHelper(Distribution)
-
+%template(DistributionCollection) OT::Collection<OT::Distribution>;
 %typemap(in) const DistributionCollection & ($1_basetype temp) {
   if (! SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0))) {
-    temp = OT::convert<OT::_PySequence_,DistributionCollection>( $input );
+    temp = OT::convert<OT::_PySequence_, DistributionCollection>( $input );
     $1 = &temp;
   }
 }
@@ -136,7 +136,7 @@ OTTypedInterfaceObjectHelper(Distribution)
        OT::isAPythonSequenceOf<OT::_PyObject_>( $input );
 }
 
-%apply const DistributionCollection & { const OT::DistributionCollection & };
+%apply const DistributionCollection & { const OT::ComposedDistribution::DistributionCollection & };
 
 %include Distribution.hxx
 //%copyctor Distribution;
