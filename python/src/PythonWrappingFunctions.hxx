@@ -37,6 +37,7 @@ template <class PYTHON_Type>                 static inline int          isAPytho
 template <class PYTHON_Type>                 static inline const char * namePython();
 template <class PYTHON_Type, class CPP_Type> static inline CPP_Type     convert(PyObject * pyObj);
 template <class CPP_Type, class PYTHON_Type> static inline PyObject *   convert(CPP_Type);
+template <class PYTHON_Type, class CPP_Type> static inline bool         canConvert(PyObject * pyObj);
 template <class PYTHON_Type>                 static inline void         check(PyObject * pyObj);
 template <class PYTHON_Type, class CPP_Type> static inline CPP_Type     checkAndConvert(PyObject * pyObj);
 template <class T>                           static inline T *          buildObjectFromPySequence(PyObject * pyObj);
@@ -411,6 +412,40 @@ checkAndConvert(PyObject * pyObj)
   return convert< PYTHON_Type, CPP_Type >( pyObj );
 }
 
+
+
+
+
+template <class T>
+static inline
+bool
+canConvertCollectionObjectFromPySequence(PyObject * pyObj)
+{
+  try
+    {
+      check<_PySequence_>( pyObj );
+    }
+  catch( InvalidArgumentException & ex )
+    {
+      return false;
+    }
+
+  PyObject * newPyObj = PySequence_Fast( pyObj, "" );
+
+  const UnsignedLong size = PySequence_Fast_GET_SIZE( newPyObj );
+  for(UnsignedLong i = 0; i < size; ++i)
+    {
+      PyObject * elt = PySequence_Fast_GET_ITEM( newPyObj, i );
+      if (!canConvert< typename traitsPythonType< T >::Type, T >( elt ))
+        {
+          Py_XDECREF( newPyObj );
+          return false;
+        }
+    }
+
+  Py_XDECREF( newPyObj );
+  return true;
+}
 
 
 
