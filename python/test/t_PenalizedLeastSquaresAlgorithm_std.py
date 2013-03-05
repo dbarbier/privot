@@ -14,15 +14,15 @@ try :
     formula = Description(1)
     formula[0] = "x1^3+1.5*x2^3-x1*x2"
     model = NumericalMathFunction(inVar, outVar, formula)
-    basis = NumericalMathFunctionCollection(4)
+    basis = []
     formula[0] = "x1"
-    basis[0] = NumericalMathFunction(inVar, outVar, formula)
+    basis.append(NumericalMathFunction(inVar, outVar, formula))
     formula[0] = "x2"
-    basis[1] = NumericalMathFunction(inVar, outVar, formula)
+    basis.append(NumericalMathFunction(inVar, outVar, formula))
     formula[0] = "x1^2"
-    basis[2] = NumericalMathFunction(inVar, outVar, formula)
+    basis.append(NumericalMathFunction(inVar, outVar, formula))
     formula[0] = "x2^2"
-    basis[3] = NumericalMathFunction(inVar, outVar, formula)
+    basis.append(NumericalMathFunction(inVar, outVar, formula))
     size = 5
     inputSample = NumericalSample(size * size, dimension)
     weight = NumericalPoint(inputSample.getSize(), 1)

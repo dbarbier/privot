@@ -14,10 +14,10 @@ try :
     outVar[0] = "y"
     formula=Description(1)
     formula[0] = "x1^3 * sin(x2 + 2.5 * x3) - (x1 + x2)^2 / (1.0 + x3^2)"
-    functions = NumericalMathFunctionCollection(2)
-    functions[0] = NumericalMathFunction(inVar, outVar, formula)
+    functions = []
+    functions.append(NumericalMathFunction(inVar, outVar, formula))
     formula[0] = "exp(-x1 * x2 + x3) / cos(1.0 + x2 * x3 - x1)"
-    functions[1] = NumericalMathFunction(inVar, outVar, formula)
+    functions.append(NumericalMathFunction(inVar, outVar, formula))
     # Second, build the weights
     coefficients = NumericalPoint(2)
     coefficients[0] = 0.3

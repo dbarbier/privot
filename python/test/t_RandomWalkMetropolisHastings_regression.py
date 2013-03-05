@@ -50,18 +50,18 @@ try :
             p[i,j] = (-2+5.*i/9.)**j
     print 'p=', p
 
-    modelCollection = NumericalMathFunctionCollection()
+    modelCollection = []
     for i in range(obsSize):
-        modelCollection.add(buildPoly(p[i]))
+        modelCollection.append(buildPoly(p[i]))
     model = NumericalMathFunction(modelCollection)
 
     # calibration parameters
     calibrationColl = CalibrationStrategyCollection (chainDim)
 
     # proposal distribution
-    proposalColl = DistributionCollection()
+    proposalColl = []
     for i in range(chainDim):
-        proposalColl.add(Uniform(-1.,1.))
+        proposalColl.append(Uniform(-1.,1.))
 
     # prior distribution
     sigma0 = NumericalPoint (chainDim, 10.)# sigma0= (10.,10.,10.)

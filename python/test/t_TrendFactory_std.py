@@ -12,16 +12,16 @@ try :
     outVar[0] = "y"
     formula =Description(1)
 
-    functions = NumericalMathFunctionCollection(3)
+    functions = []
 
     formula[0] = "1"
-    functions[0] = NumericalMathFunction(inVar, outVar, formula)
+    functions.append(NumericalMathFunction(inVar, outVar, formula))
 
     formula[0] = "cos(2 * t)"
-    functions[1] = NumericalMathFunction(inVar, outVar, formula)
+    functions.append(NumericalMathFunction(inVar, outVar, formula))
 
     formula[0] = "sin(2 * t)"
-    functions[2] = NumericalMathFunction(inVar, outVar, formula)
+    functions.append(NumericalMathFunction(inVar, outVar, formula))
 
 
     # We build the weights
