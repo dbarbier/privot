@@ -13,7 +13,7 @@
 %extend OT::Collection<OT::HistogramPair>
 {
 
-OT::Collection<OT::HistogramPair> (PyObject * pyObj)
+Collection<OT::HistogramPair> (PyObject * pyObj)
 {
   return OT::buildCollectionFromPySequence<OT::Histogram::Pair>( pyObj );
 }

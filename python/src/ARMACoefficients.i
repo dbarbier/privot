@@ -38,7 +38,7 @@ namespace OT {
 %extend OT::Collection<OT::SquareMatrix>
 {
 
-OT::Collection<OT::SquareMatrix> (PyObject * pyObj)
+Collection<OT::SquareMatrix> (PyObject * pyObj)
 {
   return OT::buildCollectionFromPySequence<OT::SquareMatrix>( pyObj );
 }

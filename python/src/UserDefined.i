@@ -14,7 +14,7 @@
 %extend OT::PersistentCollection<OT::UserDefinedPair>
 {
 
-OT::PersistentCollection<OT::UserDefinedPair>::OT::PersistentCollection<OT::UserDefinedPair> (PyObject * pyObj)
+PersistentCollection<OT::UserDefinedPair> (PyObject * pyObj)
 {
   OT::Pointer<OT::Collection<OT::UserDefinedPair> > ptr = OT::buildCollectionFromPySequence<OT::UserDefinedPair>( pyObj );
   return new OT::PersistentCollection<OT::UserDefinedPair>(ptr->begin(), ptr->end());

@@ -14,7 +14,7 @@
 %extend OT::Collection<OT::Copula>
 {
 
-OT::Collection<OT::Copula> (PyObject * pyObj)
+Collection<OT::Copula> (PyObject * pyObj)
 {
   return OT::buildCollectionFromPySequence<OT::Copula>( pyObj );
 }
@@ -25,7 +25,7 @@ OT::Collection<OT::Copula> (PyObject * pyObj)
 %extend OT::ComposedCopula
 {
 
-OT::ComposedCopula(PyObject * pyObj)
+ComposedCopula(PyObject * pyObj)
 {
  OT::Pointer<OT::Collection<OT::Copula> > p_coll =  OT::buildCollectionFromPySequence<OT::Copula>( pyObj );
  return new OT::ComposedCopula( *p_coll );
