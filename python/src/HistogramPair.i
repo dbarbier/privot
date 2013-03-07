@@ -47,7 +47,7 @@
       convert<_PyObject_,OT::HistogramPair>(PyObject * pyObj)
       {
         void * ptr = 0;
-        if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::HistogramPair *"), 0 |  0 ))) {
+        if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIGTYPE_p_OT__HistogramPair, 0 ))) {
           OT::HistogramPair * p_hp = reinterpret_cast< OT::HistogramPair * >( ptr );
           return *p_hp;
 

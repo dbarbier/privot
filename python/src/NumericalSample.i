@@ -66,7 +66,7 @@ PyObject * __getitem__(PyObject * args) const {
     {
       result.at(i) = self->at( start1 + i*step1 );
     }
-    return SWIG_NewPointerObj((new OT::NumericalSample(static_cast< const OT::NumericalSample& >(result))), SWIG_TypeQuery("OT::NumericalSample *"), SWIG_POINTER_OWN |  0 );
+    return SWIG_NewPointerObj((new OT::NumericalSample(static_cast< const OT::NumericalSample& >(result))), SWIGTYPE_p_OT__NumericalSample, SWIG_POINTER_OWN |  0 );
   }
 
   PyObject * obj1 = 0 ;
@@ -130,7 +130,7 @@ PyObject * __getitem__(PyObject * args) const {
           result.at(i, j) = self->at( start1 + i*step1, start2 + j*step2 );
         }
       }
-      return SWIG_NewPointerObj((new OT::NumericalSample(static_cast< const OT::NumericalSample& >(result))), SWIG_TypeQuery("OT::NumericalSample *"), SWIG_POINTER_OWN |  0 );
+      return SWIG_NewPointerObj((new OT::NumericalSample(static_cast< const OT::NumericalSample& >(result))), SWIGTYPE_p_OT__NumericalSample, SWIG_POINTER_OWN |  0 );
     }
     else
     {
@@ -140,7 +140,7 @@ PyObject * __getitem__(PyObject * args) const {
       {
         result.at(i, 0) = self->at( start1 + i*step1, arg3 );
       }
-      return SWIG_NewPointerObj((new OT::NumericalSample(static_cast< const OT::NumericalSample& >(result))), SWIG_TypeQuery("OT::NumericalSample *"), SWIG_POINTER_OWN |  0 );
+      return SWIG_NewPointerObj((new OT::NumericalSample(static_cast< const OT::NumericalSample& >(result))), SWIGTYPE_p_OT__NumericalSample, SWIG_POINTER_OWN |  0 );
     }
 
   }
@@ -154,7 +154,7 @@ PyObject * __getitem__(PyObject * args) const {
       {
         result.at(j) = self->at( arg2, start2 + j*step2 );
       }
-      return SWIG_NewPointerObj((new OT::NumericalPoint(static_cast< const OT::NumericalPoint& >(result))), SWIG_TypeQuery("OT::NumericalPoint *"), SWIG_POINTER_OWN |  0 );
+      return SWIG_NewPointerObj((new OT::NumericalPoint(static_cast< const OT::NumericalPoint& >(result))), SWIGTYPE_p_OT__NumericalPoint, SWIG_POINTER_OWN |  0 );
     }
     else
     {  
@@ -181,7 +181,7 @@ void __setitem__(PyObject * args, PyObject * valObj) {
     PySlice_GetIndicesEx( OT::SliceCast( args ), self->getSize(), &start1, &stop1, &step1, &slicelength1 );
     OT::NumericalSample temp2 ;
     OT::NumericalSample *val2 = 0 ;
-    if (! SWIG_IsOK(SWIG_ConvertPtr(valObj, (void **) &val2, SWIG_TypeQuery("OT::NumericalSample *"), 0))) {
+    if (! SWIG_IsOK(SWIG_ConvertPtr(valObj, (void **) &val2, SWIGTYPE_p_OT__NumericalSample, 0))) {
       temp2 = OT::convert< OT::_PySequence_, OT::NumericalSample >( valObj );
       val2 = &temp2;
     }
@@ -248,7 +248,7 @@ void __setitem__(PyObject * args, PyObject * valObj) {
       // case #1: [slice/slice] <= NumericalSample
       OT::NumericalSample temp2 ;
       OT::NumericalSample *val2 = 0 ;
-      if (! SWIG_IsOK(SWIG_ConvertPtr(valObj, (void **) &val2, SWIG_TypeQuery("OT::NumericalSample *"), 0))) {
+      if (! SWIG_IsOK(SWIG_ConvertPtr(valObj, (void **) &val2, SWIGTYPE_p_OT__NumericalSample, 0))) {
         temp2 = OT::convert<OT::_PySequence_,OT::NumericalSample>( valObj );
         val2 = &temp2;
       }
@@ -265,7 +265,7 @@ void __setitem__(PyObject * args, PyObject * valObj) {
       // case #2: [slice/index] <= NumericalSample
       OT::NumericalSample temp2 ;
       OT::NumericalSample *val2 = 0 ;
-      if (! SWIG_IsOK(SWIG_ConvertPtr(valObj, (void **) &val2, SWIG_TypeQuery("OT::NumericalSample *"), 0))) {
+      if (! SWIG_IsOK(SWIG_ConvertPtr(valObj, (void **) &val2, SWIGTYPE_p_OT__NumericalSample, 0))) {
         temp2 = OT::convert<OT::_PySequence_,OT::NumericalSample>( valObj );
         val2 = &temp2;
       }
@@ -283,7 +283,7 @@ void __setitem__(PyObject * args, PyObject * valObj) {
       // case #3: [index/slice] <= NumericalPoint
       OT::NumericalPoint temp2 ;
       OT::NumericalPoint *val2 = 0 ;
-      if (! SWIG_IsOK(SWIG_ConvertPtr(valObj, (void **) &val2, SWIG_TypeQuery("OT::NumericalPoint *"), 0))) {
+      if (! SWIG_IsOK(SWIG_ConvertPtr(valObj, (void **) &val2, SWIGTYPE_p_OT__NumericalPoint, 0))) {
         temp2 = OT::convert<OT::_PySequence_,OT::NumericalPoint>( valObj );
         val2 = &temp2;
       }

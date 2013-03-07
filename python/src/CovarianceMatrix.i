@@ -19,7 +19,7 @@ namespace OT {
   convert<_PyObject_,OT::CovarianceMatrix>(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (! SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::CovarianceMatrix *"), 0 |  0 )))
+    if (! SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIGTYPE_p_OT__CovarianceMatrix, 0 )))
       throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not a CovarianceMatrix";
     OT::CovarianceMatrix * p_sm = reinterpret_cast< OT::CovarianceMatrix * >( ptr );
     return *p_sm;

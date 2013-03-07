@@ -21,7 +21,7 @@ namespace OT {
   convert<_PyObject_,OT::SquareMatrix>(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (! SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::SquareMatrix *"), 0 |  0 )))
+    if (! SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIGTYPE_p_OT__SquareMatrix, 0 )))
       throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not a SquareMatrix";
     OT::SquareMatrix * p_sm = reinterpret_cast< OT::SquareMatrix * >( ptr );
     return *p_sm;

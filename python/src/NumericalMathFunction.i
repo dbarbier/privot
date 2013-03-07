@@ -22,7 +22,7 @@ namespace OT {
 NumericalMathFunction(PyObject * pyObj)
 {
   void * ptr = 0;
-  if (SWIG_IsOK(SWIG_ConvertPtr(pyObj, &ptr, SWIG_TypeQuery("OT::Object *"), 0)))
+  if (SWIG_IsOK(SWIG_ConvertPtr(pyObj, &ptr, SWIGTYPE_p_OT__Object, 0)))
   {
     throw OT::InvalidArgumentException(HERE) << "Argument should be a pure python object";
   }

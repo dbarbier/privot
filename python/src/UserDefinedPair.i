@@ -47,7 +47,7 @@
       convert<_PyObject_,OT::UserDefinedPair>(PyObject * pyObj)
       {
         void * ptr = 0;
-        if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::UserDefinedPair *"), 0 |  0 ))) {
+        if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIGTYPE_p_OT__UserDefinedPair, 0 ))) {
           OT::UserDefinedPair * p_hp = reinterpret_cast< OT::UserDefinedPair * >( ptr );
           return *p_hp;
 
