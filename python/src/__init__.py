@@ -105,10 +105,10 @@ if not hasattr(sys, 'ps1'):
 from .common import *
 from .wrapper import *
 from .typ import *
-from .statistics import *
 from .graph import *
 from .geom import *
 from .func import *
+from .statistics import *
 from .diff import *
 from .optim import *
 from .solver import *
