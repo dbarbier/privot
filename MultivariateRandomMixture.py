@@ -138,7 +138,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         return self.cov
 
-    def getStandardDeviation(self, X):
+    def getStandardDeviation(self):
         """
         Returns the standard deviation
         """
