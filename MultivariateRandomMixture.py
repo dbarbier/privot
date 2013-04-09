@@ -233,3 +233,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def __str__(self):
         return 'PythonMultivariateRandomMixture distribution. Dimension =  %d' % self.getDimension()
+
+class MultivariateRandomMixture(ot.Distribution):
+    """
+    MultivariateRandomMixture allows to build an OpenTURNS distribution
+
+    """
+    def __new__(self, collection, matrix, y0):
+        instance = PythonMultivariateRandomMixture(collection, matrix, y0)
+        return ot.Distribution(instance)
