@@ -69,4 +69,32 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                   [0, 5])
 
         """
+        n = len(collection)
+        if (n == 0):
+            raise ValueError('Expected collection of distributions with non null size')
+        # check if all distributions are univariate
+        for k in xrange(n):
+            if (collection[k].getDimension() != 1):
+                raise ValueError("Expected a collection of univariate distributions")
+        self.collection = collection
+        # matrix cast
+        self.matrix = ot.Matrix(matrix)
+        # Check matrix dimension
+        if(self.matrix.getNbColumns() != n):
+            raise ValueError("Matrix number of column is not coherant with collection size.")
+        d = self.matrix.getNbRows()
+        if (d > 3):
+            raise ValueError("Mixture should be of dimension 1,2 or 3")
+        if (y0 is None):
+            self.y0 = ot.NumericalPoint(d * [0])
+        else :
+            assert len(y0) == d
+            self.y0 = ot.NumericalPoint(y0)
+        ot.PythonDistribution.__init__(self, d)
+        # compute the mean and covariance
+        self.computeMean()
+        self.computeCovariance()
+        # set the standard deviation
+        self.sigma = self.cov.computeCholesky()
 
+        
