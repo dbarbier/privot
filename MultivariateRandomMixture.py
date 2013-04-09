@@ -34,7 +34,7 @@
 
 """
 import openturns as ot
-
+import scipy
 
 class PythonMultivariateRandomMixture(ot.PythonDistribution):
     """
@@ -96,6 +96,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.computeCovariance()
         # set the standard deviation
         self.sigma = self.cov.computeCholesky()
+        # compute the range
+        self.computeRange()
 
     def computeMean(self):
         """
@@ -132,3 +134,65 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         Returns the standard deviation
         """
         return self.sigma
+
+    def computeRange(self):
+      """
+      Compute the range of the distribution
+      """
+      interval_collection = []
+      for i in xrange(self.getDimension()):
+          interval = ot.Interval(0, 0)
+          for j in xrange(len(self.collection)):
+              interval += self.collection[j].getRange() * self.matrix[i, j]
+          interval_collection.append(interval)
+      # Build the interval from the collection of interval
+      lowerbound = [interval.getLowerBound()[0] for interval in interval_collection]
+      finitelowerbound = [interval.getFiniteLowerBound()[0] for interval in interval_collection]
+      upperbound = [interval.getUpperBound()[0] for interval in interval_collection]
+      finiteupperbound = [interval.getFiniteUpperBound()[0] for interval in interval_collection]
+      self.interval = ot.Interval(lowerbound, upperbound, ot.BoolCollection(finitelowerbound), ot.BoolCollection(finiteupperbound))
+
+    def getRange(self):
+      """
+      Returns the range of the distribution
+      """
+      return self.interval
+
+    def computeCharacteristicFunction(self, point):
+        """
+        Return the characteristic function evaluated on point.
+
+        Parameters
+        ----------
+        criterion : point
+                    1D array-like (np array, python list, OpenTURNS NumericalPoint)
+
+        Returns
+        -------
+        out : Complex
+              The characteristic function evaluated on point
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> dist = MV.PythonMultivariateRandomMixture.PythonMultivariateRandomMixture(\
+                  ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
+                  ot.Matrix([[1,1], [3,4], [2, -1]]), \
+                  [0, 5])
+        >>> cfx = dist.computeCharacteristicFunction( [0.3, 0.9] )
+
+        """
+        raise RuntimeError( 'You must define a method computeCharacteristicFunction(x) -> cfx, where cfx is a float' )
+
+    def computePDF(self, point, xMin, xMax, pointNumber, precision):
+        raise RuntimeError( 'You must define a method computePDF(x) -> pdf, where pdf is a float' )
+
+    def computeCDF(self, X):
+        raise RuntimeError( 'You must define a method computePDF(x) -> cdf, where cdf is a float' )
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return 'PythonMultivariateRandomMixture distribution. Dimension =  %d' % self.getDimension()
