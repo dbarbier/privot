@@ -91,6 +91,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             assert len(y0) == d
             self.y0 = ot.NumericalPoint(y0)
         ot.PythonDistribution.__init__(self, d)
+        # Set alpha and beta values
+        self.alpha = 5.0 #ot.ResourceMap.GetAsNumericalScalar( "RandomMixture-DefaultAlpha" )
+        self.beta = 6.0
         # compute the mean and covariance
         self.computeMean()
         self.computeCovariance()
@@ -98,6 +101,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.sigma = self.cov.computeCholesky()
         # compute the range
         self.computeRange()
+
+    def computeH(self):
+        """
+        Compute h parameters
+        """
+        self.h = [2.0 * scipy.pi / ((self.beta + 4.0 * self.alpha) * self.sigma[l,l]) for l in xrange(self.getDimension())]
 
     def computeMean(self):
         """
@@ -141,7 +150,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
       """
       interval_collection = []
       for i in xrange(self.getDimension()):
-          interval = ot.Interval(0, 0)
+          interval = ot.Interval(self.y0[i], self.y0[i])
           for j in xrange(len(self.collection)):
               interval += self.collection[j].getRange() * self.matrix[i, j]
           interval_collection.append(interval)
@@ -151,6 +160,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
       upperbound = [interval.getUpperBound()[0] for interval in interval_collection]
       finiteupperbound = [interval.getFiniteUpperBound()[0] for interval in interval_collection]
       self.interval = ot.Interval(lowerbound, upperbound, ot.BoolCollection(finitelowerbound), ot.BoolCollection(finiteupperbound))
+      # get the diagonal of the std matrix
+      s = ot.NumericalPoint([self.sigma[k, k] for k in xrange(self.getDimension())])
+      interval = ot.Interval(self.getMean() - s * self.beta, self.getMean() + s * self.beta)
+      self.interval = self.interval.intersect(interval)
 
     def getRange(self):
       """
