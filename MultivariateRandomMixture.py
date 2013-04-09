@@ -97,4 +97,38 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # set the standard deviation
         self.sigma = self.cov.computeCholesky()
 
-        
+    def computeMean(self):
+        """
+        Compute the mean of the multivariate mixture
+        This method is implicite. Use the getMean to get the mean value
+        """
+        mu = [dist.getMean()[0] for dist in self.collection]
+        self.mu = self.matrix * ot.NumericalPoint(mu) + self.y0
+
+    def getMean(self):
+        """
+        Returns the mean vector of the mixture
+        """
+        return self.mu
+
+    def computeCovariance(self):
+        """
+        Returns the covariance of the mixture
+        This method is implicite. Use the getCovariance to get the mean value
+        """
+        cov = ot.ComposedDistribution(self.collection).getCovariance()
+        m1 = cov *  self.matrix.transpose()
+        cov = self.matrix * m1
+        self.cov = ot.CovarianceMatrix(cov.getImplementation())
+
+    def getCovariance(self):
+        """
+        Returns the covariance matrix of the mixutr
+        """
+        return self.cov
+
+    def getStandardDeviation(self, X):
+        """
+        Returns the standard deviation
+        """
+        return self.sigma
