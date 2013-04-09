@@ -198,6 +198,30 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         raise RuntimeError( 'You must define a method computeCharacteristicFunction(x) -> cfx, where cfx is a float' )
 
+    def getRealization(self):
+        """
+        Get a realization of the distribution
+        """
+        realization = [dist.getRealization()[0] for dist in self.collection]
+        realization = self.matrix * realization + self.y0
+        return realization
+
+    def getSample(self, n):
+        """
+        Get a realization of the distribution
+        """
+        assert isinstance(n, int)
+        sample = ot.ComposedDistribution(self.collection).getSample(n)
+        # product matrix * realization
+        # using scipy for scalability (matrix * sample not available)
+        sample = scipy.array(sample) * scipy.matrix(self.matrix).transpose()
+        # scipy.matrix could not be casted into ot.NumericalSample
+        sample = scipy.array(sample)
+        sample = ot.NumericalSample(sample)
+        # Do not forget the constant term
+        sample.translate(self.y0)
+        return sample
+
     def computePDF(self, point, xMin, xMax, pointNumber, precision):
         raise RuntimeError( 'You must define a method computePDF(x) -> pdf, where pdf is a float' )
 
