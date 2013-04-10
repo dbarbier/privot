@@ -54,8 +54,7 @@ if __name__ == "__main__":
     matrix = ot.Matrix([[4, 1.4]])
     y = [2.0]
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix, y)
-    # Equivalent random mixture
-    random_mixture = ot.RandomMixture(collection, [4.0, 1.4], 2.0)
+    distribution_collection.append(distribution)
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
@@ -66,16 +65,18 @@ if __name__ == "__main__":
     print "mean = ", mean
     print "cov = ", cov
     print "sigma = ", sigma
-    print "sample :"
-    print "min = %s\nmax = %s\nmean = %s" %(sample.getMin(),sample.getMax(),sample.computeMean())
+    # Equivalent random mixture
+    random_mixture = ot.RandomMixture(collection, [4.0, 1.4], 2.0)
     print "RandomMixture distribution"
     print "range = ", random_mixture.getRange()
     print "mean = ", random_mixture.getMean()
     print "cov = ", random_mixture.getCovariance()
     print "sigma = ", random_mixture.getStandardDeviation()
-    distribution_collection.append(distribution)
-    # evaluation of the characteristic function between -20 and 20
-    x = np.arange(-10, 10 +0.1, 0.5)
+    print "sample :"
+    print "min = %s\nmax = %s\nmean = %s, cov = %s" %(sample.getMin(),sample.getMax(), sample.computeMean(), sample.computeCovariance())
+    # evaluation of the characteristic function between -10 and 10
+    xmin, xmax, dx = -5, 5, 0.5
+    x = np.arange(xmin, xmax, dx)
     for value in x:
         c1 = distribution.computeCharacteristicFunction([value])
         c2 = random_mixture.computeCharacteristicFunction(value)
@@ -103,7 +104,7 @@ if __name__ == "__main__":
     print "cov = ", cov
     print "sigma = ", sigma
     print "sample :"
-    print "min = %s\nmax = %s\nmean = %s" %(sample.getMin(),sample.getMax(),sample.computeMean())
+    print "min = %s\nmax = %s\nmean = %s, cov = %s" %(sample.getMin(),sample.getMax(), sample.computeMean(), sample.computeCovariance())
     distribution_collection.append(distribution)
     # evaluation of the characteristic function in [xmin,ymin]x[xmax,ymax]
     xmin = -1.0
