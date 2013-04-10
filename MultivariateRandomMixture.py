@@ -5,8 +5,8 @@
 #
 #  Copyright (C) 2013 EADS IW France
 #
-#  Author(s) : Sofiane Haddad, IMACS
-#              Denis Barbier, IMACS
+#  Author(s) :  Denis Barbier, IMACS
+#               Sofiane Haddad, IMACS
 #
 #  This program is free software; you can redistribute it and/or
 #  it under the terms of the GNU Lesser General Public License as published by
@@ -52,12 +52,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Parameters
         ----------
-        y0 : 1D array-like
-             Either a OpenTURNS NumericalPoint or a Numpy 1D-array
+        collection : list/DistributionCollection
+                     Either OpenTURNS DistributionCollection or a list of OpenTURNS distributions
         matrix : Matrix
                  Either OpenTURNS matrix or Numpy matrix
-        collection : list/DistributionCollection
-                     Either OpenTURNS DistributionCollection of list of OpenTURNS distributions
+        y0 : 1D array-like
+             Either a python list, an OpenTURNS NumericalPoint or a Numpy 1D-array
 
         Example
         -------
@@ -134,7 +134,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getCovariance(self):
         """
-        Returns the covariance matrix of the mixutr
+        Returns the covariance matrix of the mixutre
         """
         return self.cov
 
@@ -145,31 +145,31 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         return self.sigma
 
     def computeRange(self):
-      """
-      Compute the range of the distribution
-      """
-      interval_collection = []
-      for i in xrange(self.getDimension()):
-          interval = ot.Interval(self.y0[i], self.y0[i])
-          for j in xrange(len(self.collection)):
-              interval += self.collection[j].getRange() * self.matrix[i, j]
-          interval_collection.append(interval)
-      # Build the interval from the collection of interval
-      lowerbound = [interval.getLowerBound()[0] for interval in interval_collection]
-      finitelowerbound = [interval.getFiniteLowerBound()[0] for interval in interval_collection]
-      upperbound = [interval.getUpperBound()[0] for interval in interval_collection]
-      finiteupperbound = [interval.getFiniteUpperBound()[0] for interval in interval_collection]
-      self.interval = ot.Interval(lowerbound, upperbound, ot.BoolCollection(finitelowerbound), ot.BoolCollection(finiteupperbound))
-      # get the diagonal of the std matrix
-      s = ot.NumericalPoint([self.sigma[k, k] for k in xrange(self.getDimension())])
-      interval = ot.Interval(self.getMean() - s * self.beta, self.getMean() + s * self.beta)
-      self.interval = self.interval.intersect(interval)
+        """
+        Compute the range of the distribution
+        """
+        interval_collection = []
+        for i in xrange(self.getDimension()):
+            interval = ot.Interval(self.y0[i], self.y0[i])
+            for j in xrange(len(self.collection)):
+                interval += self.collection[j].getRange() * self.matrix[i, j]
+            interval_collection.append(interval)
+        # Build the interval from the collection of interval
+        lowerbound = [interval.getLowerBound()[0] for interval in interval_collection]
+        finitelowerbound = [interval.getFiniteLowerBound()[0] for interval in interval_collection]
+        upperbound = [interval.getUpperBound()[0] for interval in interval_collection]
+        finiteupperbound = [interval.getFiniteUpperBound()[0] for interval in interval_collection]
+        self.interval = ot.Interval(lowerbound, upperbound, ot.BoolCollection(finitelowerbound), ot.BoolCollection(finiteupperbound))
+        # get the diagonal of the std matrix
+        s = ot.NumericalPoint([self.sigma[k, k] for k in xrange(self.getDimension())])
+        interval = ot.Interval(self.getMean() - s * self.beta, self.getMean() + s * self.beta)
+        self.interval = self.interval.intersect(interval)
 
     def getRange(self):
-      """
-      Returns the range of the distribution
-      """
-      return self.interval
+        """
+        Returns the range of the distribution
+        """
+        return self.interval
 
     def computeCharacteristicFunction(self, point):
         """
@@ -208,7 +208,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getSample(self, n):
         """
-        Get a realization of the distribution
+        Get a sample of size n of the distribution
         """
         assert isinstance(n, int)
         sample = ot.ComposedDistribution(self.collection).getSample(n)
@@ -226,7 +226,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         raise RuntimeError( 'You must define a method computePDF(x) -> pdf, where pdf is a float' )
 
     def computeCDF(self, X):
-        raise RuntimeError( 'You must define a method computePDF(x) -> cdf, where cdf is a float' )
+        raise RuntimeError( 'You must define a method computeCDF(x) -> cdf, where cdf is a float' )
 
     def __repr__(self):
         return self.__str__()
