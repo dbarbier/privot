@@ -36,6 +36,9 @@
 import openturns as ot
 import cmath
 
+mvrm_resource_map = {"MultivariateRandomMixture-DefaultAlpha" : 4,\
+                     "MultivariateRandomMixture-DefaultBeta": 8}
+
 class PythonMultivariateRandomMixture(ot.PythonDistribution):
     """
     Multivariate distribution
@@ -89,8 +92,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             self.y0 = ot.NumericalPoint(y0)
         ot.PythonDistribution.__init__(self, d)
         # Set alpha and beta values
-        self.alpha = ot.ResourceMap.GetAsNumericalScalar( "RandomMixture-DefaultAlpha" )
-        self.beta = 10.0
+        self.alpha = mvrm_resource_map['MultivariateRandomMixture-DefaultAlpha']
+        self.beta = mvrm_resource_map['MultivariateRandomMixture-DefaultBeta']
         # compute the mean and covariance
         self.computeMean()
         self.computeCovariance()
@@ -252,7 +255,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # product matrix * realization
         # using np for scalability (matrix * sample not available)
         try :
-            import numy as np
+            import numpy as np
             sample = np.array(sample) * np.matrix(self.matrix).transpose()
             # np.matrix could not be casted into ot.NumericalSample
             sample = np.array(sample)
