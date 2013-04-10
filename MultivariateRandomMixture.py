@@ -102,6 +102,24 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # compute the range
         self.computeRange()
 
+    def getDistributionCollection(self):
+        """
+        Returns the distribution collection
+        """
+        return self.collection
+
+    def getMatrix(self):
+        """
+        Returns the matrix of the affine transform
+        """
+        return self.matrix
+
+    def getConstant(self):
+        """
+        Returns the constant vector
+        """
+        return self.y0
+
     def computeH(self):
         """
         Compute h parameters
