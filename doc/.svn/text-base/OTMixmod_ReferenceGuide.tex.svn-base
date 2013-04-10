@@ -1,0 +1,37 @@
+% Copyright (c)  2010-2011  EADS.
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Reference Guide}
+
+The Mixmod (MIXture MODelling) library and executable provide efficient algorithms for density estimation, clustering or discriminant analysis problems.
+
+%High Performance Model-Based Cluster and Discriminant Analysis
+
+
+\subsection{Mixtures}
+
+The probability density function of a mixture is a weighted sum of densities:
+\begin{align*} 
+f(x) & = \sum_i \alpha_i p_i(x)  & \sum_i \alpha_i & = 1 \quad \text{with~} 0 \leq \alpha_i \leq 1
+\end{align*}
+
+
+
+\subsection{References}\label{ref}
+
+MIXMOD estimates the mixture parameters through maximum likelihood via the EM (Expectation Maximization, Dempster et al. 1977), and the SEM (Stochastic EM, Celeux and Diebolt 1985) algorithm or through classification maximum likelihood via the CEM algorithm (Clustering EM , Celeux and Govaert 1992). 
+
+
+\begin{itemize}
+  \item[1]  MIXMOD, www.mixmod.org/ 
+\end{itemize}
+

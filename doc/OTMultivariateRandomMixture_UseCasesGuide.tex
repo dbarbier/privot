@@ -1,0 +1,55 @@
+% Copyright (c)  2010-2011  EADS.
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Use Cases Guide}
+
+This section presents the main functionalities of the module $MultivariateRandomMixture$ in their context.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Which python modules to import ?}
+
+In order to use the functionalities described in this documentation, it is necessary to import the module 
+using the following Python script~:
+
+\begin{lstlisting}
+# Load OpenTURNS to manipulate distributions
+import MultivariateRandomMixture as MV
+# other possibility
+from MultivariateRandomMixture import *
+# or
+from MultivariateRandomMixture import PythonMultivariateRandomMixture
+\end{lstlisting}
+$openturns$ is imported into~: 
+\begin{itemize}
+   \item $MV.ot$ within the first use,
+   \item $ot$ within the second use.
+\end{itemize}
+
+We could also import $openturns$ separately to the module.
+
+
+\subsection{Creation of a multivariate random mixture through the PythonMultivariateRandomMixture class} \label{MVRM}
+
+In $MultivariateRandomMixture$, it is possible to create a python class for the manipulation of the multivariate random mixture distribution.
+The multivariate random mixture is considered as an affine transformation of random vector of independant marginals. 
+The parameters are:
+\begin{itemize}
+ \item the collection of distributions ($DistributionCollection$) which characterize the input random vector,
+ \item the $Matrix$ of the affine transformation, 
+ \item the constant vector ($NumericalPoint$) of the affine transformation.
+\end{itemize}
+
+The return objet is a distribution which inherites from the $PythonDistribution$ class.
+
+\subsubsection{UC : Manipulation of a PythonMultivariateRandomMixture}

@@ -1,0 +1,46 @@
+% Copyright (c)  2010-2011  EADS.
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{User Manual}
+
+This section gives an exhaustive presentation of the objects and functions provided by the $MultivariateRandomMixture$ module.
+
+\subsection{PythonMultivariateRandomMixture}
+
+
+\begin{description}
+\item[Usage :]  \strut
+  \begin{description}
+  \item $PythonMultivariateRandomMixture(collection, matrix)$
+  \item $PythonMultivariateRandomMixture(collection, matrix, vector)$
+  \end{description}
+\item[Arguments :] \strut
+  \begin{description}
+  \item $collection$: a DistributionCollection, a collection of OpenTURNS distributions.
+  \item $matrix$: a Matrix, the matrix of the affine transformation.
+  \item $vector$: a NumericalPoint, the constant term of the affine transformation.
+  \end{description}
+\item[Some methods :]  \strut
+
+  \begin{description}
+
+  \item $computeCharacteristicFunction$
+    \begin{description}
+    \item[Usage :]  $computeCharacteristicFunction(u)$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $u$ : a NumericalPoint of dimension $n \ge 1$
+    \end{description}
+    \item[Value :] a NumericalComplex
+    \end{description}
+
+    
+  \end{description}
+
+\end{description}

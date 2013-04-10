@@ -1,0 +1,119 @@
+% Copyright (c)  2010-2011  EADS.
+% Permission is granted to copy, distribute and/or modify this document
+% under the terms of the GNU Free Documentation License, Version 1.2
+% or any later version published by the Free Software Foundation;
+% with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+% Texts.  A copy of the license is included in the section entitled "GNU
+% Free Documentation License".
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{User Manual}
+
+This section gives an exhaustive presentation of the objects and functions provided by the $otmixmod$ module, in the alphabetic order.
+
+\subsection{CovarianceModel}
+
+\subsubsection{CovarianceModelImplementation}
+
+
+\begin{description}
+\item[Usage :]  \strut
+  \begin{description}
+   \item CovarianceModelImplementation ()
+  \end{description}
+\item[Arguments :] none
+\item[Value :]  a CovarianceModelImplementation is the implementation of a CovarianceModel and is one to the following classes:
+Gaussian\_p\_L\_I, Gaussian\_p\_Lk\_I, Gaussian\_p\_L\_B, Gaussian\_p\_Lk\_B,
+Gaussian\_p\_L\_Bk, Gaussian\_p\_Lk\_Bk, Gaussian\_p\_L\_C, Gaussian\_p\_Lk\_C, Gaussian\_p\_L\_D\_Ak\_D, Gaussian\_p\_Lk D\_Ak\_D, Gaussian\_p\_L\_Dk\_A\_Dk, Gaussian\_p\_Lk\_Dk\_A\_Dk, Gaussian\_p\_L\_Ck, Gaussian\_p\_Lk\_Ck, Gaussian\_pk\_L\_I, Gaussian\_pk\_Lk\_I, Gaussian\_pk\_L\_B,
+Gaussian\_pk\_Lk\_B, Gaussian\_pk\_L\_Bk, Gaussian\_pk\_Lk\_Bk, Gaussian\_pk\_L\_C, Gaussian\_pk\_Lk\_C,
+Gaussian\_pk\_L\_D\_Ak\_D, Gaussian\_pk\_Lk D\_Ak\_D, Gaussian\_pk\_L\_Dk\_A\_Dk, Gaussian\_pk\_Lk\_Dk\_A\_Dk, Gaussian\_pk\_L\_Ck, Gaussian\_pk\_Lk\_Ck.
+
+\item[Some methods :]  \strut
+  \begin{description}
+\item $convertToMixmod$
+    \begin{description}
+    \item[Usage :]  $convertToMixmod()$
+    \item[Arguments :] none
+    \item[Value :]  a String that is the mixmod name of the covariance model. 
+    \end{description}
+
+
+  \end{description}
+
+\end{description}
+
+
+
+
+
+\subsection{MixtureFactory}
+
+
+\begin{description}
+\item[Usage :]  \strut
+  \begin{description}
+  \item $MixtureFactory(atomsNumber)$
+  \item $MixtureFactory(atomsNumber, covarianceModel)$
+  \end{description}
+\item[Arguments :] \strut
+  \begin{description}
+  \item $atomsNumber$: a UnsignedLong, the number of atoms to consider in the muxture.
+  \item $covarianceModel$: a CovarianceModel, the covariance model assumed for the several atoms of a mixture.
+  \end{description}
+\item[Some methods :]  \strut
+
+  \begin{description}
+
+  \item $build$
+    \begin{description}
+    \item[Usage :]  $build(sample)$
+    \item[Usage :]  $build(sample, labels, BICLogLikelihood)$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $sample$ : a NumericalSample of dimension $n \ge 1$
+      \item $labels$ : an Indices that will be filled by the method.
+      \item $BICLogLikelihood$ : a NumericalPoint that will be filled by 3 values: the log-likelihood of the estimated model, the corrected log-likelihood taking the number of parameters into account, and the entropy.
+    \end{description}
+    \item[Value :] a Mixture. 
+    \end{description}
+
+
+  \item $getAtomsNumber$
+    \begin{description}
+    \item[Usage :] $getAtomsNumber()$
+    \item[Arguments :] none
+    \item[Value :] an UnsignedLong, which is the number of atoms  in the mixture factory.
+    \end{description}
+
+  \item $getCovarianceModel$
+    \begin{description}
+    \item[Usage :]  $getCovarianceModel()$
+    \item[Arguments :]  none
+    \item[Value :]  a CovarianceModel, which is the covariance model assumed for the several atoms of a mixture.
+    \end{description}
+
+
+  \item $setAtomsNumber$
+    \begin{description}
+    \item[Usage :]  $setAtomsNumber(myAtomNumber)$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $myAtomNumber$ : an UnsignedLong, which is the number of atoms to set in the mixture factory. 
+    \end{description}
+    \item[Value :]  none
+    \end{description}
+
+  \item $setCovarianceModel$
+    \begin{description}
+    \item[Usage :]  $getCovarianceModel(myCovarianceModel)$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $myCovarianceModel$ : a CovarianceModel, which is the covariance model assumed for the several atoms of a mixture.
+    \end{description}
+    \item[Value :]  none
+    \end{description}
+
+
+  \end{description}
+
+\end{description}
