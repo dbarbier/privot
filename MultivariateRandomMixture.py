@@ -72,19 +72,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         n = len(collection)
         if (n == 0):
             raise ValueError('Expected collection of distributions with non null size')
-        # check if all distributions are univariate
-        for k in xrange(n):
-            if (collection[k].getDimension() != 1):
-                raise ValueError("Expected a collection of univariate distributions")
-        self.collection = collection
+        # Use of setDistributionCollection method
+        self.setDistributionCollection(collection)
         # matrix cast
         self.matrix = ot.Matrix(matrix)
         # Check matrix dimension
         if(self.matrix.getNbColumns() != n):
-            raise ValueError("Matrix number of column is not coherant with collection size.")
+            raise ValueError("Matrix number of columns is not coherant with collection size.")
         d = self.matrix.getNbRows()
         if (d > 3):
-            raise ValueError("Mixture should be of dimension 1,2 or 3")
+            raise ValueError("Mixture should be of dimension 1, 2 or 3")
         if (y0 is None):
             self.y0 = ot.NumericalPoint(d * [0])
         else :
@@ -92,8 +89,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             self.y0 = ot.NumericalPoint(y0)
         ot.PythonDistribution.__init__(self, d)
         # Set alpha and beta values
-        self.alpha = 5.0 #ot.ResourceMap.GetAsNumericalScalar( "RandomMixture-DefaultAlpha" )
-        self.beta = 6.0
+        self.alpha = ot.ResourceMap.GetAsNumericalScalar( "RandomMixture-DefaultAlpha" )
+        self.beta = 10.0
         # compute the mean and covariance
         self.computeMean()
         self.computeCovariance()
@@ -101,6 +98,17 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.sigma = self.cov.computeCholesky()
         # compute the range
         self.computeRange()
+
+    def setDistributionCollection(self, collection):
+        """
+        Set the distribution collection
+        This method should not be used, except by the __init__ method
+        """
+        for k in xrange(len(collection)):
+            # check if distribution is univariate
+            if (collection[k].getDimension() != 1):
+                raise ValueError("Expected a collection of univariate distributions")
+        self.collection = collection
 
     def getDistributionCollection(self):
         """
