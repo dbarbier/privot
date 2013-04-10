@@ -35,6 +35,7 @@
 """
 import openturns as ot
 import scipy
+import cmath
 
 class PythonMultivariateRandomMixture(ot.PythonDistribution):
     """
@@ -197,19 +198,19 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         return self.interval
 
-    def computeCharacteristicFunction(self, point):
+    def computeCharacteristicFunction(self, u):
         """
-        Return the characteristic function evaluated on point.
+        Return the characteristic function evaluated on u.
 
         Parameters
         ----------
-        criterion : point
+        criterion : u
                     1D array-like (np array, python list, OpenTURNS NumericalPoint)
 
         Returns
         -------
         out : Complex
-              The characteristic function evaluated on point
+              The characteristic function evaluated on u
 
         Example
         -------
@@ -222,7 +223,18 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> cfx = dist.computeCharacteristicFunction( [0.3, 0.9] )
 
         """
-        raise RuntimeError( 'You must define a method computeCharacteristicFunction(x) -> cfx, where cfx is a float' )
+        assert len(u) == self.getDimension()
+        somme = 0
+        # The characteristic function is given by the following formula:
+        # \phi(u) = \prod_{j=1}^{d} (exp(i * u_j * y0_j) * \prod_{k=1}^{n} \phi_{X_k}(Mjk u_j))
+        n = len(self.collection)
+        d = self.getDimension()
+        for j in xrange(d):
+            somme += u[j] * self.y0[j] * 1j
+            for k in xrange(n):
+                Mjk = self.matrix[j,k]
+                somme += self.collection[k].computeLogCharacteristicFunction(Mjk * u[j])
+        return cmath.exp(somme)
 
     def getRealization(self):
         """
