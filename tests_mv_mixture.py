@@ -39,6 +39,7 @@
 if __name__ == "__main__":
     import openturns as ot
     import MultivariateRandomMixture as MV
+    import numpy as np
 
     # Storing all distribution results
     distribution_collection = []
@@ -73,16 +74,25 @@ if __name__ == "__main__":
     print "cov = ", random_mixture.getCovariance()
     print "sigma = ", random_mixture.getStandardDeviation()
     distribution_collection.append(distribution)
+    # evaluation of the characteristic function between -20 and 20
+    x = np.arange(-10, 10 +0.1, 0.5)
+    for value in x:
+        c1 = distribution.computeCharacteristicFunction([value])
+        c2 = random_mixture.computeCharacteristicFunction(value)
+        print "x = %s, mv=%s, rm=%s" %(value, c1, c2)
+
 
     """
     Test 2
     ------
     The matrix is assumed to be diagonal for validation purposes
     """
-    collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
+    collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Normal(0.0, 1.0)])
     matrix = ot.Matrix([[4, 0], [0, 1.4]])
-    y = [5, 1]
-    distribution = MV.PythonMultivariateRandomMixture(collection, matrix, y)
+    distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
+    # Equivalent Normals
+    normal_1 = ot.Normal(0.0, 4.0)
+    normal_2 = ot.Normal(0.0 * 1.4, 1.4 * 1.0)
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
@@ -95,3 +105,19 @@ if __name__ == "__main__":
     print "sample :"
     print "min = %s\nmax = %s\nmean = %s" %(sample.getMin(),sample.getMax(),sample.computeMean())
     distribution_collection.append(distribution)
+    # evaluation of the characteristic function in [xmin,ymin]x[xmax,ymax]
+    xmin = -1.0
+    ymin = -1.0
+    xmax = 1.0
+    ymax = 1.0
+    dx = 0.2
+    dy = 0.2
+    # 2D grid
+    x = np.arange(xmin, xmax + dx, dx)
+    y = np.arange(ymin, ymax + dy, dy)
+    for valuex in x:
+        for valuey in y:
+            c1 = distribution.computeCharacteristicFunction([valuex, valuey])
+            c2 = normal_1.computeCharacteristicFunction(valuex) * normal_2.computeCharacteristicFunction(valuey)
+            print "x=%s, y=%s"  %(valuex, valuey)
+            print "mv=%s, rm=%s" %(c1, c2)
