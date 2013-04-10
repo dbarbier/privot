@@ -34,7 +34,6 @@
 
 """
 import openturns as ot
-import scipy
 import cmath
 
 class PythonMultivariateRandomMixture(ot.PythonDistribution):
@@ -133,7 +132,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Compute h parameters
         """
-        self.h = [2.0 * scipy.pi / ((self.beta + 4.0 * self.alpha) * self.sigma[l,l]) for l in xrange(self.getDimension())]
+        self.h = [2.0 * cmath.pi / ((self.beta + 4.0 * self.alpha) * self.sigma[l,l]) for l in xrange(self.getDimension())]
 
     def computeMean(self):
         """
@@ -251,11 +250,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         assert isinstance(n, int)
         sample = ot.ComposedDistribution(self.collection).getSample(n)
         # product matrix * realization
-        # using scipy for scalability (matrix * sample not available)
-        sample = scipy.array(sample) * scipy.matrix(self.matrix).transpose()
-        # scipy.matrix could not be casted into ot.NumericalSample
-        sample = scipy.array(sample)
-        sample = ot.NumericalSample(sample)
+        # using np for scalability (matrix * sample not available)
+        try :
+            import numy as np
+            sample = np.array(sample) * np.matrix(self.matrix).transpose()
+            # np.matrix could not be casted into ot.NumericalSample
+            sample = np.array(sample)
+            sample = ot.NumericalSample(sample)
+        except ImportError :
+            #
+            sample = ot.NumericalSample([self.matrix * sample_element for sample_element in sample])
         # Do not forget the constant term
         sample.translate(self.y0)
         return sample
