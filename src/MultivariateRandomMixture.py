@@ -204,8 +204,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         Parameters
         ----------
-        criterion : u
-                    1D array-like (np array, python list, OpenTURNS NumericalPoint)
+        u :  vector of size d
+             1D array-like (np array, python list, OpenTURNS NumericalPoint)
 
         Returns
         -------
@@ -267,10 +267,22 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         raise RuntimeError( 'You must define a method computeCDF(x) -> cdf, where cdf is a float' )
 
     def __repr__(self):
-        return self.__str__()
+        return 'PythonMultivariateRandomMixture distribution. Dimension =  %d' % self.getDimension()
 
     def __str__(self):
-        return 'PythonMultivariateRandomMixture distribution. Dimension =  %d' % self.getDimension()
+        """
+        pretty print of the distribution
+        """
+        s = ''
+        for k in xrange(self.getDimension()):
+            s += "Y_%d: %1.3e + " %(k+1, self.y0[k])
+            for j in xrange(len(self.collection)):
+                s += "%1.3e * %s" %(self.matrix[k, j], str(self.collection[j]))
+                if j < len(self.collection) - 1:
+                    s += ' + '
+                else :
+                    s += '\n'
+        return s
 
 class MultivariateRandomMixture(ot.Distribution):
     """
