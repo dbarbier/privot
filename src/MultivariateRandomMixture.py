@@ -110,6 +110,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.sigma = self.cov.computeCholesky()
         # compute the range
         self.computeRange()
+        # compute h parameters for the evaluation of the density function
+        self.computeH()
 
     def setDistributionCollection(self, collection):
         """
