@@ -37,8 +37,11 @@ import openturns as ot
 import cmath
 
 # Dictionary equivalent to a resource map
-mvrm_resource_map = {"MultivariateRandomMixture-DefaultAlpha" : 4,\
-                     "MultivariateRandomMixture-DefaultBeta": 8}
+mvrm_resource_map = {}
+mvrm_resource_map.setdefault("MultivariateRandomMixture-DefaultAlpha", 4)
+mvrm_resource_map.setdefault("MultivariateRandomMixture-DefaultBeta",  8)
+mvrm_resource_map.setdefault("MultivariateRandomMixture-DefaultPDFEpsilon",\
+ot.ResourceMap.GetAsNumericalScalar("DistributionImplementation-DefaultPDFEpsilon"))
 
 class PythonMultivariateRandomMixture(ot.PythonDistribution):
     """
