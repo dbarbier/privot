@@ -227,15 +227,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> dist = MV.PythonMultivariateRandomMixture.PythonMultivariateRandomMixture(\
-                  ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
-                  ot.Matrix([[1,1], [3,4], [2, -1]]), \
-                  [0, 5])
+        >>> dist = MV.PythonMultivariateRandomMixture(ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
+                  ot.Matrix([[1,1], [3,4], [2, -1]]), [0, 5])
         >>> cfx = dist.computeCharacteristicFunction( [0.3, 0.9] )
 
         """
         assert len(u) == self.getDimension()
-        somme = 0
+        somme = float()
         # The characteristic function is given by the following formula:
         # \phi(u) = \prod_{j=1}^{d} (exp(i * u_j * y0_j) * \prod_{k=1}^{n} \phi_{X_k}(Mjk u_j))
         n = len(self.collection)
@@ -255,6 +253,24 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def getRealization(self):
         """
         Get a realization of the distribution
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        out : OpenTURNS NumericalPoint
+              Realization of the distribution
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> dist = MV.PythonMultivariateRandomMixture(ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
+                  ot.Matrix([[1,1], [3,4], [2, -1]]), [0, 5])
+        >>> realization = dist.getRealization()
+
         """
         realization = [dist.getRealization()[0] for dist in self.collection]
         realization = self.matrix * realization + self.y0
@@ -263,6 +279,24 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def getSample(self, n):
         """
         Get a sample of size n of the distribution
+
+        Parameters
+        ----------
+        n : integer
+            Number of realizations
+
+        Returns
+        -------
+        out : OpenTURNS NumericalSample
+              Sample of realization of the distribution, of size n
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> dist = MV.PythonMultivariateRandomMixture(ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
+                  ot.Matrix([[1,1], [3,4], [2, -1]]), [0, 5])
+        >>> sample = dist.getSample(100)
         """
         assert isinstance(n, int)
         sample = ot.ComposedDistribution(self.collection).getSample(n)
@@ -275,34 +309,58 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             sample = np.array(sample)
             sample = ot.NumericalSample(sample)
         except ImportError :
-            #
+            # matrix * np for each point
             sample = ot.NumericalSample([self.matrix * sample_element for sample_element in sample])
         # Do not forget the constant term
-        sample.translate(self.y0)
+        # optimization : y0 size is usually negligible compared to the sample size
+        if self.y0.norm() != 0:
+            sample.translate(self.y0)
         return sample
 
     def computePDF(self, point, xMin, xMax, pointNumber, precision):
+        """
+        Return the probability density function evaluated on u.
+
+        Parameters
+        ----------
+        u :  vector of size d
+             1D array-like (np array, python list, OpenTURNS NumericalPoint)
+
+        Returns
+        -------
+        out : Scalar
+              The density function evaluated on u
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> dist = MV.PythonMultivariateRandomMixture(ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
+                  ot.Matrix([[1,1], [3,4], [2, -1]]), [0, 5])
+        >>> cfx = dist.computePDF( [0.3, 0.9] )
+
+        """
         raise RuntimeError( 'You must define a method computePDF(x) -> pdf, where pdf is a float' )
 
-    def computeCDF(self, X):
-        raise RuntimeError( 'You must define a method computeCDF(x) -> cdf, where cdf is a float' )
-
     def __repr__(self):
+        """
+        Resume print of the distribution
+        """
         return 'PythonMultivariateRandomMixture distribution. Dimension =  %d' % self.getDimension()
 
     def __str__(self):
         """
         pretty print of the distribution
         """
-        s = ''
+        s = str()
         for k in xrange(self.getDimension()):
             s += "Y_%d: %1.3e + " %(k+1, self.y0[k])
             for j in xrange(len(self.collection)):
                 s += "%1.3e * %s" %(self.matrix[k, j], str(self.collection[j]))
                 if j < len(self.collection) - 1:
-                    s += ' + '
+                    s += " + "
                 else :
-                    s += '\n'
+                    s += "\n"
         return s
 
 class MultivariateRandomMixture(ot.Distribution):
