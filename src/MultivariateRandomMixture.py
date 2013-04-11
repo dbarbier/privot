@@ -232,11 +232,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # \phi(u) = \prod_{j=1}^{d} (exp(i * u_j * y0_j) * \prod_{k=1}^{n} \phi_{X_k}(Mjk u_j))
         n = len(self.collection)
         d = self.getDimension()
+        mt = self.matrix.transpose()
+        # compute M^t * u
+        mt_u = mt * u
+        # compute the deterministic term
         for j in xrange(d):
             somme += u[j] * self.y0[j] * 1j
-            for k in xrange(n):
-                Mjk = self.matrix[j,k]
-                somme += self.collection[k].computeLogCharacteristicFunction(Mjk * u[j])
+        # compute the random part
+        # The variables are independent
+        for k in xrange(n):
+            somme += self.collection[k].computeLogCharacteristicFunction(mt_u[k])
         return cmath.exp(somme)
 
     def getRealization(self):
