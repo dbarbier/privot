@@ -188,22 +188,28 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Compute the range of the distribution
         """
-        interval_collection = []
+        # Elements of the bounds
+        lower_bounds = []
+        finite_lower_bounds = []
+        upper_bounds = []
+        finite_upper_bounds = []
         for i in xrange(self.getDimension()):
             interval = ot.Interval(self.y0[i], self.y0[i])
             for j in xrange(len(self.collection)):
                 interval += self.collection[j].getRange() * self.matrix[i, j]
-            interval_collection.append(interval)
-        # Build the interval from the collection of interval
-        lowerbound = [interval.getLowerBound()[0] for interval in interval_collection]
-        finitelowerbound = [interval.getFiniteLowerBound()[0] for interval in interval_collection]
-        upperbound = [interval.getUpperBound()[0] for interval in interval_collection]
-        finiteupperbound = [interval.getFiniteUpperBound()[0] for interval in interval_collection]
-        self.interval = ot.Interval(lowerbound, upperbound, ot.BoolCollection(finitelowerbound), ot.BoolCollection(finiteupperbound))
-        # get the diagonal of the std matrix
+            # Set the i-th element of the interval
+            lower_bounds.append(interval.getLowerBound()[0])
+            finite_lower_bounds.append(bool(interval.getFiniteLowerBound()[0]))
+            upper_bounds.append(interval.getUpperBound()[0])
+            finite_upper_bounds.append(bool(interval.getFiniteUpperBound()[0]))
+        # The d-interval
+        self.interval = ot.Interval(lower_bounds, upper_bounds, finite_lower_bounds, finite_upper_bounds)
+        # We build an "equivalent" gaussian with mean, sigma values
+        # We take into account the intersect of the interval computed and mu -/+ beta * sigma
+        # Diagonal elements of the sigma matrix
         s = ot.NumericalPoint([self.sigma[k, k] for k in xrange(self.getDimension())])
-        interval = ot.Interval(self.getMean() - s * self.beta, self.getMean() + s * self.beta)
-        self.interval = self.interval.intersect(interval)
+        gaussian_interval = ot.Interval(self.getMean() - s * self.beta, self.getMean() + s * self.beta)
+        self.interval = self.interval.intersect(gaussian_interval)
 
     def getRange(self):
         """
