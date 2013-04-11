@@ -107,7 +107,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.computeMean()
         self.computeCovariance()
         # set the standard deviation
-        self.sigma = self.cov.computeCholesky()
+        self.sigma = [cmath.sqrt(self.cov[k, k]).real for k in xrange(d)]
         # compute the range
         self.computeRange()
         # compute h parameters for the evaluation of the density function
@@ -146,7 +146,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Compute h parameters
         """
-        self.h = [2.0 * cmath.pi / ((self.beta + 4.0 * self.alpha) * self.sigma[l,l]) for l in xrange(self.getDimension())]
+        self.h = [2.0 * cmath.pi / ((self.beta + 4.0 * self.alpha) * self.sigma[l]) for l in xrange(self.getDimension())]
 
     def computeMean(self):
         """
@@ -207,7 +207,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # We build an "equivalent" gaussian with mean, sigma values
         # We take into account the intersect of the interval computed and mu -/+ beta * sigma
         # Diagonal elements of the sigma matrix
-        s = ot.NumericalPoint([self.sigma[k, k] for k in xrange(self.getDimension())])
+        s = ot.NumericalPoint([self.sigma[k] for k in xrange(self.getDimension())])
         gaussian_interval = ot.Interval(self.getMean() - s * self.beta, self.getMean() + s * self.beta)
         self.interval = self.interval.intersect(gaussian_interval)
 
