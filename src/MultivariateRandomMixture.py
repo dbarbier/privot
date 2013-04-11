@@ -36,6 +36,7 @@
 import openturns as ot
 import cmath
 
+# Dictionary equivalent to a resource map
 mvrm_resource_map = {"MultivariateRandomMixture-DefaultAlpha" : 4,\
                      "MultivariateRandomMixture-DefaultBeta": 8}
 
