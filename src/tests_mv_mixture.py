@@ -40,6 +40,7 @@ if __name__ == "__main__":
     import openturns as ot
     import MultivariateRandomMixture as MV
     import numpy as np
+    from MultivariateGaussianCharacteristicFunction import MGCF as mgcf
 
     # Storing all distribution results
     distribution_collection = []
@@ -91,9 +92,8 @@ if __name__ == "__main__":
     collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Normal(0.0, 1.0)])
     matrix = ot.Matrix([[4, 0], [0, 1.4]])
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
-    # Equivalent Normals
-    normal_1 = ot.Normal(0.0, 4.0)
-    normal_2 = ot.Normal(0.0 * 1.4, 1.4 * 1.0)
+    # Equivalent Normal2D distribution
+    normal2D = ot.Normal(2 * [0.0], [4.0, 1.40], ot.CorrelationMatrix(2))
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
@@ -119,6 +119,6 @@ if __name__ == "__main__":
     for valuex in x:
         for valuey in y:
             c1 = distribution.computeCharacteristicFunction([valuex, valuey])
-            c2 = normal_1.computeCharacteristicFunction(valuex) * normal_2.computeCharacteristicFunction(valuey)
+            c2 = mgcf(normal2D, [valuex, valuey])
             print "x=%s, y=%s"  %(valuex, valuey)
             print "mv=%s, rm=%s" %(c1, c2)
