@@ -93,7 +93,7 @@ if __name__ == "__main__":
     matrix = ot.Matrix([[4, 0], [0, 1.4]])
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
     # Equivalent Normal2D distribution
-    normal2D = ot.Normal(2 * [0.0], [4.0, 1.40], ot.CorrelationMatrix(2))
+    normal2D = ot.Normal(distribution.getMean(), distribution.getCovariance())
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
