@@ -122,3 +122,42 @@ if __name__ == "__main__":
             c2 = mgcf(normal2D, [valuex, valuey])
             print "x=%s, y=%s"  %(valuex, valuey)
             print "mv=%s, rm=%s" %(c1, c2)
+
+    """
+    Test 3
+    ------
+    The matrix is more complex
+    """
+    collection = ot.DistributionCollection([ot.Normal(2.0, 3.0), ot.Normal(1.0, 4.0)])
+    matrix = ot.Matrix([[4, 2], [1, 1.4]])
+    distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
+    # Equivalent Normal2D distribution
+    normal2D = ot.Normal(distribution.getMean(), distribution.getCovariance())
+    interval = distribution.getRange()
+    mean = distribution.getMean()
+    cov = distribution.getCovariance()
+    sigma = distribution.getStandardDeviation()
+    sample = distribution.getSample(N)
+    print "range = ", interval
+    print "mean = ", mean
+    print "cov = ", cov
+    print "sigma = ", sigma
+    print "sample :"
+    print "min = %s\nmax = %s\nmean = %s, cov = %s" %(sample.getMin(),sample.getMax(), sample.computeMean(), sample.computeCovariance())
+    distribution_collection.append(distribution)
+    # evaluation of the characteristic function in [xmin,ymin]x[xmax,ymax]
+    xmin = -1.0
+    ymin = -1.0
+    xmax = 1.0
+    ymax = 1.0
+    dx = 0.25
+    dy = 0.25
+    # 2D grid
+    x = np.arange(xmin, xmax + dx, dx)
+    y = np.arange(ymin, ymax + dy, dy)
+    for valuex in x:
+        for valuey in y:
+            c1 = distribution.computeCharacteristicFunction([valuex, valuey])
+            c2 = mgcf(normal2D, [valuex, valuey])
+            print "x=%s, y=%s"  %(valuex, valuey)
+            print "mv=%s, rm=%s" %(c1, c2)
