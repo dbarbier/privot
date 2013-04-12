@@ -74,8 +74,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> dist = MV.PythonMultivariateRandomMixture(ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
-                  ot.Matrix([[1,1], [3,4], [2, -1]]), [0, 5])
+        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
+        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
+        >>> y0 = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, y0)
 
         """
         n = len(collection)
@@ -116,34 +118,36 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # compute h parameters for the evaluation of the density function
         self.computeH()
 
-    def setDistributionCollection(self, collection):
+    def __repr__(self):
         """
-        Set the distribution collection
-        This method should not be used, except by the __init__ method
+        Resume print of the distribution
         """
-        for k in xrange(len(collection)):
-            # check if distribution is univariate
-            if (collection[k].getDimension() != 1):
-                raise ValueError("Expected a collection of univariate distributions")
-        self.collection = collection
+        return 'PythonMultivariateRandomMixture distribution. Dimension =  %d' % self.getDimension()
 
-    def getDistributionCollection(self):
+    def __str__(self):
         """
-        Returns the distribution collection
+        pretty print of the distribution
         """
-        return self.collection
+        s = str()
+        for k in xrange(self.getDimension()):
+            s += "Y_%d: %1.3e + " %(k+1, self.y0[k])
+            for j in xrange(len(self.collection)):
+                s += "%1.3e * %s" %(self.matrix[k, j], str(self.collection[j]))
+                if j < len(self.collection) - 1:
+                    s += " + "
+                else :
+                    s += "\n"
+        return s
 
-    def getMatrix(self):
+    def computeCovariance(self):
         """
-        Returns the matrix of the affine transform
+        Returns the covariance of the mixture
+        This method is implicite. Use the getCovariance to get the mean value
         """
-        return self.matrix
-
-    def getConstant(self):
-        """
-        Returns the constant vector
-        """
-        return self.y0
+        cov = ot.ComposedDistribution(self.collection).getCovariance()
+        m1 = cov *  self.matrix.transpose()
+        cov = self.matrix * m1
+        self.cov = ot.CovarianceMatrix(cov.getImplementation())
 
     def computeH(self):
         """
@@ -158,34 +162,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         mu = [dist.getMean()[0] for dist in self.collection]
         self.mu = self.matrix * ot.NumericalPoint(mu) + self.y0
-
-    def getMean(self):
-        """
-        Returns the mean vector of the mixture
-        """
-        return self.mu
-
-    def computeCovariance(self):
-        """
-        Returns the covariance of the mixture
-        This method is implicite. Use the getCovariance to get the mean value
-        """
-        cov = ot.ComposedDistribution(self.collection).getCovariance()
-        m1 = cov *  self.matrix.transpose()
-        cov = self.matrix * m1
-        self.cov = ot.CovarianceMatrix(cov.getImplementation())
-
-    def getCovariance(self):
-        """
-        Returns the covariance matrix of the mixutre
-        """
-        return self.cov
-
-    def getStandardDeviation(self):
-        """
-        Returns the standard deviation
-        """
-        return self.sigma
 
     def computeRange(self):
         """
@@ -214,11 +190,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         gaussian_interval = ot.Interval(self.getMean() - s * self.beta, self.getMean() + s * self.beta)
         self.interval = self.interval.intersect(gaussian_interval)
 
-    def getRange(self):
+    def setDistributionCollection(self, collection):
         """
-        Returns the range of the distribution
+        Set the distribution collection
+        This method should not be used, except by the __init__ method
         """
-        return self.interval
+        for k in xrange(len(collection)):
+            # check if distribution is univariate
+            if (collection[k].getDimension() != 1):
+                raise ValueError("Expected a collection of univariate distributions")
+        self.collection = collection
 
     def computeCharacteristicFunction(self, u):
         """
@@ -238,8 +219,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> dist = MV.PythonMultivariateRandomMixture(ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
-                  ot.Matrix([[1,1], [3,4], [2, -1]]), [0, 5])
+        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
+        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
+        >>> y0 = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, y0)
         >>> cfx = dist.computeCharacteristicFunction( [0.3, 0.9] )
 
         """
@@ -261,6 +244,69 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             somme += self.collection[k].computeLogCharacteristicFunction(mt_u[k])
         return cmath.exp(somme)
 
+    def computePDF(self, point, xMin, xMax, pointNumber, precision):
+        """
+        Return the probability density function evaluated on u.
+
+        Parameters
+        ----------
+        u :  vector of size d
+             1D array-like (np array, python list, OpenTURNS NumericalPoint)
+
+        Returns
+        -------
+        out : Scalar
+              The density function evaluated on u
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
+        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
+        >>> y0 = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, y0)
+        >>> pdf = dist.computePDF( [0.3, 0.9] )
+
+        """
+        raise RuntimeError( 'You must define a method computePDF(x) -> pdf, where pdf is a float' )
+
+    def getConstant(self):
+        """
+        Returns the constant vector
+        """
+        return self.y0
+
+    def getDistributionCollection(self):
+        """
+        Returns the distribution collection
+        """
+        return self.collection
+
+    def getMatrix(self):
+        """
+        Returns the matrix of the affine transform
+        """
+        return self.matrix
+
+    def getMean(self):
+        """
+        Returns the mean vector of the mixture
+        """
+        return self.mu
+
+    def getCovariance(self):
+        """
+        Returns the covariance matrix of the mixutre
+        """
+        return self.cov
+
+    def getRange(self):
+        """
+        Returns the range of the distribution
+        """
+        return self.interval
+
     def getRealization(self):
         """
         Get a realization of the distribution
@@ -278,8 +324,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> dist = MV.PythonMultivariateRandomMixture(ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
-                  ot.Matrix([[1,1], [3,4], [2, -1]]), [0, 5])
+        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
+        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
+        >>> y0 = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, y0)
         >>> realization = dist.getRealization()
 
         """
@@ -305,8 +353,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> dist = MV.PythonMultivariateRandomMixture(ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
-                  ot.Matrix([[1,1], [3,4], [2, -1]]), [0, 5])
+        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
+        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
+        >>> y0 = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, y0)
         >>> sample = dist.getSample(100)
         """
         assert isinstance(n, int)
@@ -328,51 +378,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             sample.translate(self.y0)
         return sample
 
-    def computePDF(self, point, xMin, xMax, pointNumber, precision):
+    def getStandardDeviation(self):
         """
-        Return the probability density function evaluated on u.
-
-        Parameters
-        ----------
-        u :  vector of size d
-             1D array-like (np array, python list, OpenTURNS NumericalPoint)
-
-        Returns
-        -------
-        out : Scalar
-              The density function evaluated on u
-
-        Example
-        -------
-        >>> import openturns as ot
-        >>> import MultivariateRandomMixture as MV
-        >>> dist = MV.PythonMultivariateRandomMixture(ot.DistributionCollection([ot.Normal(), ot.Uniform()]), \
-                  ot.Matrix([[1,1], [3,4], [2, -1]]), [0, 5])
-        >>> cfx = dist.computePDF( [0.3, 0.9] )
-
+        Returns the standard deviation
         """
-        raise RuntimeError( 'You must define a method computePDF(x) -> pdf, where pdf is a float' )
-
-    def __repr__(self):
-        """
-        Resume print of the distribution
-        """
-        return 'PythonMultivariateRandomMixture distribution. Dimension =  %d' % self.getDimension()
-
-    def __str__(self):
-        """
-        pretty print of the distribution
-        """
-        s = str()
-        for k in xrange(self.getDimension()):
-            s += "Y_%d: %1.3e + " %(k+1, self.y0[k])
-            for j in xrange(len(self.collection)):
-                s += "%1.3e * %s" %(self.matrix[k, j], str(self.collection[j]))
-                if j < len(self.collection) - 1:
-                    s += " + "
-                else :
-                    s += "\n"
-        return s
+        return self.sigma
 
 class MultivariateRandomMixture(ot.Distribution):
     """
