@@ -107,6 +107,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # Set alpha and beta values from the resource map
         self.alpha_ = mvrm_resource_map['MultivariateRandomMixture-DefaultAlpha']
         self.beta_ = mvrm_resource_map['MultivariateRandomMixture-DefaultBeta']
+        self.pdfEpsilon_ = mvrm_resource_map["MultivariateRandomMixture-DefaultPDFEpsilon"]
         # compute the mean and covariance
         # as mean is easy, no need to use isComputedMean attributs
         self.computeMean()
@@ -159,6 +160,46 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         and covariance = self.covariance
         """
         self.equivalentNormal_ = ot.Normal(self.getMean(), self.getCovariance())
+
+    def computeEquivalentNormalPDFSum(self, point):
+        """
+        Compute the left-hand sum in Poisson's summation formula
+        for the equivalent normal
+        """
+        gaussian_pdf = self.equivalentNormal_.computePDF(point)
+        i = 0
+        delta = 0.0
+        pi = cmath.pi
+        condition = True
+        d = self.getDimension()
+        # corners to be taken into account
+        corners = []
+        if d == 3 :
+            for ix in [-1, 1]:
+                for iy in [-1, 1]:
+                    for iz in [-1, 1]:
+                        hx, hy, hz = tuple(self.h)
+                        step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
+                        corners.append(ot.NumericalPoint(step))
+        elif d == 2 :
+            for ix in [-1, 1]:
+                for iy in [-1, 1]:
+                    hx, hy = tuple(self.h)
+                    step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy]
+                    corners.append(ot.NumericalPoint(step))
+        elif d == 1 :
+            for ix in [-1, 1]:
+                  hx = self.h[0]
+                  step = [2.0 * pi * ix / hx]
+                  corners.append(ot.NumericalPoint(step))
+        while (condition):
+            i = i + 1
+            for step in corners:
+                delta = self.equivalentNormal_.computePDF(ot.NumericalPoint(point) + (step * float(i)))
+                gaussian_pdf += delta
+            error = delta > gaussian_pdf * self.pdfEpsilon_
+            condition = error
+        return gaussian_pdf
 
     def computeH(self):
         """
