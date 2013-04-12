@@ -296,7 +296,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             somme += self.collection_[k].computeLogCharacteristicFunction(mt_u[k])
         return cmath.exp(somme)
 
-    def computePDF(self, point, xMin, xMax, pointNumber, precision):
+    def computePDF(self, u):
         """
         Return the probability density function evaluated on u.
 
@@ -321,7 +321,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> pdf = dist.computePDF( [0.3, 0.9] )
 
         """
-        raise RuntimeError( 'You must define a method computePDF(x) -> pdf, where pdf is a float' )
+        assert len(point) == self.getDimension()
+        # Check if u is in domain
+        if not self.interval_.contains(u):
+            return 0.0
+        # General case : two different steps
+        # 1) Compute a gaussian pdf approximation
+        value = self.computeEquivalentNormalPDFSum(u)
+        # 2) Compute a difference of characteristic functions on the point u
+        # TODO The method is not yet implemented
+        return value
 
     def getConstant(self):
         """
