@@ -117,6 +117,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.computeRange()
         # compute h parameters for the evaluation of the density function
         self.computeH()
+        # set equivalent Normal distribution, i.e a normal distribution with mean = self.mu
+        # and covariance = self.cov
+        self.computeEquivalentNormal()
 
     def __repr__(self):
         """
@@ -148,6 +151,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         m1 = cov *  self.matrix.transpose()
         cov = self.matrix * m1
         self.cov = ot.CovarianceMatrix(cov.getImplementation())
+
+    def computeEquivalentNormal(self):
+        """
+        Compute the equivalent Normal distribution,
+        i.e a normal distribution with mean = self.mean
+        and covariance = self.covariance
+        """
+        self.equivalentNormal_ = ot.Normal(self.getMean(), self.getCovariance())
 
     def computeH(self):
         """
