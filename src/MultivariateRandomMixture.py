@@ -90,11 +90,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # ot type before checking
         # Also, if the object is of type SquareMatrix,
         # the getNbColumns/getNbRows methods are not available
-        self.matrix = ot.Matrix(matrix)
+        self.matrix_ = ot.Matrix(matrix)
         # Check matrix dimension
-        if(self.matrix.getNbColumns() != n):
+        if(self.matrix_.getNbColumns() != n):
             raise ValueError("Matrix number of columns is not coherant with collection size.")
-        d = self.matrix.getNbRows()
+        d = self.matrix_.getNbRows()
         if (d > 3):
             raise ValueError("Mixture should be of dimension 1, 2 or 3")
         if (y0 is None):
@@ -105,20 +105,20 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # Set the distribution dimension
         ot.PythonDistribution.__init__(self, d)
         # Set alpha and beta values from the resource map
-        self.alpha = mvrm_resource_map['MultivariateRandomMixture-DefaultAlpha']
-        self.beta = mvrm_resource_map['MultivariateRandomMixture-DefaultBeta']
+        self.alpha_ = mvrm_resource_map['MultivariateRandomMixture-DefaultAlpha']
+        self.beta_ = mvrm_resource_map['MultivariateRandomMixture-DefaultBeta']
         # compute the mean and covariance
         # as mean is easy, no need to use isComputedMean attributs
         self.computeMean()
         self.computeCovariance()
         # set the standard deviation
-        self.sigma = [cmath.sqrt(self.cov[k, k]).real for k in xrange(d)]
+        self.sigma_ = ot.NumericalPoint([cmath.sqrt(self.cov_[k, k]).real for k in xrange(d)])
         # compute the range
         self.computeRange()
         # compute h parameters for the evaluation of the density function
         self.computeH()
-        # set equivalent Normal distribution, i.e a normal distribution with mean = self.mu
-        # and covariance = self.cov
+        # set equivalent Normal distribution, i.e a normal distribution with mean = self.mean_
+        # and covariance = self.cov_
         self.computeEquivalentNormal()
 
     def __repr__(self):
@@ -134,9 +134,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         s = str()
         for k in xrange(self.getDimension()):
             s += "Y_%d: %1.3e + " %(k+1, self.y0[k])
-            for j in xrange(len(self.collection)):
-                s += "%1.3e * %s" %(self.matrix[k, j], str(self.collection[j]))
-                if j < len(self.collection) - 1:
+            for j in xrange(len(self.collection_)):
+                s += "%1.3e * %s" %(self.matrix_[k, j], str(self.collection_[j]))
+                if j < len(self.collection_) - 1:
                     s += " + "
                 else :
                     s += "\n"
@@ -147,10 +147,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         Returns the covariance of the mixture
         This method is implicite. Use the getCovariance to get the mean value
         """
-        cov = ot.ComposedDistribution(self.collection).getCovariance()
-        m1 = cov *  self.matrix.transpose()
-        cov = self.matrix * m1
-        self.cov = ot.CovarianceMatrix(cov.getImplementation())
+        cov = ot.ComposedDistribution(self.collection_).getCovariance()
+        m1 = cov *  self.matrix_.transpose()
+        cov = self.matrix_ * m1
+        self.cov_ = ot.CovarianceMatrix(cov.getImplementation())
 
     def computeEquivalentNormal(self):
         """
@@ -164,15 +164,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Compute h parameters
         """
-        self.h = [2.0 * cmath.pi / ((self.beta + 4.0 * self.alpha) * self.sigma[l]) for l in xrange(self.getDimension())]
+        self.h = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.getDimension())]
 
     def computeMean(self):
         """
         Compute the mean of the multivariate mixture
         This method is implicite. Use the getMean to get the mean value
         """
-        mu = [dist.getMean()[0] for dist in self.collection]
-        self.mu = self.matrix * ot.NumericalPoint(mu) + self.y0
+        mu = [dist.getMean()[0] for dist in self.collection_]
+        self.mean_ = self.matrix_ * ot.NumericalPoint(mu) + self.y0
 
     def computeRange(self):
         """
@@ -185,21 +185,21 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         finite_upper_bounds = []
         for i in xrange(self.getDimension()):
             interval = ot.Interval(self.y0[i], self.y0[i])
-            for j in xrange(len(self.collection)):
-                interval += self.collection[j].getRange() * self.matrix[i, j]
+            for j in xrange(len(self.collection_)):
+                interval += self.collection_[j].getRange() * self.matrix_[i, j]
             # Set the i-th element of the interval
             lower_bounds.append(interval.getLowerBound()[0])
             finite_lower_bounds.append(bool(interval.getFiniteLowerBound()[0]))
             upper_bounds.append(interval.getUpperBound()[0])
             finite_upper_bounds.append(bool(interval.getFiniteUpperBound()[0]))
         # The d-interval
-        self.interval = ot.Interval(lower_bounds, upper_bounds, finite_lower_bounds, finite_upper_bounds)
+        self.interval_ = ot.Interval(lower_bounds, upper_bounds, finite_lower_bounds, finite_upper_bounds)
         # We build an "equivalent" gaussian with mean, sigma values
         # We take into account the intersect of the interval computed and mu -/+ beta * sigma
         # Diagonal elements of the sigma matrix
-        s = ot.NumericalPoint([self.sigma[k] for k in xrange(self.getDimension())])
-        gaussian_interval = ot.Interval(self.getMean() - s * self.beta, self.getMean() + s * self.beta)
-        self.interval = self.interval.intersect(gaussian_interval)
+        s = ot.NumericalPoint([self.sigma_[k] for k in xrange(self.getDimension())])
+        gaussian_interval = ot.Interval(self.getMean() - s * self.beta_, self.getMean() + s * self.beta_)
+        self.interval_ = self.interval_.intersect(gaussian_interval)
 
     def setDistributionCollection(self, collection):
         """
@@ -210,7 +210,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # check if distribution is univariate
             if (collection[k].getDimension() != 1):
                 raise ValueError("Expected a collection of univariate distributions")
-        self.collection = collection
+        self.collection_ = collection
 
     def computeCharacteristicFunction(self, u):
         """
@@ -241,9 +241,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         somme = float()
         # The characteristic function is given by the following formula:
         # \phi(u) = \prod_{j=1}^{d} (exp(i * u_j * y0_j) * \prod_{k=1}^{n} \phi_{X_k}(Mjk u_j))
-        n = len(self.collection)
+        n = len(self.collection_)
         d = self.getDimension()
-        mt = self.matrix.transpose()
+        mt = self.matrix_.transpose()
         # compute M^t * u
         mt_u = mt * u
         # compute the deterministic term
@@ -252,7 +252,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # compute the random part
         # The variables are independent
         for k in xrange(n):
-            somme += self.collection[k].computeLogCharacteristicFunction(mt_u[k])
+            somme += self.collection_[k].computeLogCharacteristicFunction(mt_u[k])
         return cmath.exp(somme)
 
     def computePDF(self, point, xMin, xMax, pointNumber, precision):
@@ -292,31 +292,31 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Returns the distribution collection
         """
-        return self.collection
+        return self.collection_
 
     def getMatrix(self):
         """
         Returns the matrix of the affine transform
         """
-        return self.matrix
+        return self.matrix_
 
     def getMean(self):
         """
         Returns the mean vector of the mixture
         """
-        return self.mu
+        return self.mean_
 
     def getCovariance(self):
         """
         Returns the covariance matrix of the mixutre
         """
-        return self.cov
+        return self.cov_
 
     def getRange(self):
         """
         Returns the range of the distribution
         """
-        return self.interval
+        return self.interval_
 
     def getRealization(self):
         """
@@ -342,8 +342,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> realization = dist.getRealization()
 
         """
-        realization = [dist.getRealization()[0] for dist in self.collection]
-        realization = self.matrix * realization + self.y0
+        realization = [dist.getRealization()[0] for dist in self.collection_]
+        realization = self.matrix_ * realization + self.y0
         return realization
 
     def getSample(self, n):
@@ -371,18 +371,18 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> sample = dist.getSample(100)
         """
         assert isinstance(n, int)
-        sample = ot.ComposedDistribution(self.collection).getSample(n)
+        sample = ot.ComposedDistribution(self.collection_).getSample(n)
         # product matrix * realization
         # using np for scalability (matrix * sample not available)
         try :
             import numpy as np
-            sample = np.array(sample) * np.matrix(self.matrix).transpose()
+            sample = np.array(sample) * np.matrix(self.matrix_).transpose()
             # np.matrix could not be casted into ot.NumericalSample
             sample = np.array(sample)
             sample = ot.NumericalSample(sample)
         except ImportError :
             # matrix * np for each point
-            sample = ot.NumericalSample([self.matrix * sample_element for sample_element in sample])
+            sample = ot.NumericalSample([self.matrix_ * sample_element for sample_element in sample])
         # Do not forget the constant term
         # optimization : y0 size is usually negligible compared to the sample size
         if self.y0.norm() != 0:
@@ -393,7 +393,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Returns the standard deviation
         """
-        return self.sigma
+        return self.sigma_
 
 class MultivariateRandomMixture(ot.Distribution):
     """
