@@ -59,7 +59,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     """
 
-    def __init__(self, collection, matrix, y0 = None):
+    def __init__(self, collection, matrix, constant = None):
         """
         Parameters
         ----------
@@ -67,7 +67,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                      Either OpenTURNS DistributionCollection or a list of OpenTURNS distributions
         matrix : Matrix
                  Either OpenTURNS matrix or Numpy matrix
-        y0 : 1D array-like
+        constant : 1D array-like
              Either a python list, an OpenTURNS NumericalPoint or a Numpy 1D-array
 
         Example
@@ -76,8 +76,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> import MultivariateRandomMixture as MV
         >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
         >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
-        >>> y0 = [0, 5]
-        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, y0)
+        >>> constant = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
 
         """
         n = len(collection)
@@ -97,11 +97,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         d = self.matrix_.getNbRows()
         if (d > 3):
             raise ValueError("Mixture should be of dimension 1, 2 or 3")
-        if (y0 is None):
-            self.y0 = ot.NumericalPoint(d * [0.0])
+        if (constant is None):
+            self.constant_ = ot.NumericalPoint(d * [0.0])
         else :
-            assert len(y0) == d
-            self.y0 = ot.NumericalPoint(y0)
+            assert len(constant) == d
+            self.constant_ = ot.NumericalPoint(constant)
         # Set the distribution dimension
         ot.PythonDistribution.__init__(self, d)
         # Set alpha and beta values from the resource map
@@ -134,7 +134,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         s = str()
         for k in xrange(self.getDimension()):
-            s += "Y_%d: %1.3e + " %(k+1, self.y0[k])
+            s += "Y_%d: %1.3e + " %(k+1, self.constant_[k])
             for j in xrange(len(self.collection_)):
                 s += "%1.3e * %s" %(self.matrix_[k, j], str(self.collection_[j]))
                 if j < len(self.collection_) - 1:
@@ -213,7 +213,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         This method is implicite. Use the getMean to get the mean value
         """
         mu = [dist.getMean()[0] for dist in self.collection_]
-        self.mean_ = self.matrix_ * ot.NumericalPoint(mu) + self.y0
+        self.mean_ = self.matrix_ * ot.NumericalPoint(mu) + self.constant_
 
     def computeRange(self):
         """
@@ -225,7 +225,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         upper_bounds = []
         finite_upper_bounds = []
         for i in xrange(self.getDimension()):
-            interval = ot.Interval(self.y0[i], self.y0[i])
+            interval = ot.Interval(self.constant_[i], self.constant_[i])
             for j in xrange(len(self.collection_)):
                 interval += self.collection_[j].getRange() * self.matrix_[i, j]
             # Set the i-th element of the interval
@@ -273,15 +273,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> import MultivariateRandomMixture as MV
         >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
         >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
-        >>> y0 = [0, 5]
-        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, y0)
+        >>> constant = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
         >>> cfx = dist.computeCharacteristicFunction( [0.3, 0.9] )
 
         """
         assert len(u) == self.getDimension()
         somme = float()
         # The characteristic function is given by the following formula:
-        # \phi(u) = \prod_{j=1}^{d} (exp(i * u_j * y0_j) * \prod_{k=1}^{n} \phi_{X_k}(Mjk u_j))
+        # \phi(u) = \prod_{j=1}^{d} (exp(i * u_j * constant_j) * \prod_{k=1}^{n} \phi_{X_k}(Mjk u_j))
         n = len(self.collection_)
         d = self.getDimension()
         mt = self.matrix_.transpose()
@@ -289,7 +289,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         mt_u = mt * u
         # compute the deterministic term
         for j in xrange(d):
-            somme += u[j] * self.y0[j] * 1j
+            somme += u[j] * self.constant_[j] * 1j
         # compute the random part
         # The variables are independent
         for k in xrange(n):
@@ -316,8 +316,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> import MultivariateRandomMixture as MV
         >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
         >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
-        >>> y0 = [0, 5]
-        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, y0)
+        >>> constant = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
         >>> pdf = dist.computePDF( [0.3, 0.9] )
 
         """
@@ -329,14 +329,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # 1) Compute a gaussian pdf approximation
         value = self.computeEquivalentNormalPDFSum(u)
         # 2) Compute a difference of characteristic functions on the point u
-        # TODO The method is not yet implemented
+        # TODO The method is not 
         return value
 
     def getConstant(self):
         """
         Returns the constant vector
         """
-        return self.y0
+        return self.constant_
 
     def getDistributionCollection(self):
         """
@@ -387,13 +387,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> import MultivariateRandomMixture as MV
         >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
         >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
-        >>> y0 = [0, 5]
-        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, y0)
+        >>> constant = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
         >>> realization = dist.getRealization()
 
         """
         realization = [dist.getRealization()[0] for dist in self.collection_]
-        realization = self.matrix_ * realization + self.y0
+        realization = self.matrix_ * realization + self.constant_
         return realization
 
     def getSample(self, n):
@@ -416,8 +416,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> import MultivariateRandomMixture as MV
         >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
         >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
-        >>> y0 = [0, 5]
-        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, y0)
+        >>> constant = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
         >>> sample = dist.getSample(100)
         """
         assert isinstance(n, int)
@@ -434,9 +434,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # matrix * np for each point
             sample = ot.NumericalSample([self.matrix_ * sample_element for sample_element in sample])
         # Do not forget the constant term
-        # optimization : y0 size is usually negligible compared to the sample size
-        if self.y0.norm() != 0:
-            sample.translate(self.y0)
+        # optimization : constant size is usually negligible compared to the sample size
+        if self.constant_.norm() != 0:
+            sample.translate(self.constant_)
         return sample
 
     def getStandardDeviation(self):
@@ -450,6 +450,6 @@ class MultivariateRandomMixture(ot.Distribution):
     MultivariateRandomMixture allows to build an OpenTURNS distribution
 
     """
-    def __new__(self, collection, matrix, y0):
-        instance = PythonMultivariateRandomMixture(collection, matrix, y0)
+    def __new__(self, collection, matrix, constant):
+        instance = PythonMultivariateRandomMixture(collection, matrix, constant)
         return ot.Distribution(instance)
