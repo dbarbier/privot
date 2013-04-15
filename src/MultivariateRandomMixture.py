@@ -161,41 +161,20 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         self.equivalentNormal_ = ot.Normal(self.getMean(), self.getCovariance())
 
-    def computeEquivalentNormalPDFSum(self, point):
+    def computeEquivalentNormalPDFSum(self, u):
         """
         Compute the left-hand sum in Poisson's summation formula
         for the equivalent normal
         """
-        gaussian_pdf = self.equivalentNormal_.computePDF(point)
+        gaussian_pdf = self.equivalentNormal_.computePDF(u)
         i = 0
         delta = 0.0
-        pi = cmath.pi
         condition = True
-        d = self.getDimension()
-        # corners to be taken into account
-        corners = []
-        if d == 3 :
-            for ix in [-1, 1]:
-                for iy in [-1, 1]:
-                    for iz in [-1, 1]:
-                        hx, hy, hz = tuple(self.h)
-                        step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
-                        corners.append(ot.NumericalPoint(step))
-        elif d == 2 :
-            for ix in [-1, 1]:
-                for iy in [-1, 1]:
-                    hx, hy = tuple(self.h)
-                    step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy]
-                    corners.append(ot.NumericalPoint(step))
-        elif d == 1 :
-            for ix in [-1, 1]:
-                  hx = self.h[0]
-                  step = [2.0 * pi * ix / hx]
-                  corners.append(ot.NumericalPoint(step))
         while (condition):
             i = i + 1
-            for step in corners:
-                delta = self.equivalentNormal_.computePDF(ot.NumericalPoint(point) + (step * float(i)))
+            list_points = self.get_points_on_grid_pdf_(i)
+            for step in list_points:
+                delta = self.equivalentNormal_.computePDF(ot.NumericalPoint(u) + (step * float(i)))
                 gaussian_pdf += delta
             error = delta > gaussian_pdf * self.pdfEpsilon_
             condition = error
@@ -241,6 +220,87 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         s = ot.NumericalPoint([self.sigma_[k] for k in xrange(self.getDimension())])
         gaussian_interval = ot.Interval(self.getMean() - s * self.beta_, self.getMean() + s * self.beta_)
         self.interval_ = self.interval_.intersect(gaussian_interval)
+
+    def get_points_on_grid_pdf_(self, index):
+        """
+        The method helps to get the points on which some functions should be evaluated
+        """
+        assert isinstance(index, int)
+        pi = cmath.pi
+        d = self.getDimension()
+        # List of points to be taken into account
+        list_points = []
+        if d == 1 :
+            # list_points should contains 2 points
+            hx = self.h[0]
+            for ix in [-index, index]:
+                  step = [2.0 * pi * ix / hx]
+                  list_points.append(ot.NumericalPoint(step))
+        elif d == 2 :
+            # In 2D case, we should take into account the contour line of a
+            # bidimensional square, i.e we should take into account
+            # all points with |x| = index, |y| = index
+            # list_points should contains 8j^2 points
+            hx, hy = tuple(self.h)
+            # for easy reading, we follow the curvi-linear abcissa
+            # starting from the left-bottom corner
+            # 1) bottom
+            iy = float(-index)
+            for ix in range(-index, index):
+                step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy]
+                list_points.append(ot.NumericalPoint(step))
+            # 2) right
+            ix = float(index)
+            for iy in range(-index, index):
+                step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy]
+                list_points.append(ot.NumericalPoint(step))
+            # 3) top
+            iy = float(index)
+            for ix in range(index, -index, -1):
+                step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy]
+                list_points.append(ot.NumericalPoint(step))
+            # 4) left hand
+            ix = float(-index)
+            for iy in range(index, -index, -1):
+                step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy]
+                list_points.append(ot.NumericalPoint(step))
+        elif d == 3 :
+            # In 3D case, we should take into account the 6 faces of a
+            # cube, i.e we should take into account
+            # all points with |x| = index, |y| = index and |z| = index
+            # list_points should contains 24j^2 + 2 points
+            hx, hy, hz = tuple(self.h)
+            # 1) contour (like 2D case) for each z
+            for iz in xrange(-index, index + 1):
+                # a) bottom
+                iy = float(-index)
+                for ix in range(-index, index):
+                    step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
+                    list_points.append(ot.NumericalPoint(step))
+                # b) right
+                ix = float(index)
+                for iy in range(-index, index):
+                    step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
+                    list_points.append(ot.NumericalPoint(step))
+                # c) top
+                iy = float(index)
+                for ix in range(index, -index, -1):
+                    step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
+                    list_points.append(ot.NumericalPoint(step))
+                # d) left hand
+                ix = float(-index)
+                for iy in range(index, -index, -1):
+                    step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
+                    list_points.append(ot.NumericalPoint(step))
+            # 2) quasi-plain square for |z| = index
+            # quasi because we remove corners and contours already in the list
+            for iz in [-index, index]:
+                for ix in xrange(-index + 1 , index):
+                    for iy in xrange(-index + 1, index):
+                        step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
+                        list_points.append(ot.NumericalPoint(step))
+        # list-return
+        return list_points
 
     def setDistributionCollection(self, collection):
         """
@@ -329,7 +389,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # 1) Compute a gaussian pdf approximation
         value = self.computeEquivalentNormalPDFSum(u)
         # 2) Compute a difference of characteristic functions on the point u
-        # TODO The method is not 
+        # TODO The method is not
         return value
 
     def getConstant(self):
