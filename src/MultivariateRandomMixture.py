@@ -321,7 +321,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> pdf = dist.computePDF( [0.3, 0.9] )
 
         """
-        assert len(point) == self.getDimension()
+        assert len(u) == self.getDimension()
         # Check if u is in domain
         if not self.interval_.contains(u):
             return 0.0
