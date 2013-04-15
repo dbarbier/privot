@@ -46,8 +46,8 @@ if __name__ == "__main__":
     """
     collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
     matrix = ot.Matrix([[4, 1.4]])
-    y = [2.0]
-    distribution = MV.PythonMultivariateRandomMixture(collection, matrix, y)
+    constant = [2.0]
+    distribution = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
@@ -76,5 +76,5 @@ if __name__ == "__main__":
         c2 = random_mixture.computeCharacteristicFunction(value)
         delta += abs((c1 - c2))**2
     # Variation of characteristic function
-    delta /= len(x) * len(y)
+    delta /= len(x)
     print "delta of characteristic function=%s" %(np.sqrt(delta))

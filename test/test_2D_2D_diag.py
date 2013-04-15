@@ -75,12 +75,12 @@ if __name__ == "__main__":
     x = np.arange(xmin, xmax + dx, dx)
     y = np.arange(ymin, ymax + dy, dy)
     # Compute delta(cf)
-    delta = 0
+    delta = 0.0
     for valuex in x:
         for valuey in y:
             c1 = distribution.computeCharacteristicFunction([valuex, valuey])
             c2 = mgcf(normal2D, [valuex, valuey])
             delta += abs((c1 - c2))**2
     # Variation of characteristic function
-    delta /= len(x) * len(y)
+    delta /= (len(x) * len(y))
     print "delta of characteristic function=%s" %(np.sqrt(delta))
