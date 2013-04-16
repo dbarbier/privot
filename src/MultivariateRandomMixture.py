@@ -117,7 +117,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # compute the range
         self.computeRange()
         # compute h parameters for the evaluation of the density function
-        self.computeH()
+        self.computeReferenceBandwidth()
         # set equivalent Normal distribution, i.e a normal distribution with mean = self.mean_
         # and covariance = self.cov_
         self.computeEquivalentNormal()
@@ -171,7 +171,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         delta = 0.0
         two_pi = 2.0 * cmath.pi
         d = self.getDimension()
-        two_pi_on_h = [two_pi / element for element in self.h]
+        two_pi_on_h = [two_pi / element for element in self.referenceBandwidth_]
         condition = True
         while (condition):
             i = i + 1
@@ -184,11 +184,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             condition = error
         return gaussian_pdf
 
-    def computeH(self):
+    def computeReferenceBandwidth(self):
         """
         Compute h parameters
         """
-        self.h = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.getDimension())]
+        self.referenceBandwidth_ = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.getDimension())]
 
     def computeMean(self):
         """
