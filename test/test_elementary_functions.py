@@ -35,6 +35,16 @@ if __name__ == "__main__":
     import MultivariateRandomMixture as MV
     index = 10
 
+    try :
+        import matplotlib.pylab as plt
+        from matplotlib.backends.backend_pdf import PdfPages
+        from mpl_toolkits.mplot3d import Axes3D
+        has_pylab = True
+    except ImportError:
+        has_pylab = False
+        import warnings
+        warnings.warn('No graphical validation. Install matplotlib for that purpose')
+
     """
     Validation of get_points_on_surface_grid_ function for index in 0, 10
     Validation in 1D, 2D and 3D cases
@@ -52,14 +62,21 @@ if __name__ == "__main__":
     for i in xrange(1, index):
         list_points1D = distribution1D.get_points_on_surface_grid_(i)
         collection_list_1D.append(list_points1D)
-        print "index=%d #list=%d #expected=%d" %(i, len(list_points1D), 2)
-        unique = 0
-        for j, pt in enumerate(list_points1D):
-            unique = max(unique, list_points1D.count(pt))
-        print "Point #%d, count in list =#%d" %(j + 1, unique)
+        j = 0
+        try:
+            while True:
+                ot.Log.Info("Point #%s" % str(list_points1D.next()) )
+                j = j + 1
+        except StopIteration:
+            pass
+        print "index=%d #list=%d #expected=%d" %(i, j, 2)
 
     # 2D distribution
-    collection_list_2D = []
+    if has_pylab:
+        pdf_file = 'validation_2D.pdf'
+        pdf_plot = PdfPages(pdf_file)
+        x = []
+        y = []
     collection2D = ot.DistributionCollection([ot.Normal(2.0, 3.0), ot.Normal(1.0, 4.0)])
     matrix2D = ot.Matrix([[4, 2], [1, 1.4]])
     distribution2D = MV.PythonMultivariateRandomMixture(collection2D, matrix2D)
@@ -67,22 +84,23 @@ if __name__ == "__main__":
     print "2D case"
     for i in xrange(1, index):
         list_points2D = distribution2D.get_points_on_surface_grid_(i)
-        collection_list_2D.append(list_points2D)
-        print "index=%d #list=%d #expected=%d" %(i, len(list_points2D), 8*i)
-        unique = 0
-        for j, pt in enumerate(list_points2D):
-            unique = max(unique, list_points2D.count(pt))
-        print "Point #%d, count in list =#%d" %(j + 1, unique)
-
-    # Graphical validation using matplotlib
-    try :
-        import matplotlib.pylab as plt
-        from matplotlib.backends.backend_pdf import PdfPages
-        pdf_file = 'validation_2D.pdf'
-        pdf_plot = PdfPages(pdf_file)
-        for list_points2D in collection_list_2D:
-            x = [list(point)[0] for point in list_points2D]
-            y = [list(point)[1] for point in list_points2D]
+        if has_pylab:
+            x = []
+            y = []
+        j = 0
+        try:
+            while True:
+                point = list_points2D.next()
+                ot.Log.Info( "Point #%s" % str(point))
+                j = j + 1
+                # Graphical validation using matplotlib
+                if has_pylab:
+                    x.append(point[0])
+                    y.append(point[1])
+        except StopIteration:
+            pass
+        print "index=%d #list=%d #expected=%d" %(i, j, 8 * i)
+        if has_pylab:
             fig = plt.figure()
             plt.xlim(-index, index)
             plt.ylim(-index, index)
@@ -92,13 +110,17 @@ if __name__ == "__main__":
             plt.title('index = %d' %max(x))
             pdf_plot.savefig(fig)
             plt.close()
-        pdf_plot.close()
-    except ImportError:
-        import warnings
-        warnings.warn('No graphical validation. Install matplotlib for that purpose')
 
+    # Graphical validation using matplotlib
+    if has_pylab:
+        pdf_plot.close()
     # 3D distribution
-    collection_list_3D = []
+    if has_pylab:
+        pdf_file = 'validation_3D.pdf'
+        pdf_plot = PdfPages(pdf_file)
+        x = []
+        y = []
+        z = []
     collection3D = ot.DistributionCollection([ot.Normal(2.0, 3.0), ot.Normal(1.0, 4.0)])
     matrix3D = ot.Matrix([[4, 2], [1, 1.4], [-4.5, 6.0]])
     distribution3D = MV.PythonMultivariateRandomMixture(collection3D, matrix3D)
@@ -106,23 +128,25 @@ if __name__ == "__main__":
     print "3D case"
     for i in xrange(1, index):
         list_points3D = distribution3D.get_points_on_surface_grid_(i)
-        collection_list_3D.append(list_points3D)
-        print "index=%d #list=%d #expected=%d" %(i, len(list_points3D), 24 *i *i + 2)
-        unique = 0
-        for j, pt in enumerate(list_points3D):
-            unique = max(unique, list_points3D.count(pt))
-        print "Point #%d, count in list =#%d" %(j + 1, unique)
-    # Graphical validation using matplotlib
-    try :
-        import matplotlib.pylab as plt
-        from mpl_toolkits.mplot3d import Axes3D
-        from matplotlib.backends.backend_pdf import PdfPages
-        pdf_file = 'validation_3D.pdf'
-        pdf_plot = PdfPages(pdf_file)
-        for list_points3D in collection_list_3D:
-            x = [list(point)[0] for point in list_points3D]
-            y = [list(point)[1] for point in list_points3D]
-            z = [list(point)[2] for point in list_points3D]
+        if has_pylab:
+            x = []
+            y = []
+            z = []
+        j = 0
+        try:
+            while True:
+                point = list_points3D.next()
+                ot.Log.Info("Point #%s" % str(point))
+                j = j + 1
+                # Graphical validation using matplotlib
+                if has_pylab:
+                    x.append(point[0])
+                    y.append(point[1])
+                    z.append(point[2])
+        except StopIteration:
+            pass
+        print "index=%d #list=%d #expected=%d" %(i, j, 24 * i * i + 2)
+        if has_pylab:
             fig = plt.figure()
             ax = fig.add_subplot(111, projection='3d')
             ax.scatter(x, y, z, c='b', marker='s')
@@ -135,7 +159,7 @@ if __name__ == "__main__":
             ax.set_title('index = %d' %max(x))
             pdf_plot.savefig(fig)
             plt.close()
+
+    # Graphical validation using matplotlib
+    if has_pylab:
         pdf_plot.close()
-    except ImportError:
-        import warnings
-        warnings.warn('No graphical validation. Install matplotlib for that purpose')
