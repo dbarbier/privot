@@ -126,7 +126,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Resume print of the distribution
         """
-        return 'PythonMultivariateRandomMixture distribution. Dimension =  %d' % self.getDimension()
+        s = 'class=PythonMultivariateRandomMixture,dimension=%d,' % self.getDimension()
+        s += 'collection=%s, matrix=%s, constant=%s' %(repr(self.collection_), repr(self.matrix_), repr(self.constant_))
+        return s
 
     def __str__(self):
         """
@@ -146,7 +148,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def computeCovariance(self):
         """
         Returns the covariance of the mixture
-        This method is implicite. Use the getCovariance to get the mean value
+        This method is implicite. Use the getCovariance to get the covariance value
         """
         cov = ot.ComposedDistribution(self.collection_).getCovariance()
         m1 = cov *  self.matrix_.transpose()
@@ -349,19 +351,19 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         return cmath.exp(self.computeLogCharacteristicFunction(y))
 
-    def computePDF(self, u):
+    def computePDF(self, y):
         """
-        Return the probability density function evaluated on u.
+        Return the probability density function evaluated on y.
 
         Parameters
         ----------
-        u :  vector of size d
+        y :  vector of size d
              1D array-like (np array, python list, OpenTURNS NumericalPoint)
 
         Returns
         -------
         out : Scalar
-              The density function evaluated on u
+              The density function evaluated on y
 
         Example
         -------
@@ -374,15 +376,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> pdf = dist.computePDF( [0.3, 0.9] )
 
         """
-        assert len(u) == self.getDimension()
-        # Check if u is in domain
-        if not self.interval_.contains(u):
+        assert len(y) == self.getDimension()
+        # Check if y is in domain
+        if not self.interval_.contains(y):
             return 0.0
         # General case : two different steps
         # 1) Compute a gaussian pdf approximation
-        value = self.computeEquivalentNormalPDFSum(u)
-        # 2) Compute a difference of characteristic functions on the point u
-        # TODO The method is not
+        value = self.computeEquivalentNormalPDFSum(y)
+        # 2) Compute a difference of characteristic functions on the point y
+        # TODO The method is not yet implemented
         return value
 
     def getConstant(self):
