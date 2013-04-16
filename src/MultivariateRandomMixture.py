@@ -159,10 +159,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         Returns the covariance of the mixture
         This method is implicite. Use the getCovariance to get the covariance value
         """
-        cov = ot.ComposedDistribution(self.collection_).getCovariance()
-        m1 = cov *  self.matrix_.transpose()
-        cov = self.matrix_ * m1
-        self.cov_ = ot.CovarianceMatrix(cov.getImplementation())
+        d = self.getDimension()
+        self.cov_ = ot.CovarianceMatrix(d)
+        for i in xrange(d):
+            for j in xrange(d):
+                s = 0.0
+                for k in xrange(d):
+                    s += self.matrix_[i, k] * self.matrix_[j, k] * self.collection_[k].getStandardDeviation()[0]
+                self.cov_[i, j] = s
 
     def computeEquivalentNormal(self):
         """
