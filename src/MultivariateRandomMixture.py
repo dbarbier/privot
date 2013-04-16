@@ -281,13 +281,54 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                 raise ValueError("Expected a collection of univariate distributions")
         self.collection_ = collection
 
-    def computeCharacteristicFunction(self, u):
+    def computeLogCharacteristicFunction(self, y):
         """
-        Return the characteristic function evaluated on u.
+        Return the Log-characteristic function evaluated on y.
 
         Parameters
         ----------
-        u :  vector of size d
+        y :  vector of size d
+             1D array-like (np array, python list, OpenTURNS NumericalPoint)
+
+        Returns
+        -------
+        out : Complex
+              The characteristic function evaluated on y
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
+        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
+        >>> constant = [0, 5]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> log_cf = dist.computeLogCharacteristicFunction( [0.3, 0.9] )
+
+        """
+        assert len(y) == self.getDimension()
+        # The characteristic function is given by the following formula:
+        # \phi(y) = \prod_{j=1}^{d} (exp(i * u_j * constant_j) * \prod_{k=1}^{n} \phi_{X_k}(Mjk u_j))
+        n = len(self.collection_)
+        d = self.getDimension()
+        mt = self.matrix_.transpose()
+        # compute M^t * u
+        mt_y = mt * y
+        # compute the deterministic term
+        somme = ot.dot(y, self.constant_) * 1j
+        # compute the random part
+        # The variables are independent
+        for k in xrange(n):
+            somme += self.collection_[k].computeLogCharacteristicFunction(mt_y[k])
+        return somme
+
+    def computeCharacteristicFunction(self, y):
+        """
+        Return the characteristic function evaluated on y.
+
+        Parameters
+        ----------
+        y :  vector of size d
              1D array-like (np array, python list, OpenTURNS NumericalPoint)
 
         Returns
@@ -303,26 +344,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
         >>> constant = [0, 5]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
-        >>> cfx = dist.computeCharacteristicFunction( [0.3, 0.9] )
+        >>> cf = dist.computeCharacteristicFunction( [0.3, 0.9] )
 
         """
-        assert len(u) == self.getDimension()
-        somme = float()
-        # The characteristic function is given by the following formula:
-        # \phi(u) = \prod_{j=1}^{d} (exp(i * u_j * constant_j) * \prod_{k=1}^{n} \phi_{X_k}(Mjk u_j))
-        n = len(self.collection_)
-        d = self.getDimension()
-        mt = self.matrix_.transpose()
-        # compute M^t * u
-        mt_u = mt * u
-        # compute the deterministic term
-        for j in xrange(d):
-            somme += u[j] * self.constant_[j] * 1j
-        # compute the random part
-        # The variables are independent
-        for k in xrange(n):
-            somme += self.collection_[k].computeLogCharacteristicFunction(mt_u[k])
-        return cmath.exp(somme)
+        return cmath.exp(self.computeLogCharacteristicFunction(y))
 
     def computePDF(self, u):
         """
