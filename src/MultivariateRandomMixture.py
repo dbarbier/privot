@@ -38,10 +38,14 @@ import cmath
 
 # Dictionary equivalent to a resource map
 mvrm_resource_map = {}
-mvrm_resource_map.setdefault("MultivariateRandomMixture-DefaultAlpha", 4)
-mvrm_resource_map.setdefault("MultivariateRandomMixture-DefaultBeta",  8)
-mvrm_resource_map.setdefault("MultivariateRandomMixture-DefaultPDFEpsilon",\
-ot.ResourceMap.GetAsNumericalScalar("DistributionImplementation-DefaultPDFEpsilon"))
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultBlockMin", 3 )
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultBlockMax", 16 )
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultMaxSize", 65536 )
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultAlpha", 4.0 )
+mvrm_resource_map.setdefault("MultivariateRandomMixture-DefaultBeta",  8.0)
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultPDFEpsilon", 1.0e-10 )
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultCDFEpsilon", 1.0e-10 )
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-SmallSize", 100 )
 
 class PythonMultivariateRandomMixture(ot.PythonDistribution):
     """
@@ -104,10 +108,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             self.constant_ = ot.NumericalPoint(constant)
         # Set the distribution dimension
         ot.PythonDistribution.__init__(self, d)
-        # Set alpha and beta values from the resource map
-        self.alpha_ = mvrm_resource_map['MultivariateRandomMixture-DefaultAlpha']
-        self.beta_ = mvrm_resource_map['MultivariateRandomMixture-DefaultBeta']
+        # Set constants values using default parameters
+        self.alpha_ = mvrm_resource_map["MultivariateRandomMixture-DefaultAlpha"]
+        self.beta_ = mvrm_resource_map["MultivariateRandomMixture-DefaultBeta"]
         self.pdfEpsilon_ = mvrm_resource_map["MultivariateRandomMixture-DefaultPDFEpsilon"]
+        self.blockMin_ = mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMin"]
+        self.blockMax_ = mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMax"]
+        self.maxSize_ = mvrm_resource_map["MultivariateRandomMixture-DefaultMaxSize"]
+        # Cache for the characteristic function values
+        self.characteristicValuesCache_ = NumericalComplexPersistentCollection(0)
         # compute the mean and covariance
         # as mean is easy, no need to use isComputedMean attributs
         self.computeMean()
@@ -188,7 +197,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def computeReferenceBandwidth(self):
         """
-        Compute h parameters
+        Compute the reference bandwidth h. It is defined as the maximum bandwidth
+        that allow a precise computation of the PDF over the range
+        [mean +/- beta * sigma_]
         """
         self.referenceBandwidth_ = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.getDimension())]
 
@@ -387,6 +398,38 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # TODO The method is not yet implemented
         return value
 
+    # alpha get-accessor
+    def getAlpha(self):
+        """
+        Returns the alpha parameter used for the evaluation
+        of the range
+        """
+        return self.alpha_
+
+    # beta get-accessor
+    def getBeta(self):
+        """
+        Returns the beta parameter used for the evaluation
+        of the range
+        """
+        return self.beta_
+
+    # blockMax get-accessor
+    def getBlockMax(self):
+        """
+        Returns the blockMax parameter used for the evaluation
+        of the pdf using the gaussian approximation
+        """
+        return self.blockMax_
+
+    # blockMin get-accessor
+    def getBlockMin(self):
+        """
+        Returns the blockMin parameter used for the evaluation
+        of the pdf using the gaussian approximation
+        """
+        return self.blockMin_
+
     def getConstant(self):
         """
         Returns the constant vector
@@ -416,6 +459,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         Returns the covariance matrix of the mixutre
         """
         return self.cov_
+
+    # maxSize get-accessor
+    def getMaxSize(self):
+        """
+        Returns the maximum size of the cache for the CharacteristicFunction values
+        """
+        return self.maxSize_
 
     def getRange(self):
         """
@@ -450,6 +500,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         realization = [dist.getRealization()[0] for dist in self.collection_]
         realization = self.matrix_ * realization + self.constant_
         return realization
+
+    # bandwidth get-accessor
+    def getReferenceBandwidth(self):
+        """
+        Returns the bandwidth parameter used for the evaluation
+        of the pdf using the gaussian approximation
+        """
+        return self.referenceBandwidth_
 
     def getSample(self, n):
         """
@@ -499,6 +557,54 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         Returns the standard deviation
         """
         return self.sigma_
+
+    # alpha set-accessor
+    def setAlpha(self, alpha):
+        """
+        Returns the alpha parameter used for the evaluation
+        of the range
+        """
+        self.alpha_ = alpha
+
+    # beta set-accessor
+    def setBeta(self, beta):
+        """
+        Returns the beta parameter used for the evaluation
+        of the range
+        """
+        self.beta_ = beta
+
+    # BlockMax accessors
+    def setBlockMax(self, blockMax):
+        """
+        Set the blockMax parameter used for the evaluation
+        of the pdf using the gaussian approximation
+        """
+        self.blockMax_ = blockMax
+
+    # BlockMin accessors
+    def setBlockMin(self, blockMin):
+        """
+        Set the blockMin parameter used for the evaluation
+        of the pdf using the gaussian approximation
+        """
+        self.blockMin_ = blockMin
+
+    # MaxSize set-accessor
+    def setMaxSize(self, maxSize):
+        """
+        Returns the maximum size of the cache for the CharacteristicFunction values
+        """
+        self.maxSize_ = maxSize
+
+    # Reference bandwidth set-accessor
+    def setReferenceBandwidth(self, bandwidth):
+        """
+        Set the blockMin parameter used for the evaluation
+        of the pdf using the gaussian approximation
+        """
+        self.referenceBandwidth_ = bandwidth
+
 
 class MultivariateRandomMixture(ot.Distribution):
     """
