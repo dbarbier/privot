@@ -183,20 +183,19 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         gaussian_pdf = self.equivalentNormal_.computePDF(y)
         i = 0
-        delta = 0.0
         two_pi = 2.0 * cmath.pi
         d = self.getDimension()
         two_pi_on_h = [two_pi / element for element in self.referenceBandwidth_]
         condition = True
         while (condition):
             i = i + 1
+            delta = 0.0
             walker = self.get_points_on_surface_grid_(i)
             try:
                 while True:
                     point = walker.next()
-                    x = [two_pi_on_h[k] * point[k] for k in range(d)]
-                    delta = self.equivalentNormal_.computePDF(ot.NumericalPoint(y) + ot.NumericalPoint(x))
-                    gaussian_pdf += delta
+                    x = [y[k] + two_pi_on_h[k] * point[k] for k in range(d)]
+                    delta += self.equivalentNormal_.computePDF(ot.NumericalPoint(x))
             except StopIteration:
                 pass
             error = delta > gaussian_pdf * self.pdfEpsilon_
