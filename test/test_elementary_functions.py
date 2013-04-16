@@ -36,7 +36,7 @@ if __name__ == "__main__":
     index = 10
 
     """
-    Validation of get_points_on_grid_pdf_ function for index in 0, 10
+    Validation of get_points_on_surface_grid_ function for index in 0, 10
     Validation in 1D, 2D and 3D cases
      1) Validation of theoretical number of points
      2) Validation of unicity of points
@@ -44,40 +44,98 @@ if __name__ == "__main__":
 
     """
     # 1D distribution
+    collection_list_1D = []
     collection1D = ot.DistributionCollection([ot.Uniform()])
     matrix1D = ot.Matrix([[1.0]])
     distribution1D = MV.PythonMultivariateRandomMixture(collection1D, matrix1D)
     print "1D case"
     for i in xrange(1, index):
-        list_points = distribution1D.get_points_on_grid_pdf_(i)
-        print "index=%d #list=%d #expected=%d" %(i, len(list_points), 2)
+        list_points1D = distribution1D.get_points_on_surface_grid_(i)
+        collection_list_1D.append(list_points1D)
+        print "index=%d #list=%d #expected=%d" %(i, len(list_points1D), 2)
         unique = 0
-        for j, pt in enumerate(list_points):
-            unique = max(unique, list_points.count(pt))
+        for j, pt in enumerate(list_points1D):
+            unique = max(unique, list_points1D.count(pt))
         print "Point #%d, count in list =#%d" %(j + 1, unique)
 
     # 2D distribution
+    collection_list_2D = []
     collection2D = ot.DistributionCollection([ot.Normal(2.0, 3.0), ot.Normal(1.0, 4.0)])
     matrix2D = ot.Matrix([[4, 2], [1, 1.4]])
     distribution2D = MV.PythonMultivariateRandomMixture(collection2D, matrix2D)
+    print
     print "2D case"
     for i in xrange(1, index):
-        list_points = distribution2D.get_points_on_grid_pdf_(i)
-        print "index=%d #list=%d #expected=%d" %(i, len(list_points), 8*i)
+        list_points2D = distribution2D.get_points_on_surface_grid_(i)
+        collection_list_2D.append(list_points2D)
+        print "index=%d #list=%d #expected=%d" %(i, len(list_points2D), 8*i)
         unique = 0
-        for j, pt in enumerate(list_points):
-            unique = max(unique, list_points.count(pt))
+        for j, pt in enumerate(list_points2D):
+            unique = max(unique, list_points2D.count(pt))
         print "Point #%d, count in list =#%d" %(j + 1, unique)
 
+    # Graphical validation using matplotlib
+    try :
+        import matplotlib.pylab as plt
+        from matplotlib.backends.backend_pdf import PdfPages
+        pdf_file = 'validation_2D.pdf'
+        pdf_plot = PdfPages(pdf_file)
+        for list_points2D in collection_list_2D:
+            x = [list(point)[0] for point in list_points2D]
+            y = [list(point)[1] for point in list_points2D]
+            fig = plt.figure()
+            plt.xlim(-index, index)
+            plt.ylim(-index, index)
+            plt.plot(x, y, '.')
+            plt.xlabel('x')
+            plt.ylabel('y')
+            plt.title('index = %d' %max(x))
+            pdf_plot.savefig(fig)
+            plt.close()
+        pdf_plot.close()
+    except ImportError:
+        import warnings
+        warnings.warn('No graphical validation. Install matplotlib for that purpose')
+
     # 3D distribution
+    collection_list_3D = []
     collection3D = ot.DistributionCollection([ot.Normal(2.0, 3.0), ot.Normal(1.0, 4.0)])
     matrix3D = ot.Matrix([[4, 2], [1, 1.4], [-4.5, 6.0]])
     distribution3D = MV.PythonMultivariateRandomMixture(collection3D, matrix3D)
+    print
     print "3D case"
     for i in xrange(1, index):
-        list_points = distribution3D.get_points_on_grid_pdf_(i)
-        print "index=%d #list=%d #expected=%d" %(i, len(list_points), 24 *i *i + 2)
+        list_points3D = distribution3D.get_points_on_surface_grid_(i)
+        collection_list_3D.append(list_points3D)
+        print "index=%d #list=%d #expected=%d" %(i, len(list_points3D), 24 *i *i + 2)
         unique = 0
-        for j, pt in enumerate(list_points):
-            unique = max(unique, list_points.count(pt))
+        for j, pt in enumerate(list_points3D):
+            unique = max(unique, list_points3D.count(pt))
         print "Point #%d, count in list =#%d" %(j + 1, unique)
+    # Graphical validation using matplotlib
+    try :
+        import matplotlib.pylab as plt
+        from mpl_toolkits.mplot3d import Axes3D
+        from matplotlib.backends.backend_pdf import PdfPages
+        pdf_file = 'validation_3D.pdf'
+        pdf_plot = PdfPages(pdf_file)
+        for list_points3D in collection_list_3D:
+            x = [list(point)[0] for point in list_points3D]
+            y = [list(point)[1] for point in list_points3D]
+            z = [list(point)[2] for point in list_points3D]
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            ax.scatter(x, y, z, c='b', marker='s')
+            ax.set_xlabel('X Label')
+            ax.set_ylabel('Y Label')
+            ax.set_zlabel('Z Label')
+            ax.set_xlim(-index, index)
+            ax.set_ylim(-index, index)
+            ax.set_zlim(-index, index)
+            ax.set_title('index = %d' %max(x))
+            pdf_plot.savefig(fig)
+            plt.close()
+        pdf_plot.close()
+    except ImportError:
+        import warnings
+        warnings.warn('No graphical validation. Install matplotlib for that purpose')
