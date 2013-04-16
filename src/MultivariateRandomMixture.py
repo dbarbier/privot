@@ -186,11 +186,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         condition = True
         while (condition):
             i = i + 1
-            list_points = self.get_points_on_surface_grid_(i)
-            for point in list_points:
-                x = [two_pi_on_h[k] * point[k] for k in range(d)]
-                delta = self.equivalentNormal_.computePDF(ot.NumericalPoint(y) + ot.NumericalPoint(x))
-                gaussian_pdf += delta
+            walker = self.get_points_on_surface_grid_(i)
+            try:
+                while True:
+                    point = walker.next()
+                    x = [two_pi_on_h[k] * point[k] for k in range(d)]
+                    delta = self.equivalentNormal_.computePDF(ot.NumericalPoint(y) + ot.NumericalPoint(x))
+                    gaussian_pdf += delta
+            except StopIteration:
+                pass
             error = delta > gaussian_pdf * self.pdfEpsilon_
             condition = error
         return gaussian_pdf
@@ -247,11 +251,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         assert isinstance(index, int)
         d = self.getDimension()
-        # List of points to be taken into account
-        list_points = []
         if d == 1 :
             # list_points should contains 2 points
-            list_points.append(ot.NumericalPoint([-index, index]))
+            for ix in [-index, index]:
+                yield (ix,)
         elif d == 2 :
             # In 2D case, we should take into account the contour line of a
             # bidimensional square, i.e we should take into account
@@ -263,8 +266,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                 for iy in xrange(-index, index+1):
                     inner_y = (abs(iy) < index)
                     if not(inner_x and inner_y):
-                        point = [ix, iy]
-                        list_points.append(ot.NumericalPoint(point))
+                        yield (ix, iy)
         elif d == 3 :
             # In 3D case, we should take into account the 6 faces of a
             # cube, i.e we should take into account
@@ -278,10 +280,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     for iz in xrange(-index, index+1):
                         inner_z = (abs(iz) < index)
                         if not(inner_x and inner_y and inner_z):
-                            point = [ix, iy, iz]
-                            list_points.append(ot.NumericalPoint(point))
-        # list-return
-        return list_points
+                            yield (ix, iy, iz)
 
     def setDistributionCollection(self, collection):
         """
