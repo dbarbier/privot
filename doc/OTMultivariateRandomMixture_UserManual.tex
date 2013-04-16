@@ -6,7 +6,7 @@
 % Texts.  A copy of the license is included in the section entitled "GNU
 % Free Documentation License".
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{User Manual}
 
 This section gives an exhaustive presentation of the objects and functions provided by the $MultivariateRandomMixture$ module.
@@ -37,7 +37,17 @@ This section gives an exhaustive presentation of the objects and functions provi
     \begin{description}
       \item $u$ : a NumericalPoint of dimension $n \ge 1$
     \end{description}
-    \item[Value :] a $NumericalComplex$
+    \item[Value :] a $NumericalComplex$, performs the characteristic function on $u$
+    \end{description}
+
+  \item $computeLogCharacteristicFunction$
+    \begin{description}
+    \item[Usage :]  $computeLogCharacteristicFunction(u)$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $u$ : a NumericalPoint of dimension $n \ge 1$
+    \end{description}
+    \item[Value :] a $NumericalComplex$, performs the log-characteristic function on $u$
     \end{description}
 
   \item $computePDF$
@@ -47,7 +57,47 @@ This section gives an exhaustive presentation of the objects and functions provi
     \begin{description}
       \item $u$ : a NumericalPoint of dimension $n \ge 1$
     \end{description}
-    \item[Value :] a $NumericalScalar$
+    \item[Value :] a $NumericalScalar$, compute the probability density function on $u$
+    \end{description}
+
+  \item $getAlpha$
+    \begin{description}
+    \item[Usage :]  $getAlpha()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $None$
+    \end{description}
+    \item[Value :] a $NumericalScalar$, the $\alpha$ parameter used for the computation of the range (position indicator)
+    \end{description}
+
+  \item $getBeta$
+    \begin{description}
+    \item[Usage :]  $getBeta()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $None$
+    \end{description}
+    \item[Value :] a $NumericalScalar$, the $\beta$ parameter used for the computation of the range (dispersion indicator)
+    \end{description}
+
+  \item $getBlockMax$
+    \begin{description}
+    \item[Usage :]  $getBlockMax()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $None$
+    \end{description}
+    \item[Value :] a $UnsignedLong$, the maximal parameter size (i.e $2^{blocMax}$) used for the computation of the characteristic function differences
+    \end{description}
+
+  \item $getBlockMin$
+    \begin{description}
+    \item[Usage :]  $getBlockMin()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $None$
+    \end{description}
+    \item[Value :] a $UnsignedLong$, the minimal parameter size (i.e $2^{blocMin}$) used for the computation of the characteristic function differences
     \end{description}
 
   \item $getConstant$
@@ -90,6 +140,16 @@ This section gives an exhaustive presentation of the objects and functions provi
     \item[Value :] a $Matrix$, the <<~weight~>> matrix used for the affine transformation
     \end{description}
 
+  \item $getMaxSize$
+    \begin{description}
+    \item[Usage :]  $getMaxSize()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $None$
+    \end{description}
+    \item[Value :] an $UnsignedLong$, the maximum size of the cache for the CharacteristicFunction values
+    \end{description}
+
   \item $getMean$
     \begin{description}
     \item[Usage :]  $getMean()$
@@ -120,6 +180,16 @@ This section gives an exhaustive presentation of the objects and functions provi
     \item[Value :] a $NumericalPoint$, a realization the distribution
     \end{description}
 
+  \item $getReferenceBandwidth$
+    \begin{description}
+    \item[Usage :]  $getReferenceBandwidth()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $None$
+    \end{description}
+    \item[Value :] an $NumericalScalar$, the bandwidth used for $PDF$
+    \end{description}
+
   \item $getSample$
     \begin{description}
     \item[Usage :]  $getSample()$
@@ -138,6 +208,66 @@ This section gives an exhaustive presentation of the objects and functions provi
       \item $None$
     \end{description}
     \item[Value :] a $NumericalPoint$, the standard deviation of the distribution
+    \end{description}
+
+  \item $setAlpha$
+    \begin{description}
+    \item[Usage :]  $setAlpha(alpha)$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $alpha$, a $NumericalScalar$
+    \end{description}
+    \item[Value :]  $None$, sets the $\alpha$ parameter used for the computation of the range (position indicator)
+    \end{description}
+
+  \item $setBeta$
+    \begin{description}
+    \item[Usage :] $setBeta(beta)$
+    \item[Arguments :] \strut
+    \begin{description}
+      \item $beta$: a $NumericalScalar$
+    \end{description}
+    \item[Value :] $None$, sets the $\beta$ parameter used for the computation of the range (dispersion indicator)
+    \end{description}
+
+  \item $setBlockMax$
+    \begin{description}
+    \item[Usage :]  $setBlockMax(blocMax)$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $blocMax$, a $UnsignedLong$
+    \end{description}
+    \item[Value :] $None$, sets the maximal parameter size (i.e $2^{blocMax}$) used for the computation of the characteristic function differences
+    \end{description}
+
+  \item $setBlockMin$
+    \begin{description}
+    \item[Usage :]  $setBlockMin(blocMin)$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $blocMin$, a $UnsignedLong$
+    \end{description}
+    \item[Value :] $None$, sets the minimal parameter size (i.e $2^{blocMin}$) used for the computation of the characteristic function differences
+    \end{description}
+
+  \item $setMaxSize$
+    \begin{description}
+    \item[Usage :]  $setMaxSize(maxSize)$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $maxSize$, a $UnsignedLong$
+    \end{description}
+    \item[Value :] $None$, sets the maximum size of the cache for the CharacteristicFunction values
+    \end{description}
+
+  \item $setReferenceBandwidth$
+    \begin{description}
+    \item[Usage :]  $setReferenceBandwidth(bandwidth)$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $bandwidth$, a $NumericalScalar$
+    \end{description}
+    \item[Value :] $None$, sets the bandwidth used for $PDF$
     \end{description}
 
   \end{description}
