@@ -161,20 +161,24 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         self.equivalentNormal_ = ot.Normal(self.getMean(), self.getCovariance())
 
-    def computeEquivalentNormalPDFSum(self, u):
+    def computeEquivalentNormalPDFSum(self, y):
         """
         Compute the left-hand sum in Poisson's summation formula
         for the equivalent normal
         """
-        gaussian_pdf = self.equivalentNormal_.computePDF(u)
+        gaussian_pdf = self.equivalentNormal_.computePDF(y)
         i = 0
         delta = 0.0
+        two_pi = 2.0 * cmath.pi
+        d = self.getDimension()
+        two_pi_on_h = [two_pi / element for element in self.h]
         condition = True
         while (condition):
             i = i + 1
-            list_points = self.get_points_on_grid_pdf_(i)
-            for step in list_points:
-                delta = self.equivalentNormal_.computePDF(ot.NumericalPoint(u) + (step * float(i)))
+            list_points = self.get_points_on_surface_grid_(i)
+            for point in list_points:
+                x = [two_pi_on_h[k] * point[k] for k in range(d)]
+                delta = self.equivalentNormal_.computePDF(ot.NumericalPoint(y) + ot.NumericalPoint(x))
                 gaussian_pdf += delta
             error = delta > gaussian_pdf * self.pdfEpsilon_
             condition = error
@@ -221,84 +225,48 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         gaussian_interval = ot.Interval(self.getMean() - s * self.beta_, self.getMean() + s * self.beta_)
         self.interval_ = self.interval_.intersect(gaussian_interval)
 
-    def get_points_on_grid_pdf_(self, index):
+    def get_points_on_surface_grid_(self, index):
         """
         The method helps to get the points on which some functions should be evaluated
+        These functions are respectively:
+         1) The evaluation of the equivalent normal pdf sum
+         2) The evaluation of delta characteristic functions
         """
         assert isinstance(index, int)
-        pi = cmath.pi
         d = self.getDimension()
         # List of points to be taken into account
         list_points = []
         if d == 1 :
             # list_points should contains 2 points
-            hx = self.h[0]
-            for ix in [-index, index]:
-                  step = [2.0 * pi * ix / hx]
-                  list_points.append(ot.NumericalPoint(step))
+            list_points.append(ot.NumericalPoint([-index, index]))
         elif d == 2 :
             # In 2D case, we should take into account the contour line of a
             # bidimensional square, i.e we should take into account
             # all points with |x| = index, |y| = index
-            # list_points should contains 8j^2 points
-            hx, hy = tuple(self.h)
-            # for easy reading, we follow the curvi-linear abcissa
-            # starting from the left-bottom corner
-            # 1) bottom
-            iy = float(-index)
-            for ix in range(-index, index):
-                step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy]
-                list_points.append(ot.NumericalPoint(step))
-            # 2) right
-            ix = float(index)
-            for iy in range(-index, index):
-                step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy]
-                list_points.append(ot.NumericalPoint(step))
-            # 3) top
-            iy = float(index)
-            for ix in range(index, -index, -1):
-                step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy]
-                list_points.append(ot.NumericalPoint(step))
-            # 4) left hand
-            ix = float(-index)
-            for iy in range(index, -index, -1):
-                step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy]
-                list_points.append(ot.NumericalPoint(step))
+            # list_points should contains:
+            # (2j+1)^2 - (2j-1)^2 = 8j^2 points
+            for ix in xrange(-index, index + 1):
+                inner_x = (abs(ix) < index)
+                for iy in xrange(-index, index+1):
+                    inner_y = (abs(iy) < index)
+                    if not(inner_x and inner_y):
+                        point = [ix, iy]
+                        list_points.append(ot.NumericalPoint(point))
         elif d == 3 :
             # In 3D case, we should take into account the 6 faces of a
             # cube, i.e we should take into account
             # all points with |x| = index, |y| = index and |z| = index
-            # list_points should contains 24j^2 + 2 points
-            hx, hy, hz = tuple(self.h)
-            # 1) contour (like 2D case) for each z
-            for iz in xrange(-index, index + 1):
-                # a) bottom
-                iy = float(-index)
-                for ix in range(-index, index):
-                    step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
-                    list_points.append(ot.NumericalPoint(step))
-                # b) right
-                ix = float(index)
-                for iy in range(-index, index):
-                    step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
-                    list_points.append(ot.NumericalPoint(step))
-                # c) top
-                iy = float(index)
-                for ix in range(index, -index, -1):
-                    step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
-                    list_points.append(ot.NumericalPoint(step))
-                # d) left hand
-                ix = float(-index)
-                for iy in range(index, -index, -1):
-                    step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
-                    list_points.append(ot.NumericalPoint(step))
-            # 2) quasi-plain square for |z| = index
-            # quasi because we remove corners and contours already in the list
-            for iz in [-index, index]:
-                for ix in xrange(-index + 1 , index):
-                    for iy in xrange(-index + 1, index):
-                        step = [2.0 * pi * ix / hx, 2.0 * pi * iy / hy, 2.0 * pi * iz / hz]
-                        list_points.append(ot.NumericalPoint(step))
+            # list_points should contains:
+            # (2j+1)^3 - (2j-1)^3 = 24j^2 + 2 points
+            for ix in xrange(-index, index+1):
+                inner_x = (abs(ix) < index)
+                for iy in xrange(-index, index+1):
+                    inner_y = (abs(iy) < index)
+                    for iz in xrange(-index, index+1):
+                        inner_z = (abs(iz) < index)
+                        if not(inner_x and inner_y and inner_z):
+                            point = [ix, iy, iz]
+                            list_points.append(ot.NumericalPoint(point))
         # list-return
         return list_points
 
