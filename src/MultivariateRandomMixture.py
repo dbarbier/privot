@@ -489,7 +489,40 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # 1) Compute a gaussian pdf approximation
         value = self.computeEquivalentNormalPDFSum(y)
         # 2) Compute a difference of characteristic functions on the point y
-        # TODO The method is not yet implemented
+        # compute the factor \prod_{k=1}^{d} h_k/'2\pi)
+        factor = 1.0
+        for k in xrange(self.getDimension()):
+            factor *= self.referenceBandwidth_[k] / (2.0 * cmath.pi)
+        # sum of delta functions
+        k = 1
+        precision = self.pdfEpsilon_
+        kmin = 1 << self.blockMin_
+        kmax = 1 << self.blockMax_
+        error = 2.0 * precision
+        while ( (k < kmin) or ( (k < kmax) and (error > precision))):
+            error = 0.0
+            for m in xrange(k, 2*k):
+                # get the current point
+                walker = self.get_points_on_surface_grid_(m)
+                try :
+                    while True:
+                        point = walker.next()
+                        h = [self.referenceBandwidth_[d] * point[d] for d in xrange(self.getDimension())]
+                        h_y = ot.dot(h, y)
+                        cos_hy = cmath.cos(h_y).real
+                        sin_hy = cmath.sin(h_y).real
+                        cfValue = self.computeDeltaCharacteristicFunction(h)
+                        error += factor * (cfValue.real * cos_hy + cfValue.imag * sin_hy)
+                except StopIteration:
+                  pass
+            value += error;
+            error = abs(error)
+            k *= 2
+            # end of while
+        # For very low levels of PDF, the computed value can be slightly negative. Round it up to zero.
+        if (value < 0.0):
+            value = 0.0
+        self.pdfEpsilon_ = error
         return value
 
     # alpha get-accessor
