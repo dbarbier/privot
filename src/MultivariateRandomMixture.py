@@ -223,21 +223,20 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def computeEquivalentNormalPDFSum(self, y):
         """
         Compute the left-hand sum in Poisson's summation formula for the equivalent normal.
-        The interest is to compute :
-          \sum_{i_1 \in \mathbb{Z}^d} q(y + i * h) with :
-            q = the equivalent gaussian density function (gaussian in \mathbb{R}^d with
-            \mu = self.mean and \sigma_ = self.sigma
-            i = (i_1,...,i_d) : the multi-indices
-            y = (y_1,...,y_d) : point on which we want to compute the pdf
-            h = (h_1,...,h_d) : the reference bandwidth
+        The goal is to compute:
+          \sum_{i \in \mathbb{Z}^d} q(y + i * h) with :
+            y = (y_1,...,y_d) point on which the pdf is requested
+            q = the density function of the distribution computed by computeEquivalentNormal
+            h = (h_1,...,h_d) the reference bandwidth
             i*h = (i_1 * h_1,...,i_d * h_d)
-         We start with i = (0,...,0) and at each iteration #it, we add the points such as
-         all elements of i are not lower as the iteration #it
-         The point should not have been taken into account in #it - 1, that is to say
-         there are (2j+1)^d -(2j-1)^d points to add, d is the dimension of the distribution.
-         We add the evaluation of the gaussian density in these points into the current
-         sum. We stop the algorithm if the added value is negligible compared to the current density
-         relative value (pdf * precision)
+         The sum above is rewritten as:
+           \sum_{s \in \mathbb{N}} \sum_{x such as \norm{x-y}_\infinity=s} q(x)
+         We start with s=0 and at each iteration, we add the points which are exactly at
+         distance s with norm L^\infinity.
+         If s>0, there are (2s+1)^d - (2s-1)^d points to add at iteration s.
+         The evaluation of the gaussian density at these points are added into the current sum.
+	 The summation halts when the added value at iteration s is negligible relative to
+         the current density value.
 
         """
         gaussian_pdf = self.equivalentNormal_.computePDF(y)
