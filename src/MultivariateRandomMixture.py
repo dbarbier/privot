@@ -51,19 +51,27 @@ mvrm_resource_map.setdefault( "MultivariateRandomMixture-SmallSize", 100 )
 class PythonMultivariateRandomMixture(ot.PythonDistribution):
     """
     Multivariate distribution
-    Modelization of a multivariate random mixture distribution of form:
-    Y = y_0 + M X, Y of size d
-    where M is a (d x n) matrix, X is a n-random vector with independent components and y_0 a deterministic vector.
-    This is a generalization of the unidimensional RandomMixture distribution.
+    The objective of the python class is the modelization of a multivariate random vector as a
+    multivariate mixture of form:
+    Y = y_0 + M X
+    where: Y of size d
+           X is a n-random vector with independent components, i.e. a collection of univariate distributions,
+           M is a (d x n) deterministic matrix, i.e. the linear operator of the affine transformation,
+           y_0 a constant and deterministic vector,  i.e the constant part of the affine transformation.
+    The distribution is a generalization of the unidimensional RandomMixture distribution.
 
-    y_0 is corresponds to the constant vector of the affine transformation, M is the linear operator of the affine transformation and X
-    the random part modeled by a independent multivariate distribution (more precisely, a collection of univariate distributions)
-
-    Its moments either some realizations are easy to get. The characteristic function could be deduced easily using the
-    independance of X's marginals.
-    The probability density function (p.d.f) is computed using the Poisson summation formula :
+    As the purposes of the distribution is mainly the evaluation of the density function and its visualization,
+    the dimension may not exceed 3. This probability density function (p.d.f) is computed using the Poisson summation formula :
     \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} p(y_1 + \frac{2\pi j_1}{h_1},...,y_d + \frac{2\pi j_d}{h_d}) =
     \frac{h_1 x... x h_d}{2^d \pi^d} \sum_{k_1 \in \mathbb{Z}}... \sum_{k_d \in \mathbb{Z}} \phi(k_1 h_1,...,k_d h_d) * exp(-i(k_1 h_1+...+k_d h_d))
+    Using small values of h, such as p(x+h) << p(x), we could evaluate the density function with few terms.
+    The characteristic function could be deduced easily using the independance of X's marginals:
+      phi(y_1,...,y_d) = \prod_{j=1}^d {\imath y_j {y_0}_j} \prod_{k=1}^n (\phi_{X_k})((M^t y)_j)
+    The first moments are analytically given as follows:
+      - E(Y) = M * E(X)
+      - Cov(Y) = M * Cov(X) * M^t
+    As Cov(X) is diagonal:
+      - Cov(Y)_{i,j} = \sum_{k=1}^n M_{i,k} M_{j,k} Cov(X_k, X_k)
 
     """
 
@@ -169,6 +177,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Returns the covariance of the mixture
         This method is implicite. Use the getCovariance to get the covariance value
+        The covariance is given by
+          Cov(Y) = M * Cov(X) * M^t
+        As Cov(X) is diagonal:
+          Cov(Y)_{i,j} = \sum_{k=1}^n M_{i,k} M_{j,k} Cov(X_k, X_k)
+
         """
         d = self.getDimension()
         self.cov_ = ot.CovarianceMatrix(d)
@@ -251,6 +264,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Compute the mean of the multivariate mixture
         This method is implicite. Use the getMean to get the mean value
+        The mean is given by:
+          E(Y) = M * E(X)
+
         """
         mu = [dist.getMean()[0] for dist in self.collection_]
         self.mean_ = self.matrix_ * ot.NumericalPoint(mu) + self.constant_
