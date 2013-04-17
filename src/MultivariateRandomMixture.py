@@ -53,8 +53,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     Multivariate distribution
     Modelization of a multivariate random mixture distribution of form:
     Y = y_0 + M X, Y of size d
-    where M is a d x n matrix, X is a n-random vector with independent components and y_0 a deterministic vector.
-    This is a generalization of the RandomMixture distribution.
+    where M is a (d x n) matrix, X is a n-random vector with independent components and y_0 a deterministic vector.
+    This is a generalization of the unidimensional RandomMixture distribution.
+
+    y_0 is corresponds to the constant vector of the affine transformation, M is the linear operator of the affine transformation and X
+    the random part modeled by a independent multivariate distribution (more precisely, a collection of univariate distributions)
 
     Its moments either some realizations are easy to get. The characteristic function could be deduced easily using the
     independance of X's marginals.
@@ -72,21 +75,23 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                      Either OpenTURNS DistributionCollection or a list of OpenTURNS distributions
         matrix : Matrix
                  Either OpenTURNS matrix or Numpy matrix
+                 It corresponds to the matrix operator of the affine transformation
         constant : 1D array-like
              Either a python list, an OpenTURNS NumericalPoint or a Numpy 1D-array
+             It corresponds to the constant vector of the affine transformation
 
         Example
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
-        >>> matrix = ot.Matrix([[1,1], [3,4]])
-        >>> constant = [0, 5]
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
 
         """
-        n = len(collection)
-        if (n == 0):
+        size = len(collection)
+        if (size == 0):
             raise ValueError('Expected collection of distributions with non null size')
         # Use of setDistributionCollection method
         self.setDistributionCollection(collection)
@@ -97,12 +102,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # the getNbColumns/getNbRows methods are not available
         self.matrix_ = ot.Matrix(matrix)
         # Check matrix dimension
-        if(self.matrix_.getNbColumns() != n):
+        # the operator of the transformation should have the same number of
+        # columns as the collection size
+        if(self.matrix_.getNbColumns() != size):
             raise ValueError("Matrix number of columns is not coherant with collection size.")
         d = self.matrix_.getNbRows()
         if (d > 3):
             raise ValueError("Mixture should be of dimension 1, 2 or 3")
         if (constant is None):
+            # setting the y_0 term (constant term)
             self.constant_ = ot.NumericalPoint(d * [0.0])
         else :
             assert len(constant) == d
@@ -110,8 +118,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # Set the distribution dimension
         ot.PythonDistribution.__init__(self, d)
         # Set constants values using default parameters
+        # alpha and beta are used for the range
         self.alpha_ = mvrm_resource_map["MultivariateRandomMixture-DefaultAlpha"]
         self.beta_ = mvrm_resource_map["MultivariateRandomMixture-DefaultBeta"]
+        # pdfEpsilon, blockMax, blockMin and maxSize are used for the evaluation of the density function
         self.pdfEpsilon_ = mvrm_resource_map["MultivariateRandomMixture-DefaultPDFEpsilon"]
         self.blockMin_ = mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMin"]
         self.blockMax_ = mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMax"]
@@ -163,10 +173,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         d = self.getDimension()
         self.cov_ = ot.CovarianceMatrix(d)
         for i in xrange(d):
-            for j in xrange(d):
+            for j in xrange(i + 1):
                 s = 0.0
-                for k in xrange(d):
-                    s += self.matrix_[i, k] * self.matrix_[j, k] * self.collection_[k].getStandardDeviation()[0]
+                for k in xrange(len(self.collection_)):
+                    s += self.matrix_[i, k] * self.matrix_[j, k] * self.collection_[k].getCovariance()[0, 0]
                 self.cov_[i, j] = s
 
     def computeDeltaCharacteristicFunction(self, x):
@@ -278,6 +288,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         These functions are respectively:
          1) The evaluation of the equivalent normal pdf sum
          2) The evaluation of delta characteristic functions
+        The points corresponds to :
+        \cup_{(i_1,..,i_d) \in [-index, index]^d} (i_1,...,i_d) \ \cup_{(i_1,..,i_d) \in [-index+1, index-1]^d} (i_1,...,i_d)
         """
         assert isinstance(index, int)
         d = self.getDimension()
@@ -326,11 +338,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def computeLogCharacteristicFunction(self, y):
         """
         Return the Log-characteristic function evaluated on y.
+        The Log-characteristic function depends on the constant vector, the matrix and the log-characteristic
+        functions of the input distribution collection like this:
+          log\(phi)(y_1,...,y_d) = \sum_{j=1}^d {\imath y_j {y_0}_j} + \sum_{k=1}^n log(\phi_{X_k})((M^t y)_j)
+        with \phi_{X_k}: the characteristic function of the k-th input distribution
 
         Parameters
         ----------
         y :  vector of size d
              1D array-like (np array, python list, OpenTURNS NumericalPoint)
+             point on which the log-characteristic function will be evaluated
 
         Returns
         -------
@@ -341,9 +358,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
-        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
-        >>> constant = [0, 5]
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
         >>> log_cf = dist.computeLogCharacteristicFunction( [0.3, 0.9] )
 
@@ -367,11 +384,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def computeCharacteristicFunction(self, y):
         """
         Return the characteristic function evaluated on y.
+        The Log-characteristic function depends on the constant vector, the matrix and the characteristic
+        functions of the input distribution collection like this:
+          (phi)(y_1,...,y_d) = \prod_{j=1}^d {\imath y_j {y_0}_j} \prod_{k=1}^n (\phi_{X_k})((M^t y)_j)
+        with \phi_{X_k}: the characteristic function of the k-th input distribution
 
         Parameters
         ----------
         y :  vector of size d
              1D array-like (np array, python list, OpenTURNS NumericalPoint)
+             point on which the characteristic function will be evaluated
 
         Returns
         -------
@@ -382,9 +404,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
-        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
-        >>> constant = [0, 5]
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
         >>> cf = dist.computeCharacteristicFunction( [0.3, 0.9] )
 
@@ -394,24 +416,51 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def computePDF(self, y):
         """
         Return the probability density function evaluated on y.
+        It uses the Poisson inversion formula as described in the reference:
+        "Abate, J. and Whitt, W. (1992). The Fourier-series method for inverting
+        transforms of probability distributions. Queueing Systems 10, 5--88., 1992",
+        formula 5.5.
+
+        Here, we recall the Poisson summation formula:
+        \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} p(y_1 + 2 pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) =
+        h_1...h_d/(2^d \pi^d) \sum_{k_1 \in \mathbb{Z}}... \sum_{k_d \in \mathbb{Z}} \phi(k_1 h_1,...,k_d h_d) * exp(-i(k_1 h_1+...+k_d h_d))
+
+        We can rewrite this formula as:
+        \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} p(y_1 + 2 pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) =
+        \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} q(y_1 + 2 pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) +
+        h_1...h_d/(2^d \pi^d) \sum_{k_1 \in \mathbb{Z}}... \sum_{k_d \in \mathbb{Z}} (\phi(k_1 h_1,...,k_d h_d) -
+        \psi(k_1 h_1,...,k_d h_d)) * exp(-i(k_1 h_1+...+k_d h_d))
+        where q is the PDF and \psi the characteristic function of the multivariate normal distribution with the same mean and
+        the same variance as the curernt multivariate mixture.
+        We take h such as p(x_1+2k_1\pi/h_1,...,x_d+2k_d\pi/h_d) << p(x_1,...,x_d) for k\neq 0, then:
+        p(x) \simeq \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} q(y_1 + 2 pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) +
+        h_1...h_d/(2^d \pi^d) \sum_{k_1 \in \mathbb{Z}}... \sum_{k_d \in \mathbb{Z}} (\phi(k_1 h_1,...,k_d h_d) -
+        \psi(k_1 h_1,...,k_d h_d)) * exp(-i(k_1 h_1+...+k_d h_d))
+
+        The first sum \sum_{k\in Z^d}q(x+2k\pi/h) will be approximated using only few terms, as the condition on h will almost
+        gives q(x_1+2k_1\pi/h_1, x_d+2k_d\pi/h_d) << q(x) for k\neq 0.
+        Call this sum Q(x, h), and define \delta as delta(u) = \phi(u) - \psi(u), u \in \mathbb{R}^d.
+        The first term is computed thanks to the internal computeEquivalentNormalPDFSum method whereas the second term (delta)
+        is partially computed with the computeDeltaCharacteristicFunction method
 
         Parameters
         ----------
         y :  vector of size d
              1D array-like (np array, python list, OpenTURNS NumericalPoint)
+             The point on which we want the PDF
 
         Returns
         -------
-        out : Scalar
+        out : postivie or null scalar
               The density function evaluated on y
 
         Example
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
-        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
-        >>> constant = [0, 5]
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
         >>> pdf = dist.computePDF( [0.3, 0.9] )
 
@@ -519,9 +568,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
-        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
-        >>> constant = [0, 5]
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
         >>> realization = dist.getRealization()
 
@@ -556,9 +605,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         -------
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
-        >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
-        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
-        >>> constant = [0, 5]
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
         >>> sample = dist.getSample(100)
         """
