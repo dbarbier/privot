@@ -136,6 +136,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.maxSize_ = mvrm_resource_map["MultivariateRandomMixture-DefaultMaxSize"]
         # Cache for the characteristic function values
         self.characteristicValuesCache_ = []
+        self.storedSize_ = 0
         # compute the mean and covariance
         # as mean is easy, no need to use isComputedMean attributs
         self.computeMean()
