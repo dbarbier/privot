@@ -80,7 +80,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
         >>> collection = ot.DistributionCollection([ot.Normal(), ot.Uniform()])
-        >>> matrix = ot.Matrix([[1,1], [3,4], [2, -1]])
+        >>> matrix = ot.Matrix([[1,1], [3,4]])
         >>> constant = [0, 5]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
 
@@ -189,8 +189,23 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def computeEquivalentNormalPDFSum(self, y):
         """
-        Compute the left-hand sum in Poisson's summation formula
-        for the equivalent normal
+        Compute the left-hand sum in Poisson's summation formula for the equivalent normal.
+        The interest is to compute :
+          \sum_{i_1 \in \mathbb{Z}^d} q(y + i * h) with :
+            q = the equivalent gaussian density function (gaussian in \mathbb{R}^d with
+            \mu = self.mean and \sigma_ = self.sigma
+            i = (i_1,...,i_d) : the multi-indices
+            y = (y_1,...,y_d) : point on which we want to compute the pdf
+            h = (h_1,...,h_d) : the reference bandwidth
+            i*h = (i_1 * h_1,...,i_d * h_d)
+         We start with i = (0,...,0) and at each iteration #it, we add the points such as
+         all elements of i are not lower as the iteration #it
+         The point should not have been taken into account in #it - 1, that is to say
+         there are (2j+1)^d -(2j-1)^d points to add, d is the dimension of the distribution.
+         We add the evaluation of the gaussian density in these points into the current
+         sum. We stop the algorithm if the added value is negligible compared to the current density
+         relative value (pdf * precision)
+
         """
         gaussian_pdf = self.equivalentNormal_.computePDF(y)
         i = 0
@@ -209,6 +224,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     delta += self.equivalentNormal_.computePDF(ot.NumericalPoint(x))
             except StopIteration:
                 pass
+            gaussian_pdf += delta
             error = delta > gaussian_pdf * self.pdfEpsilon_
             condition = error
         return gaussian_pdf
