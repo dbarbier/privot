@@ -35,6 +35,7 @@
 """
 import openturns as ot
 import cmath
+import MultivariateGaussianCharacteristicFunction as mvgc
 
 # Dictionary equivalent to a resource map
 mvrm_resource_map = {}
@@ -167,6 +168,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                 for k in xrange(d):
                     s += self.matrix_[i, k] * self.matrix_[j, k] * self.collection_[k].getStandardDeviation()[0]
                 self.cov_[i, j] = s
+
+    def computeDeltaCharacteristicFunction(self, x):
+        """
+        Returns the differences of characteristic functions
+        This method is implicite and should not be used outside the interla methods
+        The current method does not implement the cache mechanism
+        The method uses also an external class for the evaluation of the characteristic function
+        for multivariate gaussian distribution
+        """
+        return self.computeCharacteristicFunction(x) - mvgc.MGCF(self.equivalentNormal_, x)
 
     def computeEquivalentNormal(self):
         """
