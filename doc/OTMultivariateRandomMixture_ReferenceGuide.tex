@@ -14,7 +14,76 @@
 
 \subsection{Multivariate random mixtures}
 
+The objective is to manipulate a multivariate random vector $\vect{Y}$ with a specific structure~: 
+it is the image by an affine transformation $T$ of a random vector $\vect{X} = (X_1, \hdots, X_n) $ of independent components of any continuous distributions:
+\begin{align}\label{defY}
+  \vect{Y}=\vect{y}_0+\vect{M}\vect{X}
+\end{align}
+where $\vect{y}_0\in\mathbb{R}^d$ is a deterministic vector with $d\in\{1,2,3\}$ and $\vect{M}\in\mathcal{M}_{d,n}(\mathbb{R})$ 
+a deterministic matrix.
+We denote its density function $p$. This particular form allows the calculation of the law of $\vect{Y} $ using the Poisson summation formula, which links the characteristic 
+function $\phi $ of $\vect{Y}$ to its density $p$. This formula is given by:
 
+\begin{align}\label{poissonND}
+  \begin{array}{p{\textwidth}}
+    \multicolumn{1}{l}{\displaystyle\sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}}p\left(y_1+\frac{2\pi j_1}{h_1},\hdots,y_d+\frac{2\pi j_d}{h_d}\right)=}\\
+    \multicolumn{1}{r}{\displaystyle\frac{h_1\times\cdots\times h_d}{2^d\pi^d}\sum_{k_1\in\mathbb{Z}}\hdots\sum_{k_d\in\mathbb{Z}}\phi\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}}
+  \end{array}
+\end{align}
+
+By fixing $h_1,\hdots,h_d$ enough small, the nested sums of the right term are reduced to the central term $j_1=\hdots=j_d = 0$. 
+The sums on the right are all nested truncated symmetrically to $ 2N +1 $ terms, which gives:
+\begin{align}
+  p\left(y_1,\hdots,y_d\right)\simeq\frac{H}{2^d\pi^d}\sum_{|k_1|\leq N}\hdots\sum_{|k_d|\leq N}\phi\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}
+\end{align}
+where $H = h_1\times\hdots\times h_d$ .
+
+The characteristic function of such random vector $Y$ is obtained analitycally using $\vect{y}_0$, $\vect{M}$ and the characteristic functions of $X_1$,\dots,$X_d$:
+\begin{align}
+  \forall \vect{u}\in\mathbb{R}^d,\quad\phi(u_1,\hdots,u_d)=\prod_{j=1}^de^{iu_j{y_0}_j}\prod_{k=1}^n\phi_{X_k}(M_{j,k}u_j)
+\end{align}
+
+Using the symmetry of $\phi$, we get:
+\begin{align}
+  p\left(y_1,\hdots,y_d\right)\simeq\frac{H}{\pi^d} \left(1+\sum_{k_1=1}^N\hdots\sum_{k_d=1}^N\left\{\prod_{j=1}^d\mathfrak{R}\left(e^{ih_jk_j{y_0}_j}
+  \times\right.\right.\right.\left.\left.\times\prod_{\ell=1}^n\phi_{X_\ell}(M_{j,\ell}k_jh_j)\right)\right\}\left.e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)} \right)
+\end{align}
+
+It is possible to greatly improve the performance of the algorithm by noting that the equation ~(\ref{poissonND}) is linear between $p$ 
+and $\phi $. By applying applied to the multivariate normal distribution with the same mean $\vect{\mu}$ and same covariance matrix 
+$\vect{C} $, for which we denote the density $q$ and the characteristic function $\psi$, we obtain by subtraction:
+\begin{align}\label{algoPoisson}
+  \begin{array}{p{\textwidth}}
+    \multicolumn{1}{l}{\displaystyle p\left(y_1,\hdots,y_d\right)\simeq \sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}}q\left(y_1+\frac{2\pi j_1}{h_1},\hdots,y_d+\frac{2\pi j_d}{h_d}\right)+}\\
+    \multicolumn{1}{r}{+\displaystyle \frac{H}{2^d\pi^d}\sum_{|k_1|\leq N}\hdots\sum_{|k_d|\leq N}(\phi-\psi)\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}}
+  \end{array}
+\end{align}
+
+The vector $\vect{\mu}$ mand the covariance matrix $\vect{C}$ are obtained using $\vect{X}$ and the following formula:
+\begin{align}
+  \vect{\mu}=&\vect{M}\mathbb{E}(\vect{X})\\
+  \vect{C}=&\vect{M}\vect{\mathrm{Cov}}(\vect{X})\vect{M}^t\\
+\end{align}
+
+The matrix $\vect{\mathrm{Cov}}(\vect{X})$ is diagonal thanks to the the independence of $X_i$. 
+The element $C_{i,j}$ of $\vect{C}$ is given by:
+\begin{align}
+\forall i,j\in\{1,\hdots,d\},\quad C_{i,j}=\sum_{k=1}^nM_{i,k}M_{j,k}\mathrm{Var}(X_k)
+\end{align}
+
+In the case where $n \gg $ 1, using the Central Limit Theorem, the law of $\vect{Y} $ tends to the normal distribution density $q$. 
+The sum on $q$ will be the dominant term in the value of $p$, which will reduce $N$. 
+It notes the need to keep more terms than the central one in this sum, since the parameters $ h_1, \dots  h_d$ were calibrated 
+with respect to $p$ not $q$.
+
+The parameters $h_1, \dots  h_d$ are calibrated using the following formula:
+\begin{align}
+  h_\ell = \frac{2\pi}{(b+4a)\sigma_\ell}
+\end{align}
+where $\sigma_\ell=\sqrt{C_{\ell,\ell}}$ and $a$, $b$ are respectively the number of standard deviations covered by the marginal distribution 
+($a=4$ per default) and $b$ the number of marginal deviations beyond which the density is negligible ($b=​​8$ per default).
+
+The $N$ parameter is dynamically calibrated: we start with $N=8$ then we double $N$ value until the total contribution of the additional terms is negligible.
 
 \subsection{References}\label{ref}
 
