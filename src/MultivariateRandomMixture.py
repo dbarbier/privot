@@ -54,20 +54,27 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     The objective of the python class is the modelization of a multivariate random vector as a
     multivariate mixture of form:
     Y = y_0 + M X
-    where: Y of size d
+    where: Y of size d, d\in {1,2,3}
            X is a n-random vector with independent components, i.e. a collection of univariate distributions,
            M is a (d x n) deterministic matrix, i.e. the linear operator of the affine transformation,
            y_0 a constant and deterministic vector,  i.e the constant part of the affine transformation.
     The distribution is a generalization of the unidimensional RandomMixture distribution.
 
-    As the purposes of the distribution is mainly the evaluation of the density function and its visualization,
-    the dimension may not exceed 3. This probability density function (p.d.f) is computed using the Poisson summation formula :
-    \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} p(y_1 + \frac{2\pi j_1}{h_1},...,y_d + \frac{2\pi j_d}{h_d}) =
-    \frac{h_1 x... x h_d}{2^d \pi^d} \sum_{k_1 \in \mathbb{Z}}... \sum_{k_d \in \mathbb{Z}} \phi(k_1 h_1,...,k_d h_d) * exp(-i(k_1 h_1+...+k_d h_d))
-    Using small values of h, such as p(x+h) << p(x), we could evaluate the density function with few terms.
+    Its probability density function (PDF) is computed using the Poisson summation formula :
+    \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} p(y_1 + 2\pi j_1/h_1,...,y_d + 2\pi j_d/h_d) =
+    (h_1...h_d)/(2^d \pi^d) \sum_{k_1 \in \mathbb{Z}}... \sum_{k_d \in \mathbb{Z}} \phi(k_1 h_1,...,k_d h_d) * exp(-i(k_1 h_1+...+k_d h_d))
     The characteristic function could be deduced easily using the independance of X's marginals:
       phi(y_1,...,y_d) = \prod_{j=1}^d {\imath y_j {y_0}_j} \prod_{k=1}^n (\phi_{X_k})((M^t y)_j)
-    The first moments are analytically given as follows:
+    The algorithm could be performed using a gaussian approximation. Indeed, the Poisson formula is linear so by substracting the
+    multivariate normal distribution with the same mean and the same variance as the curernt multivariate mixture density and
+    characteristic functions (denoted respectively by q and \psi), the formula becomes:
+    \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} p(y_1 + 2 pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) =
+    \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} q(y_1 + 2 pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) +
+    h_1...h_d/(2^d \pi^d) \sum_{k_1 \in \mathbb{Z}}... \sum_{k_d \in \mathbb{Z}} (\phi(k_1 h_1,...,k_d h_d) -
+    \psi(k_1 h_1,...,k_d h_d)) * exp(-i(k_1 h_1+...+k_d h_d))
+    Using small values of h, such as p(x+h) << p(x), we could evaluate the density function with few terms.
+
+        The first moments are analytically given as follows:
       - E(Y) = M * E(X)
       - Cov(Y) = M * Cov(X) * M^t
     As Cov(X) is diagonal:
@@ -79,14 +86,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Parameters
         ----------
-        collection : list/DistributionCollection
-                     Either OpenTURNS DistributionCollection or a list of OpenTURNS distributions
-        matrix : Matrix
-                 Either OpenTURNS matrix or Numpy matrix
+        collection : Either an OpenTURNS DistributionCollection or a list of OpenTURNS distributions
+                     The modelization of the input random vector X. The collection should contains
+                     n univariate distribution
+
+        matrix : Either OpenTURNS matrix or Numpy matrix
                  It corresponds to the matrix operator of the affine transformation
-        constant : 1D array-like
-             Either a python list, an OpenTURNS NumericalPoint or a Numpy 1D-array
-             It corresponds to the constant vector of the affine transformation
+
+        constant : 1D array-like (either a python list, an OpenTURNS NumericalPoint
+                   or a Numpy 1D-array)
+                 It corresponds to the constant vector of the affine transformation
 
         Example
         -------
@@ -127,13 +136,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         ot.PythonDistribution.__init__(self, d)
         # Set constants values using default parameters
         # alpha and beta are used for the range
-        self.alpha_ = mvrm_resource_map["MultivariateRandomMixture-DefaultAlpha"]
-        self.beta_ = mvrm_resource_map["MultivariateRandomMixture-DefaultBeta"]
+        self.alpha_ = float(mvrm_resource_map["MultivariateRandomMixture-DefaultAlpha"])
+        self.beta_ = float(mvrm_resource_map["MultivariateRandomMixture-DefaultBeta"])
         # pdfEpsilon, blockMax, blockMin and maxSize are used for the evaluation of the density function
-        self.pdfEpsilon_ = mvrm_resource_map["MultivariateRandomMixture-DefaultPDFEpsilon"]
-        self.blockMin_ = mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMin"]
-        self.blockMax_ = mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMax"]
-        self.maxSize_ = mvrm_resource_map["MultivariateRandomMixture-DefaultMaxSize"]
+        self.pdfEpsilon_ = float(mvrm_resource_map["MultivariateRandomMixture-DefaultPDFEpsilon"])
+        self.blockMin_ = int(mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMin"])
+        self.blockMax_ = int(mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMax"])
+        self.maxSize_ = int(mvrm_resource_map["MultivariateRandomMixture-DefaultMaxSize"])
         # Cache for the characteristic function values
         self.characteristicValuesCache_ = []
         self.storedSize_ = 0
@@ -489,19 +498,27 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # General case : two different steps
         # 1) Compute a gaussian pdf approximation
         value = self.computeEquivalentNormalPDFSum(y)
-        # 2) Compute a difference of characteristic functions on the point y
-        # compute the factor \prod_{k=1}^{d} h_k/'2\pi)
+        # Compute the factor \prod_{k=1}^{d} h_k/'2\pi
+        # h_k are supposed to be small values, we must care about
+        # numerical troubles
         factor = 1.0
         for k in xrange(self.getDimension()):
             factor *= self.referenceBandwidth_[k] / (2.0 * cmath.pi)
+        # 2) Compute a difference of characteristic functions on the point y
         # sum of delta functions
         k = 1
         precision = self.pdfEpsilon_
+        # kmin is set to 2**self.blockMin_
         kmin = 1 << self.blockMin_
+        # kmax is set to 2**self.blockMax_
         kmax = 1 << self.blockMax_
+        # error is fixed here only for the while condition
         error = 2.0 * precision
         while ( (k < kmin) or ( (k < kmax) and (error > precision))):
+            # error fixed to 0
             error = 0.0
+            # At each iteration of the while condition,
+            # k calculations are done
             for m in xrange(k, 2*k):
                 # get the current point
                 walker = self.get_points_on_surface_grid_(m)
@@ -516,7 +533,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                         error += factor * (cfValue.real * cos_hy + cfValue.imag * sin_hy)
                 except StopIteration:
                   pass
-            value += error;
+            value += error
             error = abs(error)
             k *= 2
             # end of while
@@ -526,78 +543,195 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.pdfEpsilon_ = error
         return value
 
-    # alpha get-accessor
     def getAlpha(self):
         """
         Returns the alpha parameter used for the evaluation
         of the range
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> alpha = dist.getAlpha()
+
         """
         return self.alpha_
 
-    # beta get-accessor
     def getBeta(self):
         """
         Returns the beta parameter used for the evaluation
         of the range
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> beta = dist.getBeta()
+
         """
         return self.beta_
 
-    # blockMax get-accessor
     def getBlockMax(self):
         """
         Returns the blockMax parameter used for the evaluation
         of the pdf using the gaussian approximation
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> blockMax = dist.getBlockMax()
+
         """
         return self.blockMax_
 
-    # blockMin get-accessor
     def getBlockMin(self):
         """
         Returns the blockMin parameter used for the evaluation
         of the pdf using the gaussian approximation
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> blockMin = dist.getBlockMin()
+
         """
         return self.blockMin_
 
     def getConstant(self):
         """
-        Returns the constant vector
+        Returns the constant vector. This vector is also denoted by y_0
+        in the reference guide documentation
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> constant = dist.getConstant() # ==> the output should be the previous vector constant
+
         """
         return self.constant_
 
     def getDistributionCollection(self):
         """
         Returns the distribution collection
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> distCollection = dist.getDistributionCollection()
+
         """
         return self.collection_
 
     def getMatrix(self):
         """
         Returns the matrix of the affine transform
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> mat = dist.getMatrix()
+
         """
         return self.matrix_
 
     def getMean(self):
         """
         Returns the mean vector of the mixture
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> mean = dist.getMean()
+
         """
         return self.mean_
 
     def getCovariance(self):
         """
         Returns the covariance matrix of the mixutre
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> cov = dist.getCovariance()
+
         """
         return self.cov_
 
-    # maxSize get-accessor
     def getMaxSize(self):
         """
         Returns the maximum size of the cache for the CharacteristicFunction values
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> maxSize = dist.getMaxSize()
+
         """
         return self.maxSize_
 
     def getRange(self):
         """
         Returns the range of the distribution
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> interval = dist.getRange()
+
         """
         return self.interval_
 
@@ -629,11 +763,21 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         realization = self.matrix_ * realization + self.constant_
         return realization
 
-    # bandwidth get-accessor
     def getReferenceBandwidth(self):
         """
         Returns the bandwidth parameter used for the evaluation
         of the pdf using the gaussian approximation
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> referenceBandwidth = dist.getReferenceBandwidth()
+
         """
         return self.referenceBandwidth_
 
@@ -683,55 +827,133 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def getStandardDeviation(self):
         """
         Returns the standard deviation
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> sigma = dist.getStandardDeviation()
+
         """
         return self.sigma_
 
-    # alpha set-accessor
     def setAlpha(self, alpha):
         """
-        Returns the alpha parameter used for the evaluation
-        of the range
-        """
-        self.alpha_ = alpha
+        Set the alpha parameter used for the evaluation of the range.
+        The parameter corresponds to the number of standard deviations
+        covered by the marginal distributions.
 
-    # beta set-accessor
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> dist.setAlpha(5.0)
+
+        """
+        self.alpha_ = float(alpha)
+
     def setBeta(self, beta):
         """
-        Returns the beta parameter used for the evaluation
-        of the range
-        """
-        self.beta_ = beta
+        Set the beta parameter used for the evaluation of the range.
+        The parameter corresponds to the number of marginal deviations
+        beyond which the density is negligible
 
-    # BlockMax accessors
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> dist.setBeta(6.0)
+
+        """
+        self.beta_ = float(beta)
+
     def setBlockMax(self, blockMax):
         """
         Set the blockMax parameter used for the evaluation
-        of the pdf using the gaussian approximation
-        """
-        self.blockMax_ = blockMax
+        of the pdf using the gaussian approximation.
 
-    # BlockMin accessors
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> dist.setBlockMax(8)
+
+        """
+        assert int(blockMax) > 0
+        self.blockMax_ = int(blockMax)
+
     def setBlockMin(self, blockMin):
         """
         Set the blockMin parameter used for the evaluation
         of the pdf using the gaussian approximation
-        """
-        self.blockMin_ = blockMin
 
-    # MaxSize set-accessor
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> dist.setBlockMin(2)
+
+        """
+        assert int(blockMin) > 0
+        self.blockMin_ = int(blockMin)
+
     def setMaxSize(self, maxSize):
         """
-        Returns the maximum size of the cache for the CharacteristicFunction values
-        """
-        self.maxSize_ = maxSize
+        Set the maximum size of the cache for the CharacteristicFunction values
 
-    # Reference bandwidth set-accessor
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> dist.setMaxSize(200)
+
+        """
+        assert int(maxSize) > 0
+        self.maxSize_ = int(maxSize)
+
     def setReferenceBandwidth(self, bandwidth):
         """
         Set the blockMin parameter used for the evaluation
         of the pdf using the gaussian approximation
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> dist.setReferenceBandwidth([0.1, 0.1])
+
         """
-        self.referenceBandwidth_ = bandwidth
+        if len(bandwidth) != self.getDimension():
+            raise ValueError("The given bandwidth's size differ with the dimension of distribution")
+        self.referenceBandwidth_ = [float(element) for element in bandwidth]
 
 
 class MultivariateRandomMixture(ot.Distribution):
