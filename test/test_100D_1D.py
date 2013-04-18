@@ -108,7 +108,7 @@ if __name__ == "__main__":
         plt.ylabel('pdf plot')
         plt.title("validation of pdf function")
         plt.subplot(212)
-        plt.semilogy(x, (plt.np.array(pdf_rm)-plt.np.array(pdf_mv))/plt.np.array(pdf_rm), 'r', label = 'MV')
+        plt.semilogy(x, abs(plt.np.array(pdf_rm)-plt.np.array(pdf_mv))/plt.np.array(pdf_rm), 'r', label = 'MV')
         plt.xlabel('')
         plt.ylabel('Relative error on PDF')
         pdf_plot.savefig(fig)
