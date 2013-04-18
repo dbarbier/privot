@@ -54,23 +54,44 @@ if __name__ == "__main__":
 
     """
     # 1D distribution
-    collection_list_1D = []
+    if has_pylab:
+        pdf_file = 'validation_1D.pdf'
+        pdf_plot = PdfPages(pdf_file)
+        x = []
     collection1D = ot.DistributionCollection([ot.Uniform()])
     matrix1D = ot.Matrix([[1.0]])
     distribution1D = MV.PythonMultivariateRandomMixture(collection1D, matrix1D)
     print "1D case"
     for i in xrange(1, index):
         list_points1D = distribution1D.get_points_on_surface_grid_(i)
-        collection_list_1D.append(list_points1D)
-        j = 0
+        if has_pylab:
+            x = []
+            j = 0
         try:
             while True:
-                ot.Log.Info("Point #%s" % str(list_points1D.next()) )
+                point = list_points1D.next()
+                ot.Log.Info("Point #%s" % str(point) )
                 j = j + 1
+                if has_pylab:
+                    x.append(point[0])
         except StopIteration:
             pass
         print "index=%d #list=%d #expected=%d" %(i, j, 2)
+        if has_pylab:
+            fig = plt.figure()
+            plt.grid(True)
+            plt.xlim(-index, index)
+            plt.ylim(-index, index)
+            plt.plot(x, 2 * [0], '.')
+            plt.xlabel('x')
+            plt.ylabel('y')
+            plt.title('index = %d' %max(x))
+            pdf_plot.savefig(fig)
+            plt.close()
 
+    # Graphical validation using matplotlib
+    if has_pylab:
+        pdf_plot.close()
     # 2D distribution
     if has_pylab:
         pdf_file = 'validation_2D.pdf'
@@ -102,6 +123,7 @@ if __name__ == "__main__":
         print "index=%d #list=%d #expected=%d" %(i, j, 8 * i)
         if has_pylab:
             fig = plt.figure()
+            plt.grid(True)
             plt.xlim(-index, index)
             plt.ylim(-index, index)
             plt.plot(x, y, '.')
@@ -148,6 +170,7 @@ if __name__ == "__main__":
         print "index=%d #list=%d #expected=%d" %(i, j, 24 * i * i + 2)
         if has_pylab:
             fig = plt.figure()
+            plt.grid(True)
             ax = fig.add_subplot(111, projection='3d')
             ax.scatter(x, y, z, c='b', marker='s')
             ax.set_xlabel('X Label')
