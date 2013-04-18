@@ -15,6 +15,23 @@
 This section presents the main functionalities of the module $MultivariateRandomMixture$ in their context.
 
 
+The objective is to define the a random vector as a MultivariateRandomMixture, which means an affine combination of input random variables :
+$$
+\displaystyle   \vect{Y}=\vect{y}_0+\vect{M}\vect{X}
+$$
+where $\vect{y}_0\in\mathbb{R}^d$ a deterministic vector with  $d\in\{1,2,3\}$, $\vect{M}\in\mathcal{M}_{d,n}(\mathbb{R})$ a deterministic matrix
+and $(X_i)_{ 1 \leq i \leq n}$ are some  \emph{independent univariate} random variables.\\
+
+
+The module evaluates the probability density function of the random variable $Y$, the mean\slash variance.
+
+It is important to note that the distribution evaluation of $Y$ needs the evaluation of the characteristic functions of the univariate $X_i$. 
+Open TURNS proposes an implementation of all its univariate distributions, continuous or discrete ones. 
+But only some of the them have the implementation of a specific algorithm that evaluates the characteristic function : 
+it is the case of all the discrete distributions and most of (but not all) the continuous ones. 
+In that case, the evaluation is performant. 
+For the remaining distributions, the generic implementation might be time consuming for high arguments. \\
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Which python modules to import ?}
