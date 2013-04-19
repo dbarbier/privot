@@ -513,6 +513,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         kmax = 1 << self.blockMax_
         # error is fixed here only for the while condition
         error = 2.0 * precision
+        # The computation of delta function (\phi - \psi)
         while ( (k < kmin) or ( (k < kmax) and (error > precision))):
             # error fixed to 0
             error = 0.0
@@ -958,6 +959,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 class MultivariateRandomMixture(ot.Distribution):
     """
     MultivariateRandomMixture allows to build an OpenTURNS distribution
+    which aims to model a multivariate random vector with the following structure:
+    Y = y_0 + M X
+    where: Y of size d, d\in {1,2,3}
+           X is a n-random vector with independent components, i.e. a collection of univariate distributions,
+           M is a (d x n) deterministic matrix, i.e. the linear operator of the affine transformation,
+           y_0 a constant and deterministic vector,  i.e the constant part of the affine transformation.
+    The distribution is a generalization of the unidimensional RandomMixture distribution.
 
     """
     def __new__(self, collection, matrix, constant):
