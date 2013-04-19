@@ -37,18 +37,18 @@ import openturns as ot
 import cmath
 import MultivariateGaussianCharacteristicFunction as mvgc
 
-# Dictionary equivalent to a resource map
-mvrm_resource_map = {}
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultBlockMin", 3 )
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultBlockMax", 16 )
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultMaxSize", 65536 )
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultAlpha", 4.0 )
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultBeta",  8.0)
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultPDFEpsilon", 1.0e-14)
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultCDFEpsilon", 1.0e-14)
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultPDFPrecision", 1.0e-10 )
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultCDFPrecision", 1.0e-10 )
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-SmallSize", 100 )
+# ResourceMap : setting different numerical parameters useful for the distribution
+ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin", 3)
+ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMax", 16)
+ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultMaxSize", 65536)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultAlpha", 4.0)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultBeta",  8.0)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFPrecision", 1.0e-14)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultCDFPrecision", 1.0e-14)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFEpsilon", 1.0e-10)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultCDFEpsilon", 1.0e-10)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-SmallSize", 100)
+
 
 class PythonMultivariateRandomMixture(ot.PythonDistribution):
     """
@@ -138,14 +138,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         ot.PythonDistribution.__init__(self, d)
         # Set constants values using default parameters
         # alpha and beta are used for the range
-        self.alpha_ = float(mvrm_resource_map["MultivariateRandomMixture-DefaultAlpha"])
-        self.beta_ = float(mvrm_resource_map["MultivariateRandomMixture-DefaultBeta"])
+        self.alpha_ = ot.ResourceMap.GetAsNumericalScalar("MultivariateRandomMixture-DefaultAlpha")
+        self.beta_ = ot.ResourceMap.GetAsNumericalScalar("MultivariateRandomMixture-DefaultBeta")
         # pdfEpsilon, blockMax, blockMin and maxSize are used for the evaluation of the density function
-        self.pdfEpsilon_ = float(mvrm_resource_map["MultivariateRandomMixture-DefaultPDFEpsilon"])
-        self.pdfPrecision_ = float(mvrm_resource_map["MultivariateRandomMixture-DefaultPDFPrecision"])
-        self.blockMin_ = int(mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMin"])
-        self.blockMax_ = int(mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMax"])
-        self.maxSize_ = int(mvrm_resource_map["MultivariateRandomMixture-DefaultMaxSize"])
+        self.pdfEpsilon_ = ot.ResourceMap.GetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFEpsilon")
+        self.pdfPrecision_ = ot.ResourceMap.GetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFPrecision")
+        self.blockMin_ = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin")
+        self.blockMax_ = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMax")
+        self.maxSize_ = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultMaxSize")
         # Cache for the characteristic function values
         self.characteristicValuesCache_ = []
         self.storedSize_ = 0
@@ -189,7 +189,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def computeCovariance(self):
         """
         Returns the covariance of the mixture
-        This method is implicite. Use the getCovariance to get the covariance value
+        This method is private. Use the getCovariance to get the covariance value
         The covariance is given by
           Cov(Y) = M * Cov(X) * M^t
         As Cov(X) is diagonal:
@@ -208,7 +208,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def computeDeltaCharacteristicFunction(self, x):
         """
         Returns the differences of characteristic functions
-        This method is implicite and should not be used outside the interla methods
+        This method is private and should not be used outside the interla methods
         The current method does not implement the cache mechanism
         The method uses also an external class for the evaluation of the characteristic function
         for multivariate gaussian distribution
@@ -238,7 +238,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
          distance s with norm L^\infinity.
          If s>0, there are (2s+1)^d - (2s-1)^d points to add at iteration s.
          The evaluation of the gaussian density at these points are added into the current sum.
-	 The summation halts when the added value at iteration s is negligible relative to
+         The summation halts when the added value at iteration s is negligible relative to
          the current density value.
 
         """
@@ -275,7 +275,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def computeMean(self):
         """
         Compute the mean of the multivariate mixture
-        This method is implicite. Use the getMean to get the mean value
+        This method is private. Use the getMean to get the mean value
         The mean is given by:
           E(Y) = M * E(X)
 
@@ -368,7 +368,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         Return the Log-characteristic function evaluated on y.
         The Log-characteristic function depends on the constant vector, the matrix and the log-characteristic
         functions of the input distribution collection like this:
-          log\(phi)(y_1,...,y_d) = \sum_{j=1}^d {\imath y_j {y_0}_j} + \sum_{k=1}^n log(\phi_{X_k})((M^t y)_j)
+          log\(phi)(y_1,...,y_d) = \sum_{j=1}^d {\imath y_j {y_0}_j} + \sum_{k=1}^n log(\phi_{X_k})((M^t y)_k)
         with \phi_{X_k}: the characteristic function of the k-th input distribution
 
         Parameters
@@ -395,7 +395,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         assert len(y) == self.getDimension()
         # The characteristic function is given by the following formula:
-        # \phi(y) = \prod_{j=1}^{d} (exp(i * u_j * constant_j) * \prod_{k=1}^{n} \phi_{X_k}(Mjk u_j))
+        # \phi(y) = \prod_{j=1}^{d} (exp(i * u_j * constant_j) * \prod_{k=1}^{n} \phi_{X_k}((M^t u)_k))
         n = len(self.collection_)
         d = self.getDimension()
         mt = self.matrix_.transpose()
@@ -403,10 +403,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         mt_y = mt * y
         # compute the deterministic term
         somme = ot.dot(y, self.constant_) * 1j
+        smallScalar = 0.5 * ot.SpecFunc.LogMinNumericalScalar
         # compute the random part
         # The variables are independent
         for k in xrange(n):
             somme += self.collection_[k].computeLogCharacteristicFunction(mt_y[k])
+            if somme.real < smallScalar:
+                break
         return somme
 
     def computeCharacteristicFunction(self, y):
@@ -414,7 +417,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         Return the characteristic function evaluated on y.
         The Log-characteristic function depends on the constant vector, the matrix and the characteristic
         functions of the input distribution collection like this:
-          (phi)(y_1,...,y_d) = \prod_{j=1}^d {\imath y_j {y_0}_j} \prod_{k=1}^n (\phi_{X_k})((M^t y)_j)
+          (phi)(y_1,...,y_d) = \prod_{j=1}^d {\imath y_j {y_0}_j} \prod_{k=1}^n (\phi_{X_k})((M^t y)_k)
         with \phi_{X_k}: the characteristic function of the k-th input distribution
 
         Parameters
@@ -517,7 +520,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # error is fixed here only for the while condition
         error = 2.0 * precision
         # The computation of delta function (\phi - \psi)
-        while ( (k < kmin) or ((k < kmax) and (error > precision))):
+        while ((k < kmin) or ((k < kmax) and (error > precision))):
             # error fixed to 0
             error = 0.0
             # At each iteration of the while condition,
