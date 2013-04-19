@@ -43,9 +43,11 @@ mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultBlockMin", 3 )
 mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultBlockMax", 16 )
 mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultMaxSize", 65536 )
 mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultAlpha", 4.0 )
-mvrm_resource_map.setdefault("MultivariateRandomMixture-DefaultBeta",  8.0)
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultPDFEpsilon", 1.0e-10 )
-mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultCDFEpsilon", 1.0e-10 )
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultBeta",  8.0)
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultPDFEpsilon", 1.0e-14)
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultCDFEpsilon", 1.0e-14)
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultPDFPrecision", 1.0e-10 )
+mvrm_resource_map.setdefault( "MultivariateRandomMixture-DefaultCDFPrecision", 1.0e-10 )
 mvrm_resource_map.setdefault( "MultivariateRandomMixture-SmallSize", 100 )
 
 class PythonMultivariateRandomMixture(ot.PythonDistribution):
@@ -140,6 +142,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.beta_ = float(mvrm_resource_map["MultivariateRandomMixture-DefaultBeta"])
         # pdfEpsilon, blockMax, blockMin and maxSize are used for the evaluation of the density function
         self.pdfEpsilon_ = float(mvrm_resource_map["MultivariateRandomMixture-DefaultPDFEpsilon"])
+        self.pdfPrecision_ = float(mvrm_resource_map["MultivariateRandomMixture-DefaultPDFPrecision"])
         self.blockMin_ = int(mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMin"])
         self.blockMax_ = int(mvrm_resource_map["MultivariateRandomMixture-DefaultBlockMax"])
         self.maxSize_ = int(mvrm_resource_map["MultivariateRandomMixture-DefaultMaxSize"])
@@ -506,7 +509,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # 2) Compute a difference of characteristic functions on the point y
         # sum of delta functions
         k = 1
-        precision = self.pdfEpsilon_
+        precision = self.pdfPrecision_
         # kmin is set to 2**self.blockMin_
         kmin = 1 << self.blockMin_
         # kmax is set to 2**self.blockMax_
@@ -514,7 +517,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # error is fixed here only for the while condition
         error = 2.0 * precision
         # The computation of delta function (\phi - \psi)
-        while ( (k < kmin) or ( (k < kmax) and (error > precision))):
+        while ( (k < kmin) or ((k < kmax) and (error > precision))):
             # error fixed to 0
             error = 0.0
             # At each iteration of the while condition,
@@ -895,7 +898,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> dist.setBlockMax(8)
 
         """
-        assert int(blockMax) > 0
         self.blockMax_ = int(blockMax)
 
     def setBlockMin(self, blockMin):
@@ -914,7 +916,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> dist.setBlockMin(2)
 
         """
-        assert int(blockMin) > 0
         self.blockMin_ = int(blockMin)
 
     def setMaxSize(self, maxSize):
@@ -932,7 +933,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> dist.setMaxSize(200)
 
         """
-        assert int(maxSize) > 0
         self.maxSize_ = int(maxSize)
 
     def setReferenceBandwidth(self, bandwidth):
