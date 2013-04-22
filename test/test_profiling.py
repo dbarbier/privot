@@ -69,8 +69,8 @@ for value in x:
     dt2 = toc - tic
     t2.append(dt2)
     print dt1, dt2, dt1/dt2
-    print distribution.pdfEpsilon_,  random_mixture.getPDFEpsilon()
-    print c1, c2, (c1 - c2)/c2
+    print "pdf eps : dist=%e, rm=%e"%(distribution.pdfEpsilon_,  random_mixture.getPDFEpsilon())
+    print "values comparison : dist_pdf=%s, rm_pdf=%s, error=%s" %(c1, c2, (c1 - c2)/c2)
 
 size = len(t1)
 import matplotlib.pylab as plt
