@@ -205,6 +205,55 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     s += self.matrix_[i, k] * self.matrix_[j, k] * self.collection_[k].getCovariance()[0, 0]
                 self.cov_[i, j] = s
 
+    def computeDeltaCharacteristicFunctionCache(self, index):
+        """
+        Returns the differences of characteristic functions
+        This method is private and should not be used outside the interla methods
+        The current method does not implement the cache mechanism
+        The method uses also an external class for the evaluation of the characteristic function
+        for multivariate gaussian distribution
+        This method uses a cache mecanism : it is compute a value of the characteristic function
+        on a prescribed discretization and as the value associated with index == 0 is known, it is
+        not stored. For index > 0, the corresponding value is at position index-1
+        """
+        assert isinstance(index, int)
+        if (index == 0): return 0.0
+        # The cached values are computed and stored in an ascending order without hole: this function is always called on sequence starting from 0 to n-1
+        # Usual case first: the index is within the already computed values
+        if (index <= self.storedSize_): return self.characteristicValuesCache_[index - 1];
+        # If the index is higher than the maximum allowed storage
+        if (index > self.maxSize_):
+            ot.Log.Info("Cache exceeded in MultivariateRandomMixture::computeDeltaCharacteristicFunction, consider increasing maxSize_ to %d"%index)
+            walker = self.get_points_on_surface_grid_(index)
+            delta = []
+            try :
+                while True:
+                    y = list(walker.next())
+                    for k in xrange(self.getDimension()):
+                        y[k] *= self.referenceBandwidth_[k]
+                    delta += [self.computeCharacteristicFunction(y) - mvgc.MGCF(self.equivalentNormal_, y)]
+            except StopIteration:
+                pass
+            return delta
+
+        # Here, the index has not been computed so far, fill-in the gap
+        if (index > self.storedSize_):
+            for i in xrange(self.storedSize_ + 1, index + 1):
+                # append list of points
+                walker = self.get_points_on_surface_grid_(i)
+                delta = []
+                try :
+                    while True:
+                        y = list(walker.next())
+                        for k in xrange(self.getDimension()):
+                            y[k] *= self.referenceBandwidth_[k]
+                        delta += [self.computeCharacteristicFunction(y) - mvgc.MGCF(self.equivalentNormal_, y)]
+                except StopIteration:
+                    pass
+                self.characteristicValuesCache_.append(delta)
+            self.storedSize_ = index
+            return self.characteristicValuesCache_[self.storedSize_ - 1]
+
     def computeDeltaCharacteristicFunction(self, x):
         """
         Returns the differences of characteristic functions
@@ -528,6 +577,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             for m in xrange(k, 2*k):
                 # get the current point
                 walker = self.get_points_on_surface_grid_(m)
+                cfValues = self.computeDeltaCharacteristicFunctionCache(m)
+                j = 0
                 try :
                     while True:
                         point = walker.next()
@@ -535,7 +586,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                         h_y = ot.dot(h, y)
                         cos_hy = cmath.cos(h_y).real
                         sin_hy = cmath.sin(h_y).real
-                        cfValue = self.computeDeltaCharacteristicFunction(h)
+                        #cfValue = self.computeDeltaCharacteristicFunction(h)
+                        cfValue = cfValues[j]
+                        j = j + 1
                         error += factor * (cfValue.real * cos_hy + cfValue.imag * sin_hy)
                 except StopIteration:
                   pass
@@ -937,6 +990,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         self.maxSize_ = int(maxSize)
+        self.storedSize_ = min(maxSize, self.storedSize_)
+        self.characteristicValuesCache_ = self.characteristicValuesCache_[0:self.storedSize_]
 
     def setReferenceBandwidth(self, bandwidth):
         """
