@@ -454,11 +454,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         Here, we recall the Poisson summation formula:
         \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} p(y_1 + 2 pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) =
-        h_1...h_d/(2^d \pi^d) \sum_{k_1 \in \mathbb{Z}}... \sum_{k_d \in \mathbb{Z}} \phi(k_1 h_1,...,k_d h_d) * exp(-i(k_1 h_1+...+k_d h_d))
+        h_1...h_d/(2^d \pi^d) \sum_{k_1 \in \mathbb{Z}}... \sum_{k_d \in \mathbb{Z}} \phi(k_1 h_1,...,k_d h_d) exp(-i(k_1 h_1+...+k_d h_d))
 
         We can rewrite this formula as:
-        \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} p(y_1 + 2 pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) =
-        \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} q(y_1 + 2 pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) +
+        \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} p(y_1 + 2 \pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) =
+        \sum_{j_1 \in \mathbb{Z}}... \sum_{j_d \in \mathbb{Z}} q(y_1 + 2 \pi j_1/h_1,...,y_d+ 2 \pi j_d/h_d) +
         h_1...h_d/(2^d \pi^d) \sum_{k_1 \in \mathbb{Z}}... \sum_{k_d \in \mathbb{Z}} (\phi(k_1 h_1,...,k_d h_d) -
         \psi(k_1 h_1,...,k_d h_d)) * exp(-i(k_1 h_1+...+k_d h_d))
         where q is the PDF and \psi the characteristic function of the multivariate normal distribution with the same mean and
@@ -470,8 +470,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         The first sum \sum_{k\in Z^d}q(x+2k\pi/h) will be approximated using only few terms, as the condition on h will almost
         gives q(x_1+2k_1\pi/h_1, x_d+2k_d\pi/h_d) << q(x) for k\neq 0.
-        Call this sum Q(x, h), and define \delta as delta(u) = \phi(u) - \psi(u), u \in \mathbb{R}^d.
-        The first term is computed thanks to the internal computeEquivalentNormalPDFSum method whereas the second term (delta)
+        Call this sum Q(x, h), and define \delta as \delta(u) = \phi(u) - \psi(u), u \in \mathbb{R}^d.
+        The first term is computed thanks to the internal computeEquivalentNormalPDFSum method whereas the second term (\delta)
         is partially computed with the computeDeltaCharacteristicFunction method
 
         Parameters
