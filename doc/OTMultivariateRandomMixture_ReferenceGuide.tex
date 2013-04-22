@@ -15,7 +15,7 @@
 \subsection{Multivariate random mixtures}
 
 The objective is to manipulate a multivariate random vector $\vect{Y}$ with a specific structure~: 
-it is the image by an affine transformation $T$ of a random vector $\vect{X} = (X_1, \hdots, X_n) $ of independent components of any continuous distributions:
+it is the image of a random vector $\vect{X} = (X_1, \hdots, X_n) $ of independent continuous components distributions by an affine transformation $T$:
 \begin{align}\label{defY}
   \vect{Y}=\vect{y}_0+\vect{M}\vect{X}
 \end{align}
@@ -26,7 +26,7 @@ function $\phi $ of $\vect{Y}$ to its density $p$. This formula is given by:
 
 \begin{align}\label{poissonND}
   \begin{array}{p{\textwidth}}
-    \multicolumn{1}{l}{\displaystyle\sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}}p\left(y_1+\frac{2\pi j_1}{h_1},\hdots,y_d+\frac{2\pi j_d}{h_d}\right)=}\\
+    \multicolumn{1}{l}{\displaystyle\sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}}p\left(y_1+\frac{2\pi j_1}{h_1},\hdots,y_d+\frac{2\pi j_d}{h_d}\right)= }\\
     \multicolumn{1}{r}{\displaystyle\frac{h_1\times\cdots\times h_d}{2^d\pi^d}\sum_{k_1\in\mathbb{Z}}\hdots\sum_{k_d\in\mathbb{Z}}\phi\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}}
   \end{array}
 \end{align}
@@ -40,14 +40,14 @@ where $H = h_1\times\hdots\times h_d$ .
 
 The characteristic function of such random vector $Y$ is obtained analitycally using $\vect{y}_0$, $\vect{M}$ and the characteristic functions of $X_1$,\dots,$X_d$:
 \begin{align}
-  \forall \vect{u}\in\mathbb{R}^d,\quad\phi(u_1,\hdots,u_d)=\prod_{j=1}^de^{iu_j{y_0}_j}\prod_{k=1}^n\phi_{X_k}(M_{j,k}u_j)
+  \forall \vect{u}\in\mathbb{R}^d,\quad\phi(u_1,\hdots,u_d)=\prod_{j=1}^de^{iu_j{y_0}_j}\prod_{k=1}^n\phi_{X_k}((M^tu)_k)
 \end{align}
 
-Using the symmetry of $\phi$, we get:
-\begin{align}
-  p\left(y_1,\hdots,y_d\right)\simeq\frac{H}{\pi^d} \left(1+\sum_{k_1=1}^N\hdots\sum_{k_d=1}^N\left\{\prod_{j=1}^d\mathfrak{R}\left(e^{ih_jk_j{y_0}_j}
-  \times\right.\right.\right.\left.\left.\times\prod_{\ell=1}^n\phi_{X_\ell}(M_{j,\ell}k_jh_j)\right)\right\}\left.e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)} \right)
-\end{align}
+% Using the symmetry of $\phi$, we get:
+% \begin{align}
+%   p\left(y_1,\hdots,y_d\right)\simeq\frac{H}{\pi^d} \left(1+\sum_{k_1=1}^N\hdots\sum_{k_d=1}^N\left\{\prod_{j=1}^d\mathfrak{R}\left(e^{ih_jk_j{y_0}_j}
+%   \times\right.\right.\right.\left.\left.\times\prod_{\ell=1}^n\phi_{X_\ell}(M_{j,\ell}k_jh_j)\right)\right\}\left.e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)} \right)
+% \end{align}
 
 It is possible to greatly improve the performance of the algorithm by noting that the equation ~(\ref{poissonND}) is linear between $p$ 
 and $\phi $. By applying applied to the multivariate normal distribution with the same mean $\vect{\mu}$ and same covariance matrix 
@@ -59,9 +59,9 @@ $\vect{C} $, for which we denote the density $q$ and the characteristic function
   \end{array}
 \end{align}
 
-The vector $\vect{\mu}$ mand the covariance matrix $\vect{C}$ are obtained using $\vect{X}$ and the following formula:
+The vector $\vect{\mu}$ and the covariance matrix $\vect{C}$ of the random vector $\vect{Y}$ are obtained using $\vect{X}$ and the following formula:
 \begin{align}
-  \vect{\mu}=&\vect{M}\mathbb{E}(\vect{X})\\
+  \vect{\mu}=& y_0 + \vect{M}\mathbb{E}(\vect{X})\\
   \vect{C}=&\vect{M}\vect{\mathrm{Cov}}(\vect{X})\vect{M}^t\\
 \end{align}
 
@@ -86,9 +86,8 @@ where $\sigma_\ell=\sqrt{C_{\ell,\ell}}$ and $a$, $b$ are respectively the numbe
 The $N$ parameter is dynamically calibrated: we start with $N=8$ then we double $N$ value until the total contribution of the additional terms is negligible.
 
 \subsection{References}\label{ref}
-
-
 \begin{itemize}
-  \item[1]  Ref1
+  \item[1] "Abate, J. and Whitt, W. (1992). The Fourier-series method for inverting transforms of probability distributions. Queueing Systems 10, 5--88., 1992",
+        formula 5.5.
 \end{itemize}
 
