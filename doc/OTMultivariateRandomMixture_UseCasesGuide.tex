@@ -50,7 +50,8 @@ from MultivariateRandomMixture import PythonMultivariateRandomMixture
 $openturns$ is imported into~: 
 \begin{itemize}
    \item $MV.ot$ within the first use,
-   \item $ot$ within the second use.
+   \item $ot$ within the second use,
+   \item Not imported within the last use-case.
 \end{itemize}
 
 We could also import $openturns$ separately to the module.
@@ -67,6 +68,96 @@ The parameters are:
  \item the constant vector ($NumericalPoint$) of the affine transformation.
 \end{itemize}
 
-The return objet is a distribution which inherites from the $PythonDistribution$ class.
+The return object is a distribution which inherites from the $PythonDistribution$ class.\\
+\requirements{
+  \begin{description}
+  \item[$\bullet$] a collection of distribution, {\itshape myCollection}
+  \item[type:] a PythonDistribution
+  \item[$\bullet$] a deterministic matrix of transformation, {\itshape myMatrix}
+  \item[type:] a Matrix
+  \item[$\bullet$] a deterministic constant vector, {\itshape myVector}
+  \item[type:] a NumericalPoint
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] a PythonMultivariateRandomMixture object : {\itshape myDistribution},
+  \item[type:] a PythonDistribution
+  \end{description}
+}
+\espace
 
-\subsubsection{UC : Manipulation of a PythonMultivariateRandomMixture}
+Python script for this use case:
+
+\begin{lstlisting}
+ # Create a PythonMultivariateRandomMixture
+myDistribution = PythonMultivariateRandomMixture(myCollection, myMatrix, myVector)
+\end{lstlisting}
+
+\subsection{UC : Manipulation of a PythonMultivariateRandomMixture}
+
+\subsubsection{Manipulation of the moments of the multivariate random mixture}
+It is now possible to get the mean, the variance of distribution.
+The distribution allows to get some realizations.\\
+\requirements{
+  \begin{description}
+  \item[$\bullet$] None
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] the mean value : {\itshape myMean},
+  \item[type:] a NumericalPoint
+  \item[$\bullet$] the standard deviation value : {\itshape myStandardDeviation},
+  \item[type:] a NumericalPoint
+  \item[$\bullet$] the covariance matrix : {\itshape myCovarianceMatrix},
+  \item[type:] a CovarianceMatrix
+  \item[$\bullet$] a realization of the distribution : {\itshape myRealization},
+  \item[type:] a NumericalPoint
+  \item[$\bullet$] some realization of the distribution : {\itshape mySample},
+  \item[type:] a NumericalSample
+  \end{description}
+}
+\espace
+
+Python script for this use case:
+
+\begin{lstlisting}
+# get the mean of the multivariate random distribution
+myMean = myDistribution.getMean()
+# get the standard deviation of the multivariate random distribution
+myStandardDeviation = myDistribution.getStandardDeviation()
+# get the covariance matrix of the multivariate random distribution
+myCovarianceMatrix = myDistribution.getCovariance()
+# get a realization of the multivariate random distribution
+myRealization = myDistribution.getRealization()
+# get a realization of the multivariate random distribution
+mySample = myDistribution.getSample(100)
+\end{lstlisting}
+
+\subsubsection{Manipulation of density function, the realization}
+It is also possible to get the characteristic function, the probability density function.
+
+\requirements{
+  \begin{description}
+  \item[$\bullet$] the point of interest, {\itshape myPoint}
+  \item[type:] a NumericalPoint
+  \end{description}
+}
+{
+  \begin{description}
+  \item[$\bullet$] probability density value : {\itshape myPDF},
+  \item[type:] a NumericalScalar
+  \item[$\bullet$] the characteristic function value : {\itshape myCF},
+  \item[type:] a NumericalComplex
+  \end{description}
+}
+\espace
+
+\begin{lstlisting}
+myPoint = [0.3]
+# compute the probability density value on myPoint
+myPDF = myDistribution.computePDF(myPoint)
+# compute the probability density value on myPoint
+myCF = myDistribution.computeCharacteristicFunction(myPoint)
+\end{lstlisting}
