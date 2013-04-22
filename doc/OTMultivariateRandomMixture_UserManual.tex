@@ -37,7 +37,7 @@ This section gives an exhaustive presentation of the objects and functions provi
     \begin{description}
       \item $u$ : a NumericalPoint of dimension $n \ge 1$
     \end{description}
-    \item[Value :] a $NumericalComplex$, performs the characteristic function on $u$
+    \item[Value :] a $NumericalComplex$, compute the characteristic function on $u$
     \end{description}
 
   \item $computeLogCharacteristicFunction$
@@ -47,7 +47,7 @@ This section gives an exhaustive presentation of the objects and functions provi
     \begin{description}
       \item $u$ : a NumericalPoint of dimension $n \ge 1$
     \end{description}
-    \item[Value :] a $NumericalComplex$, performs the log-characteristic function on $u$
+    \item[Value :] a $NumericalComplex$, compute the log-characteristic function on $u$
     \end{description}
 
   \item $computePDF$
@@ -87,7 +87,7 @@ This section gives an exhaustive presentation of the objects and functions provi
     \begin{description}
       \item $None$
     \end{description}
-    \item[Value :] a $UnsignedLong$, the maximal parameter size (i.e $2^{blocMax}$) used for the computation of the characteristic function differences
+    \item[Value :] an $UnsignedLong$, the maximal parameter size (i.e $2^{blocMax}$) used for the computation of the characteristic function differences
     \end{description}
 
   \item $getBlockMin$
@@ -97,7 +97,7 @@ This section gives an exhaustive presentation of the objects and functions provi
     \begin{description}
       \item $None$
     \end{description}
-    \item[Value :] a $UnsignedLong$, the minimal parameter size (i.e $2^{blocMin}$) used for the computation of the characteristic function differences
+    \item[Value :] an $UnsignedLong$, the minimal parameter size (i.e $2^{blocMin}$) used for the computation of the characteristic function differences
     \end{description}
 
   \item $getConstant$
@@ -162,7 +162,7 @@ This section gives an exhaustive presentation of the objects and functions provi
 
   \item $getRange$
     \begin{description}
-    \item[Usage :]  $getRangee()$
+    \item[Usage :]  $getRange()$
     \item[Arguments :]  \strut
     \begin{description}
       \item $None$
@@ -187,7 +187,7 @@ This section gives an exhaustive presentation of the objects and functions provi
     \begin{description}
       \item $None$
     \end{description}
-    \item[Value :] an $NumericalScalar$, the bandwidth used for $PDF$
+    \item[Value :] a $NumericalPoint$, the bandwidth used for $PDF$
     \end{description}
 
   \item $getSample$
@@ -235,7 +235,7 @@ This section gives an exhaustive presentation of the objects and functions provi
     \item[Usage :]  $setBlockMax(blocMax)$
     \item[Arguments :]  \strut
     \begin{description}
-      \item $blocMax$, a $UnsignedLong$
+      \item $blocMax$, an $UnsignedLong$
     \end{description}
     \item[Value :] $None$, sets the maximal parameter size (i.e $2^{blocMax}$) used for the computation of the characteristic function differences
     \end{description}
@@ -245,7 +245,7 @@ This section gives an exhaustive presentation of the objects and functions provi
     \item[Usage :]  $setBlockMin(blocMin)$
     \item[Arguments :]  \strut
     \begin{description}
-      \item $blocMin$, a $UnsignedLong$
+      \item $blocMin$, an $UnsignedLong$
     \end{description}
     \item[Value :] $None$, sets the minimal parameter size (i.e $2^{blocMin}$) used for the computation of the characteristic function differences
     \end{description}
@@ -255,7 +255,7 @@ This section gives an exhaustive presentation of the objects and functions provi
     \item[Usage :]  $setMaxSize(maxSize)$
     \item[Arguments :]  \strut
     \begin{description}
-      \item $maxSize$, a $UnsignedLong$
+      \item $maxSize$, an $UnsignedLong$
     \end{description}
     \item[Value :] $None$, sets the maximum size of the cache for the CharacteristicFunction values
     \end{description}
@@ -263,9 +263,9 @@ This section gives an exhaustive presentation of the objects and functions provi
   \item $setReferenceBandwidth$
     \begin{description}
     \item[Usage :]  $setReferenceBandwidth(bandwidth)$
-    \item[Arguments :]  \strut
+    \item[Arguments :] \strut
     \begin{description}
-      \item $bandwidth$, a $NumericalScalar$
+      \item $bandwidth$, a $NumericalPoint$
     \end{description}
     \item[Value :] $None$, sets the bandwidth used for $PDF$
     \end{description}
