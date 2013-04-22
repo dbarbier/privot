@@ -36,9 +36,8 @@ def MGCF(distribution, u):
     somme = 0
     mu = dist.getMean()
     sigma = dist.getCovariance()
-    simga_u = sigma * u
-    for k in xrange(dist.getDimension()):
-        somme += (u[k] * mu[k]* 1j) - 0.5 * u[k] * simga_u[k]
+    sigma_u = sigma * u
+    somme = complex(-0.5 * ot.dot(u, sigma_u), ot.dot(u, mu))
     return cmath.exp(somme)
 
 if __name__ == "__main__":
@@ -49,5 +48,5 @@ if __name__ == "__main__":
     dy = 0.01
     for ix in x:
         for iy in y:
-	    cf = MGCF(ot.Normal(2), [dx * ix, dy * iy])
-	    print "x=%s y=%s val=%s" %(dx*ix, dy*iy, cf)
+            cf = MGCF(ot.Normal(2), [dx * ix, dy * iy])
+            print "x=%s y=%s val=%s" %(dx*ix, dy*iy, cf)
