@@ -7,8 +7,8 @@ import time
 
 N = 100
 maxSize = 0
-blockMin = 0
-blockMax = 1
+blockMin = 3
+blockMax = 16
 
 
 #ot.Log.Show(ot.Log.ALL)
