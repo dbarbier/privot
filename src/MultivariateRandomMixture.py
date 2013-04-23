@@ -43,10 +43,10 @@ ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMax", 16
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultMaxSize", 65536)
 ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultAlpha", 4.0)
 ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultBeta",  8.0)
-ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFPrecision", 1.0e-14)
-ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultCDFPrecision", 1.0e-14)
-ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFEpsilon", 1.0e-10)
-ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultCDFEpsilon", 1.0e-10)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFPrecision", 1.0e-10)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultCDFPrecision", 1.0e-10)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFEpsilon", 1.0e-14)
+ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultCDFEpsilon", 1.0e-14)
 ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-SmallSize", 100)
 
 
