@@ -346,12 +346,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def get_points_on_surface_grid_(self, index):
         """
-        The method helps to get the points on which some functions should be evaluated
-        These functions are respectively:
+        This method is private and helps to get the points on which some functions should be evaluated.
+        The concerning functions are:
          1) The evaluation of the equivalent normal pdf sum
          2) The evaluation of delta characteristic functions
         The points corresponds to :
         \cup_{(i_1,..,i_d) \in [-index, index]^d} (i_1,...,i_d) \ \cup_{(i_1,..,i_d) \in [-index+1, index-1]^d} (i_1,...,i_d)
+        The current implementation is in index^d operations for easy readability
         """
         assert isinstance(index, int)
         d = self.getDimension()
