@@ -41,7 +41,6 @@ if __name__ == "__main__":
     """
     Test
     ------
-    The matrix is assumed to be diagonal for validation purposes
     """
     collection = ot.DistributionCollection([ot.Normal(2.0, 3.0), ot.Normal(1.0, 4.0)])
     matrix = ot.Matrix([[4, 2], [1, 1.4]])
