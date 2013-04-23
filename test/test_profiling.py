@@ -11,12 +11,9 @@ blockMin = 3
 blockMax = 16
 
 
-#ot.Log.Show(ot.Log.ALL)
-
-collection = ot.DistributionCollection(100 * [ot.Uniform()])
-matrix = ot.Matrix([100 * [1.0]])
+collection = ot.DistributionCollection(50 * [ot.Normal(1,5)] + 21 * [ot.Normal(0,7)] + 30 * [ot.Uniform()])
+matrix = ot.Matrix([101 * [1.0]])
 distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
-
 
 interval = distribution.getRange()
 mean = distribution.getMean()
@@ -35,11 +32,9 @@ random_mixture.setAlpha(distribution.getAlpha())
 random_mixture.setBeta(distribution.getBeta())
 random_mixture.setReferenceBandwidth(distribution.getReferenceBandwidth()[0])
 
-distribution.setMaxSize(maxSize)
 distribution.setBlockMin(blockMin)
 distribution.setBlockMax(blockMax)
 
-random_mixture.setMaxSize(maxSize)
 random_mixture.setBlockMin(blockMin)
 random_mixture.setBlockMax(blockMax)
 
@@ -71,6 +66,7 @@ for value in x:
     print dt1, dt2, dt1/dt2
     print "pdf eps : dist=%e, rm=%e"%(distribution.pdfEpsilon_,  random_mixture.getPDFEpsilon())
     print "values comparison : dist_pdf=%s, rm_pdf=%s, error=%s" %(c1, c2, (c1 - c2)/c2)
+
 
 size = len(t1)
 import matplotlib.pylab as plt
