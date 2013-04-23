@@ -114,27 +114,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             raise ValueError('Expected collection of distributions with non null size')
         # Use of setDistributionCollection method
         self.setDistributionCollection(collection)
-        # matrix cast
-        # As object might be a numpy class, we convert into
-        # ot type before checking
-        # Also, if the object is of type SquareMatrix,
-        # the getNbColumns/getNbRows methods are not available
-        self.matrix_ = ot.Matrix(matrix)
-        # Check matrix dimension
-        # the operator of the transformation should have the same number of
-        # columns as the collection size
-        if(self.matrix_.getNbColumns() != size):
-            raise ValueError("Matrix number of columns is not coherant with collection size.")
-        d = self.matrix_.getNbRows()
-        if (d > 3):
-            raise ValueError("Mixture should be of dimension 1, 2 or 3")
-        if (constant is None):
-            # setting the y_0 term (constant term)
-            self.constant_ = ot.NumericalPoint(d * [0.0])
-        else :
-            assert len(constant) == d
-            self.constant_ = ot.NumericalPoint(constant)
+        # Use of the setMatrix method
+        self.setMatrix(matrix)
+        # Use of the setConstant method
+        self.setConstant(constant)
         # Set the distribution dimension
+        d = len(self.constant_)
         ot.PythonDistribution.__init__(self, d)
         # Set constants values using default parameters
         # alpha and beta are used for the range
@@ -400,6 +385,38 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                         inner_z = (abs(iz) < index)
                         if not(inner_x and inner_y and inner_z):
                             yield (ix, iy, iz)
+
+    def setConstant(self, constant):
+        """
+        This method is private.
+        """
+        d = self.matrix_.getNbRows()
+        if (constant is None):
+            # setting the y_0 term (constant term)
+            self.constant_ = ot.NumericalPoint(d * [0.0])
+        else :
+            assert len(constant) == d
+            self.constant_ = ot.NumericalPoint(constant)
+
+    def setMatrix(self, matrix):
+        """
+        This method is private.
+        """
+        # matrix cast
+        # As object might be a numpy class, we convert into
+        # ot type before checking
+        # Also, if the object is of type SquareMatrix,
+        # the getNbColumns/getNbRows methods are not available
+        self.matrix_ = ot.Matrix(matrix)
+        # Check matrix dimension
+        # the operator of the transformation should have the same number of
+        # columns as the collection size
+        size = len(self.collection_)
+        if(self.matrix_.getNbColumns() != size):
+            raise ValueError("Matrix number of columns is not coherant with collection size.")
+        d = self.matrix_.getNbRows()
+        if (d > 3):
+            raise ValueError("Mixture should be of dimension 1, 2 or 3")
 
     def setDistributionCollection(self, collection):
         """
