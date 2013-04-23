@@ -113,11 +113,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         if (size == 0):
             raise ValueError('Expected collection of distributions with non null size')
         # Use of setDistributionCollection method
-        self.setDistributionCollection(collection)
+        [ind, mu_agregated, sigma_agregated] = self.setDistributionCollection(collection)
         # Use of the setMatrix method
-        self.setMatrix(matrix)
+        mu_gaussian = self.setMatrix(matrix,ind, mu_agregated, sigma_agregated)
         # Use of the setConstant method
-        self.setConstant(constant)
+        self.setConstant(constant, mu_gaussian)
         # Set the distribution dimension
         d = len(self.constant_)
         ot.PythonDistribution.__init__(self, d)
@@ -387,19 +387,17 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                         if not(inner_x and inner_y and inner_z):
                             yield (ix, iy, iz)
 
-    def setConstant(self, constant):
+    def setConstant(self, constant, mu_gaussian):
         """
         This method is private.
         """
         d = self.matrix_.getNbRows()
-        if (constant is None):
-            # setting the y_0 term (constant term)
-            self.constant_ = ot.NumericalPoint(d * [0.0])
-        else :
+        self.constant_ = mu_gaussian
+        if (constant is not None):
             assert len(constant) == d
-            self.constant_ = ot.NumericalPoint(constant)
+            self.constant_ += ot.NumericalPoint(constant)
 
-    def setMatrix(self, matrix):
+    def setMatrix(self, matrix, ind, mu_agregated, sigma_agregated):
         """
         This method is private.
         """
@@ -408,27 +406,71 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # ot type before checking
         # Also, if the object is of type SquareMatrix,
         # the getNbColumns/getNbRows methods are not available
-        self.matrix_ = ot.Matrix(matrix)
+        mat = ot.Matrix(matrix)
+        d = mat.getNbRows()
+        if (d > 3):
+            raise ValueError("Mixture should be of dimension 1, 2 or 3")
         # Check matrix dimension
         # the operator of the transformation should have the same number of
         # columns as the collection size
-        size = len(self.collection_)
-        if(self.matrix_.getNbColumns() != size):
+        size_collection = len(self.collection_)
+        size_ind = len(ind)
+        if size_ind > 0:
+            size = size_collection - 1 + size_ind
+        else:
+            size = size_collection
+        if(mat.getNbColumns() != size):
             raise ValueError("Matrix number of columns is not coherant with collection size.")
-        d = self.matrix_.getNbRows()
-        if (d > 3):
-            raise ValueError("Mixture should be of dimension 1, 2 or 3")
+        # Rework the matrix if ind is not empty
+        if ind.isEmpty():
+            self.matrix_ = mat
+            return ot.NumericalPoint(d)
+        self.matrix_ = ot.Matrix(d, size_collection)
+        sigma_gaussian = ot.NumericalPoint(d)
+        mu_gaussian = ot.NumericalPoint(d)
+        current_column = 0
+        for column in xrange(size):
+            if not ind.__contains__(column):
+                for row in xrange(d):
+                    self.matrix_[row, current_column] = mat[row, column]
+                current_column += 1
+            else:
+                for row in xrange(d):
+                    matrix_dot_sigma = mat[row, column] * sigma_agregated[column - current_column]
+                    sigma_gaussian[row] += matrix_dot_sigma * matrix_dot_sigma
+                    mu_gaussian[row] += mat[row, column] * mu_agregated[column - current_column]
+        for row in xrange(d):
+            self.matrix_[row, current_column] =  cmath.sqrt(sigma_gaussian[row]).real
+        return mu_gaussian
 
     def setDistributionCollection(self, collection):
         """
         Set the distribution collection
-        This method should not be used, except by the __init__ method
+        This method is private and is called by the __init__ method
         """
+        self.collection_ = ot.DistributionCollection()
+        ind = ot.Indices()
+        mu_agregated = []
+        sigma_agregated = []
+
         for k in xrange(len(collection)):
+            # Check distribution object
+            assert hasattr(collection[k], "computePDF")
             # check if distribution is univariate
             if (collection[k].getDimension() != 1):
                 raise ValueError("Expected a collection of univariate distributions")
-        self.collection_ = collection
+            dist = ot.Distribution(collection[k])
+            if dist.getImplementation().getClassName() == "Normal":
+                ind.add(k)
+                mu_agregated.append(collection[k].getMean()[0])
+                sigma_agregated.append(collection[k].getStandardDeviation()[0])
+            else:
+                self.collection_.add(collection[k])
+        # The gaussian distributions are agregated
+        if len(ind) != 0:
+            self.collection_.add(ot.Normal(0.0, 1.0))
+        return [ind, mu_agregated, sigma_agregated]
+
 
     def computeLogCharacteristicFunction(self, y):
         """
