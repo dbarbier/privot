@@ -1,0 +1,229 @@
+    |\^/|     Maple 13 (X86 64 LINUX)
+._|\|   |/|_. Copyright (c) Maplesoft, a division of Waterloo Maple Inc. 2009
+ \  MAPLE  /  All rights reserved. Maple is a trademark of
+ <____ ____>  Waterloo Maple Inc.
+      |       Type ? for help.
+> restart:
+> with(Statistics):
+> assume(m11, real, m12, real, m13, real, m21, real, m22, real, m23, real);
+> valnum := m11 = 1, m12 = -2, m13 = 1, m21 = 1, m22 = 1, m23 = -3;
+     valnum := m11~ = 1, m12~ = -2, m13~ = 1, m21~ = 1, m22~ = 1, m23~ = -3
+
+> p1 := PDF(RandomVariable(Uniform(0, 1)), x1);
+                                 { 0         x1 < 0
+                                 {
+                           p1 := { 1         x1 < 1
+                                 {
+                                 { 0        otherwise
+
+> p2 := PDF(RandomVariable(Uniform(0, 1)), x2);
+                                 { 0         x2 < 0
+                                 {
+                           p2 := { 1         x2 < 1
+                                 {
+                                 { 0        otherwise
+
+> p3 := PDF(RandomVariable(Uniform(0, 1)), x3);
+                                 { 0         x3 < 0
+                                 {
+                           p3 := { 1         x3 < 1
+                                 {
+                                 { 0        otherwise
+
+> N := Matrix(3, 3, [m11, m12, m13, m21, m22, m23, 0, 0, 1]);
+                               [m11~    m12~    m13~]
+                               [                    ]
+                          N := [m21~    m22~    m23~]
+                               [                    ]
+                               [ 0       0       1  ]
+
+> with(LinearAlgebra):
+> R := MatrixInverse(N);
+                    [ m22~       m12~     m12~ m23~ - m13~ m22~ ]
+                    [ ----     - ----     --------------------- ]
+                    [  %1         %1               %1           ]
+                    [                                           ]
+               R := [  m21~     m11~       m11~ m23~ - m13~ m21~]
+                    [- ----     ----     - ---------------------]
+                    [   %1       %1                 %1          ]
+                    [                                           ]
+                    [  0         0                  1           ]
+
+                          %1 := -m21~ m12~ + m11~ m22~
+
+> x := R . Vector([z1, z2, z3]);
+                 [ m22~ z1   m12~ z2   (m12~ m23~ - m13~ m22~) z3 ]
+                 [ ------- - ------- + -------------------------- ]
+                 [   %1        %1                  %1             ]
+                 [                                                ]
+            x := [  m21~ z1   m11~ z2   (m11~ m23~ - m13~ m21~) z3]
+                 [- ------- + ------- - --------------------------]
+                 [    %1        %1                  %1            ]
+                 [                                                ]
+                 [                       z3                       ]
+
+                          %1 := -m21~ m12~ + m11~ m22~
+
+> pdfZ := subs(x1 = x[1], p1) * subs(x2 = x[2], p2) * subs(x3 = x[3], p3) * abs(Determinant(R));
+        /{          m22~ z1   m12~ z2   (m12~ m23~ - m13~ m22~) z3    \
+        |{ 0        ------- - ------- + -------------------------- < 0|
+        |{            %1        %1                  %1                |
+        |{                                                            |
+pdfZ := |{          m22~ z1   m12~ z2   (m12~ m23~ - m13~ m22~) z3    |
+        |{ 1        ------- - ------- + -------------------------- < 1|
+        |{            %1        %1                  %1                |
+        |{                                                            |
+        \{ 0                            otherwise                     /
+
+    /{            m21~ z1   m11~ z2   (m11~ m23~ - m13~ m21~) z3    \
+    |{ 0        - ------- + ------- - -------------------------- < 0|
+    |{              %1        %1                  %1                |
+    |{                                                              |
+    |{            m21~ z1   m11~ z2   (m11~ m23~ - m13~ m21~) z3    |
+    |{ 1        - ------- + ------- - -------------------------- < 1|
+    |{              %1        %1                  %1                |
+    |{                                                              |
+    \{ 0                             otherwise                      /
+
+    /{ 0         z3 < 0  \
+    |{                   |
+    |{ 1         z3 < 1  |/| %1 |
+    |{                   |
+    \{ 0        otherwise/
+
+%1 := -m21~ m12~ + m11~ m22~
+
+> pdfZsimp := simplify(subs(valnum, pdfZ)) assuming z3>0, z3<1;
+pdfZsimp := 1/3
+
+    /{           z1    2 z2   5 z3     \ /{             z1     z2    4 z3     \
+    |{ 0        ---- + ---- + ---- < 0 | |{ 0        - ---- + ---- + ---- < 0 |
+    |{           3      3      3       | |{             3      3      3       |
+    |{                                 | |{                                   |
+    |{           z1    2 z2   5 z3     | |{             z1     z2    4 z3     |
+    |{ 1        ---- + ---- + ---- < 1 | |{ 1        - ---- + ---- + ---- < 1 |
+    |{           3      3      3       | |{             3      3      3       |
+    |{                                 | |{                                   |
+    |{                z1    2 z2   5 z3| |{                  z1     z2    4 z3|
+    |{ 0        1 <= ---- + ---- + ----| |{ 0        1 <= - ---- + ---- + ----|
+    \{                3      3      3  / \{                  3      3      3  /
+
+> pdfY := int(pdfZsimp, z3 = 0..1);
+memory used=84.2MB, alloc=75.1MB, time=0.84
+memory used=168.5MB, alloc=85.9MB, time=1.64
+pdfY := 1/12 %3 z1 %1 + 1/15 %12 %2 z1 - 1/12 %8 z2 %4 %9 - 2/15 %2 %5 %1
+
+     + 2/15 %5 %3 %1 + 1/15 %2 z1 %5 + 2/15 %2 z2 %5 - 1/15 %5 %6 z1
+
+     - 2/15 %5 %6 z2 - 2/15 %8 z2 %12 - 1/15 %8 z1 %12 - 1/4 %8 %12 %11
+
+     + 1/4 %12 %6 %11 - 1/12 %2 z1 %1 + 1/12 %2 z2 %1 - 1/12 %3 z2 %1
+
+     - 1/12 %3 z1 %10 + 1/12 %3 z2 %10 + 1/12 %2 z1 %10 + 2/15 %12 %2 z2
+
+     + 1/5 %7 %3 %10 - 1/15 %2 z1 %7 - 2/15 %2 z2 %7 - 1/5 %2 %7 %10
+
+     - 1/12 %2 z2 %10 + 1/15 %7 %6 z1 + 2/15 %7 %6 z2 - 1/15 %4 %2 z1
+
+     - 2/15 %4 %2 z2 - 1/12 %8 %4 %9 + 1/12 %6 %4 %9 + 1/15 %8 z1 %4
+
+     + 2/15 %8 z2 %4 + 1/12 %6 z1 %12 %11 - 1/12 %6 z2 %12 %11
+
+     - 1/12 %8 z1 %12 %11 + 1/12 %8 z2 %12 %11 - 1/15 %2 z1 %5 %1
+
+     - 2/15 %2 z2 %5 %1 + 1/15 %5 %3 z1 %1 + 2/15 %5 %3 z2 %1
+
+     - 2/15 %7 %3 z2 %10 + 1/15 %2 z1 %7 %10 + 2/15 %2 z2 %7 %10
+
+     - 1/15 %7 %3 z1 %10 - 1/12 %6 z1 %4 %9 + 1/12 %6 z2 %4 %9
+
+     + 1/12 %8 z1 %4 %9 + 1/3 %8 %4 - 1/5 %7 %6 + 1/5 %2 %7 - 2/15 %5 %6
+
+     + 2/15 %2 %5 - 1/3 %4 %2 - 1/3 %3 %1 + 1/3 %2 %1
+
+      { 0        -z1 + z2 < -4
+%1 := {
+      { 1          otherwise
+
+      { 0        z2 + 3 z1 < 0
+%2 := {
+      { 1          otherwise
+
+      { 0        z2 + 3 z1 < 4
+%3 := {
+      { 1          otherwise
+
+      {                z1
+      { 0        z2 + ---- < -5/2
+%4 := {                2
+      {
+      { 1           otherwise
+
+      {                z1
+      { 0        z2 + ---- < -1
+%5 := {                2
+      {
+      { 1          otherwise
+
+      { 0        z2 + 3 z1 < -1
+%6 := {
+      { 1          otherwise
+
+      {                z1
+      { 0        z2 + ---- < 3/2
+%7 := {                2
+      {
+      { 1           otherwise
+
+      { 0        z2 + 3 z1 < -5
+%8 := {
+      { 1          otherwise
+
+      { 0        -z1 + z2 < -1
+%9 := {
+      { 1          otherwise
+
+       { 0        -z1 + z2 < 0
+%10 := {
+       { 1         otherwise
+
+       { 0        -z1 + z2 < 3
+%11 := {
+       { 1         otherwise
+
+       {                z1
+       { 0        z2 + ---- < 0
+%12 := {                2
+       {
+       { 1          otherwise
+
+> evalf(subs(z1 = 1, z2 = -0.5, pdfY));
+                                  0.0750000000
+
+> with(plots):
+> contourplot(pdfY, z1=-3..3, z2=-3..3, grid=[150,150]);
+
+                  AAAAAAAAA            +                                       
+              AAAAAAAAAAAAAAAAAAAAAA   +                                       
+         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA*AAAAA                                  
+     AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1*AAAAAAAAAAAAAA                         
+   AAA AAAAAAAAAAAAAAAAAAAA***AAAAAAAAA*AAAAAAAAAAAAAAAAAAA                    
+    AAAAAAAAA AAA AAAACCCCCCCCCCCCCC****AAAAAAAAAAAAAAAAAAAA                   
+      AA AA AA AA AA CC  CCCCCCCCCCCCCC*CCCCC**AAA AA AA AA AA                 
+       A-1,5AAAAAAA-1ACCCCC -0,5  CCCCC*CCCCCCCC0,5AAAAAAAA1AAA     1,5        
+  --+-+-+**-**+**-**+**-**+*****+-+-++-+-+**-**+**-**+**-**+**-**+-+-+-+-+-+-- 
+          AAAAAAAAAAAAAAACCCCCCCC     0+   CCCCCCCCCAAAAAAAAAAAAAAA            
+            AA AA AA AA AA CC CC CC    +     CC CC CC AA AA AA AA AA           
+             AAAAAAAAAAAAAAACCCCC CC   +       CCCCCCCCAAAAAAAAAAAAAAA         
+               AA AA AA AA AA CC CC C-1+        CC CC CC AA AA AA AA AA        
+                 AAAAAAAAAAAAAACCCCCCCC*CCCCCC    CC CCCCCAAAAAAAAAAAAAAA      
+                  AA AA AA AA AAA**CCCC*CCCCCCCCCCCCCCC  CC AA AA AA AA AA     
+                   AAAAAAAAAAAAAAAAAAAA*A***CCCCCCCCCCCCCCAAAA AAA AA AAAAAA   
+                     AAAAAAAAAAAAAAAAAA*AAAAAAAAAA***AAAAAAAAAAAAAAAAAAAA AAA  
+                          AAAAAAAAAAA-2*AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA    
+                                   AAAA*AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA        
+                                       +    AAAAAAAAAAAAAAAAAAAAAA             
+                                       +             AAAAAAAAA                 
+                                                                               
+> quit
+memory used=231.9MB, alloc=99.7MB, time=2.96
