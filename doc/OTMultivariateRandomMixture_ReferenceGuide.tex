@@ -15,13 +15,12 @@
 \subsection{Multivariate random mixtures}
 
 The objective is to manipulate a multivariate random vector $\vect{Y}$ with a specific structure~: 
-it is the image of a random vector $\vect{X} = (X_1, \hdots, X_n) $ of independent continuous components distributions by an affine transformation $T$:
+it is the image of a random vector $\vect{X} = (X_1, \hdots, X_n) $ of independent and continuous univariate distributions by an affine transformation $T$:
 \begin{align}\label{defY}
   \vect{Y}=\vect{y}_0+\vect{M}\vect{X}
 \end{align}
-where $\vect{y}_0\in\mathbb{R}^d$ is a deterministic vector with $d\in\{1,2,3\}$ and $\vect{M}\in\mathcal{M}_{d,n}(\mathbb{R})$ 
-a deterministic matrix.
-We denote its density function $p$. This particular form allows the calculation of the law of $\vect{Y} $ using the Poisson summation formula, which links the characteristic 
+$\vect{y}_0\in\mathbb{R}^d$ is a deterministic vector with $d\in\{1,2,3\}$ and $\vect{M}\in\mathcal{M}_{d,n}(\mathbb{R})$ 
+a deterministic matrix. This particular form allows the calculation of the law of $\vect{Y} $ using the Poisson summation formula, which links the characteristic 
 function $\phi $ of $\vect{Y}$ to its density $p$. This formula is given by:
 
 \begin{align}\label{poissonND}
@@ -38,20 +37,20 @@ The sums on the right are all nested truncated symmetrically to $ 2N +1 $ terms,
 \end{align}
 where $H = h_1\times\hdots\times h_d$ .
 
-The characteristic function of such random vector $Y$ is obtained analitycally using $\vect{y}_0$, $\vect{M}$ and the characteristic functions of $X_1$,\dots,$X_d$:
+The characteristic function of such random vector $Y$ is obtained analitycally using $\vect{y}_0$, $\vect{M}$ and the characteristic functions of $X_1$,\dots,$X_n$:
 \begin{align}
   \forall \vect{u}\in\mathbb{R}^d,\quad\phi(u_1,\hdots,u_d)=\prod_{j=1}^de^{iu_j{y_0}_j}\prod_{k=1}^n\phi_{X_k}((M^tu)_k)
 \end{align}
 
-% Using the symmetry of $\phi$, we get:
-% \begin{align}
-%   p\left(y_1,\hdots,y_d\right)\simeq\frac{H}{\pi^d} \left(1+\sum_{k_1=1}^N\hdots\sum_{k_d=1}^N\left\{\prod_{j=1}^d\mathfrak{R}\left(e^{ih_jk_j{y_0}_j}
-%   \times\right.\right.\right.\left.\left.\times\prod_{\ell=1}^n\phi_{X_\ell}(M_{j,\ell}k_jh_j)\right)\right\}\left.e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)} \right)
-% \end{align}
+Using the symmetry of $\phi$, we get:
+\begin{align}
+  p\left(y_1,\hdots,y_d\right)\simeq\frac{H}{\pi^d} \left(1+\sum_{k_1=1}^N\hdots\sum_{k_d=1}^N\left\{\prod_{j=1}^d\mathfrak{R}\left(e^{ih_jk_j{y_0}_j}
+  \times\right.\right.\right.\left.\left.\times\prod_{\ell=1}^n\phi_{X_\ell}(M_{j,\ell}k_jh_j)\right)\right\}\left.e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)} \right)
+\end{align}
 
-It is possible to greatly improve the performance of the algorithm by noting that the equation ~(\ref{poissonND}) is linear between $p$ 
-and $\phi $. By applying applied to the multivariate normal distribution with the same mean $\vect{\mu}$ and same covariance matrix 
-$\vect{C} $, for which we denote the density $q$ and the characteristic function $\psi$, we obtain by subtraction:
+It is possible to greatly improve the performance of the algorithm by noting that the equation~(\ref{poissonND}) is linear between $p$ 
+and $\phi $. We denote $q$ and $\psi$ respectively the density and the characteristic function of the multivariate normal distribution with the 
+same mean $\vect{\mu}$ and same covariance matrix $\vect{C}$ as the the random mixture. By applying this multivariate normal distribution to the equation~(\ref{poissonND}), we obtain by subtraction:
 \begin{align}\label{algoPoisson}
   \begin{array}{p{\textwidth}}
     \multicolumn{1}{l}{\displaystyle p\left(y_1,\hdots,y_d\right)\simeq \sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}}q\left(y_1+\frac{2\pi j_1}{h_1},\hdots,y_d+\frac{2\pi j_d}{h_d}\right)+}\\
@@ -71,7 +70,7 @@ The element $C_{i,j}$ of $\vect{C}$ is given by:
 \forall i,j\in\{1,\hdots,d\},\quad C_{i,j}=\sum_{k=1}^nM_{i,k}M_{j,k}\mathrm{Var}(X_k)
 \end{align}
 
-In the case where $n \gg $ 1, using the Central Limit Theorem, the law of $\vect{Y} $ tends to the normal distribution density $q$. 
+In the case where $n \gg $ 1, using the limit central theorem, the law of $\vect{Y} $ tends to the normal distribution density $q$. 
 The sum on $q$ will be the dominant term in the value of $p$, which will reduce $N$. 
 It notes the need to keep more terms than the central one in this sum, since the parameters $ h_1, \dots  h_d$ were calibrated 
 with respect to $p$ not $q$.
