@@ -54,10 +54,12 @@ if __name__ == "__main__":
     print "sigma = ", sigma
     distribution.setBlockMin(3)
     distribution.setBlockMax(10)
-    # importting validation sample
+    distribution.setMaxSize(2**10)
+    # importing validation sample
     validation_sample = ot.NumericalSample.ImportFromCSVFile("../validation/valid_d2_3unif.csv")
     # Compute inverse of transformation matrix
     delta = 0.0
+    pdf_epsilon = distribution.pdfEpsilon_
     dt = []
     for element in validation_sample:
         x, y, theoretical_pdf = tuple(element)
@@ -70,6 +72,8 @@ if __name__ == "__main__":
         #theoretical_pdf = 
         delta += abs((pdf_estimate - theoretical_pdf))**2
         print "pdf_estimate=%s pdf_theoretical=%s"%(pdf_estimate, theoretical_pdf)
+        print "pdf_epsilon =%s" %distribution.pdfEpsilon_
+        distribution.pdfEpsilon_ = pdf_epsilon
     # Variation of characteristic function
     delta /= (len(x) * len(y))
     print "delta of pdf=%s" %(np.sqrt(delta))
