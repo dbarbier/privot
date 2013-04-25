@@ -1,6 +1,6 @@
 #                                               -*- Python -*-
 #
-#  @file  test_2D_2D_nondiag.py
+#  @file  test_3U_2_nondiag.py
 #  @brief MultivariateRandomMixture validation tests
 #
 #  Copyright (C) 2013 EADS IW France
@@ -53,13 +53,12 @@ if __name__ == "__main__":
     print "cov = ", cov
     print "sigma = ", sigma
     distribution.setBlockMin(3)
-    distribution.setBlockMax(10)
-    distribution.setMaxSize(2**10)
+    distribution.setBlockMax(12)
+    distribution.setMaxSize(2**12)
     # importing validation sample
     validation_sample = ot.NumericalSample.ImportFromCSVFile("../validation/valid_d2_3unif.csv")
     # Compute inverse of transformation matrix
     delta = 0.0
-    pdf_epsilon = distribution.pdfEpsilon_
     dt = []
     for element in validation_sample:
         x, y, theoretical_pdf = tuple(element)
@@ -72,8 +71,7 @@ if __name__ == "__main__":
         #theoretical_pdf = 
         delta += abs((pdf_estimate - theoretical_pdf))**2
         print "pdf_estimate=%s pdf_theoretical=%s"%(pdf_estimate, theoretical_pdf)
-        print "pdf_epsilon =%s" %distribution.pdfEpsilon_
-        distribution.pdfEpsilon_ = pdf_epsilon
+        print "pdf_error =%s" %distribution.getLastPDFError()
     # Variation of characteristic function
-    delta /= (len(x) * len(y))
+    delta /= len(validation_sample)
     print "delta of pdf=%s" %(np.sqrt(delta))
