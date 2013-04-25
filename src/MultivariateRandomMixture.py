@@ -207,7 +207,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         if (index == 0): return 0.0
         # The cached values are computed and stored in an ascending order without hole: this function is always called on sequence starting from 0 to n-1
         # Usual case first: the index is within the already computed values
-        if (index <= self.storedSize_): return self.characteristicValuesCache_[index - 1];
+        if (index <= self.storedSize_): return self.characteristicValuesCache_[index - 1]
         # If the index is higher than the maximum allowed storage
         if (index > self.maxSize_):
             ot.Log.Info("Cache exceeded in MultivariateRandomMixture::computeDeltaCharacteristicFunction, consider increasing maxSize_ to %d"%index)
@@ -1030,6 +1030,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def setMaxSize(self, maxSize):
         """
         Set the maximum size of the cache for the CharacteristicFunction values
+        It is recommanded to set values which are of kind 2^b
 
         Example
         -------
@@ -1039,12 +1040,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> matrix = ot.Matrix([[1,2], [3,4]])
         >>> constant = [5, 6]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
-        >>> dist.setMaxSize(200)
+        >>> dist.setMaxSize(256)
 
         """
         self.maxSize_ = int(maxSize)
-        self.storedSize_ = min(maxSize, self.storedSize_)
-        self.characteristicValuesCache_ = self.characteristicValuesCache_[0:self.storedSize_]
+        if (self.maxSize_ < self.storedSize_):
+            self.characteristicValuesCache_ = self.characteristicValuesCache_[0:self.maxSize_]
+            self.storedSize_ = self.maxSize_
 
     def setReferenceBandwidth(self, bandwidth):
         """
