@@ -311,6 +311,20 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         mu = [dist.getMean()[0] for dist in self.collection_]
         self.mean_ = self.matrix_ * ot.NumericalPoint(mu) + self.constant_
 
+    def compute_nr_points_to_add(self, index):
+        """
+        This method is private and helps to compute the number points added when considering:
+        \cup_{(i_1,..,i_d) \in [-index, index]^d} (i_1,...,i_d) \ \cup_{(i_1,..,i_d) \in [-index+1, index-1]^d} (i_1,...,i_d)
+        """
+        assert isinstance(index, int)
+        dimension = self.getDimension()
+        if dimension == 1:
+            return 2
+        elif dimension == 2:
+            return 8 * index
+        else:
+            return 24 * index * index + 2
+
     def computeReferenceBandwidth(self):
         """
         The method is private.
