@@ -138,8 +138,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # as mean is easy, no need to use isComputedMean attributs
         self.computeMean()
         self.computeCovariance()
-        # set the standard deviation
-        self.sigma_ = ot.NumericalPoint([cmath.sqrt(self.cov_[k, k]).real for k in xrange(d)])
+        # compute the standard deviation
+        self.computeStandardDeviation()
         # compute the range
         self.computeRange()
         # compute h parameters for the evaluation of the density function
@@ -189,6 +189,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                 for k in xrange(len(self.collection_)):
                     s += self.matrix_[i, k] * self.matrix_[j, k] * self.collection_[k].getCovariance()[0, 0]
                 self.cov_[i, j] = s
+
+
+    def computeStandardDeviation(self):
+        # set the standard deviation
+        self.sigma_ = ot.NumericalPoint([cmath.sqrt(self.cov_[k, k]).real for k in xrange(d)])
 
     def computeDeltaCharacteristicFunctionCache(self, index):
         """
