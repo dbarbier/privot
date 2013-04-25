@@ -190,11 +190,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     s += self.matrix_[i, k] * self.matrix_[j, k] * self.collection_[k].getCovariance()[0, 0]
                 self.cov_[i, j] = s
 
-
-    def computeStandardDeviation(self):
-        # set the standard deviation
-        self.sigma_ = ot.NumericalPoint([cmath.sqrt(self.cov_[k, k]).real for k in xrange(d)])
-
     def computeDeltaCharacteristicFunctionCache(self, index):
         """
         Returns the differences of characteristic functions
@@ -303,14 +298,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             condition = error
         return gaussian_pdf
 
-    def computeReferenceBandwidth(self):
-        """
-        Compute the reference bandwidth h. It is defined as the maximum bandwidth
-        that allow a precise computation of the PDF over the range
-        [mean +/- beta * sigma_]
-        """
-        self.referenceBandwidth_ = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.getDimension())]
-
     def computeMean(self):
         """
         Compute the mean of the multivariate mixture
@@ -322,9 +309,27 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         mu = [dist.getMean()[0] for dist in self.collection_]
         self.mean_ = self.matrix_ * ot.NumericalPoint(mu) + self.constant_
 
+    def computeReferenceBandwidth(self):
+        """
+        The method is private.
+        It computes the reference bandwidth. It is defined as the maximum bandwidth
+        that allow a precise computation of the PDF over the range
+        [mean +/- beta * sigma_]
+        """
+        if (len(self.collection_) <= ot.ResourceMap.GetAsUnsignedLong( "MultivariateRandomMixture-SmallSize" )):
+            self.referenceBandwidth_ = [2.0 * cmath.pi / (self.getRange().getUpperBound()[k] - self.getRange().getLowerBound()[k]) for k in xrange(self.getDimension())]
+            # Shrink a little bit the bandwidth if the range is finite
+            isFinite = [self.getRange().getFiniteLowerBound()[k] and self.getRange().getFiniteUpperBound()[k] for k in xrange(self.getDimension())]
+            if (all(isFinite)):
+                self.referenceBandwidth_ = [self.referenceBandwidth_[k] * 0.5 for k in xrange(self.getDimension())]
+        # Else use a kind of Normal approximation
+        else:
+            self.referenceBandwidth_ = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.getDimension())]
+
     def computeRange(self):
         """
-        Compute the range of the distribution
+        This methods is private.
+        It computes the range of the distribution.
         """
         # Elements of the bounds
         lower_bounds = []
@@ -348,6 +353,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         s = ot.NumericalPoint([self.sigma_[k] for k in xrange(self.getDimension())])
         gaussian_interval = ot.Interval(self.getMean() - s * self.beta_, self.getMean() + s * self.beta_)
         self.interval_ = self.interval_.intersect(gaussian_interval)
+
+    def computeStandardDeviation(self):
+        # set the standard deviation
+        self.sigma_ = ot.NumericalPoint([cmath.sqrt(self.cov_[k, k]).real for k in xrange(self.getDimension())])
 
     def get_points_on_surface_grid_(self, index):
         """
@@ -623,6 +632,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         if (value < 0.0):
             value = 0.0
         self.pdfEpsilon_ = error
+        ot.Log.Debug("Current pdf epsilon : %s"%self.pdfEpsilon_)
         return value
 
     def getAlpha(self):
