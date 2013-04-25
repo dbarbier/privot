@@ -64,15 +64,10 @@ if __name__ == "__main__":
     print "sigma = ", sigma
     # Equivalent random mixture
     random_mixture = ot.RandomMixture(collection)
-    random_mixture.setAlpha(distribution.getAlpha())
-    random_mixture.setBeta(distribution.getBeta())
-    random_mixture.setReferenceBandwidth(distribution.getReferenceBandwidth()[0])
 
-    #distribution.setMaxSize(maxSize)
     distribution.setBlockMin(blockMin)
     distribution.setBlockMax(blockMax)
 
-    #random_mixture.setMaxSize(maxSize)
     random_mixture.setBlockMin(blockMin)
     random_mixture.setBlockMax(blockMax)
 
