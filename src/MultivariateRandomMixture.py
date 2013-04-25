@@ -128,6 +128,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # pdfEpsilon, blockMax, blockMin and maxSize are used for the evaluation of the density function
         self.pdfEpsilon_ = ot.ResourceMap.GetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFEpsilon")
         self.pdfPrecision_ = ot.ResourceMap.GetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFPrecision")
+        # PDF error : the last error obtained with the calculation of the PDF
+        self.pdfError_ = 0.0
         self.blockMin_ = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin")
         self.blockMax_ = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMax")
         self.maxSize_ = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultMaxSize")
@@ -631,8 +633,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # For very low levels of PDF, the computed value can be slightly negative. Round it up to zero.
         if (value < 0.0):
             value = 0.0
-        self.pdfEpsilon_ = error
-        ot.Log.Debug("Current pdf epsilon : %s"%self.pdfEpsilon_)
+        self.pdfError_ = error
+        ot.Log.Debug("Current pdf epsilon : %s" %self.pdfError_)
         return value
 
     def getAlpha(self):
@@ -741,6 +743,24 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         return self.collection_
+
+    def getLastPDFError(self):
+        """
+        Returns the last error obtained during computation of the probability density function
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> pdf = dist.computePDF([0.0, 1.0])
+        >>> last_error = dist.getLastPDFError()
+
+        """
+        return self.pdfError_
 
     def getMatrix(self):
         """
