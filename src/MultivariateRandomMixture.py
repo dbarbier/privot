@@ -204,10 +204,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         not stored. For index > 0, the corresponding value is at position index-1
         """
         assert isinstance(index, int)
-        if (index == 0): return 0.0
         # The cached values are computed and stored in an ascending order without hole: this function is always called on sequence starting from 0 to n-1
         # Usual case first: the index is within the already computed values
-        if (index <= self.storedSize_): return self.characteristicValuesCache_[index - 1]
+        if (index < self.storedSize_):
+            return self.characteristicValuesCache_[index]
         # If the index is higher than the maximum allowed storage
         if (index > self.maxSize_):
             ot.Log.Info("Cache exceeded in MultivariateRandomMixture::computeDeltaCharacteristicFunction, consider increasing maxSize_ to %d"%index)
@@ -224,8 +224,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             return delta
 
         # Here, the index has not been computed so far, fill-in the gap
-        if (index > self.storedSize_):
-            for i in xrange(self.storedSize_ + 1, index + 1):
+        if (index >= self.storedSize_):
+            for i in xrange(self.storedSize_, index + 1):
                 # append list of points
                 walker = self.get_points_on_surface_grid_(i)
                 delta = []
@@ -238,8 +238,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                 except StopIteration:
                     pass
                 self.characteristicValuesCache_.append(delta)
-            self.storedSize_ = index
-            return self.characteristicValuesCache_[self.storedSize_ - 1]
+            self.storedSize_ = len(self.characteristicValuesCache_)
+            return self.characteristicValuesCache_[index]
 
     def computeDeltaCharacteristicFunction(self, x):
         """
