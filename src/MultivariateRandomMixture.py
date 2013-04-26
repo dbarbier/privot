@@ -35,6 +35,7 @@
 """
 import openturns as ot
 import cmath
+import numpy as np
 
 # ResourceMap : setting different numerical parameters useful for the distribution
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin", 3)
@@ -986,15 +987,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         sample = ot.ComposedDistribution(self.collection_).getSample(n)
         # product matrix * realization
         # using np for scalability (matrix * sample not available)
-        try :
-            import numpy as np
-            sample = np.array(sample) * np.matrix(self.matrix_).transpose()
-            # np.matrix could not be casted into ot.NumericalSample
-            sample = np.array(sample)
-            sample = ot.NumericalSample(sample)
-        except ImportError :
-            # matrix * np for each point
-            sample = ot.NumericalSample([self.matrix_ * sample_element for sample_element in sample])
+        sample = np.array(sample) * np.matrix(self.matrix_).transpose()
+        # np.matrix could not be casted into ot.NumericalSample
+        sample = np.array(sample)
+        sample = ot.NumericalSample(sample)
         # Do not forget the constant term
         # optimization : constant size is usually negligible compared to the sample size
         if self.constant_.norm() != 0:
