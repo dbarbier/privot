@@ -35,7 +35,6 @@
 """
 import openturns as ot
 import cmath
-import MultivariateGaussianCharacteristicFunction as mvgc
 
 # ResourceMap : setting different numerical parameters useful for the distribution
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin", 3)
@@ -236,7 +235,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     y = list(walker.next())
                     for k in xrange(self.getDimension()):
                         y[k] *= self.referenceBandwidth_[k]
-                    delta += [self.computeCharacteristicFunction(y) - mvgc.MGCF(self.equivalentNormal_, y)]
+                    delta += [self.computeCharacteristicFunction(y) - self.equivalentNormal_.computeCharacteristicFunction(y)]
             except StopIteration:
                 pass
             return delta
@@ -252,7 +251,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                         y = list(walker.next())
                         for k in xrange(self.getDimension()):
                             y[k] *= self.referenceBandwidth_[k]
-                        delta += [self.computeCharacteristicFunction(y) - mvgc.MGCF(self.equivalentNormal_, y)]
+                        delta += [self.computeCharacteristicFunction(y) - self.equivalentNormal_.computeCharacteristicFunction(y)]
                 except StopIteration:
                     pass
                 self.characteristicValuesCache_.append(delta)
@@ -267,7 +266,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         The method uses also an external class for the evaluation of the characteristic function
         for multivariate gaussian distribution
         """
-        return self.computeCharacteristicFunction(x) - mvgc.MGCF(self.equivalentNormal_, x)
+        return self.computeCharacteristicFunction(x) - self.equivalentNormal_.computeCharacteristicFunction(x)
 
     def computeEquivalentNormal(self):
         """
