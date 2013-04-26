@@ -101,7 +101,7 @@ if __name__ == "__main__":
     try :
         import matplotlib.pylab as plt
         fig = plt.figure()
-        plt.imshow(pdf_values, vmin=np.min(pdf_values), vmax=np.max(pdf_values), origin='lower', extent=[xmin+0.25*dx, xmax-0.25*dx, ymin+0.25*dy, ymax-0.25*dy])
+        plt.contour(pdf_values, vmin=np.min(pdf_values), vmax=np.max(pdf_values), origin='lower', extent=[xmin+0.25*dx, xmax-0.25*dx, ymin+0.25*dy, ymax-0.25*dy])
         plt.colorbar()
         plt.savefig("3Normals2d_pdf.pdf")
         plt.close('all')
