@@ -142,6 +142,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.computeCovariance()
         # compute the standard deviation
         self.computeStandardDeviation()
+        # compute the correlation
+        self.computeCorrelation()
         # compute the range
         self.computeRange()
         # compute h parameters for the evaluation of the density function
@@ -173,9 +175,25 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     s += "\n"
         return s
 
+    def computeCorrelation(self):
+        """
+        Compute the correlation matrix of the mixture
+        This method is private. Use the getCovariance to get the covariance value
+        The covariance is given by
+          Cov(Y) = M * Cov(X) * M^t
+        As Cov(X) is diagonal:
+          Cov(Y)_{i,j} = \sum_{k=1}^n M_{i,k} M_{j,k} Cov(X_k, X_k)
+
+        """
+        dimension = self.getDimension()
+        self.corr_ = ot.CorrelationMatrix(dimension)
+        for i in xrange(dimension):
+            for j in xrange(0, i):
+                self.corr_[i, j] = self.cov_[i, j] / (self.sigma_[i] * self.sigma_[j])
+
     def computeCovariance(self):
         """
-        Returns the covariance of the mixture
+        Compute the covariance of the mixture
         This method is private. Use the getCovariance to get the covariance value
         The covariance is given by
           Cov(Y) = M * Cov(X) * M^t
@@ -809,6 +827,23 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         return self.mean_
+
+    def getCorrelation(self):
+        """
+        Returns the correlation matrix of the mixutre
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> corr = dist.getCorrelation()
+
+        """
+        return self.corr_
 
     def getCovariance(self):
         """
