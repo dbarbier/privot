@@ -120,26 +120,65 @@ if __name__ == "__main__":
     print "mean = ", mean
     print "cov = ", cov
     print "sigma = ", sigma
-    distribution.setBlockMin(3)
-    distribution.setBlockMax(10)
-    distribution.setMaxSize(2**10)
+    blockMin = 3
+    blockMax = 9
+    maxSize = 1 << blockMax
+    distribution.setBlockMin(blockMin)
+    distribution.setBlockMax(blockMax)
+    distribution.setMaxSize(maxSize)
+    distribution.setPDFPrecision(1.e-6)
+
     # importing validation sample
     validation_sample = ot.NumericalSample.ImportFromCSVFile("../validation/valid_d2_3unif.csv")
-    # Compute inverse of transformation matrix
+    # sample for error observation
+    estimate_sample = ot.NumericalSample(len(validation_sample), 3)
     delta = 0.0
     dt = []
-    for element in validation_sample:
-        x, y, theoretical_pdf = tuple(element)
+    for ind in xrange(len(validation_sample)):
+        x, y, pdf_theoretical = tuple(validation_sample[ind])
+        estimate_sample[ind, 0] = x
+        estimate_sample[ind, 1] = y
         u = [x, y]
         tic = time.time()
         pdf_estimate = distribution.computePDF(u)
         toc = time.time()
+        estimate_sample[ind, 2] = pdf_estimate
         dt.append(toc - tic)
         print "dt = %s"%(toc-tic)
-        #theoretical_pdf = 
-        delta += abs((pdf_estimate - theoretical_pdf))**2
-        print "x=%s, y=%s, pdf_estimate=%s pdf_theoretical=%s"%(x, y, pdf_estimate, theoretical_pdf)
-        print "pdf_error =%s" %distribution.getLastPDFError()
+        delta += abs((pdf_estimate - pdf_theoretical))**2
+        print "x=%s, y=%s, pdf_estimate=%s pdf_theoretical=%s"%(x, y, pdf_estimate, pdf_theoretical)
+        print "pdf_error=%s" %distribution.getLastPDFError()
     # Variation of characteristic function
     delta /= len(validation_sample)
     print "delta of pdf=%s" %(np.sqrt(delta))
+    # Reorganization of data using meshgrid for graphical purposes
+    x = np.unique(np.array(validation_sample.getMarginal(0)))
+    y = np.unique(np.array(validation_sample.getMarginal(1)))
+    grid_x, grid_y = np.meshgrid(x,y)
+    shape = grid_x.shape
+    pdf_theoretical = np.ndarray(shape)
+    pdf_estimate = np.ndarray(shape)
+    ind = 0
+    for i in range(shape[0]):
+        for j in range(shape[1]):
+            # grid_x[j,i],grid_y[j,i] respectively equal to validation_sample[ind,0], validation_sample[ind,1]
+            pdf_theoretical[j,i] = validation_sample[ind, 2]
+            pdf_estimate[j,i] = estimate_sample[ind, 2]
+            ind +=1
+    try :
+        import matplotlib.pylab as plt
+        fig = plt.figure()
+        plt.contour(pdf_estimate, vmin=np.min(pdf_estimate), vmax=np.max(pdf_estimate), origin='lower', extent=[np.min(x), np.max(x), np.min(y), np.max(y)])
+        plt.colorbar()
+        plt.title("Estimated PDF with MVRM")
+        plt.savefig("3Uniform2d_pdf.pdf")
+        plt.close('all')
+        fig = plt.figure()
+        pdf_error = pdf_estimate - pdf_theoretical
+        plt.imshow(pdf_error, vmin=np.min(pdf_error), vmax=np.max(pdf_error), origin='lower', extent=[np.min(x), np.max(x), np.min(y), np.max(y)])
+        plt.colorbar()
+        plt.title("Error PDF with MVRM")
+        plt.savefig("3Uniform2d_error_pdf.pdf")
+        plt.close('all')
+    except ImportError:
+        ot.log.Warn("Matplotlib not found. Could not create iso values graph of pdf")
