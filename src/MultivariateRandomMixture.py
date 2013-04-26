@@ -758,6 +758,40 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         return self.constant_
 
+    def getCorrelation(self):
+        """
+        Returns the correlation matrix of the mixutre
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> corr = dist.getCorrelation()
+
+        """
+        return self.corr_
+
+    def getCovariance(self):
+        """
+        Returns the covariance matrix of the mixutre
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> cov = dist.getCovariance()
+
+        """
+        return self.cov_
+
     def getDistributionCollection(self):
         """
         Returns the distribution collection
@@ -826,40 +860,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         return self.mean_
-
-    def getCorrelation(self):
-        """
-        Returns the correlation matrix of the mixutre
-
-        Example
-        -------
-        >>> import openturns as ot
-        >>> import MultivariateRandomMixture as MV
-        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
-        >>> matrix = ot.Matrix([[1,2], [3,4]])
-        >>> constant = [5, 6]
-        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
-        >>> corr = dist.getCorrelation()
-
-        """
-        return self.corr_
-
-    def getCovariance(self):
-        """
-        Returns the covariance matrix of the mixutre
-
-        Example
-        -------
-        >>> import openturns as ot
-        >>> import MultivariateRandomMixture as MV
-        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
-        >>> matrix = ot.Matrix([[1,2], [3,4]])
-        >>> constant = [5, 6]
-        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
-        >>> cov = dist.getCovariance()
-
-        """
-        return self.cov_
 
     def getMaxSize(self):
         """
