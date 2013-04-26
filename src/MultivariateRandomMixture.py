@@ -878,6 +878,23 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         return self.maxSize_
 
+    def getPDFPrecision(self):
+        """
+        Returns the pdf precision used computation of the probability density function
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> pdf_precision = dist.getPDFPrecision()
+
+        """
+        return self.pdfPrecision_
+
     def getRange(self):
         """
         Returns the range of the distribution
@@ -1095,6 +1112,25 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         if (self.maxSize_ < self.storedSize_):
             self.characteristicValuesCache_ = self.characteristicValuesCache_[0:self.maxSize_]
             self.storedSize_ = self.maxSize_
+
+    def setPDFPrecision(self, pdfPrecision):
+        """
+        Sets the pdf precision used computation of the probability density function
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> pdfPrecision = 1e-6
+        >>> dist.setPDFPrecision(pdfPrecision)
+
+        """
+        assert float(pdfPrecision) > 0
+        self.pdfPrecision_ = float(pdfPrecision)
 
     def setReferenceBandwidth(self, bandwidth):
         """
