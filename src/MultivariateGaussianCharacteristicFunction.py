@@ -48,5 +48,11 @@ if __name__ == "__main__":
     dy = 0.01
     for ix in x:
         for iy in y:
-            cf = MGCF(ot.Normal(2), [dx * ix, dy * iy])
+            dist = ot.Normal([0.3, 0.9], ot.CovarianceMatrix([[2.0, -1.0], [-1.0, 3.0]]))
+            cf = MGCF(dist, [dx * ix, dy * iy])
             print "x=%s y=%s val=%s" %(dx*ix, dy*iy, cf)
+            try :
+                value = dist.computeCharacteristicFunction([dx * ix, dy * iy])
+                print "ot implementation: %s, diff=%s" %(value, value - cf)
+            except ValueError:
+                pass
