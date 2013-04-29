@@ -40,7 +40,7 @@ if __name__ == "__main__":
     Test
     ------
     """
-    collection = ot.DistributionCollection([ot.Uniform(), ot.Normal()])
+    collection = ot.DistributionCollection([ot.Uniform(-1, 1), ot.Uniform(-1, 1)])
     matrix = ot.Matrix([[1, 4], [3, 2]])
     constant = [0.0, 0.0]
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
@@ -61,8 +61,8 @@ if __name__ == "__main__":
     dx = 0.1
     dy = 0.1
     # 2D grid
-    x = np.arange(xmin + 0.25 * dX, xmax - 0.25 * dX, dx)
-    y = np.arange(ymin + 0.25 * dY, ymax - 0.25 * dY, dy)
+    x = np.arange(xmin - 0.1 * dX, xmax + 0.1 * dX, dx)
+    y = np.arange(ymin - 0.1 * dY, ymax + 0.1 * dY, dy)
     # Compute inverse of transformation matrix
     grid_x, grid_y = np.meshgrid(x,y)
     shape = grid_x.shape
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     try :
         import matplotlib.pylab as plt
         fig = plt.figure()
-        plt.contour(values, vmin=np.min(values), vmax=np.max(values), origin='lower', extent=[np.min(x), np.max(x), np.min(y), np.max(y)])
+        plt.contour(values, 20,  vmin=np.min(values), vmax=np.max(values), origin='lower', extent=[np.min(x), np.max(x), np.min(y), np.max(y)])
         plt.colorbar()
         plt.title("Estimated PDF with MVRM")
         plt.savefig("2Uniform2d_pdf.pdf")
