@@ -463,9 +463,27 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         size = len(self.collection_)
         if(self.matrix_.getNbColumns() != size):
             raise ValueError("Matrix number of columns is not coherant with collection size.")
-        d = self.matrix_.getNbRows()
-        if (d > 3):
+        dimension = self.matrix_.getNbRows()
+        if (dimension > 3):
             raise ValueError("Mixture should be of dimension 1, 2 or 3")
+        # Checking valid size/dimension
+        if dimension > size:
+            raise ValueError("Dimension is greater than the collection of distributions: incoherant matrix's rank")
+        # Checking rank of the matrix
+        u = ot.Matrix()
+        vT = ot.Matrix()
+        lam = self.matrix_.computeSingularValues(u, vT)
+        lam = list(lam)
+        if lam.count(0):
+            raise ValueError("Incomplete matrix's rank")
+        # check if the matrix if square, we may get analytically the pdf estimate
+        self.isAnalyticPDF_ = False
+        self.matrixInverse_ = ot.Matrix()
+        self.detMatrixInverse_ = 0.0
+        if size == dimension:
+            self.isAnalyticPDF_ = True
+            self.matrixInverse_ = matrix.solveLinearSystem(ot.IdentityMatrix(dimension))
+            self.detMatrixInverse_ = self.matrixInverse_.getImplementation().computeDeterminant()
 
     def setDistributionCollection(self, collection):
         """
@@ -589,6 +607,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         The first term is computed thanks to the internal computeEquivalentNormalPDFSum method whereas the second term (\delta)
         is partially computed with the computeDeltaCharacteristicFunction method
 
+        In case of square matrix, the density is analytical:
+            pdf(x_1,...,x_d) = |det (M^(-1))| \prod_{j=1}^{n} pdf_j((M^(-1) * x)_j)
+
         Parameters
         ----------
         y :  vector of size d
@@ -612,6 +633,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         assert len(y) == self.getDimension()
+        if self.isAnalyticPDF_:
+            # compute analytically the pdf
+            u = ot.NumericalPoint(y) - self.constant_
+            Qu = self.matrixInverse_ * u
+            pdf = abs(self.detMatrixInverse_)
+            for j in xrange(self.getDimension()):
+                pdf *= self.collection_[j].computePDF(Qu[j])
+            return pdf
+
         # Check if y is in domain
         if not self.interval_.contains(y):
             return 0.0
