@@ -470,9 +470,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         if dimension > size:
             raise ValueError("Dimension is greater than the collection of distributions: incoherant matrix's rank")
         # Checking rank of the matrix
-        u = ot.Matrix()
-        vT = ot.Matrix()
-        lam = self.matrix_.computeSingularValues(u, vT)
+        lam = self.matrix_.computeSingularValues()
         lam = list(lam)
         if lam.count(0):
             raise ValueError("Incomplete matrix's rank")
@@ -482,7 +480,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.detMatrixInverse_ = 0.0
         if size == dimension:
             self.isAnalyticPDF_ = True
-            self.matrixInverse_ = matrix.solveLinearSystem(ot.IdentityMatrix(dimension))
+            self.matrixInverse_ = self.matrix_.solveLinearSystem(ot.IdentityMatrix(dimension))
             self.detMatrixInverse_ = self.matrixInverse_.getImplementation().computeDeterminant()
 
     def setDistributionCollection(self, collection):
