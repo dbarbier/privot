@@ -110,6 +110,16 @@ This section gives an exhaustive presentation of the objects and functions provi
     \item[Value :] a $NumericalPoint$, the deterministic vector of the transformation
     \end{description}
 
+  \item $getCorrelation$
+    \begin{description}
+    \item[Usage :]  $getCorrelation()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $None$
+    \end{description}
+    \item[Value :] a $CorrelationMatrix$, the correlation of the distribution
+    \end{description}
+
   \item $getCovariance$
     \begin{description}
     \item[Usage :]  $getCovariance()$
@@ -120,6 +130,16 @@ This section gives an exhaustive presentation of the objects and functions provi
     \item[Value :] a $CovarianceMatrix$, the covariance of the distribution
     \end{description}
 
+  \item $getDimension$
+    \begin{description}
+    \item[Usage :]  $getDimension()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $None$
+    \end{description}
+    \item[Value :] an $UnsignedLong$, the dimension of the matrix
+    \end{description}
+
   \item $getDistributionCollection$
     \begin{description}
     \item[Usage :]  $getDistributionCollection()$
@@ -128,6 +148,16 @@ This section gives an exhaustive presentation of the objects and functions provi
       \item $None$
     \end{description}
     \item[Value :] a $DistributionCollection$, the collection of distributions used for the affine transformation
+    \end{description}
+
+  \item $getLastPDFError$
+    \begin{description}
+    \item[Usage :]  $getLastPDFError()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $None$
+    \end{description}
+    \item[Value :] a $NumericalScalar$, the last error obtained when computing the probability density function
     \end{description}
 
   \item $getMatrix$
@@ -159,6 +189,15 @@ This section gives an exhaustive presentation of the objects and functions provi
     \end{description}
     \item[Value :] a $NumericalPoint$, the mean of the distribution
     \end{description}
+
+  \item $getPDFPrecision$
+    \begin{description}
+    \item[Usage :]  $getPDFPrecision()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $None$
+    \end{description}
+    \item[Value :] a $NumericalScalar$, the precision used for the computation of the probability density function
 
   \item $getRange$
     \begin{description}
@@ -268,6 +307,16 @@ This section gives an exhaustive presentation of the objects and functions provi
       \item $bandwidth$, a $NumericalPoint$
     \end{description}
     \item[Value :] $None$, sets the bandwidth used for $PDF$
+    \end{description}
+
+  \item $setPDFPrecision$
+    \begin{description}
+    \item[Usage :]  $setPDFPrecision()$
+    \item[Arguments :]  \strut
+    \begin{description}
+      \item $pdfPrecision$, a $NumericalScalar$
+    \end{description}
+    \item[Value :] $None$, sets the precision used for the computation of the probability density function
     \end{description}
 
   \end{description}
