@@ -36,6 +36,7 @@
 import openturns as ot
 import cmath
 import numpy as np
+import MaxNormMeshGrid
 
 # ResourceMap : setting different numerical parameters useful for the distribution
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin", 3)
@@ -151,6 +152,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # set equivalent Normal distribution, i.e a normal distribution with mean = self.mean_
         # and covariance = self.cov_
         self.computeEquivalentNormal()
+        if len(self.referenceBandwidth_) == 1:
+            self.meshGrid_ = MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True)
+        elif len(self.referenceBandwidth_) == 2:
+            self.meshGrid_ = MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True)
+        elif len(self.referenceBandwidth_) == 3:
+            self.meshGrid_ = MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True)
 
     def __repr__(self):
         """
@@ -229,13 +236,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # If the index is higher than the maximum allowed storage
         if (index > self.maxSize_):
             ot.Log.Info("Cache exceeded in MultivariateRandomMixture::computeDeltaCharacteristicFunction, consider increasing maxSize_ to %d"%index)
-            walker = self.get_points_on_surface_grid_(index)
+            walker = self.meshGrid_.get_skin_walker(index)
             delta = []
             try :
                 while True:
-                    y = list(walker.next())
-                    for k in xrange(self.getDimension()):
-                        y[k] *= self.referenceBandwidth_[k]
+                    y = walker.next()
                     delta += [self.computeCharacteristicFunction(y) - self.equivalentNormal_.computeCharacteristicFunction(y)]
             except StopIteration:
                 pass
@@ -245,13 +250,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         if (index >= self.storedSize_):
             for i in xrange(self.storedSize_, index + 1):
                 # append list of points
-                walker = self.get_points_on_surface_grid_(i)
+                walker = self.meshGrid_.get_skin_walker(i)
                 delta = []
                 try :
                     while True:
-                        y = list(walker.next())
-                        for k in xrange(self.getDimension()):
-                            y[k] *= self.referenceBandwidth_[k]
+                        y = walker.next()
                         delta += [self.computeCharacteristicFunction(y) - self.equivalentNormal_.computeCharacteristicFunction(y)]
                 except StopIteration:
                     pass
@@ -300,16 +303,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         i = 0
         two_pi = 2.0 * cmath.pi
         d = self.getDimension()
-        two_pi_on_h = [two_pi / element for element in self.referenceBandwidth_]
+        two_pi_on_h2 = [two_pi / (element*element) for element in self.referenceBandwidth_]
         condition = True
         while (condition):
             i = i + 1
             delta = 0.0
-            walker = self.get_points_on_surface_grid_(i)
+            walker = self.meshGrid_.get_skin_walker(i)
             try:
                 while True:
                     point = walker.next()
-                    x = [y[k] + two_pi_on_h[k] * point[k] for k in range(d)]
+                    x = [y[k] + two_pi_on_h2[k] * point[k] for k in range(d)]
                     delta += self.equivalentNormal_.computePDF(ot.NumericalPoint(x))
             except StopIteration:
                 pass
@@ -672,13 +675,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # k calculations are done
             for m in xrange(k, 2*k):
                 # get the current point
-                walker = self.get_points_on_surface_grid_(m)
+                walker = self.meshGrid_.get_skin_walker(m)
                 cfValues = self.computeDeltaCharacteristicFunctionCache(m)
                 j = 0
                 try :
                     while True:
-                        point = walker.next()
-                        h = [self.referenceBandwidth_[d] * point[d] for d in xrange(self.getDimension())]
+                        h = walker.next()
                         h_y = ot.dot(h, y)
                         cos_hy = cmath.cos(h_y).real
                         sin_hy = cmath.sin(h_y).real
@@ -688,6 +690,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                         error += factor * (cfValue.real * cos_hy + cfValue.imag * sin_hy)
                 except StopIteration:
                   pass
+            if self.meshGrid_.isSymmetric():
+                error *= 2.0
             value += error
             error = abs(error)
             k *= 2
@@ -1215,6 +1219,23 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         self.blockMin_ = int(blockMin)
+
+    def setGridMesher(self, gridMesher):
+        """
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> import MaxNormMeshGrid
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> dist.setGridMesher(MaxNormMeshGrid.Cube2D(dist.getReferenceBandwidth()), True)
+
+        """
+        self.meshGrid_ = gridMesher
 
     def setMaxSize(self, maxSize):
         """

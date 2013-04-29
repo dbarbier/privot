@@ -30,76 +30,11 @@
     Validation with respect to the Maple
     use case
 """
-def get_points_on_surface_grid(dist, index):
-    """
-    """
-    assert isinstance(index, int)
-    d = dist.getDimension()
-    # List of points to be taken into account
-    list_points = []
-    if d == 1 :
-        for ix in [-index, index]:
-            step = (ix,)
-            yield step
-    elif d == 2 :
-        # In 2D case, we should take into account 4 faces of a
-        # bidimensional square |x| = index, |y| = index
-        # for easy reading and taking into account, we follow a
-        # curve
-        # 1) botton
-        ix = float(-index)
-        for iy in range(-index, index):
-            step = (ix, iy)
-            yield step
-        # 2) right
-        iy = float(index)
-        for ix in range(-index, index):
-            step = (ix, iy)
-            yield step
-        # 3) top
-        ix = float(index)
-        for iy in range(index, -index, -1):
-            step = (ix, iy)
-            yield step
-        # 4) left hand
-        iy = float(-index)
-        for ix in range(index, -index, -1):
-            step = (ix, iy)
-            yield step
-    elif d == 3 :
-        # 1) contour (like 2D case) for each z
-        for iz in xrange(-index, index + 1):
-            # a) bottom
-            iy = float(-index)
-            for ix in range(-index, index):
-                step = (ix, iy, iz)
-                yield step
-            # b) right
-            ix = float(index)
-            for iy in range(-index, index):
-                step = (ix, iy, iz)
-                yield step
-            # c) top
-            iy = float(index)
-            for ix in range(index, -index, -1):
-                step = (ix, iy, iz)
-                yield step
-            # d) left hand
-            ix = float(-index)
-            for iy in range(index, -index, -1):
-                step = (ix, iy, iz)
-                yield step
-        # 2) quasi-plain square for |z| = index
-        # quasi because we remove corners and contours already in the list
-        for iz in [-index, index]:
-            for ix in xrange(-index + 1 , index):
-                for iy in xrange(-index + 1, index):
-                  step = (ix, iy, iz)
-                  yield step
 
 if __name__ == "__main__":
     import openturns as ot
     import MultivariateRandomMixture as MV
+    import MaxNormMeshGrid
     import numpy as np
     import time
 
@@ -108,10 +43,10 @@ if __name__ == "__main__":
     ------
     """
     #ot.Log.Show(ot.Log.ALL)
-    MV.PythonMultivariateRandomMixture.get_points_on_surface_grid_ = get_points_on_surface_grid
     collection = ot.DistributionCollection([ot.Uniform(0,1), ot.Uniform(0,1), ot.Uniform(0,1)])
     matrix = ot.Matrix([[1, -2, 1], [1, 1, -3]])
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
+    distribution.setGridMesher(MaxNormMeshGrid.SkinCube2D(distribution.getReferenceBandwidth(), True))
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
