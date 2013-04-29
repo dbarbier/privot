@@ -1,0 +1,41 @@
+restart:
+Digits := 25:
+with(Statistics):
+assume(m11, real, m12, real, m13, real, m14, real, m21, real, m22, real, m23, real, m24, real, m31, real, m32, real, m33, real, m34, real);
+valnum := m11 = 1, m12 = -0.05, m13 = 1, m14 = -0.5, m21 = 0.5, m22 = 1, m23 = -0.05, m24 = 0.3, m31 = -0.5, m32 = -0.1, m33 = 1.2, m34 = -0.8;
+p1 := PDF(RandomVariable(Normal(0, 1)), x1);
+p2 := PDF(RandomVariable(Normal(2, 1)), x2)/2+PDF(RandomVariable(Normal(-2, 1)), x2)/2;
+p3 := PDF(RandomVariable(Uniform(0, 1)), x3);
+p4 := PDF(RandomVariable(Uniform(0, 1)), x4);
+N := Matrix(4, 4, [m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, 0, 0, 0, 1]);
+with(LinearAlgebra):
+R := MatrixInverse(N):
+x := R . Vector([z1, z2, z3, z4]):
+expr:=simplify(subs(valnum,subs(x1 = x[1], p1) * subs(x2 = x[2], p2) * subs(x3 = x[3], p3) * subs(x4 = x[4], p4) * abs(Determinant(R)))) assuming z4>0,z4<1;
+pdfZ := int(expr, z4=0..1);
+fd := fopen("valid_d3_4dists.csv", WRITE, TEXT);
+for i from -10 to 10 do
+  for j from -10 to 10 do
+    for k from -10 to 10 do
+      v1 := evalf(2 * i / 10);
+      v2 := evalf(2 * j / 10);
+      v3 := evalf(2 * k / 10);
+      pdf := abs(evalf(subs(z1 = v1, z2 = v2, z3 = v3, pdfZ)));
+      fprintf(fd, "%.20g; %.20g; %.20g; %.20g\n", v1, v2, v3, pdf);
+    end do:
+  end do:
+  print([v1,v2,v3,pdf]);
+end do:
+fclose(fd):
+
+with(plots):
+npts:=21:
+p1:=implicitplot3d(pdfZ=0.02,z1=-4..4,z2=-6..6,z3=-3..3,grid=[npts,npts,npts],transparency=0,axes=boxed):
+display3d(p1);
+p2:=implicitplot3d(pdfZ=0.001,z1=-4..4,z2=-6..6,z3=-3..3,grid=[npts,npts,npts],transparency=0.5,axes=boxed):
+display3d(p2);
+display3d({p1,p2});
+
+
+
+
