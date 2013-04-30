@@ -488,11 +488,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         Set the distribution collection
         This method should not be used, except by the __init__ method
         """
+        distributions = []
         for k in xrange(len(collection)):
             # check if distribution is univariate
             if (collection[k].getDimension() != 1):
                 raise ValueError("Expected a collection of univariate distributions")
-        self.collection_ = collection
+            distributions.append(collection[k])
+        self.collection_ = distributions
 
     def computeLogCharacteristicFunction(self, y):
         """
@@ -836,7 +838,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> distCollection = dist.getDistributionCollection()
 
         """
-        return self.collection_
+        return ot.DistributionCollection(self.collection_)
 
     def getLastPDFError(self):
         """
@@ -1012,7 +1014,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> sample = dist.getSample(100)
         """
         assert isinstance(n, int)
-        sample = ot.ComposedDistribution(self.collection_).getSample(n)
+        sample = ot.ComposedDistribution(ot.DistributionCollection(self.collection_)).getSample(n)
         # product matrix * realization
         # using np for scalability (matrix * sample not available)
         sample = np.array(sample) * np.matrix(self.matrix_).transpose()
