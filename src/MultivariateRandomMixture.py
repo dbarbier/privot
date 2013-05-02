@@ -616,17 +616,17 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # At each iteration of the while condition,
             # k calculations are done
             for m in xrange(k, 2*k):
-                # get the current point
                 walker = self.meshGrid_.get_skin_walker_evaluate(m, self.computeDeltaCharacteristicFunction)
                 try :
                     while True:
                         h, cfValue = walker.next()
-                        h_y = ot.dot(h, y)
+                        h_y = self.meshGrid_.dot(h, y)
                         cos_hy = cmath.cos(h_y).real
                         sin_hy = cmath.sin(h_y).real
-                        error += factor * (cfValue.real * cos_hy + cfValue.imag * sin_hy)
+                        error += cfValue.real * cos_hy + cfValue.imag * sin_hy
                 except StopIteration:
                   pass
+            error *= factor
             if self.meshGrid_.isSymmetric():
                 error *= 2.0
             value += error

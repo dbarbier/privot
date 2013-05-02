@@ -76,6 +76,10 @@ class Cube1D:
     def isSymmetric(self):
         return self.symmetric_
 
+    @staticmethod
+    def dot(x, y):
+        return x[0] * y[0]
+
     def get_skin_walker(self, index):
         if index == 0:
             yield (0.,)
@@ -134,6 +138,10 @@ class Cube2D:
 
     def isSymmetric(self):
         return self.symmetric_
+
+    @staticmethod
+    def dot(x, y):
+        return x[0] * y[0] + x[1] * y[1]
 
     def get_skin_walker(self, index):
         if index == 0:
@@ -205,6 +213,10 @@ class SkinCube2D:
 
     def isSymmetric(self):
         return self.symmetric_
+
+    @staticmethod
+    def dot(x, y):
+        return x[0] * y[0] + x[1] * y[1]
 
     def get_skin_walker(self, index):
         if index == 0:
@@ -286,6 +298,10 @@ class Cube3D:
 
     def isSymmetric(self):
         return self.symmetric_
+
+    @staticmethod
+    def dot(x, y):
+        return x[0] * y[0] + x[1] * y[1] + x[2] * y[2]
 
     def get_skin_walker(self, index):
         if index == 0:
@@ -371,6 +387,10 @@ class SkinCube3D:
 
     def isSymmetric(self):
         return self.symmetric_
+
+    @staticmethod
+    def dot(x, y):
+        return x[0] * y[0] + x[1] * y[1] + x[2] * y[2]
 
     def get_skin_walker(self, index):
         if index == 0:
@@ -475,6 +495,9 @@ class CachedMeshGrid:
 
     def isSymmetric(self):
         return self.meshGrid_.isSymmetric()
+
+    def dot(self, x, y):
+        return self.meshGrid_.dot(x, y)
 
     def get_skin_walker(self, index):
         if self.meshGrid_.get_size_upto_level(index+1) > self.maxSize_:
