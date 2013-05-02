@@ -65,10 +65,13 @@ class Cube1D:
              If True (by default), only positive values are returned
 
         """
-        if (len(steps) != 1):
+        if len(steps) != 1:
             raise ValueError("Argument must be a vector of dimension 1")
         self.step_ = steps[0]
         self.symmetric_ = symmetric
+
+    def clone(self, steps):
+        return Cube1D(steps, self.symmetric_)
 
     def isSymmetric(self):
         return self.symmetric_
@@ -82,6 +85,15 @@ class Cube1D:
             else:
                 yield (-index * self.step_,)
                 yield (index * self.step_,)
+
+    def get_skin_walker_evaluate(self, index, function):
+        walker = self.get_skin_walker(index)
+        try:
+            while True:
+                point = walker.next()
+                yield point, function(point)
+        except StopIteration:
+            raise StopIteration()
 
     def get_size_of_level(self, index):
         if index == 0:
@@ -111,11 +123,14 @@ class Cube2D:
     """
 
     def __init__(self, steps, symmetric = True):
-        if (len(steps) != 2):
+        if len(steps) != 2:
             raise ValueError("Argument must be a vector of dimension 2")
         self.stepX_ = steps[0]
         self.stepY_ = steps[1]
         self.symmetric_ = symmetric
+
+    def clone(self, steps):
+        return Cube2D(steps, self.symmetric_)
 
     def isSymmetric(self):
         return self.symmetric_
@@ -141,6 +156,15 @@ class Cube2D:
                         inner_y = (abs(iy) < index)
                         if not(inner_x and inner_y):
                             yield (cx, float(iy) * self.stepY_)
+
+    def get_skin_walker_evaluate(self, index, function):
+        walker = self.get_skin_walker(index)
+        try:
+            while True:
+                point = walker.next()
+                yield point, function(point)
+        except StopIteration:
+            raise StopIteration()
 
     def get_size_of_level(self, index):
         if index == 0:
@@ -170,11 +194,14 @@ class SkinCube2D:
     """
 
     def __init__(self, steps, symmetric = True):
-        if (len(steps) != 2):
+        if len(steps) != 2:
             raise ValueError("Argument must be a vector of dimension 2")
         self.stepX_ = steps[0]
         self.stepY_ = steps[1]
         self.symmetric_ = symmetric
+
+    def clone(self, steps):
+        return SkinCube2D(steps, self.symmetric_)
 
     def isSymmetric(self):
         return self.symmetric_
@@ -210,6 +237,15 @@ class SkinCube2D:
                 for ix in range(index, -index, -1):
                     yield (float(ix) * self.stepX_, cy)
 
+    def get_skin_walker_evaluate(self, index, function):
+        walker = self.get_skin_walker(index)
+        try:
+            while True:
+                point = walker.next()
+                yield point, function(point)
+        except StopIteration:
+            raise StopIteration()
+
     def get_size_of_level(self, index):
         if index == 0:
             return 1
@@ -238,12 +274,15 @@ class Cube3D:
     """
 
     def __init__(self, steps, symmetric = True):
-        if (len(steps) != 3):
+        if len(steps) != 3:
             raise ValueError("Argument must be a vector of dimension 3")
         self.stepX_ = steps[0]
         self.stepY_ = steps[1]
         self.stepZ_ = steps[2]
         self.symmetric_ = symmetric
+
+    def clone(self, steps):
+        return Cube3D(steps, self.symmetric_)
 
     def isSymmetric(self):
         return self.symmetric_
@@ -283,6 +322,15 @@ class Cube3D:
                             if not(inner_x and inner_y and inner_z):
                                 yield (cx, cy, float(iz) * self.stepZ_)
 
+    def get_skin_walker_evaluate(self, index, function):
+        walker = self.get_skin_walker(index)
+        try:
+            while True:
+                point = walker.next()
+                yield point, function(point)
+        except StopIteration:
+            raise StopIteration()
+
     def get_size_of_level(self, index):
         if index == 0:
             return 1
@@ -311,12 +359,15 @@ class SkinCube3D:
     """
 
     def __init__(self, steps, symmetric = True):
-        if (len(steps) != 3):
+        if len(steps) != 3:
             raise ValueError("Argument must be a vector of dimension 3")
         self.stepX_ = steps[0]
         self.stepY_ = steps[1]
         self.stepZ_ = steps[2]
         self.symmetric_ = symmetric
+
+    def clone(self, steps):
+        return SkinCube3D(steps, self.symmetric_)
 
     def isSymmetric(self):
         return self.symmetric_
@@ -371,6 +422,15 @@ class SkinCube3D:
                         for iy in xrange(-index + 1, index):
                           yield (cx, float(iy) * self.stepY_, cz)
 
+    def get_skin_walker_evaluate(self, index, function):
+        walker = self.get_skin_walker(index)
+        try:
+            while True:
+                point = walker.next()
+                yield point, function(point)
+        except StopIteration:
+            raise StopIteration()
+
     def get_size_of_level(self, index):
         if index == 0:
             return 1
@@ -400,11 +460,16 @@ class CachedMeshGrid:
         self.meshGrid_ = meshGrid
         self.maxSize_ = size
         self.currentSize_ = 0
-        self.cache_ = []
+        self.cachedPosition_ = []
+        self.cachedValue_ = []
+
+    def clone(self, steps):
+        return CachedMeshGrid(self.meshGrid_.clone(steps), self.currentSize_)
 
     def setCacheSize(self, size):
         if size < self.currentSize_:
-            del self.cache_[size:]
+            del self.cachedPosition_[size:]
+            del self.cachedValue_[size:]
             self.currentSize_ = size
         self.maxSize_ = size
 
@@ -412,7 +477,7 @@ class CachedMeshGrid:
         return self.meshGrid_.isSymmetric()
 
     def get_skin_walker(self, index):
-        if (self.meshGrid_.get_size_upto_level(index+1) > self.maxSize_):
+        if self.meshGrid_.get_size_upto_level(index+1) > self.maxSize_:
             walker = self.meshGrid_.get_skin_walker(index)
             try:
                 while True:
@@ -426,16 +491,43 @@ class CachedMeshGrid:
                 if self.meshGrid_.get_size_upto_level(i) < self.currentSize_:
                     continue
                 walker = self.meshGrid_.get_skin_walker(i)
-                # Precompute the whole level
                 try:
                     while True:
-                        self.cache_.append(walker.next())
+                        self.cachedPosition_.append(walker.next())
                 except StopIteration:
                     pass
                 self.currentSize_ += self.meshGrid_.get_size_of_level(i)
 
             for x in xrange(self.meshGrid_.get_size_upto_level(index), self.meshGrid_.get_size_upto_level(index)+self.meshGrid_.get_size_of_level(index)):
-                yield self.cache_[x]
+                yield self.cachedPosition_[x]
+
+    def get_skin_walker_evaluate(self, index, function):
+        if self.meshGrid_.get_size_upto_level(index+1) > self.maxSize_:
+            walker = self.meshGrid_.get_skin_walker(index)
+            try:
+                while True:
+                    point = walker.next()
+                    yield (point, function(point))
+            except StopIteration:
+                raise StopIteration()
+        else:
+            i = -1
+            while i <= index:
+                i += 1
+                if self.meshGrid_.get_size_upto_level(i) < self.currentSize_:
+                    continue
+                walker = self.meshGrid_.get_skin_walker(i)
+                try:
+                    while True:
+                        point = walker.next()
+                        self.cachedPosition_.append(point)
+                        self.cachedValue_.append(function(point))
+                except StopIteration:
+                    pass
+                self.currentSize_ += self.meshGrid_.get_size_of_level(i)
+
+            for x in xrange(self.meshGrid_.get_size_upto_level(index), self.meshGrid_.get_size_upto_level(index)+self.meshGrid_.get_size_of_level(index)):
+                yield (self.cachedPosition_[x], self.cachedValue_[x])
 
     def get_size_of_level(self, index):
         return self.meshGrid_.get_size_of_level(index)

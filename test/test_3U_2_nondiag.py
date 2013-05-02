@@ -46,7 +46,7 @@ if __name__ == "__main__":
     collection = ot.DistributionCollection([ot.Uniform(0,1), ot.Uniform(0,1), ot.Uniform(0,1)])
     matrix = ot.Matrix([[1, -2, 1], [1, 1, -3]])
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
-    distribution.setGridMesher(MaxNormMeshGrid.SkinCube2D(distribution.getReferenceBandwidth(), True))
+    distribution.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(MaxNormMeshGrid.SkinCube2D(distribution.getReferenceBandwidth(), symmetric=True), size=40000000))
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()

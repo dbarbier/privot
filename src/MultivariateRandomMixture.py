@@ -148,11 +148,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # and covariance = self.cov_
         self.computeEquivalentNormal()
         if len(self.referenceBandwidth_) == 1:
-            self.meshGrid_ = MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True)
+            self.setGridMesher(MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True))
         elif len(self.referenceBandwidth_) == 2:
-            self.meshGrid_ = MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True)
+            self.setGridMesher(MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True))
         elif len(self.referenceBandwidth_) == 3:
-            self.meshGrid_ = MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True)
+            self.setGridMesher(MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True))
 
     def __repr__(self):
         """
@@ -251,19 +251,17 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         gaussian_pdf = self.equivalentNormal_.computePDF(y)
         i = 0
-        two_pi = 2.0 * cmath.pi
         d = self.getDimension()
-        two_pi_on_h2 = [two_pi / (element*element) for element in self.referenceBandwidth_]
         condition = True
         while (condition):
             i = i + 1
             delta = 0.0
-            walker = self.meshGrid_.get_skin_walker(i)
+            walker = self.meshAltGrid_.get_skin_walker(i)
             try:
                 while True:
                     point = walker.next()
-                    x = [y[k] + two_pi_on_h2[k] * point[k] for k in range(d)]
-                    delta += self.equivalentNormal_.computePDF(ot.NumericalPoint(x))
+                    x = [y[k] + point[k] for k in xrange(d)]
+                    delta += self.equivalentNormal_.computePDF(x)
             except StopIteration:
                 pass
             gaussian_pdf += delta
@@ -625,14 +623,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # k calculations are done
             for m in xrange(k, 2*k):
                 # get the current point
-                walker = self.meshGrid_.get_skin_walker(m)
+                walker = self.meshGrid_.get_skin_walker_evaluate(m, self.computeDeltaCharacteristicFunction)
                 try :
                     while True:
-                        h = walker.next()
+                        h, cfValue = walker.next()
                         h_y = ot.dot(h, y)
                         cos_hy = cmath.cos(h_y).real
                         sin_hy = cmath.sin(h_y).real
-                        cfValue = self.computeDeltaCharacteristicFunction(h)
                         error += factor * (cfValue.real * cos_hy + cfValue.imag * sin_hy)
                 except StopIteration:
                   pass
@@ -1182,6 +1179,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         self.meshGrid_ = gridMesher
+        two_pi_on_h = [2.0 * cmath.pi / element for element in self.referenceBandwidth_]
+        self.meshAltGrid_ = self.meshGrid_.clone(two_pi_on_h)
 
     def setPDFPrecision(self, pdfPrecision):
         """
