@@ -60,7 +60,6 @@ if __name__ == "__main__":
     maxSize = 1 << blockMax
     distribution.setBlockMin(blockMin)
     distribution.setBlockMax(blockMax)
-    distribution.setMaxSize(maxSize)
     distribution.setPDFPrecision(1.e-6)
 
     # importing validation sample

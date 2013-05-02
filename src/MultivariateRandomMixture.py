@@ -41,7 +41,6 @@ import MaxNormMeshGrid
 # ResourceMap : setting different numerical parameters useful for the distribution
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin", 3)
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMax", 16)
-ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultMaxSize", 65536)
 ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultAlpha", 4.0)
 ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultBeta",  8.0)
 ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFPrecision", 1.0e-10)
@@ -133,10 +132,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.pdfError_ = 0.0
         self.blockMin_ = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin")
         self.blockMax_ = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMax")
-        self.maxSize_ = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultMaxSize")
-        # Cache for the characteristic function values
-        self.characteristicValuesCache_ = []
-        self.storedSize_ = 0
         # compute the mean and covariance
         # as mean is easy, no need to use isComputedMean attributs
         self.computeMean()
@@ -216,51 +211,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                 for k in xrange(len(self.collection_)):
                     s += self.matrix_[i, k] * self.matrix_[j, k] * self.collection_[k].getCovariance()[0, 0]
                 self.cov_[i, j] = s
-
-    def computeDeltaCharacteristicFunctionCache(self, index):
-        """
-        Returns the differences of characteristic functions
-        This method is private and should not be used outside the interla methods
-        The current method does not implement the cache mechanism
-        The method uses also an external class for the evaluation of the characteristic function
-        for multivariate gaussian distribution
-        This method uses a cache mecanism : it is compute a value of the characteristic function
-        on a prescribed discretization and as the value associated with index == 0 is known, it is
-        not stored. For index > 0, the corresponding value is at position index-1
-        """
-        assert isinstance(index, int)
-        # The cached values are computed and stored in an ascending order without hole: this function is always called on sequence starting from 0 to n-1
-        # Usual case first: the index is within the already computed values
-        if (index < self.storedSize_):
-            return self.characteristicValuesCache_[index]
-        # If the index is higher than the maximum allowed storage
-        if (index > self.maxSize_):
-            ot.Log.Info("Cache exceeded in MultivariateRandomMixture::computeDeltaCharacteristicFunction, consider increasing maxSize_ to %d"%index)
-            walker = self.meshGrid_.get_skin_walker(index)
-            delta = []
-            try :
-                while True:
-                    y = walker.next()
-                    delta += [self.computeCharacteristicFunction(y) - self.equivalentNormal_.computeCharacteristicFunction(y)]
-            except StopIteration:
-                pass
-            return delta
-
-        # Here, the index has not been computed so far, fill-in the gap
-        if (index >= self.storedSize_):
-            for i in xrange(self.storedSize_, index + 1):
-                # append list of points
-                walker = self.meshGrid_.get_skin_walker(i)
-                delta = []
-                try :
-                    while True:
-                        y = walker.next()
-                        delta += [self.computeCharacteristicFunction(y) - self.equivalentNormal_.computeCharacteristicFunction(y)]
-                except StopIteration:
-                    pass
-                self.characteristicValuesCache_.append(delta)
-            self.storedSize_ = len(self.characteristicValuesCache_)
-            return self.characteristicValuesCache_[index]
 
     def computeDeltaCharacteristicFunction(self, x):
         """
@@ -676,17 +626,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             for m in xrange(k, 2*k):
                 # get the current point
                 walker = self.meshGrid_.get_skin_walker(m)
-                cfValues = self.computeDeltaCharacteristicFunctionCache(m)
-                j = 0
                 try :
                     while True:
                         h = walker.next()
                         h_y = ot.dot(h, y)
                         cos_hy = cmath.cos(h_y).real
                         sin_hy = cmath.sin(h_y).real
-                        #cfValue = self.computeDeltaCharacteristicFunction(h)
-                        cfValue = cfValues[j]
-                        j = j + 1
+                        cfValue = self.computeDeltaCharacteristicFunction(h)
                         error += factor * (cfValue.real * cos_hy + cfValue.imag * sin_hy)
                 except StopIteration:
                   pass
@@ -1236,27 +1182,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         self.meshGrid_ = gridMesher
-
-    def setMaxSize(self, maxSize):
-        """
-        Set the maximum size of the cache for the CharacteristicFunction values
-        It is recommanded to set values which are of kind 2^b
-
-        Example
-        -------
-        >>> import openturns as ot
-        >>> import MultivariateRandomMixture as MV
-        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
-        >>> matrix = ot.Matrix([[1,2], [3,4]])
-        >>> constant = [5, 6]
-        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
-        >>> dist.setMaxSize(256)
-
-        """
-        self.maxSize_ = int(maxSize)
-        if (self.maxSize_ < self.storedSize_):
-            self.characteristicValuesCache_ = self.characteristicValuesCache_[0:self.maxSize_]
-            self.storedSize_ = self.maxSize_
 
     def setPDFPrecision(self, pdfPrecision):
         """
