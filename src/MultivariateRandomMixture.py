@@ -699,6 +699,104 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         ot.Log.Debug("Current pdf epsilon : %s" %self.pdfError_)
         return value
 
+    def computePDFOn1DGrid(self, b, N):
+        """
+        The interest is to compute the density function on a 1D grid of form:
+          \forall m\in\{0,\hdots,N-1\},\:y_{m}=\mu +b\left(\frac{2m+1}{N} - 1\right)\sigma
+
+        The density is given by:
+          p_{m}= Q_{m}+S_{m}
+        with S_{m} = \frac{h}{2\pi}\sum_{k=-N}^{N} \delta(kh)\times E_{m}(k)
+        Here :
+          E_{m}(k)=e^{-i kh (\mu + b (\frac{2m+1}{N}-1)\sigma)}
+        Using FFT,
+        S_{m}=\frac{h}{2\pi} \Sigma_{m}^{+} + \Sigma_{m}^{-}
+        with
+        \Sigma_{m}^{+}=\sum_{k=0}^{N-1}\delta((k+1)h) E_{m}(k+1)
+        \Sigma_{m}^{-}=\sum_{k=0}^{N-1} \delta(-(k+1)h)E_{m}(-(k+1))
+
+        Parameters
+        ----------
+        b : postitive float
+            The number of marginal standard deviations beyond which the density is evaluated
+
+        N : postitive integer, preference of form N = 2**k
+            The number of points used for meshing the interval [mean - b * sigma, mean + b * sigma]
+
+        Returns
+        -------
+        grid_values : array
+                      1D Grid on which the probability density function has been evaluated
+
+        pdf_values : array
+                    The probability density function values on the grid
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> constant = [5, 6]
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+        >>> b = 4 # we are interested in the pdf on mean +/- b * sigma
+        >>> N = 256 # 256 points for the grid
+        >>> [grid_values, pdf_values] = dist.computePDFOn1DGrid(b, N)
+
+        """
+        # Initializing some variables
+        pi = np.pi
+        mu = self.getMean()[0]
+        sigma = self.getStandardDeviation()[0]
+        b_sigma = b * sigma
+        tau = mu / b_sigma
+        h = pi / b_sigma
+        # Vectorizing some functions
+        normal_pdf = np.vectorize(self.equivalentNormal_.computePDF)
+        normal_cf = np.vectorize(self.equivalentNormal_.computeCharacteristicFunction)
+
+        # compute the gaussian pdf on y_m + 2(k+1)b \sigma, k in 0,..,N-1, m in 0,..,N-1
+        # ym_grid is also usefull for visualization
+        ym_grid = mu + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma
+        # to check here
+        ot.Log.Info("Precomputing gaussian pdf")
+        pdf = normal_pdf(ym_grid)
+        ot.Log.Info("End of gaussian approximation")
+        # interest is to build 2 * (k+1)*b *sigma and compute the gaussian pdf on the grid of form
+        # grid of k, k =1,...,N
+        k_grid = 2.0 * np.arange(1, N + 1) * b_sigma
+        # TODO check the interest here or optimize
+        # This part is too much CPU consuming
+        # y_m + 2k*b*sigma
+        #tmp = np.array([el + k_grid for el in ym_grid])
+        #pdf += np.sum(normal_pdf(tmp), axis=1)
+        # y_m - 2k*b*sigma
+        #tmp = np.array([el - k_grid for el in ym_grid])
+        #pdf += np.sum(normal_pdf(tmp), axis=1)
+
+        # Precompute the grid of delta functions
+        # the concerning grid is of form h,2h,...,Nh
+        ot.Log.Info("Precomputing delta grid")
+        delta_grid = np.arange(1, N + 1) * h
+        dcf = np.array([self.computeCharacteristicFunction([k]) for k in delta_grid]) - normal_cf(delta_grid)
+        ot.Log.Info("End of precomputing delta grid")
+
+        # compute \Sigma_+
+        yk = dcf * np.exp( -2 * pi* 1j * (tau + 1.0 /N - 1.0) * np.arange(1, N+1))
+        yk_hat = np.fft.fft(yk)
+        sigma_plus = yk_hat * np.exp(2 * pi* 1j *np.arange(N) / N)
+
+        # compute the \Sigma_-
+        zk = np.conjugate(dcf[N - np.arange(N) - 1]) * np.exp(pi* 1j * (tau + 1.0 /N - 1.0) * (N - np.arange(1,N+1)))
+        zk_hat = np.fft.fft(zk)
+        sigma_minus = zk_hat * np.exp(2 * pi* 1j * np.arange(N))
+
+        # final computation
+        s_m = h / (2.0 * pi) * (sigma_plus + sigma_minus)
+        total_pdf = pdf + s_m.real
+        total_pdf *= (total_pdf > 0)
+        return [ym_grid, total_pdf]
+
     def getAlpha(self):
         """
         Returns the alpha parameter used for the evaluation
