@@ -390,3 +390,59 @@ class SkinCube3D:
     def __str__(self):
         return "SkinCube3D symmetric="+str(self.symmetric_)+" step=["+str(self.stepX_)+", "+str(self.stepY_)+", "+str(self.stepZ_)+"]"
 
+class CachedMeshGrid:
+    """
+    Implements a cache.
+
+    """
+
+    def __init__(self, meshGrid, size=100000):
+        self.meshGrid_ = meshGrid
+        self.maxSize_ = size
+        self.currentSize_ = 0
+        self.cache_ = []
+
+    def setCacheSize(self, size):
+        if size < self.currentSize_:
+            del self.cache_[size:]
+            self.currentSize_ = size
+        self.maxSize_ = size
+
+    def isSymmetric(self):
+        return self.meshGrid_.isSymmetric()
+
+    def get_skin_walker(self, index):
+        if (self.meshGrid_.get_size_upto_level(index+1) > self.maxSize_):
+            walker = self.meshGrid_.get_skin_walker(index)
+            try:
+                while True:
+                    yield walker.next()
+            except StopIteration:
+                raise StopIteration()
+        else:
+            i = -1
+            while i <= index:
+                i += 1
+                if self.meshGrid_.get_size_upto_level(i) < self.currentSize_:
+                    continue
+                walker = self.meshGrid_.get_skin_walker(i)
+                # Precompute the whole level
+                try:
+                    while True:
+                        self.cache_.append(walker.next())
+                except StopIteration:
+                    pass
+                self.currentSize_ += self.meshGrid_.get_size_of_level(i)
+
+            for x in xrange(self.meshGrid_.get_size_upto_level(index), self.meshGrid_.get_size_upto_level(index)+self.meshGrid_.get_size_of_level(index)):
+                yield self.cache_[x]
+
+    def get_size_of_level(self, index):
+        return self.meshGrid_.get_size_of_level(index)
+
+    def get_size_upto_level(self, index):
+        return self.meshGrid_.get_size_upto_level(index)
+
+    def __str__(self):
+        return "CachedMeshGrid: maxItems="+str(self.maxSize_)+" usedItems="+str(self.currentSize_)+" mesherGrid="+str(self.meshGrid_)
+
