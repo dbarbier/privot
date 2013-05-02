@@ -119,8 +119,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # Use of the setConstant method
         self.setConstant(constant)
         # Set the distribution dimension
-        d = len(self.constant_)
-        ot.PythonDistribution.__init__(self, d)
+        self.dimension_ = len(self.constant_)
+        ot.PythonDistribution.__init__(self, self.dimension_)
         # Set constants values using default parameters
         # alpha and beta are used for the range
         self.alpha_ = ot.ResourceMap.GetAsNumericalScalar("MultivariateRandomMixture-DefaultAlpha")
@@ -158,7 +158,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         Resume print of the distribution
         """
-        s = 'class=PythonMultivariateRandomMixture,dimension=%d,' % self.getDimension()
+        s = 'class=PythonMultivariateRandomMixture,dimension=%d,' % self.dimension_
         s += 'collection=%s, matrix=%s, constant=%s' %(repr(self.collection_), repr(self.matrix_), repr(self.constant_))
         return s
 
@@ -167,7 +167,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         pretty print of the distribution
         """
         s = str()
-        for k in xrange(self.getDimension()):
+        for k in xrange(self.dimension_):
             s += "Y_%d: %1.3e + " %(k+1, self.constant_[k])
             for j in xrange(len(self.collection_)):
                 s += "%1.3e * %s" %(self.matrix_[k, j], str(self.collection_[j]))
@@ -187,9 +187,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
           Cov(Y)_{i,j} = \sum_{k=1}^n M_{i,k} M_{j,k} Cov(X_k, X_k)
 
         """
-        dimension = self.getDimension()
-        self.corr_ = ot.CorrelationMatrix(dimension)
-        for i in xrange(dimension):
+        self.corr_ = ot.CorrelationMatrix(self.dimension_)
+        for i in xrange(self.dimension_):
             for j in xrange(0, i):
                 self.corr_[i, j] = self.cov_[i, j] / (self.sigma_[i] * self.sigma_[j])
 
@@ -203,9 +202,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
           Cov(Y)_{i,j} = \sum_{k=1}^n M_{i,k} M_{j,k} Cov(X_k, X_k)
 
         """
-        d = self.getDimension()
-        self.cov_ = ot.CovarianceMatrix(d)
-        for i in xrange(d):
+        self.cov_ = ot.CovarianceMatrix(self.dimension_)
+        for i in xrange(self.dimension_):
             for j in xrange(i + 1):
                 s = 0.0
                 for k in xrange(len(self.collection_)):
@@ -251,7 +249,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         gaussian_pdf = self.equivalentNormal_.computePDF(y)
         i = 0
-        d = self.getDimension()
         condition = True
         while (condition):
             i = i + 1
@@ -260,7 +257,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             try:
                 while True:
                     point = walker.next()
-                    x = [y[k] + point[k] for k in xrange(d)]
+                    x = [y[k] + point[k] for k in xrange(self.dimension_)]
                     delta += self.equivalentNormal_.computePDF(x)
             except StopIteration:
                 pass
@@ -286,10 +283,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         \cup_{(i_1,..,i_d) \in [-index, index]^d} (i_1,...,i_d) \ \cup_{(i_1,..,i_d) \in [-index+1, index-1]^d} (i_1,...,i_d)
         """
         assert isinstance(index, int)
-        dimension = self.getDimension()
-        if dimension == 1:
+        if self.dimension_ == 1:
             return 2
-        elif dimension == 2:
+        elif self.dimension_ == 2:
             return 8 * index
         else:
             return 24 * index * index + 2
@@ -302,14 +298,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         [mean +/- beta * sigma_]
         """
         if (len(self.collection_) <= ot.ResourceMap.GetAsUnsignedLong( "MultivariateRandomMixture-SmallSize" )):
-            self.referenceBandwidth_ = [2.0 * cmath.pi / (self.getRange().getUpperBound()[k] - self.getRange().getLowerBound()[k]) for k in xrange(self.getDimension())]
+            self.referenceBandwidth_ = [2.0 * cmath.pi / (self.getRange().getUpperBound()[k] - self.getRange().getLowerBound()[k]) for k in xrange(self.dimension_)]
             # Shrink a little bit the bandwidth if the range is finite
-            isFinite = [self.getRange().getFiniteLowerBound()[k] and self.getRange().getFiniteUpperBound()[k] for k in xrange(self.getDimension())]
+            isFinite = [self.getRange().getFiniteLowerBound()[k] and self.getRange().getFiniteUpperBound()[k] for k in xrange(self.dimension_)]
             if (all(isFinite)):
-                self.referenceBandwidth_ = [self.referenceBandwidth_[k] * 0.5 for k in xrange(self.getDimension())]
+                self.referenceBandwidth_ = [self.referenceBandwidth_[k] * 0.5 for k in xrange(self.dimension_)]
         # Else use a kind of Normal approximation
         else:
-            self.referenceBandwidth_ = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.getDimension())]
+            self.referenceBandwidth_ = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.dimension_)]
 
     def computeRange(self):
         """
@@ -321,7 +317,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         finite_lower_bounds = []
         upper_bounds = []
         finite_upper_bounds = []
-        for i in xrange(self.getDimension()):
+        for i in xrange(self.dimension_):
             interval = ot.Interval(self.constant_[i], self.constant_[i])
             for j in xrange(len(self.collection_)):
                 interval += self.collection_[j].getRange() * self.matrix_[i, j]
@@ -335,13 +331,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # We build an "equivalent" gaussian with mean, sigma values
         # We take into account the intersect of the interval computed and mu -/+ beta * sigma
         # Diagonal elements of the sigma matrix
-        s = ot.NumericalPoint([self.sigma_[k] for k in xrange(self.getDimension())])
+        s = ot.NumericalPoint([self.sigma_[k] for k in xrange(self.dimension_)])
         gaussian_interval = ot.Interval(self.getMean() - s * self.beta_, self.getMean() + s * self.beta_)
         self.interval_ = self.interval_.intersect(gaussian_interval)
 
     def computeStandardDeviation(self):
         # set the standard deviation
-        self.sigma_ = ot.NumericalPoint([cmath.sqrt(self.cov_[k, k]).real for k in xrange(self.getDimension())])
+        self.sigma_ = ot.NumericalPoint([cmath.sqrt(self.cov_[k, k]).real for k in xrange(self.dimension_)])
 
     def get_points_on_surface_grid_(self, index):
         """
@@ -354,12 +350,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         The current implementation is in index^d operations for easy readability
         """
         assert isinstance(index, int)
-        d = self.getDimension()
-        if d == 1 :
+        if self.dimension_ == 1 :
             # list_points should contains 2 points
             for ix in [-index, index]:
                 yield (ix,)
-        elif d == 2 :
+        elif self.dimension_ == 2 :
             # In 2D case, we should take into account the contour line of a
             # bidimensional square, i.e we should take into account
             # all points with |x| = index, |y| = index
@@ -371,7 +366,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     inner_y = (abs(iy) < index)
                     if not(inner_x and inner_y):
                         yield (ix, iy)
-        elif d == 3 :
+        elif self.dimension_ == 3 :
             # In 3D case, we should take into account the 6 faces of a
             # cube, i.e we should take into account
             # all points with |x| = index, |y| = index and |z| = index
@@ -477,11 +472,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> log_cf = dist.computeLogCharacteristicFunction( [0.3, 0.9] )
 
         """
-        assert len(y) == self.getDimension()
+        assert len(y) == self.dimension_
         # The characteristic function is given by the following formula:
         # \phi(y) = \prod_{j=1}^{d} (exp(i * u_j * constant_j) * \prod_{k=1}^{n} \phi_{X_k}((M^t u)_k))
         n = len(self.collection_)
-        d = self.getDimension()
         mt = self.matrix_.transpose()
         # compute M^t * u
         mt_y = mt * y
@@ -583,13 +577,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> pdf = dist.computePDF( [0.3, 0.9] )
 
         """
-        assert len(y) == self.getDimension()
+        assert len(y) == self.dimension_
         if self.isAnalyticPDF_:
             # compute analytically the pdf
             u = ot.NumericalPoint(y) - self.constant_
             Qu = self.matrixInverse_ * u
             pdf = abs(self.detMatrixInverse_)
-            for j in xrange(self.getDimension()):
+            for j in xrange(self.dimension_):
                 pdf *= self.collection_[j].computePDF(Qu[j])
             return pdf
 
@@ -603,7 +597,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # h_k are supposed to be small values, we must care about
         # numerical troubles
         factor = 1.0
-        for k in xrange(self.getDimension()):
+        for k in xrange(self.dimension_):
             factor *= self.referenceBandwidth_[k] / (2.0 * cmath.pi)
         # 2) Compute a difference of characteristic functions on the point y
         # sum of delta functions
@@ -1217,7 +1211,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> dist.setReferenceBandwidth([0.1, 0.1])
 
         """
-        if len(bandwidth) != self.getDimension():
+        if len(bandwidth) != self.dimension_:
             raise ValueError("The given bandwidth's size differ with the dimension of distribution")
         self.referenceBandwidth_ = [float(element) for element in bandwidth]
 
