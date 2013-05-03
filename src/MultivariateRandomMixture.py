@@ -253,10 +253,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         while (condition):
             i = i + 1
             delta = 0.0
-            walker = self.meshAltGrid_.get_skin_walker(i)
+            iterator = self.meshAltGrid_.get_skin_iterator(i)
             try:
                 while True:
-                    point = walker.next()
+                    point = iterator.next()
                     x = [y[k] + point[k] for k in xrange(self.dimension_)]
                     delta += self.equivalentNormal_.computePDF(x)
             except StopIteration:
@@ -616,10 +616,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # At each iteration of the while condition,
             # k calculations are done
             for m in xrange(k, 2*k):
-                walker = self.meshGrid_.get_skin_walker_evaluate(m, self.computeDeltaCharacteristicFunction)
+                iterator = self.meshGrid_.get_skin_iterator_evaluate(m, self.computeDeltaCharacteristicFunction)
                 try :
                     while True:
-                        h, cfValue = walker.next()
+                        h, cfValue = iterator.next()
                         h_y = self.meshGrid_.dot(h, y)
                         cos_hy = cmath.cos(h_y).real
                         sin_hy = cmath.sin(h_y).real

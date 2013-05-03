@@ -29,25 +29,25 @@
 #  All classes define the following methods:
 #    __init__(self, steps, symmetric)
 #    isSymmetric(self)
-#    get_skin_walker(self, index)
+#    get_skin_iterator(self, index)
 #    get_size_of_level(self, index)
 #    get_size_upto_level(self, index)
 
 
 class Cube1D:
     """
-    Trivial implementation of a 1D grid walker.
+    Trivial implementation of a 1D grid iterator.
 
     Example
     -------
     >>> import MaxNormMeshGrid
     >>> meshgrid = MaxNormMeshGrid.Cube1D([0.1], True)
     >>> for i in xrange(1, 10):
-    >>>     walker = meshgrid.get_skin_walker(i)
+    >>>     iterator = meshgrid.get_skin_iterator(i)
     >>>     print("Iteration "+str(i))
     >>>     try:
     >>>         while True:
-    >>>             y = walker.next()
+    >>>             y = iterator.next()
     >>>             print(" -> "+y.__str__())
     >>>     except StopIteration:
     >>>         pass
@@ -80,7 +80,7 @@ class Cube1D:
     def dot(x, y):
         return x[0] * y[0]
 
-    def get_skin_walker(self, index):
+    def get_skin_iterator(self, index):
         if index == 0:
             yield (0.,)
         else:
@@ -90,11 +90,11 @@ class Cube1D:
                 yield (-index * self.step_,)
                 yield (index * self.step_,)
 
-    def get_skin_walker_evaluate(self, index, function):
-        walker = self.get_skin_walker(index)
+    def get_skin_iterator_evaluate(self, index, function):
+        iterator = self.get_skin_iterator(index)
         try:
             while True:
-                point = walker.next()
+                point = iterator.next()
                 yield point, function(point)
         except StopIteration:
             raise StopIteration()
@@ -120,9 +120,9 @@ class Cube1D:
 
 class Cube2D:
     """
-    Trivial implementation of a 2D grid walker.
+    Trivial implementation of a 2D grid iterator.
     Points at distance N are found by considering all points in the cube (N,N) which does not
-    belong to the cube (N-1,N-1).  Complexity of get_skin_walker is O(N^2).
+    belong to the cube (N-1,N-1).  Complexity of get_skin_iterator is O(N^2).
 
     """
 
@@ -143,7 +143,7 @@ class Cube2D:
     def dot(x, y):
         return x[0] * y[0] + x[1] * y[1]
 
-    def get_skin_walker(self, index):
+    def get_skin_iterator(self, index):
         if index == 0:
             yield (0., 0.)
         else:
@@ -165,11 +165,11 @@ class Cube2D:
                         if not(inner_x and inner_y):
                             yield (cx, float(iy) * self.stepY_)
 
-    def get_skin_walker_evaluate(self, index, function):
-        walker = self.get_skin_walker(index)
+    def get_skin_iterator_evaluate(self, index, function):
+        iterator = self.get_skin_iterator(index)
         try:
             while True:
-                point = walker.next()
+                point = iterator.next()
                 yield point, function(point)
         except StopIteration:
             raise StopIteration()
@@ -195,9 +195,9 @@ class Cube2D:
 
 class SkinCube2D:
     """
-    Optimized implementation of a 2D grid walker.
+    Optimized implementation of a 2D grid iterator.
     Points at distance N are found by considering the 4 lines |x|=N and |y|=N.
-    Complexity of get_skin_walker is O(N).
+    Complexity of get_skin_iterator is O(N).
 
     """
 
@@ -218,7 +218,7 @@ class SkinCube2D:
     def dot(x, y):
         return x[0] * y[0] + x[1] * y[1]
 
-    def get_skin_walker(self, index):
+    def get_skin_iterator(self, index):
         if index == 0:
             yield (0., 0.)
         else:
@@ -249,11 +249,11 @@ class SkinCube2D:
                 for ix in range(index, -index, -1):
                     yield (float(ix) * self.stepX_, cy)
 
-    def get_skin_walker_evaluate(self, index, function):
-        walker = self.get_skin_walker(index)
+    def get_skin_iterator_evaluate(self, index, function):
+        iterator = self.get_skin_iterator(index)
         try:
             while True:
-                point = walker.next()
+                point = iterator.next()
                 yield point, function(point)
         except StopIteration:
             raise StopIteration()
@@ -279,9 +279,9 @@ class SkinCube2D:
 
 class Cube3D:
     """
-    Trivial implementation of a 3D grid walker.
+    Trivial implementation of a 3D grid iterator.
     Points at distance N are found by considering all points in the cube (N,N,N) which does not
-    belong to the cube (N-1,N-1,N-1).  Complexity of get_skin_walker is O(N^3).
+    belong to the cube (N-1,N-1,N-1).  Complexity of get_skin_iterator is O(N^3).
 
     """
 
@@ -303,7 +303,7 @@ class Cube3D:
     def dot(x, y):
         return x[0] * y[0] + x[1] * y[1] + x[2] * y[2]
 
-    def get_skin_walker(self, index):
+    def get_skin_iterator(self, index):
         if index == 0:
             yield (0., 0., 0.)
         else:
@@ -338,11 +338,11 @@ class Cube3D:
                             if not(inner_x and inner_y and inner_z):
                                 yield (cx, cy, float(iz) * self.stepZ_)
 
-    def get_skin_walker_evaluate(self, index, function):
-        walker = self.get_skin_walker(index)
+    def get_skin_iterator_evaluate(self, index, function):
+        iterator = self.get_skin_iterator(index)
         try:
             while True:
-                point = walker.next()
+                point = iterator.next()
                 yield point, function(point)
         except StopIteration:
             raise StopIteration()
@@ -368,9 +368,9 @@ class Cube3D:
 
 class SkinCube3D:
     """
-    Optimized implementation of a 3D grid walker.
+    Optimized implementation of a 3D grid iterator.
     Points at distance N are found by considering the 6 planes |x|=N, |y|=N and |z|=N.
-    Complexity of get_skin_walker is O(N^2).
+    Complexity of get_skin_iterator is O(N^2).
 
     """
 
@@ -392,7 +392,7 @@ class SkinCube3D:
     def dot(x, y):
         return x[0] * y[0] + x[1] * y[1] + x[2] * y[2]
 
-    def get_skin_walker(self, index):
+    def get_skin_iterator(self, index):
         if index == 0:
             yield (0., 0., 0.)
         else:
@@ -442,11 +442,11 @@ class SkinCube3D:
                         for iy in xrange(-index + 1, index):
                           yield (cx, float(iy) * self.stepY_, cz)
 
-    def get_skin_walker_evaluate(self, index, function):
-        walker = self.get_skin_walker(index)
+    def get_skin_iterator_evaluate(self, index, function):
+        iterator = self.get_skin_iterator(index)
         try:
             while True:
-                point = walker.next()
+                point = iterator.next()
                 yield point, function(point)
         except StopIteration:
             raise StopIteration()
@@ -499,12 +499,12 @@ class CachedMeshGrid:
     def dot(self, x, y):
         return self.meshGrid_.dot(x, y)
 
-    def get_skin_walker(self, index):
+    def get_skin_iterator(self, index):
         if self.meshGrid_.get_size_upto_level(index+1) > self.maxSize_:
-            walker = self.meshGrid_.get_skin_walker(index)
+            iterator = self.meshGrid_.get_skin_iterator(index)
             try:
                 while True:
-                    yield walker.next()
+                    yield iterator.next()
             except StopIteration:
                 raise StopIteration()
         else:
@@ -513,10 +513,10 @@ class CachedMeshGrid:
                 i += 1
                 if self.meshGrid_.get_size_upto_level(i) < self.currentSize_:
                     continue
-                walker = self.meshGrid_.get_skin_walker(i)
+                iterator = self.meshGrid_.get_skin_iterator(i)
                 try:
                     while True:
-                        self.cachedPosition_.append(walker.next())
+                        self.cachedPosition_.append(iterator.next())
                 except StopIteration:
                     pass
                 self.currentSize_ += self.meshGrid_.get_size_of_level(i)
@@ -524,12 +524,12 @@ class CachedMeshGrid:
             for x in xrange(self.meshGrid_.get_size_upto_level(index), self.meshGrid_.get_size_upto_level(index)+self.meshGrid_.get_size_of_level(index)):
                 yield self.cachedPosition_[x]
 
-    def get_skin_walker_evaluate(self, index, function):
+    def get_skin_iterator_evaluate(self, index, function):
         if self.meshGrid_.get_size_upto_level(index+1) > self.maxSize_:
-            walker = self.meshGrid_.get_skin_walker(index)
+            iterator = self.meshGrid_.get_skin_iterator(index)
             try:
                 while True:
-                    point = walker.next()
+                    point = iterator.next()
                     yield (point, function(point))
             except StopIteration:
                 raise StopIteration()
@@ -539,10 +539,10 @@ class CachedMeshGrid:
                 i += 1
                 if self.meshGrid_.get_size_upto_level(i) < self.currentSize_:
                     continue
-                walker = self.meshGrid_.get_skin_walker(i)
+                iterator = self.meshGrid_.get_skin_iterator(i)
                 try:
                     while True:
-                        point = walker.next()
+                        point = iterator.next()
                         self.cachedPosition_.append(point)
                         self.cachedValue_.append(function(point))
                 except StopIteration:
