@@ -41,6 +41,7 @@ import MaxNormMeshGrid
 # ResourceMap : setting different numerical parameters useful for the distribution
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin", 3)
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMax", 16)
+ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultCacheSize", 4000000)
 ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultAlpha", 4.0)
 ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultBeta",  8.0)
 ot.ResourceMap.SetAsNumericalScalar("MultivariateRandomMixture-DefaultPDFPrecision", 1.0e-10)
@@ -148,11 +149,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # and covariance = self.cov_
         self.computeEquivalentNormal()
         if len(self.referenceBandwidth_) == 1:
-            self.setGridMesher(MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True))
+            gridMesherNd = MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True)
         elif len(self.referenceBandwidth_) == 2:
-            self.setGridMesher(MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True))
+            gridMesherNd = MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True)
         elif len(self.referenceBandwidth_) == 3:
-            self.setGridMesher(MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True))
+            gridMesherNd = MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True)
+        cacheSize = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultCacheSize")
+        if cacheSize > 0:
+            self.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(gridMesherNd, size=cacheSize))
+        else:
+            self.setGridMesher(gridMesherNd)
 
     def __repr__(self):
         """
@@ -277,19 +283,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         mu = [dist.getMean()[0] for dist in self.collection_]
         self.mean_ = self.matrix_ * ot.NumericalPoint(mu) + self.constant_
 
-    def compute_nr_points_to_add(self, index):
-        """
-        This method is private and helps to compute the number points added when considering:
-        \cup_{(i_1,..,i_d) \in [-index, index]^d} (i_1,...,i_d) \ \cup_{(i_1,..,i_d) \in [-index+1, index-1]^d} (i_1,...,i_d)
-        """
-        assert isinstance(index, int)
-        if self.dimension_ == 1:
-            return 2
-        elif self.dimension_ == 2:
-            return 8 * index
-        else:
-            return 24 * index * index + 2
-
     def computeReferenceBandwidth(self):
         """
         The method is private.
@@ -338,48 +331,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def computeStandardDeviation(self):
         # set the standard deviation
         self.sigma_ = ot.NumericalPoint([cmath.sqrt(self.cov_[k, k]).real for k in xrange(self.dimension_)])
-
-    def get_points_on_surface_grid_(self, index):
-        """
-        This method is private and helps to get the points on which some functions should be evaluated.
-        The concerning functions are:
-         1) The evaluation of the equivalent normal pdf sum
-         2) The evaluation of delta characteristic functions
-        The points corresponds to :
-        \cup_{(i_1,..,i_d) \in [-index, index]^d} (i_1,...,i_d) \ \cup_{(i_1,..,i_d) \in [-index+1, index-1]^d} (i_1,...,i_d)
-        The current implementation is in index^d operations for easy readability
-        """
-        assert isinstance(index, int)
-        if self.dimension_ == 1 :
-            # list_points should contains 2 points
-            for ix in [-index, index]:
-                yield (ix,)
-        elif self.dimension_ == 2 :
-            # In 2D case, we should take into account the contour line of a
-            # bidimensional square, i.e we should take into account
-            # all points with |x| = index, |y| = index
-            # list_points should contains:
-            # (2j+1)^2 - (2j-1)^2 = 8j^2 points
-            for ix in xrange(-index, index + 1):
-                inner_x = (abs(ix) < index)
-                for iy in xrange(-index, index+1):
-                    inner_y = (abs(iy) < index)
-                    if not(inner_x and inner_y):
-                        yield (ix, iy)
-        elif self.dimension_ == 3 :
-            # In 3D case, we should take into account the 6 faces of a
-            # cube, i.e we should take into account
-            # all points with |x| = index, |y| = index and |z| = index
-            # list_points should contains:
-            # (2j+1)^3 - (2j-1)^3 = 24j^2 + 2 points
-            for ix in xrange(-index, index+1):
-                inner_x = (abs(ix) < index)
-                for iy in xrange(-index, index+1):
-                    inner_y = (abs(iy) < index)
-                    for iz in xrange(-index, index+1):
-                        inner_z = (abs(iz) < index)
-                        if not(inner_x and inner_y and inner_z):
-                            yield (ix, iy, iz)
 
     def setConstant(self, constant):
         """
@@ -931,23 +882,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         return self.mean_
 
-    def getMaxSize(self):
-        """
-        Returns the maximum size of the cache for the CharacteristicFunction values
-
-        Example
-        -------
-        >>> import openturns as ot
-        >>> import MultivariateRandomMixture as MV
-        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
-        >>> matrix = ot.Matrix([[1,2], [3,4]])
-        >>> constant = [5, 6]
-        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
-        >>> maxSize = dist.getMaxSize()
-
-        """
-        return self.maxSize_
-
     def getPDFPrecision(self):
         """
         Returns the pdf precision used computation of the probability density function
@@ -1159,6 +1093,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def setGridMesher(self, gridMesher):
         """
+        Modify the function used when iterating over grid.  This method is called by __init__,
+        but it can be called to specify an alternate function.
 
         Example
         -------
@@ -1169,7 +1105,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> matrix = ot.Matrix([[1,2], [3,4]])
         >>> constant = [5, 6]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
-        >>> dist.setGridMesher(MaxNormMeshGrid.Cube2D(dist.getReferenceBandwidth()), True)
+        >>> dist.setGridMesher(MaxNormMeshGrid.Cube2D(dist.getReferenceBandwidth(), True))
 
         """
         self.meshGrid_ = gridMesher
