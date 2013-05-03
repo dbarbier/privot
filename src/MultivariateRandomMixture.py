@@ -185,8 +185,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def computeCorrelation(self):
         """
-        Compute the correlation matrix of the mixture
-        This method is private. Use the getCovariance to get the covariance value
+        Compute the correlation matrix of the mixture.
+        This method is private. Use the getCovariance to get the covariance value.
         The covariance is given by
           Cov(Y) = M * Cov(X) * M^t
         As Cov(X) is diagonal:
@@ -200,8 +200,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def computeCovariance(self):
         """
-        Compute the covariance of the mixture
-        This method is private. Use the getCovariance to get the covariance value
+        Compute the covariance of the mixture.
+        This method is private. Use the getCovariance to get the covariance value.
         The covariance is given by
           Cov(Y) = M * Cov(X) * M^t
         As Cov(X) is diagonal:
@@ -218,19 +218,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def computeDeltaCharacteristicFunction(self, x):
         """
-        Returns the differences of characteristic functions
-        This method is private and should not be used outside the interla methods
-        The current method does not implement the cache mechanism
-        The method uses also an external class for the evaluation of the characteristic function
-        for multivariate gaussian distribution
+        Returns the differences of characteristic functions.
+        This method is private and should not be called directly.
         """
         return self.computeCharacteristicFunction(x) - self.equivalentNormal_.computeCharacteristicFunction(x)
 
     def computeEquivalentNormal(self):
         """
-        Compute the equivalent Normal distribution,
-        i.e a normal distribution with mean = self.mean
-        and covariance = self.covariance
+        Compute the equivalent Normal distribution, i.e a normal distribution with
+        mean = self.mean and covariance = self.covariance
         """
         self.equivalentNormal_ = ot.Normal(self.getMean(), self.getCovariance())
 
@@ -274,9 +270,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def computeMean(self):
         """
-        Compute the mean of the multivariate mixture
-        This method is private. Use the getMean to get the mean value
-        The mean is given by:
+        Compute the mean of the multivariate mixture.
+        This method is private. Use the getMean method to get the mean value.
+        It is given by:
           E(Y) = M * E(X)
 
         """
@@ -287,8 +283,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         The method is private.
         It computes the reference bandwidth. It is defined as the maximum bandwidth
-        that allow a precise computation of the PDF over the range
-        [mean +/- beta * sigma_]
+        that allows a precise computation of the PDF over the range
+        [mean +/- beta * sigma_].
+
         """
         if (len(self.collection_) <= ot.ResourceMap.GetAsUnsignedLong( "MultivariateRandomMixture-SmallSize" )):
             self.referenceBandwidth_ = [2.0 * cmath.pi / (self.getRange().getUpperBound()[k] - self.getRange().getLowerBound()[k]) for k in xrange(self.dimension_)]
@@ -304,6 +301,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         This methods is private.
         It computes the range of the distribution.
+
         """
         # Elements of the bounds
         lower_bounds = []
@@ -329,12 +327,18 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.interval_ = self.interval_.intersect(gaussian_interval)
 
     def computeStandardDeviation(self):
-        # set the standard deviation
+        """
+        This methods is private.
+        It computes the standard deviation of the distribution.
+
+        """
         self.sigma_ = ot.NumericalPoint([cmath.sqrt(self.cov_[k, k]).real for k in xrange(self.dimension_)])
 
     def setConstant(self, constant):
         """
         This method is private.
+        It sets the constant term of the affine transformation.
+
         """
         d = self.matrix_.getNbRows()
         if (constant is None):
@@ -347,6 +351,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def setMatrix(self, matrix):
         """
         This method is private.
+        It sets the linear term of the affine transformation.
+
         """
         # matrix cast
         # As object might be a numpy class, we convert into
@@ -382,8 +388,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def setDistributionCollection(self, collection):
         """
-        Set the distribution collection
-        This method should not be used, except by the __init__ method
+        Set the distribution collection.
+        This method should not be used, except by the __init__ method.
         """
         distributions = []
         for k in xrange(len(collection)):
@@ -514,7 +520,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         Returns
         -------
-        out : postivie or null scalar
+        out : non-negative scalar
               The density function evaluated on y
 
         Example
@@ -609,10 +615,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         Parameters
         ----------
-        b : postitive float
+        b : positive float
             The number of marginal standard deviations beyond which the density is evaluated
 
-        N : postitive integer, preference of form N = 2**k
+        N : positive integer, preference of form N = 2**k
             The number of points used for meshing the interval [mean - b * sigma, mean + b * sigma]
 
         Returns
@@ -691,8 +697,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getAlpha(self):
         """
-        Returns the alpha parameter used for the evaluation
-        of the range
+        Returns the alpha parameter used for the evaluation of the range.
 
         Example
         -------
@@ -709,8 +714,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getBeta(self):
         """
-        Returns the beta parameter used for the evaluation
-        of the range
+        Returns the beta parameter used for the evaluation of the range.
 
         Example
         -------
@@ -728,7 +732,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def getBlockMax(self):
         """
         Returns the blockMax parameter used for the evaluation
-        of the pdf using the gaussian approximation
+        of the pdf using the gaussian approximation.
 
         Example
         -------
@@ -746,7 +750,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def getBlockMin(self):
         """
         Returns the blockMin parameter used for the evaluation
-        of the pdf using the gaussian approximation
+        of the pdf using the gaussian approximation.
 
         Example
         -------
@@ -764,7 +768,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def getConstant(self):
         """
         Returns the constant vector. This vector is also denoted by y_0
-        in the reference guide documentation
+        in the reference guide documentation.
 
         Example
         -------
@@ -781,7 +785,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getCorrelation(self):
         """
-        Returns the correlation matrix of the mixutre
+        Returns the correlation matrix of the mixture.
 
         Example
         -------
@@ -798,7 +802,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getCovariance(self):
         """
-        Returns the covariance matrix of the mixutre
+        Returns the covariance matrix of the mixture.
 
         Example
         -------
@@ -815,7 +819,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getDistributionCollection(self):
         """
-        Returns the distribution collection
+        Returns the distribution collection.
 
         Example
         -------
@@ -832,7 +836,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getLastPDFError(self):
         """
-        Returns the last error obtained during computation of the probability density function
+        Returns the last error obtained during computation of the probability density function.
 
         Example
         -------
@@ -850,7 +854,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getMatrix(self):
         """
-        Returns the matrix of the affine transform
+        Returns the matrix of the affine transform.
 
         Example
         -------
@@ -867,7 +871,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getMean(self):
         """
-        Returns the mean vector of the mixture
+        Returns the mean vector of the mixture.
 
         Example
         -------
@@ -884,7 +888,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getPDFPrecision(self):
         """
-        Returns the pdf precision used computation of the probability density function
+        Returns the pdf precision used during computation of the probability density function.
 
         Example
         -------
@@ -901,7 +905,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getRange(self):
         """
-        Returns the range of the distribution
+        Returns the range of the distribution.
 
         Example
         -------
@@ -918,7 +922,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getRealization(self):
         """
-        Get a realization of the distribution
+        Get a realization of the distribution.
 
         Parameters
         ----------
@@ -947,7 +951,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def getReferenceBandwidth(self):
         """
         Returns the bandwidth parameter used for the evaluation
-        of the pdf using the gaussian approximation
+        of the pdf using the gaussian approximation.
 
         Example
         -------
@@ -964,7 +968,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getSample(self, n):
         """
-        Get a sample of size n of the distribution
+        Get a sample of size n of the distribution.
 
         Parameters
         ----------
@@ -1002,7 +1006,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def getStandardDeviation(self):
         """
-        Returns the standard deviation
+        Returns the standard deviation.
 
         Example
         -------
@@ -1114,7 +1118,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
     def setPDFPrecision(self, pdfPrecision):
         """
-        Sets the pdf precision used computation of the probability density function
+        Sets the pdf precision used during computation of the probability density function.
 
         Example
         -------
@@ -1134,7 +1138,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
     def setReferenceBandwidth(self, bandwidth):
         """
         Set the blockMin parameter used for the evaluation
-        of the pdf using the gaussian approximation
+        of the pdf using the gaussian approximation.
 
         Example
         -------
