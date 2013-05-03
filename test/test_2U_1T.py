@@ -81,8 +81,6 @@ if __name__ == "__main__":
     # evaluation of the characteristic function between xmin and xmax
     xmin, xmax, dx = -5.0, 5.0, 0.5
     x = np.arange(xmin, xmax + dx, dx)
-    delta = 0.0
-    pdf = 0.0
     t1 = []
     t2 = []
     for value in x:
@@ -96,14 +94,25 @@ if __name__ == "__main__":
         toc = time.time()
         dt2 = toc - tic
         t2.append(dt2)
-        print dt1, dt2, dt1/dt2
-        print "pdf eps : dist=%e, rm=%e"%(distribution.pdfEpsilon_,  random_mixture.getPDFEpsilon())
+        print "time of computation : distribution=%s, rm=%s, ratio=%s" %(dt1, dt2, dt1/dt2)
         print "values comparison : dist_pdf=%s, rm_pdf=%s, error=%s" %(c1, c2, (c1 - c2)/c2)
 
     size = len(t1)
     import matplotlib.pylab as plt
+    plt.ion()
     plt.loglog(x, t1, 'r', label = 'MV')
     plt.loglog(x, t2, 'b', label = 'RM')
     plt.legend()
-    plt.ion()
-    plt.show()
+
+    # compute the pdf on a grid of form mu +/- b *sigma with N points
+    b = 3.0
+    N = pow(2, 16)
+    [y, pdf] = distribution.computePDFOn1DGrid(b, N)
+    pdf_theorique = np.array([random_mixture.computePDF(el) for el in y])
+    fig = plt.figure()
+    plt.subplot(211)
+    plt.plot(y, pdf_theorique, 'r', label = 'RM')
+    plt.plot(y, pdf, 'g-', label = 'MV')
+    plt.legend()
+    plt.subplot(212)
+    plt.plot(y, pdf_theorique - pdf, 'b', label = 'RM')
