@@ -501,6 +501,8 @@ class CachedMeshGrid:
 
     def get_skin_iterator(self, index):
         if self.meshGrid_.get_size_upto_level(index+1) > self.maxSize_:
+            #  For simplicity reason, if this level does not fully fit
+            #  into the cache, it is not stored
             iterator = self.meshGrid_.get_skin_iterator(index)
             try:
                 while True:
@@ -508,11 +510,13 @@ class CachedMeshGrid:
             except StopIteration:
                 raise StopIteration()
         else:
-            i = -1
-            while i <= index:
-                i += 1
-                if self.meshGrid_.get_size_upto_level(i) < self.currentSize_:
-                    continue
+            #  Find the first level not being cached
+            start = index + 1
+            while start > 0 and self.meshGrid_.get_size_upto_level(start) > self.currentSize_:
+                start -= 1
+
+            #  Fill up the cache
+            for  i in xrange(start, index + 1):
                 iterator = self.meshGrid_.get_skin_iterator(i)
                 try:
                     while True:
@@ -526,6 +530,8 @@ class CachedMeshGrid:
 
     def get_skin_iterator_evaluate(self, index, function):
         if self.meshGrid_.get_size_upto_level(index+1) > self.maxSize_:
+            #  For simplicity reason, if this level does not fully fit
+            #  into the cache, it is not stored
             iterator = self.meshGrid_.get_skin_iterator(index)
             try:
                 while True:
@@ -534,11 +540,13 @@ class CachedMeshGrid:
             except StopIteration:
                 raise StopIteration()
         else:
-            i = -1
-            while i <= index:
-                i += 1
-                if self.meshGrid_.get_size_upto_level(i) < self.currentSize_:
-                    continue
+            #  Find the first level not being cached
+            start = index + 1
+            while start > 0 and self.meshGrid_.get_size_upto_level(start) > self.currentSize_:
+                start -= 1
+
+            #  Fill up the cache
+            for  i in xrange(start, index + 1):
                 iterator = self.meshGrid_.get_skin_iterator(i)
                 try:
                     while True:
