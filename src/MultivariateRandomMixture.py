@@ -664,15 +664,17 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             ot.Log.Info("End of gaussian approximation")
             # interest is to build 2 * (k+1)*b *sigma and compute the gaussian pdf on the grid of form
             # grid of k, k =1,...,N
-            k_grid = 2.0 * np.arange(1, N + 1) * b_sigma
-            # TODO check the interest here or optimize
-            # This part is too much CPU consuming
-            # y_m + 2k*b*sigma
-            #tmp = np.array([el + k_grid for el in ym_grid])
-            #pdf += np.sum(normal_pdf(tmp), axis=1)
-            # y_m - 2k*b*sigma
-            #tmp = np.array([el - k_grid for el in ym_grid])
-            #pdf += np.sum(normal_pdf(tmp), axis=1)
+            for m, ym in enumerate(ym_grid):
+                k = 0
+                condition = True
+                # Take into account the contributions y_m + 2k*b*sigma and y_m - 2k*b*sigma
+                # while contribution is not negligible
+                while condition:
+                    dyk = 2.0 * b_sigma * (k + 1)
+                    k += 1
+                    delta = np.sum(normal_pdf([ym + dyk, ym - dyk]))
+                    pdf[m] += delta
+                    condition = delta > pdf[m] * self.pdfEpsilon_
 
             # Precompute the grid of delta functions
             # the concerning grid is of form h,2h,...,Nh
@@ -682,14 +684,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             ot.Log.Info("End of precomputing delta grid")
 
             # compute \Sigma_+
-            yk = dcf * np.exp( -2 * pi* 1j * (tau + 1.0 /N - 1.0) * np.arange(1, N+1))
+            yk = dcf * np.exp( - pi* 1j * (tau - 1.0 + 1.0 / N) * np.arange(1, N+1))
             yk_hat = np.fft.fft(yk)
-            sigma_plus = yk_hat * np.exp(2 * pi* 1j *np.arange(N) / N)
+            sigma_plus = yk_hat * np.exp(2.0 * pi* 1j * np.arange(N) / N)
 
             # compute the \Sigma_-
-            zk = np.conjugate(dcf[N - np.arange(N) - 1]) * np.exp(pi* 1j * (tau + 1.0 /N - 1.0) * (N - np.arange(1,N+1)))
+            zk = np.conjugate(dcf[N - np.arange(N) - 1]) * np.exp(pi* 1j * (tau -1.0 + 1.0 /N) * (N - np.arange(1,N+1)))
             zk_hat = np.fft.fft(zk)
-            sigma_minus = zk_hat * np.exp(2 * pi* 1j * np.arange(N))
+            sigma_minus = zk_hat * np.exp(-2 * pi* 1j * np.arange(N))
 
             # final computation
             s_m = h / (2.0 * pi) * (sigma_plus + sigma_minus)
