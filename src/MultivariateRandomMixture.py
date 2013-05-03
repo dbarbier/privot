@@ -360,6 +360,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # Also, if the object is of type SquareMatrix,
         # the getNbColumns/getNbRows methods are not available
         self.matrix_ = ot.Matrix(matrix)
+        self.matrixT_ = self.matrix_.transpose()
         # Check matrix dimension
         # the operator of the transformation should have the same number of
         # columns as the collection size
@@ -433,9 +434,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # The characteristic function is given by the following formula:
         # \phi(y) = \prod_{j=1}^{d} (exp(i * u_j * constant_j) * \prod_{k=1}^{n} \phi_{X_k}((M^t u)_k))
         n = len(self.collection_)
-        mt = self.matrix_.transpose()
-        # compute M^t * u
-        mt_y = mt * y
+        # compute M^t * y
+        mt_y = self.matrixT_ * y
         # compute the deterministic term
         somme = ot.dot(y, self.constant_) * 1j
         smallScalar = 0.5 * ot.SpecFunc.LogMinNumericalScalar
@@ -994,7 +994,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         sample = ot.ComposedDistribution(ot.DistributionCollection(self.collection_)).getSample(n)
         # product matrix * realization
         # using np for scalability (matrix * sample not available)
-        sample = np.array(sample) * np.matrix(self.matrix_).transpose()
+        sample = np.array(sample) * np.matrix(self.matrixT_)
         # np.matrix could not be casted into ot.NumericalSample
         sample = np.array(sample)
         sample = ot.NumericalSample(sample)
