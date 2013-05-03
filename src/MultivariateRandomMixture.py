@@ -661,7 +661,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # to check here
             ot.Log.Info("Precomputing gaussian pdf")
             pdf = normal_pdf(ym_grid)
-            ot.Log.Info("End of gaussian approximation")
             # interest is to build 2 * (k+1)*b *sigma and compute the gaussian pdf on the grid of form
             # grid of k, k =1,...,N
             for m, ym in enumerate(ym_grid):
@@ -674,7 +673,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     k += 1
                     delta = np.sum(normal_pdf([ym + dyk, ym - dyk]))
                     pdf[m] += delta
-                    condition = delta > pdf[m] * self.pdfEpsilon_
+                    condition = (delta > pdf[m] * self.pdfEpsilon_) and k < N
+            ot.Log.Info("End of gaussian approximation")
 
             # Precompute the grid of delta functions
             # the concerning grid is of form h,2h,...,Nh
@@ -684,14 +684,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             ot.Log.Info("End of precomputing delta grid")
 
             # compute \Sigma_+
-            yk = dcf * np.exp( - pi* 1j * (tau - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = dcf * np.exp(- pi* 1j * (tau - 1.0 + 1.0 / N) * np.arange(1, N+1))
             yk_hat = np.fft.fft(yk)
-            sigma_plus = yk_hat * np.exp(2.0 * pi* 1j * np.arange(N) / N)
+            sigma_plus = yk_hat * np.exp(-2.0 * pi* 1j * np.arange(N) / N)
 
             # compute the \Sigma_-
-            zk = np.conjugate(dcf[N - np.arange(N) - 1]) * np.exp(pi* 1j * (tau -1.0 + 1.0 /N) * (N - np.arange(1,N+1)))
+            zk = np.conjugate(dcf[N - np.arange(N) - 1]) * np.exp(-pi* 1j * (tau -1.0 + 1.0 /N) * (np.arange(N) - N))
             zk_hat = np.fft.fft(zk)
-            sigma_minus = zk_hat * np.exp(-2 * pi* 1j * np.arange(N))
+            sigma_minus = zk_hat * np.exp(2 * pi* 1j * np.arange(N))
 
             # final computation
             s_m = h / (2.0 * pi) * (sigma_plus + sigma_minus)
