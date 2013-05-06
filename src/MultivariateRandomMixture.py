@@ -712,6 +712,194 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         else :
             warnings.warn("Method available for dimension 1 only")
 
+    def computePDFOn2DGrid(self, b, N):
+        """
+        The interest is to compute the density function on a 2D grid of form:
+          r \in {1,2},\forall m\in\{0,\hdots,N-1\},\:y_{r,m}=\mu_r+b(\frac{2m+1}{N} - 1)\sigma_r
+
+        The density is given by:
+          p_{m_1,,m_2}= Q_{m_1,\hdots,m_d}+S_{m_1,\hdots,m_d}
+        with S_{m_1,\hdots,m_2} = \frac{h_1 h_2}{4\pi^2}\sum_{k_1=-N}^{N}\hdots\sum_{k_d=-N}^{N}\delta(k_1 h_1,k_2h_2) E_{m_1,\hdots,m_d}(k_1,k_2)
+        Here :
+          E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)=e^{-i\sum_{j=1}^2 k_jh_j (\mu_j+a (\frac{2m_j+1}{M}-1)\sigma_j)}
+        Using FFT,
+        S_{m_1,m_2}=\frac{h_1h_2}{4\pi^2}{\Sigma_{m_1,m_2}^{++} + \Sigma_{m_1,m_2}^{--} + \Sigma_{m_1,m_2}^{+-} + \Sigma_{m_1,m_2}^{-+}+...
+          ...+ \Sigma_{m_1,m_2}^{+0}+\Sigma_{m_1,m_2}^{-0}+\Sigma_{m_1,m_2}^{0+}+\Sigma_{m_1,m_2}^{0-}\Big\}
+        with
+        \Sigma_{m_1,m_2}^{++}=&\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta((k_1+1)h_1,(k_2+1)h_2)E_{m_1,m_2}(k_1+1,k_2+1)
+        \Sigma_{m_1,m_2}^{--}=&\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta(-(k_1+1) h_1,-(k_2+1)h_2)E_{m_1,m_2}(-(k_1+1),-(k_2+1))
+        \Sigma_{m_1,m_2}^{+-}=&\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta((k_1+1)h_1,-(k_2+1)h_2)E_{m_1,m_2}(k_1+1,-(k_2+1))
+        \Sigma_{m_1,m_2}^{-+}=&\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta(-(k_1+1)h_1,(k_2+1)h_2)E_{m_1,m_2}(-(k_1+1),k_2+1)
+        \Sigma_{m_1,m_2}^{+0}=&\sum_{k=0}^{N-1}\delta((k+1)h_1,0)E_{m_1,m_2}(k+1,0)
+        \Sigma_{m_1,m_2}^{-0}=&\sum_{k=0}^{N-1}\delta(-(k+1)h_1,0)E_{m_1,m_2}(-(k+1),0)
+        \Sigma_{m_1,m_2}^{0+}=&\sum_{k=0}^{N-1}\delta(0,(k+1)h_2)E_{m_1,m_2}(0,k+1)
+        \Sigma_{m_1,m_2}^{0-}=&\sum_{k=0}^{N-1}\delta(0,-(k+1)h_2)E_{m_1,m_2}(0,-(k+1))
+
+        Parameters
+        ----------
+        b : positive float
+            The number of marginal standard deviations beyond which the density is evaluated
+
+        N : positive integer, preference of form N = 2^k
+            The number of points used for meshing the interval [mean - b * sigma, mean + b * sigma]
+
+        Returns
+        -------
+        grid_values : ndarray of shape (N, 2)
+                      2D Grid on which the probability density function has been evaluated
+
+        pdf_values : ndarray of shape (N,N)
+                    The probability density function values on the grid
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2], [3,4]])
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix)
+        >>> b = 4 # we are interested in the pdf on mean +/- b * sigma
+        >>> N = 64 # 256 points for the grid
+        >>> [grid_values, pdf_values] = dist.computePDFOn2DGrid(b, N)
+
+        """
+
+        if self.dimension_ == 2:
+            # Initializing some variables
+            assert (float(b) > 0)
+            pi = np.pi
+            mu_x, mu_y = tuple(self.getMean())
+            sigma_x, sigma_y = tuple(self.getStandardDeviation())
+            b_sigma_x, b_sigma_y = sigma_x * b, sigma_y * b
+            tau_x, tau_y = mu_x / b_sigma_x, mu_y / b_sigma_y
+            h_x, h_y = pi / b_sigma_x, pi / b_sigma_y
+            # Vectorizing some functions
+            normal_pdf = self.equivalentNormal_.__getattribute__("computePDF")
+            normal_cf = self.equivalentNormal_.__getattribute__("computeCharacteristicFunction")
+            delta_cf = lambda x: self.computeCharacteristicFunction(x) - normal_cf(x)
+            # compute the gaussian pdf on y_m + 2(k+1)b \sigma, k in 0,..,N-1, m in 0,..,N-1
+            x_grid = mu_x + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_x
+            y_grid = mu_y + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_y
+
+            # gaussian pdf computation
+            ot.Log.Info("Precomputing gaussian pdf")
+            pdf = np.array( [[normal_pdf([x_grid[i], y_grid[j]]) for j in xrange(N)] for i in xrange(N)] )
+            # external terms
+            skin_cube = MaxNormMeshGrid.SkinCube2D([2.0 * b_sigma_x, 2.0 * b_sigma_y])
+            for j, dy in enumerate(y_grid):
+                for i, dx in enumerate(x_grid):
+                    k = 1
+                    condition = True
+                    # Take into account the contributions y_m + 2k1*b*sigma1 + 2k2*b*sigma2 +  and y_m - 2k1*b*sigma1 - 2k2*b*sigma2
+                    # while contribution is not negligible
+                    while condition:
+                        iterator = skin_cube.get_skin_iterator(k)
+                        delta = 0.0
+                        try :
+                            while True:
+                                dyk_x, dyk_y = iterator.next()
+                                delta_plus = normal_pdf([dx + dyk_x, dy + dyk_y])
+                                # using symetries
+                                delta_minus = normal_pdf([dx - dyk_x, dy - dyk_y])
+                                delta += delta_plus + delta_minus
+                        except StopIteration :
+                            pass
+                        pdf[i,j] += delta
+                        k += 1
+                        condition = (delta > pdf[i, j] * self.pdfEpsilon_) and k < N
+            ot.Log.Info("End of gaussian approximation")
+
+            # Precompute the grid of delta functions
+            ot.Log.Info("Precomputing delta grid")
+
+            # compute \Sigma_++
+            dcf = np.array( [[delta_cf([(i + 1) * h_x, (j + 1) * h_y]) for j in xrange(N)] for i in xrange(N)] )
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
+            yk_hat = np.fft.fft2(dcf * yk)
+            # finally, sigma_plus is computed
+            zm = np.exp(2.0 * pi* 1j * np.arange(N) / N)
+            zm1m2 = zm.reshape(N,1) * zm.reshape(1,N)
+            sigma_plus_plus = yk_hat * zm1m2
+
+            # compute the \Sigma_--
+            dcf_conjugate = np.conjugate(dcf[N-np.arange(N)-1,:][:,N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
+            yk_hat = np.fft.fft2(dcf_conjugate * yk)
+            zm = np.exp(-2.0 * pi* 1j * np.arange(N))
+            zm1m2 = zm.reshape(N,1) * zm.reshape(1,N)
+            sigma_minus_minus = yk_hat * zm1m2
+
+            # compute the \Sigma_+-
+            dcf = np.array( [[delta_cf([(i + 1) * h_x, (j - N) * h_y]) for j in xrange(N)] for i in xrange(N)] )
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N + 1))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
+            yk_hat = np.fft.fft2(dcf * yk)
+            zm1 = np.exp(2.0 * pi* 1j * np.arange(N) / N)
+            zm2 = np.exp(-2.0 * pi* 1j * np.arange(N))
+            zm1m2 = zm1.reshape(N,1) * zm2.reshape(1,N)
+            sigma_plus_minus = yk_hat * zm1m2
+
+            # compute the \Sigma_-+
+            dcf_conjugate = np.conjugate(dcf[N-np.arange(N)-1,:][:,N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N + 1))
+            yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
+            yk_hat = np.fft.fft2(dcf_conjugate * yk)
+            zm1 = np.exp(-2.0 * pi* 1j * np.arange(N))
+            zm2 = np.exp(2.0 * pi* 1j * np.arange(N) / N)
+            zm1m2 = zm1.reshape(N,1) * zm2.reshape(1,N)
+            sigma_minus_plus = yk_hat * zm1m2
+
+            # The interest here is sigma_plus_0
+            # It is the same as \Sigma_plus in 1D case
+            # By the same way, \Sigma_0_plus is similar
+            # One should care on how to add the values
+            # and how to get the dcf values
+            dcf_x = np.array([delta_cf([(i + 1) * h_x, 0]) for i in xrange(N)])
+            dcf_y = np.array([delta_cf([0, (i + 1) * h_y]) for i in xrange(N)])
+            yk_x = dcf_x * np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_y = dcf_y * np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            # \sigma_plus_0
+            yk_hat = np.fft.fft(yk_x)
+            sigma_plus_0 = yk_hat * np.exp(-2.0 * pi* 1j * np.arange(N) / N)
+            # \sigma_plus_0
+            yk_hat = np.fft.fft(yk_y)
+            sigma_0_plus = yk_hat * np.exp(-2.0 * pi* 1j * np.arange(N) / N)
+
+            # \sigma_minus_0 and \sigma_0_minus part
+            # The results are deduced from the 1D case
+            yk_x = np.conjugate(dcf_x[N - np.arange(N) - 1]) * np.exp(-pi* 1j * (tau_x - 1.0 + 1.0/N) * (np.arange(N) - N))
+            yk_y = np.conjugate(dcf_y[N - np.arange(N) - 1]) * np.exp(-pi* 1j * (tau_y - 1.0 + 1.0/N) * (np.arange(N) - N))
+            # \sigma_minus_0
+            yk_hat = np.fft.fft(yk_x)
+            sigma_minus_0 = yk_hat * np.exp(2 * pi* 1j * np.arange(N))
+            # \sigma_0_minus
+            yk_hat = np.fft.fft(yk_y)
+            sigma_0_minus = yk_hat * np.exp(2 * pi* 1j * np.arange(N))
+
+            # We start summation of the contributions
+            s_m = sigma_plus_plus + sigma_minus_minus + sigma_plus_minus + sigma_minus_plus
+            # We add 1D values to the gs_m terms
+            for k in xrange(N):
+                s_m[:, k] += sigma_plus_0[:]
+                s_m[:, k] += sigma_minus_0[:]
+                s_m[k, :] += sigma_0_plus[:]
+                s_m[k, :] += sigma_0_minus[:]
+            s_m *= (h_x * h_y) / (4.0 * pi * pi)
+
+            # final computation
+            total_pdf = pdf + s_m.real
+            total_pdf *= (total_pdf > 0)
+            ot.Log.Info("End of precomputing delta grid")
+            return [[x_grid, y_grid], total_pdf]
+        else :
+            warnings.warn("Method available for dimension 2 only")
+
     def getAlpha(self):
         """
         Returns the alpha parameter used for the evaluation of the range.
