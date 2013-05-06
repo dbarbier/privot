@@ -635,8 +635,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> import openturns as ot
         >>> import MultivariateRandomMixture as MV
         >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0)])
-        >>> matrix = ot.Matrix([[1,2], [3,4]])
-        >>> constant = [5, 6]
+        >>> matrix = ot.Matrix([[1,2]])
+        >>> constant = [0]
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
         >>> b = 4 # we are interested in the pdf on mean +/- b * sigma
         >>> N = 256 # 256 points for the grid
@@ -644,6 +644,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         if self.dimension_ == 1:
+            assert float(b) > 0.0
             # Initializing some variables
             pi = np.pi
             mu = self.getMean()[0]
@@ -683,15 +684,25 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             dcf = np.array([self.computeCharacteristicFunction([k]) for k in delta_grid]) - normal_cf(delta_grid)
             ot.Log.Info("End of precomputing delta grid")
 
-            # compute \Sigma_+
+            # compute \Sigma_+ term
+            # \Sigma_{m}^{+}=\sum_{k=0}^{N-1}\delta((k+1)h) E_{m}(k+1)
+            # \Sigma_{m}^{+}_{m} = fft(yk) * zm with :
+            # yk = \delta[(k+1) * h] * exp(- pi* 1j * (k+1) * (tau - 1.0 + 1.0 / N))
+            # zm_m = exp(-2.0 * pi* 1j * k / N), k=0,1,...,N-1, m =0,1,...,N-1
             yk = dcf * np.exp(- pi* 1j * (tau - 1.0 + 1.0 / N) * np.arange(1, N+1))
             yk_hat = np.fft.fft(yk)
-            sigma_plus = yk_hat * np.exp(-2.0 * pi* 1j * np.arange(N) / N)
+            zm = np.exp(-2.0 * pi* 1j * np.arange(N) / N)
+            sigma_plus = yk_hat * zm
 
-            # compute the \Sigma_-
-            zk = np.conjugate(dcf[N - np.arange(N) - 1]) * np.exp(-pi* 1j * (tau -1.0 + 1.0 /N) * (np.arange(N) - N))
-            zk_hat = np.fft.fft(zk)
-            sigma_minus = zk_hat * np.exp(2 * pi* 1j * np.arange(N))
+            # compute the \Sigma_- term
+            # \Sigma_{m}^{-}=\sum_{k=0}^{N-1}\delta(-(k+1)h) E_{m}(-(k+1))
+            # \Sigma_{m}^{-}_{m} = fft(yk) * zm with :
+            # yk = \delta[(k+1) * h] * exp(- pi* 1j * (k - N) * (tau - 1.0 + 1.0 / N))
+            # zm_m = exp(-2.0 * pi* 1j * k), k=0,1,...,N-1, m =0,1,...,N-1
+            yk = np.conjugate(dcf[N - np.arange(N) - 1]) * np.exp(-pi* 1j * (tau -1.0 + 1.0 /N) * (np.arange(N) - N))
+            yk_hat = np.fft.fft(yk)
+            zm = np.exp(2 * pi* 1j * np.arange(N))
+            sigma_minus = yk_hat * zm
 
             # final computation
             s_m = h / (2.0 * pi) * (sigma_plus + sigma_minus)
