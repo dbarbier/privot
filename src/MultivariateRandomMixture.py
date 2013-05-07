@@ -706,9 +706,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
             # final computation
             s_m = h / (2.0 * pi) * (sigma_plus + sigma_minus)
-            total_pdf = pdf + s_m.real
-            total_pdf *= (total_pdf > 0)
-            return [ym_grid, total_pdf]
+            pdf += s_m.real
+            pdf *= (pdf > 0)
+            return [ym_grid, pdf]
         else :
             warnings.warn("Method available for dimension 1 only")
 
@@ -932,10 +932,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             s_m *= (h_x * h_y) / (4.0 * pi * pi)
 
             # final computation
-            total_pdf = pdf + s_m.real
-            total_pdf *= (total_pdf > 0)
+            pdf += s_m.real
+            pdf *= (pdf > 0)
             ot.Log.Info("End of precomputing delta grid")
-            return [[x_grid, y_grid], total_pdf]
+            return [[x_grid, y_grid], pdf]
         else :
             warnings.warn("Method available for dimension 2 only")
 
