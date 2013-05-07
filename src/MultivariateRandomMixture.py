@@ -37,7 +37,6 @@ import openturns as ot
 import cmath
 import numpy as np
 import MaxNormMeshGrid
-import warnings
 
 # ResourceMap : setting different numerical parameters useful for the distribution
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin", 3)
@@ -643,22 +642,27 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> [grid_values, pdf_values] = dist.computePDFOn1DGrid(b, N)
 
         """
-        if self.dimension_ == 1:
-            assert float(b) > 0.0
-            # Initializing some variables
-            pi = np.pi
-            mu = self.getMean()[0]
-            sigma = self.getStandardDeviation()[0]
-            b_sigma = b * sigma
-            tau = mu / b_sigma
-            h = pi / b_sigma
-            # Vectorizing some functions
-            normal_pdf = np.vectorize(self.equivalentNormal_.computePDF)
-            normal_cf = np.vectorize(self.equivalentNormal_.computeCharacteristicFunction)
+        if self.dimension_ != 1:
+            raise ValueError("Method available for dimension 1 only")
+        assert float(b) > 0.0
+        # Initializing some variables
+        pi = np.pi
+        mu = self.getMean()[0]
+        sigma = self.getStandardDeviation()[0]
+        b_sigma = b * sigma
+        tau = mu / b_sigma
+        h = pi / b_sigma
+        # Vectorizing some functions
+        normal_pdf = np.vectorize(self.equivalentNormal_.computePDF)
+        normal_cf = np.vectorize(self.equivalentNormal_.computeCharacteristicFunction)
 
-            # compute the gaussian pdf on y_m + 2(k+1)b \sigma, k in 0,..,N-1, m in 0,..,N-1
-            # ym_grid is also usefull for visualization
-            ym_grid = mu + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma
+        # compute the gaussian pdf on y_m + 2(k+1)b \sigma, k in 0,..,N-1, m in 0,..,N-1
+        # ym_grid is also usefull for visualization
+        ym_grid = mu + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma
+        if self.isAnalyticPDF_:
+            pdf = np.array([self.computePDF([dyk]) for dyk in ym_grid])
+            return [ym_grid, pdf]
+        else:
             # to check here
             ot.Log.Info("Precomputing gaussian pdf")
             pdf = normal_pdf(ym_grid)
@@ -709,8 +713,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             pdf += s_m.real
             pdf *= (pdf > 0)
             return [ym_grid, pdf]
-        else :
-            warnings.warn("Method available for dimension 1 only")
 
     def computePDFOn2DGrid(self, b, N):
         """
@@ -718,22 +720,22 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
           r \in {1,2},\forall m\in\{0,\hdots,N-1\},\:y_{r,m}=\mu_r+b(\frac{2m+1}{N} - 1)\sigma_r
 
         The density is given by:
-          p_{m_1,,m_2}= Q_{m_1,\hdots,m_d}+S_{m_1,\hdots,m_d}
-        with S_{m_1,\hdots,m_2} = \frac{h_1 h_2}{4\pi^2}\sum_{k_1=-N}^{N}\hdots\sum_{k_d=-N}^{N}\delta(k_1 h_1,k_2h_2) E_{m_1,\hdots,m_d}(k_1,k_2)
+          p_{m1,m2}= Q_{m1,m2}+S_{m1,m2}
+        with S_{m1,m2} = \frac{hx hy}{4\pi^2}\sum_{k1=-N}^{N}\sum_{k2=-N}^{N}\delta(k1 h1,k2hy) E_{m1,m2}(k1,k2)
         Here :
-          E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)=e^{-i\sum_{j=1}^2 k_jh_j (\mu_j+a (\frac{2m_j+1}{M}-1)\sigma_j)}
+          E_{m1,m2}(k1,k2)=e^{-i\sum_{j=1}^2 k_jh_j (\mu_j+a (\frac{2m_j+1}{M}-1)\sigma_j)}
         Using FFT,
-        S_{m_1,m_2}=\frac{h_1h_2}{4\pi^2} { \Sigma_{m_1,m_2}^{++} + \Sigma_{m_1,m_2}^{--} + \Sigma_{m_1,m_2}^{+-} + \Sigma_{m_1,m_2}^{-+}+...
-          ...+ \Sigma_{m_1,m_2}^{+0}+\Sigma_{m_1,m_2}^{-0}+\Sigma_{m_1,m_2}^{0+}+\Sigma_{m_1,m_2}^{0-} }
+        S_{m1,m2}=\frac{hxhy}{4\pi^2} { \Sigma_{m1,m2}^{++} + \Sigma_{m1,m2}^{--} + \Sigma_{m1,m2}^{+-} + \Sigma_{m1,m2}^{-+}+...
+          ...+ \Sigma_{m1,m2}^{+0}+\Sigma_{m1,m2}^{-0}+\Sigma_{m1,m2}^{0+}+\Sigma_{m1,m2}^{0-} }
         with
-        \Sigma_{m_1,m_2}^{++}=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta((k_1+1)h_1,(k_2+1)h_2)E_{m_1,m_2}(k_1+1,k_2+1)
-        \Sigma_{m_1,m_2}^{--}=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta(-(k_1+1) h_1,-(k_2+1)h_2)E_{m_1,m_2}(-(k_1+1),-(k_2+1))
-        \Sigma_{m_1,m_2}^{+-}=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta((k_1+1)h_1,-(k_2+1)h_2)E_{m_1,m_2}(k_1+1,-(k_2+1))
-        \Sigma_{m_1,m_2}^{-+}=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta(-(k_1+1)h_1,(k_2+1)h_2)E_{m_1,m_2}(-(k_1+1),k_2+1)
-        \Sigma_{m_1,m_2}^{+0}=\sum_{k=0}^{N-1}\delta((k+1)h_1,0)E_{m_1,m_2}(k+1,0)
-        \Sigma_{m_1,m_2}^{-0}=\sum_{k=0}^{N-1}\delta(-(k+1)h_1,0)E_{m_1,m_2}(-(k+1),0)
-        \Sigma_{m_1,m_2}^{0+}=\sum_{k=0}^{N-1}\delta(0,(k+1)h_2)E_{m_1,m_2}(0,k+1)
-        \Sigma_{m_1,m_2}^{0-}=\sum_{k=0}^{N-1}\delta(0,-(k+1)h_2)E_{m_1,m_2}(0,-(k+1))
+        \Sigma_{m1,m2}^{++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta((k1+1)hx,(k2+1)hy)E_{m1,m2}(k1+1,k2+1)
+        \Sigma_{m1,m2}^{--}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta(-(k1+1) hx,-(k2+1)hy)E_{m1,m2}(-(k1+1),-(k2+1))
+        \Sigma_{m1,m2}^{+-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy)E_{m1,m2}(k1+1,-(k2+1))
+        \Sigma_{m1,m2}^{-+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta(-(k1+1)hx,(k2+1)hy)E_{m1,m2}(-(k1+1),k2+1)
+        \Sigma_{m1,m2}^{+0}=\sum_{k=0}^{N-1}\delta((k+1)hx,0)E_{m1,m2}(k+1,0)
+        \Sigma_{m1,m2}^{-0}=\sum_{k=0}^{N-1}\delta(-(k+1)hx,0)E_{m1,m2}(-(k+1),0)
+        \Sigma_{m1,m2}^{0+}=\sum_{k=0}^{N-1}\delta(0,(k+1)hy)E_{m1,m2}(0,k+1)
+        \Sigma_{m1,m2}^{0-}=\sum_{k=0}^{N-1}\delta(0,-(k+1)hy)E_{m1,m2}(0,-(k+1))
 
         Parameters
         ----------
@@ -764,24 +766,29 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
 
-        if self.dimension_ == 2:
-            # Initializing some variables
-            assert (float(b) > 0)
-            pi = np.pi
-            two_pi = 2.0 * pi
-            mu_x, mu_y = tuple(self.getMean())
-            sigma_x, sigma_y = tuple(self.getStandardDeviation())
-            b_sigma_x, b_sigma_y = sigma_x * b, sigma_y * b
-            tau_x, tau_y = mu_x / b_sigma_x, mu_y / b_sigma_y
-            h_x, h_y = pi / b_sigma_x, pi / b_sigma_y
-            # Vectorizing some functions
-            normal_pdf = self.equivalentNormal_.__getattribute__("computePDF")
-            normal_cf = self.equivalentNormal_.__getattribute__("computeCharacteristicFunction")
-            delta_cf = lambda x: self.computeCharacteristicFunction(x) - normal_cf(x)
-            # compute the gaussian pdf on y_m + 2(k+1)b \sigma, k in 0,..,N-1, m in 0,..,N-1
-            x_grid = mu_x + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_x
-            y_grid = mu_y + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_y
+        if self.dimension_ != 2:
+            raise ValueError("Method available for dimension 2 only")
+        # Initializing some variables
+        assert (float(b) > 0)
+        pi = np.pi
+        two_pi = 2.0 * pi
+        mu_x, mu_y = tuple(self.getMean())
+        sigma_x, sigma_y = tuple(self.getStandardDeviation())
+        b_sigma_x, b_sigma_y = sigma_x * b, sigma_y * b
+        tau_x, tau_y = mu_x / b_sigma_x, mu_y / b_sigma_y
+        h_x, h_y = pi / b_sigma_x, pi / b_sigma_y
+        # Vectorizing some functions
+        normal_pdf = self.equivalentNormal_.__getattribute__("computePDF")
+        normal_cf = self.equivalentNormal_.__getattribute__("computeCharacteristicFunction")
+        delta_cf = lambda x: self.computeCharacteristicFunction(x) - normal_cf(x)
+        # compute the gaussian pdf on y_m + 2(k+1)b \sigma, k in 0,..,N-1, m in 0,..,N-1
+        x_grid = mu_x + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_x
+        y_grid = mu_y + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_y
 
+        if self.isAnalyticPDF_:
+            pdf = np.array( [[self.computePDF([x_grid[i], y_grid[j]]) for j in xrange(N)] for i in xrange(N)] )
+            return [[x_grid, y_grid], pdf]
+        else:
             # gaussian pdf computation
             ot.Log.Info("Precomputing gaussian pdf")
             pdf = np.array( [[normal_pdf([x_grid[i], y_grid[j]]) for j in xrange(N)] for i in xrange(N)] )
@@ -936,8 +943,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             pdf *= (pdf > 0)
             ot.Log.Info("End of precomputing delta grid")
             return [[x_grid, y_grid], pdf]
-        else :
-            warnings.warn("Method available for dimension 2 only")
 
     def getAlpha(self):
         """
