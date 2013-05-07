@@ -116,3 +116,18 @@ if __name__ == "__main__":
         plt.close('all')
     except ImportError:
         ot.log.Warn("Matplotlib not found. Could not create iso values graph of pdf")
+    # computation on a grid using FFT
+    # grid of form mean + b sigma in each direction
+    b = 4.0
+    N = 1024
+    [y, pdf_grid] = distribution.computePDFOn2DGrid(b, N)
+    try :
+        import matplotlib.pylab as plt
+        fig = plt.figure()
+        plt.contour(pdf_grid, vmin=np.min(pdf_grid), vmax=np.max(pdf_grid), origin='lower', extent=[np.min(y[0]), np.max(y[0]), np.min(y[1]), np.max(y[1])])
+        plt.colorbar()
+        plt.title("Estimated PDF with MVRM using FFT")
+        plt.savefig("3Uniform2d_pdf_grid.pdf")
+        plt.close('all')
+    except ImportError:
+        pass
