@@ -2,6 +2,7 @@
 
 import openturns as ot
 import MultivariateRandomMixture as MV
+import MaxNormMeshGrid
 import numpy as np
 import time
 
@@ -16,6 +17,7 @@ blockMax = 16
 collection = ot.DistributionCollection(100 * [ot.Uniform()])
 matrix = ot.Matrix([100 * [1.0]])
 distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
+distribution.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(MaxNormMeshGrid.SkinCube2D(distribution.getReferenceBandwidth(), symmetric=True), size=maxSize))
 
 
 interval = distribution.getRange()
@@ -35,7 +37,6 @@ random_mixture.setAlpha(distribution.getAlpha())
 random_mixture.setBeta(distribution.getBeta())
 random_mixture.setReferenceBandwidth(distribution.getReferenceBandwidth()[0])
 
-distribution.setMaxSize(maxSize)
 distribution.setBlockMin(blockMin)
 distribution.setBlockMax(blockMax)
 

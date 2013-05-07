@@ -34,6 +34,7 @@
 if __name__ == "__main__":
     import openturns as ot
     import MultivariateRandomMixture as MV
+    import MaxNormMeshGrid
     import numpy as np
     import time
     
@@ -51,6 +52,7 @@ if __name__ == "__main__":
     collection = ot.DistributionCollection( 3 * [ot.Normal()])
     matrix = ot.Matrix([[1, -2, 1], [1, 1, -3]])
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
+    distribution.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(MaxNormMeshGrid.SkinCube2D(distribution.getReferenceBandwidth(), symmetric=True), size=40000000))
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
@@ -61,7 +63,6 @@ if __name__ == "__main__":
     print "sigma = ", sigma
     distribution.setBlockMin(3)
     distribution.setBlockMax(10)
-    distribution.setMaxSize(2**8)
     # importing validation sample
     nx = 100
     ny = 100
