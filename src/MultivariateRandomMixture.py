@@ -944,6 +944,624 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             ot.Log.Info("End of precomputing delta grid")
             return [[x_grid, y_grid], pdf]
 
+    def computePDFOn3DGrid(self, b, N):
+
+        """
+        The interest is to compute the density function on a 3D grid of form:
+          r \in {1,2,3},\forall m\in\{0,\hdots,N-1\},\:y_{r,m}=\mu_r+b(\frac{2m+1}{N} - 1)\sigma_r
+
+        The density is given by:
+          p_{m1,,m2, m3}= Q_{m1,m2,m3}+S_{m1,m2,m3}
+        with S_{m1,m2,m3} = \frac{hx hy hz}{8\pi^3}\sum_{k1=-N}^{N}\sum_{k2=-N}^{N}\sum_{k3=-N}^{N}\delta(k1 h_x,k2 h_y k3 h_z) E_{m1,m2,m3}(k1,k2,k3)
+        Here :
+          E_{m1,m2,m3}(k1,k2,k3)=e^{-i\sum_{j=1}^{3} k_jh_j (\mu_j+a (\frac{2m_j+1}{M}-1)\sigma_j)}
+        Using FFT,
+        S_{m1,m2,m3}=\frac{hx hy hz}{4\pi^2} \sum_{s1,s2,s3 \in [0,-,+]} \Sigma_{m1,m2,m3}^{s1 s2 s3}
+
+        with
+        \Sigma_{m1,m2,m3}^{+++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,k3+1)
+        \Sigma_{m1,m2,m3}^{---}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),-(k3+1))
+        \Sigma_{m1,m2,m3}^{++-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,-(k3+1))
+        \Sigma_{m1,m2,m3}^{--+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),k3+1)
+        \Sigma_{m1,m2,m3}^{+-+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),k3+1)
+        \Sigma_{m1,m2,m3}^{-+-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),(k2+1),-(k3+1))
+        \Sigma_{m1,m2,m3}^{+--}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))
+        \Sigma_{m1,m2,m3}^{-++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))
+        \Sigma_{m1,m2,m3}^{++0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta((k1+1)hx,(k2+1)hy,0) E_{m1,m2,m3}(k1+1,k2+1,0)
+        \Sigma_{m1,m2,m3}^{--0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta(-(k1+1)hx,-(k2+1)hy,0) E_{m1,m2,m3}(-(k1+1),-(k2+1),0)
+        \Sigma_{m1,m2,m3}^{0++}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)
+        \Sigma_{m1,m2,m3}^{0--}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)
+        \Sigma_{m1,m2,m3}^{+0+}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta((k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)
+        \Sigma_{m1,m2,m3}^{-0-}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(-(k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)
+        \Sigma_{m1,m2,m3}^{+-0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta((k1+1)hx,-(k2+1)hy, 0) E_{m1,m2,m3}(k1+1,-(k2+1),0)
+        \Sigma_{m1,m2,m3}^{-+0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta(-(k1+1)hx,(k2+1)hy, 0) E_{m1,m2,m3}(-(k1+1),(k2+1),0)
+        \Sigma_{m1,m2,m3}^{+0-}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta((k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,-(k3+1)
+        \Sigma_{m1,m2,m3}^{-0+}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(-(k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),0,(k3+1)
+        \Sigma_{m1,m2,m3}^{0+-}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k2+1))
+        \Sigma_{m1,m2,m3}^{0-+}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k3+1))
+        \Sigma_{m1,m2,m3}^{+00}=\sum_{k1=0}^{N-1} \delta((k1+1)hx,0,0) E_{m1,m2,m3}(k1+1,0,0)
+        \Sigma_{m1,m2,m3}^{-00}=\sum_{k1=0}^{N-1} \delta(-(k1+1)hx,0,0) E_{m1,m2,m3}(-(k1+1),0,0)
+        \Sigma_{m1,m2,m3}^{0+0}=\sum_{k2=0}^{N-1} \delta(0,(k2+1)hy,0) E_{m1,m2,m3}(0,k2+1,0)
+        \Sigma_{m1,m2,m3}^{0-0}=\sum_{k2=0}^{N-1} \delta(0,-(k2+1)hy,0) E_{m1,m2,m3}(0,-(k2+1),0)
+        \Sigma_{m1,m2,m3}^{00+}=\sum_{k3=0}^{N-1} \delta(0,0,(k3+1)hz) E_{m1,m2,m3}(0,0,k3+1)
+        \Sigma_{m1,m2,m3}^{00-}=\sum_{k3=0}^{N-1} \delta(0,0,-(k3+1)hz) E_{m1,m2,m3}(0,0,-(k3+1)
+
+        Parameters
+        ----------
+        b : positive float
+            The number of marginal standard deviations beyond which the density is evaluated
+
+        N : positive integer, preference of form N = 2^k
+            The number of points used for meshing the interval [mean - b * sigma, mean + b * sigma]
+
+        Returns
+        -------
+        grid_values : ndarray of shape (N, 3)
+                      3D Grid on which the probability density function has been evaluated
+
+        pdf_values : ndarray of shape (N,N,N)
+                    The probability density function values on the grid
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2, 4], [3,4,5], [6,0,1]])
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix)
+        >>> b = 4 # we are interested in the pdf on mean +/- b * sigma
+        >>> N = 2**4 # 1024 points for the 3D grid
+        >>> [grid_values, pdf_values] = dist.computePDFOn3DGrid(b, N)
+
+        """
+
+        if self.dimension_ != 3:
+            raise ValueError("Method available for dimension 3 only")
+            # Initializing some variables
+        assert (float(b) > 0)
+        pi = np.pi
+        two_pi = 2.0 * pi
+        mu_x, mu_y, mu_z = tuple(self.getMean())
+        sigma_x, sigma_y, sigma_z = tuple(self.getStandardDeviation())
+        b_sigma_x, b_sigma_y ,  b_sigma_z= sigma_x * b, sigma_y * b, sigma_z * b
+        tau_x, tau_y, tau_z = mu_x / b_sigma_x, mu_y / b_sigma_y, mu_z / b_sigma_z
+        h_x, h_y, h_z = pi / b_sigma_x, pi / b_sigma_y, pi / b_sigma_z
+        # compute the gaussian pdf on y_m + 2(k+1)b \sigma, k in 0,..,N-1, m in 0,..,N-1
+        x_grid = mu_x + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_x
+        y_grid = mu_y + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_y
+        z_grid = mu_z + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_z
+        if self.isAnalyticPDF_:
+            pdf = np.array([[[self.computePDF([x_grid[i], y_grid[j], z_grid[k]]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+        else:
+            # Vectorizing some functions
+            normal_pdf = self.equivalentNormal_.__getattribute__("computePDF")
+            normal_cf = self.equivalentNormal_.__getattribute__("computeCharacteristicFunction")
+            delta_cf = lambda x: self.computeCharacteristicFunction(x) - normal_cf(x)
+            # gaussian pdf computation
+            ot.Log.Info("Precomputing gaussian pdf")
+            pdf = np.array([[[normal_pdf([x_grid[i], y_grid[j], z_grid[k]]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+            # external terms
+            skin_cube = MaxNormMeshGrid.SkinCube3D([2.0 * b_sigma_x, 2.0 * b_sigma_y, 2.0 * b_sigma_z])
+            for k, dz in enumerate(z_grid):
+                for j, dy in enumerate(y_grid):
+                    for i, dx in enumerate(x_grid):
+                        l = 1
+                        condition = True
+                        while condition:
+                            iterator = skin_cube.get_skin_iterator(l)
+                            delta = 0.0
+                            try :
+                                while True:
+                                    dyk_x, dyk_y, dyk_z = iterator.next()
+                                    delta_plus = normal_pdf([dx + dyk_x, dy + dyk_y, dz + dyk_z])
+                                    # using symetries
+                                    delta_minus = normal_pdf([dx - dyk_x, dy - dyk_y, dz - dyk_z])
+                                    delta += delta_plus + delta_minus
+                            except StopIteration :
+                                pass
+                            pdf[i,j,k] += delta
+                            l += 1
+                            condition = (delta > pdf[i, j, k] * self.pdfEpsilon_) and l < N
+            ot.Log.Info("End of gaussian approximation")
+
+            # Precompute the grid of delta functions
+            ot.Log.Info("Precomputing delta grid")
+
+            # compute \Sigma_+++
+            # \Sigma_{m1,m2,m3}^{+++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,k3+1)
+            # \Sigma_{m1,m2,m3}^{+++} = fft(y_{k1, k2,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,k3} = \delta[(k1+1) hx, (k2+1) hy, (k3+1) hz] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3+1) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m2 / N) * exp(-2.0 * pi* 1j * m3 / N)
+            # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
+            dcf = np.array([[[delta_cf([(i + 1) * h_x, (j + 1) * h_y, (k + 1) * h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = yk_x.reshape(N, 1, 1) * yk_y.reshape(1, N, 1) * yk_y.reshape(1, 1, N)
+            yk_hat = np.fft.fftn(dcf * yk)
+            zm = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm1m2m3 = zm.reshape(N,1,1) * zm.reshape(1,N,1) * zm.reshape(1,1,N)
+            sigma_plus_plus_plus = yk_hat * zm1m2m3
+
+            # compute \Sigma_---
+            # \Sigma_{m1,m2,m3}^{---}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),-(k3+1))
+            # \Sigma_{m1,m2,m3}^{---} = fft(y_{k1,k2,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,k3} = conj(\delta[-(k1-N) hx, -(k2-N) hy, -(k3-N) hz]) * exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(2.0 * pi* 1j * m1) * exp(2.0 * pi* 1j * m2) * exp(2.0 * pi* 1j * m3)
+            # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
+            dcf_conjugate = np.conjugate(dcf[N-np.arange(N)-1,:,:][:,N-np.arange(N)-1,:][:,:,N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_x.reshape(N, 1, 1) * yk_y.reshape(1, N, 1) * yk_z.reshape(1, 1, N)
+            yk_hat = np.fft.fftn(dcf_conjugate * yk)
+            zm = np.exp(two_pi* 1j * np.arange(N))
+            zm1m2m3 = zm.reshape(N,1,1) * zm.reshape(1,N,1) * zm.reshape(1,1,N)
+            sigma_minus_minus_minus = yk_hat * zm1m2m3
+
+            # compute \Sigma_++-
+            # \Sigma_{m1,m2,m3}^{++-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,-(k3+1))
+            # \Sigma_{m1,m2,m3}^{++-} = fft(y_{k1, k2,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,k3} = \delta[(k1+1) hx, (k2+1) hy, (k3-N) hz] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m2 / N) * exp(2.0 * pi* 1j * m3)
+            # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
+            dcf = np.array([[[delta_cf([(i+1) * h_x, (j+1) * h_y, (k-N) * h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_x.reshape(N, 1, 1) * yk_y.reshape(1, N, 1) * yk_z.reshape(1, 1, N)
+            yk_hat = np.fft.fftn(dcf * yk)
+            zm1 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm2 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm3 = np.exp(two_pi* 1j * np.arange(N))
+            zm1m2m3 = zm1.reshape(N,1,1) * zm2.reshape(1,N,1) * zm3.reshape(1,1,N)
+            sigma_plus_plus_minus = yk_hat * zm1m2m3
+
+            # compute \Sigma_--+
+            # \Sigma_{m1,m2,m3}^{--+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),k3+1)
+            # \Sigma_{m1,m2,m3}^{--+} = fft(y_{k1, k2,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,k3} = conj(\delta[-(k1-N) hx, -(k2-N) hy, -(k3+1) hz]) * exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3+1) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(2.0 * pi* 1j * m1) * exp(2.0 * pi* 1j * m2) * exp(-2.0 * pi* 1j * m3/N)
+            # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
+            dcf_conjugate = np.conjugate(dcf[N-np.arange(N)-1,:,:][:,N-np.arange(N)-1,:][:,:,N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = yk_x.reshape(N, 1, 1) * yk_y.reshape(1, N, 1) * yk_z.reshape(1, 1, N)
+            yk_hat = np.fft.fftn(dcf_conjugate * yk)
+            zm1 = np.exp(two_pi* 1j * np.arange(N))
+            zm2 = np.exp(two_pi* 1j * np.arange(N))
+            zm3 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm1m2m3 = zm1.reshape(N,1,1) * zm2.reshape(1,N,1) * zm3.reshape(1,1,N)
+            sigma_minus_minus_plus = yk_hat * zm1m2m3
+
+            # compute \Sigma_+-+
+            # \Sigma_{m1,m2,m3}^{+-+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),k3+1)
+            # \Sigma_{m1,m2,m3}^{+-+} = fft(y_{k1,k2,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,k3} = \delta[(k1+1) hx, (k2-N) hy, (k3+1) hz] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3+1) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(2.0 * pi* 1j * m2) * exp(-2.0 * pi* 1j * m3 / N)
+            # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
+            dcf = np.array([[[delta_cf([(i+1) * h_x, (j-N) * h_y, (k+1) * h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = yk_x.reshape(N, 1, 1) * yk_y.reshape(1, N, 1) * yk_z.reshape(1, 1, N)
+            yk_hat = np.fft.fftn(dcf * yk)
+            zm1 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm2 = np.exp(two_pi* 1j * np.arange(N))
+            zm3 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm1m2m3 = zm1.reshape(N,1,1) * zm2.reshape(1,N,1) * zm3.reshape(1,1,N)
+            sigma_plus_minus_plus = yk_hat * zm1m2m3
+
+            # compute \Sigma_-+-
+            # \Sigma_{m1,m2,m3}^{-+-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),(k2+1),-(k3+1))
+            # \Sigma_{m1,m2,m3}^{-+-} = fft(y_{k1,k2,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,k3} = conj(\delta[(k1-N) hx, (k2+1) hy, (k3-N) hz]) * exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(2.0 * pi* 1j * m1) * exp(-2.0 * pi* 1j * m2/N) * exp(2.0 * pi* 1j * m3)
+            # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
+            dcf_conjugate = np.conjugate(dcf[N-np.arange(N)-1,:,:][:,N-np.arange(N)-1,:][:,:,N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_x.reshape(N, 1, 1) * yk_y.reshape(1, N, 1) * yk_z.reshape(1, 1, N)
+            yk_hat = np.fft.fftn(dcf * yk)
+            zm1 = np.exp(two_pi* 1j * np.arange(N))
+            zm2 = np.exp(-two_pi* 1j * np.arange(N)/ N)
+            zm3 = np.exp(two_pi* 1j * np.arange(N))
+            zm1m2m3 = zm1.reshape(N,1,1) * zm2.reshape(1,N,1) * zm3.reshape(1,1,N)
+            sigma_minus_plus_minus = yk_hat * zm1m2m3
+
+            # compute \Sigma_+--
+            # \Sigma_{m1,m2,m3}^{+--}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))
+            # \Sigma_{m1,m2,m3}^{+--} = fft(y_{k1,k2,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,k3} = \delta[(k1+1) hx, (k2-N) hy, (k3-N) hz] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(-pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(2.0 * pi* 1j * m2) * exp(2.0 * pi* 1j * m3)
+            # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
+            dcf = np.array([[[delta_cf([(i+1) * h_x, (j-N) * h_y, (k-N) * h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_x.reshape(N, 1, 1) * yk_y.reshape(1, N, 1) * yk_z.reshape(1, 1, N)
+            yk_hat = np.fft.fftn(dcf * yk)
+            zm1 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm2 = np.exp(two_pi* 1j * np.arange(N))
+            zm3 = np.exp(two_pi* 1j * np.arange(N))
+            zm1m2m3 = zm1.reshape(N,1,1) * zm2.reshape(1,N,1) * zm3.reshape(1,1,N)
+            sigma_plus_minus_minus = yk_hat * zm1m2m3
+
+            # compute \Sigma_-++
+            # \Sigma_{m1,m2,m3}^{-++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))
+            # \Sigma_{m1,m2,m3}^{-++} = fft(y_{k1,k2,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,k3} = \delta[(k1+1) hx, (k2-N) hy, (k3-N) hz] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(-pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(2.0 * pi* 1j * m2) * exp(2.0 * pi* 1j * m3)
+            # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
+            dcf_conjugate = np.conjugate(dcf[N-np.arange(N)-1,:,:][:,N-np.arange(N)-1,:][:,:,N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = yk_x.reshape(N, 1, 1) * yk_y.reshape(1, N, 1) * yk_z.reshape(1, 1, N)
+            yk_hat = np.fft.fftn(dcf_conjugate * yk)
+            zm1 = np.exp(two_pi* 1j * np.arange(N))
+            zm2 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm3 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm1m2m3 = zm1.reshape(N,1,1) * zm2.reshape(1,N,1) * zm3.reshape(1,1,N)
+            sigma_minus_plus_plus = yk_hat * zm1m2m3
+
+            #----------------------------------------#
+            #----------------- FFT2D ----------------#
+            #--- In this section, we apply 2D FFT ---#
+            #--- and we propagate in 3 dimensions ---#
+            #----------------------------------------#
+
+            # compute \Sigma_++0
+            # \Sigma_{m1,m2,m3}^{++0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta((k1+1)hx,(k2+1)hy,0) E_{m1,m2,m3}(k1+1,k2+1,0)
+            # \Sigma_{m1,m2,m3}^{++0} = fft(y_{k1, k2,0}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[(k1+1) hx, (k2+1) hy, 0] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m2 / N)
+            # forall k1,k2,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf = np.array([[delta_cf([(i + 1) * h_x, (j + 1) * h_y, 0]) for j in xrange(N)] for i in xrange(N)] )
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = yk_x.reshape(N, 1) * yk_y.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf * yk)
+            zm = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm1m2 = zm.reshape(N,1) * zm.reshape(1,N)
+            sigma_plus_plus_0 = yk_hat * zm1m2
+
+            # compute \Sigma_--0
+            # \Sigma_{m1,m2,m3}^{--0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta(-(k1+1)hx,-(k2+1)hy,0) E_{m1,m2,m3}(-(k1+1),-(k2+1),0)
+            # \Sigma_{m1,m2,m3}^{--0} = fft(y_{k1, k2,0}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = conj(\delta[-(k1-N) hx, -(k2-N) hy, 0]) * exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(2.0 * pi* 1j * m1) * exp(-2.0 * pi* 1j * m2)
+            # forall k1,k2,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf_conjugate = np.conj(dcf[N-np.arange(N)-1,:][:,N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_x.reshape(N, 1) * yk_y.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf_conjugate * yk)
+            zm = np.exp(two_pi* 1j * np.arange(N))
+            zm1m2 = zm.reshape(N,1) * zm.reshape(1,N)
+            sigma_minus_minus_0 = yk_hat * zm1m2
+
+            # compute \Sigma_0++
+            # \Sigma_{m1,m2,m3}^{0++}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)
+            # \Sigma_{m1,m2,m3}^{0++} = fft(y_{0,k2, k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[0,(k2+1) hy, (k3+1) hz] * exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k3+1) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m2 / N) * exp(-2.0 * pi* 1j * m3 / N)
+            # forall k2,k3,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf = np.array([[delta_cf([0, (i + 1) * h_y, (j + 1) * h_z]) for j in xrange(N)] for i in xrange(N)] )
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = yk_y.reshape(N, 1) * yk_z.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf * yk)
+            zm = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm2m3 = zm.reshape(N,1) * zm.reshape(1,N)
+            sigma_0_plus_plus = yk_hat * zm2m3
+
+            # compute \Sigma_0--
+            # \Sigma_{m1,m2,m3}^{0--}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)
+            # \Sigma_{m1,m2,m3}^{0-} = fft(y_{0,k2, k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = conj(\delta[0,-(k2-N) hy, -(k3-N) hz]) * exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(2.0 * pi* 1j * m2) * exp(-2.0 * pi* 1j * m3)
+            # forall k2,k3,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf_conjugate = np.conj(dcf[N-np.arange(N)-1,:][:,N-np.arange(N)-1])
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_y.reshape(N, 1) * yk_z.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf_conjugate * yk)
+            zm = np.exp(two_pi* 1j * np.arange(N))
+            zm2m3 = zm.reshape(N,1) * zm.reshape(1,N)
+            sigma_0_minus_minus = yk_hat * zm2m3
+
+            # compute \Sigma_+0+
+            # \Sigma_{m1,m2,m3}^{+0+}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta((k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)
+            # \Sigma_{m1,m2,m3}^{+0+} = fft(y_{k1,0,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[(k1+1) hx,0,(k3+1) hz] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k3+1) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m3 / N)
+            # forall k1,k3,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf = np.array([[delta_cf([(i + 1) * h_x, 0, (j + 1) * h_z]) for j in xrange(N)] for i in xrange(N)] )
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = yk_x.reshape(N, 1) * yk_z.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf * yk)
+            zm = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm1m3 = zm.reshape(N,1) * zm.reshape(1,N)
+            sigma_plus_0_plus = yk_hat * zm1m3
+
+            # compute \Sigma_-0-
+            # \Sigma_{m1,m2,m3}^{-0-}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(-(k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)
+            # \Sigma_{m1,m2,m3}^{-0-} = fft(y_{k1,0,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[-(k1-N) hx,0,-(k3-N) hz] * exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m3 / N)
+            # forall k1,k3,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf_conjugate = np.conj(dcf[N-np.arange(N)-1,:][:,N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_x.reshape(N, 1) * yk_z.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf_conjugate * yk)
+            zm = np.exp(two_pi* 1j * np.arange(N))
+            zm1m3 = zm.reshape(N,1) * zm.reshape(1,N)
+            sigma_minus_0_minus = yk_hat * zm1m3
+
+            # compute \Sigma_+-0
+            # \Sigma_{m1,m2,m3}^{+-0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta((k1+1)hx,-(k2+1)hy, 0) E_{m1,m2,m3}(k1+1,-(k2+1),0)
+            # \Sigma_{m1,m2,m3}^{+-0} = fft(y_{k1,k2,0}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[(k1+1) hx,0,(k2-N) hy,0] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(2.0 * pi* 1j * m2)
+            # forall k1,k2,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf = np.array([[delta_cf([(i + 1) * h_x, (j - N) * h_y, 0]) for j in xrange(N)] for i in xrange(N)] )
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_x.reshape(N, 1) * yk_y.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf * yk)
+            zm1 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm2 = np.exp(two_pi* 1j * np.arange(N))
+            zm1m2 = zm1.reshape(N,1) * zm2.reshape(1,N)
+            sigma_plus_minus_0 = yk_hat * zm1m2
+
+            # compute \Sigma_-+0
+            # \Sigma_{m1,m2,m3}^{-+0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta(-(k1+1)hx,(k2+1)hy, 0) E_{m1,m2,m3}(-(k1+1),(k2+1),0)
+            # \Sigma_{m1,m2,m3}^{-+0} = fft(y_{k1,k2,0}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = conj(\delta[(k1-N) hx,0,(k2+1) hy,0]) * exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(2.0 * pi* 1j * m2)
+            # forall k1,k2,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf_conjugate = np.conj(dcf[N-np.arange(N)-1,:][:,N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = yk_x.reshape(N, 1) * yk_y.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf_conjugate * yk)
+            zm1 = np.exp(two_pi* 1j * np.arange(N))
+            zm2 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm1m2 = zm1.reshape(N,1) * zm2.reshape(1,N)
+            sigma_minus_plus_0 = yk_hat * zm1m2
+
+            # compute \Sigma_+0-
+            # \Sigma_{m1,m2,m3}^{+0-}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta((k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,-(k3+1)
+            # \Sigma_{m1,m2,m3}^{+0-} = fft(y_{k1,0,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[(k1+1) hx,0,(k3-N) hz] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(2.0 * pi* 1j * m3)
+            # forall k1,k3,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf = np.array([[delta_cf([(i + 1) * h_x, 0, (j - N) * h_z]) for j in xrange(N)] for i in xrange(N)] )
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N)-N))
+            yk = yk_x.reshape(N, 1) * yk_z.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf * yk)
+            zm1 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm3 = np.exp(two_pi* 1j * np.arange(N))
+            zm1m3 = zm1.reshape(N,1) * zm3.reshape(1,N)
+            sigma_plus_0_minus = yk_hat * zm1m3
+
+            # compute \Sigma_-0+
+            # \Sigma_{m1,m2,m3}^{-0+}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(-(k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),0,(k3+1)
+            # \Sigma_{m1,m2,m3}^{-0+} = fft(y_{k1,0,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[(k1+1) hx,0,(k3-N) hz] * exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k3+1) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(2.0 * pi* 1j * m1) * exp(-2.0 * pi* 1j * m3/N)
+            # forall k1,k3,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf_conjugate = np.conj(dcf[N-np.arange(N)-1,:][:,N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N)-N))
+            yk = yk_x.reshape(N, 1) * yk_z.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf_conjugate * yk)
+            zm1 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm3 = np.exp(two_pi* 1j * np.arange(N))
+            zm1m3 = zm1.reshape(N,1) * zm3.reshape(1,N)
+            sigma_minus_0_plus = yk_hat * zm1m3
+
+            # compute \Sigma_0+-
+            # \Sigma_{m1,m2,m3}^{0+-}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k2+1))
+            # \Sigma_{m1,m2,m3}^{0+-} = fft(y_{k1,k2,0}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[(k2+1) hy,0,(k3-N) hz] * exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m2 / N) * exp(2.0 * pi* 1j * m3)
+            # forall k2,k3,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf = np.array([[delta_cf([0, (i + 1) * h_y, (j - N) * h_z]) for j in xrange(N)] for i in xrange(N)] )
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk = yk_y.reshape(N, 1) * yk_z.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf * yk)
+            zm2 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            zm3 = np.exp(two_pi* 1j * np.arange(N))
+            zm2m3 = zm2.reshape(N,1) * zm3.reshape(1,N)
+            sigma_0_plus_minus = yk_hat * zm2m3
+
+            # compute \Sigma_0-+
+            # \Sigma_{m1,m2,m3}^{0-+}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k3+1))
+            # \Sigma_{m1,m2,m3}^{0-+} = fft(y_{k1,k2,0}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[(k2+1) hy,0,(k3-N) hz] * exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N)) *
+            # exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m2 / N) * exp(2.0 * pi* 1j * m3)
+            # forall k2,k3,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 2, FFT should be of dimension 2
+            dcf_conjugate = np.conj(dcf[N-np.arange(N)-1,:][:,N-np.arange(N)-1])
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk = yk_y.reshape(N, 1) * yk_z.reshape(1, N)
+            yk_hat = np.fft.fft2(dcf_conjugate * yk)
+            zm2 = np.exp(two_pi* 1j * np.arange(N))
+            zm3 = np.exp(-two_pi* 1j * np.arange(N)/N)
+            zm2m3 = zm2.reshape(N,1) * zm3.reshape(1,N)
+            sigma_0_minus_plus = yk_hat * zm2m3
+
+            #----------------------------------------#
+            #----------------- FFT1D ----------------#
+            #--- In this section, we apply 1D FFT ---#
+            #--- and we propagate in 3 dimensions ---#
+            #----------------------------------------#
+            # compute \Sigma_+00
+            # \Sigma_{m1,m2,m3}^{+00}=\sum_{k1=0}^{N-1} \delta((k1+1)hx,0,0) E_{m1,m2,m3}(k1+1,0,0)
+            # \Sigma_{m1,m2,m3}^{+00} = fft(y_{k1,0,0}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[(k1+1)hx,0,0] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N)
+            # forall k1,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 1, FFT should be of dimension 1
+            dcf = np.array([delta_cf([(i + 1) * h_x,0,0]) for i in xrange(N)])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_hat = np.fft.fft(dcf * yk_x)
+            zm1 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            sigma_plus_0_0 = yk_hat * zm1
+
+            # compute \Sigma_-00
+            # \Sigma_{m1,m2,m3}^{-00}=\sum_{k1=0}^{N-1} \delta(-(k1+1)hx,0,0) E_{m1,m2,m3}(-(k1+1),0,0)
+            # \Sigma_{m1,m2,m3}^{-00} = fft(y_{k1,0,0}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[(k1+1)hx,0,0] * exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(2.0 * pi* 1j * m1)
+            # forall k1,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 1, FFT should be of dimension 1
+            dcf_conjugate = np.conj(dcf[N-np.arange(N)-1])
+            yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_hat = np.fft.fft(dcf_conjugate * yk_x)
+            zm1 = np.exp(two_pi* 1j * np.arange(N))
+            sigma_minus_0_0 = yk_hat * zm1
+
+            # compute \Sigma_0+0
+            # \Sigma_{m1,m2,m3}^{0+0}=\sum_{k2=0}^{N-1} \delta(0, (k2+1)hy,0) E_{m1,m2,m3}(0,k2+1,0)
+            # \Sigma_{m1,m2,m3}^{0+0} = fft(y_{0,k2,0}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[0,(k2+1)hy,0] * exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m2 / N)
+            # forall k2,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 1, FFT should be of dimension 1
+            dcf = np.array([delta_cf([0,(i + 1) * h_y,0]) for i in xrange(N)])
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_hat = np.fft.fft(dcf * yk_y)
+            zm2 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            sigma_0_plus_0 = yk_hat * zm2
+
+            # compute \Sigma_0-0
+            # \Sigma_{m1,m2,m3}^{0-0}=\sum_{k2=0}^{N-1} \delta(0, (k2+1)hy,0) E_{m1,m2,m3}(0,k2+1,0)
+            # \Sigma_{m1,m2,m3}^{0-0} = fft(y_{0,k2,0}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = conj(\delta[0,-(k2-N)hy,0]) * exp(- pi* 1j * (k2+1) * (tau_x - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(2.0 * pi* 1j * m2)
+            # forall k2,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 1, FFT should be of dimension 1
+            dcf_conjugate = np.conj(dcf[N - np.arange(N) - 1])
+            yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_hat = np.fft.fft(dcf_conjugate * yk_y)
+            zm2 = np.exp(two_pi* 1j * np.arange(N))
+            sigma_0_minus_0 = yk_hat * zm2
+
+
+            # compute \Sigma_00+
+            # \Sigma_{m1,m2,m3}^{00+}=\sum_{k3=0}^{N-1} \delta(0, 0,(k3+1)hz) E_{m1,m2,m3}(0,0,k3+1)
+            # \Sigma_{m1,m2,m3}^{00+} = fft(y_{0,0,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = \delta[0,0,(k3+1)hz] * exp(- pi* 1j * (k3+1) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m3 / N)
+            # forall k3,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 1, FFT should be of dimension 1
+            dcf = np.array([delta_cf([0,0,(i + 1) * h_z]) for i in xrange(N)])
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1, N+1))
+            yk_hat = np.fft.fft(dcf * yk_z)
+            zm3 = np.exp(-two_pi* 1j * np.arange(N) / N)
+            sigma_0_0_plus = yk_hat * zm3
+
+            # compute \Sigma_00-
+            # \Sigma_{m1,m2,m3}^{00-}=\sum_{k3=0}^{N-1} \delta(0, 0,(k3+1)hz) E_{m1,m2,m3}(0,0,k3+1)
+            # \Sigma_{m1,m2,m3}^{00-} = fft(y_{0,0,k3}) * z_{m1,m2,m3} with :
+            # y_{k1,k2,0} = conj(\delta[0,0,-(k3-N)hz]) * exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
+            # zm_{m1,m2,m3} = exp(2.0 * pi* 1j * m3)
+            # forall k3,m1,m2,m3=0,1,...,N-1
+            # Care components here are of dimension 1, FFT should be of dimension 1
+            dcf_conjugate = np.conj(dcf[np.arange(N,0,-1)-1])
+            yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N) - N))
+            yk_hat = np.fft.fft(dcf_conjugate * yk_z)
+            zm3 = np.exp(two_pi* 1j * np.arange(N))
+            sigma_0_0_minus = yk_hat * zm3
+
+
+            # We start summation of the contributions
+            # 1) full 3D contributions
+            s_m = sigma_plus_plus_plus + sigma_minus_minus_minus + sigma_plus_plus_minus + sigma_minus_minus_plus \
+            + sigma_plus_minus_plus + sigma_minus_plus_minus + sigma_plus_minus_minus + sigma_minus_plus_plus
+
+            # 2) 2D contributions
+            for k in xrange(N):
+                # Adding 2D contributions
+                # All elements with k3=0
+                s_m[:,:,k] += sigma_plus_plus_0
+                s_m[:,:,k] += sigma_minus_minus_0
+                s_m[:,:,k] += sigma_plus_minus_0
+                s_m[:,:,k] += sigma_minus_plus_0
+
+                # All elements with k2=0
+                s_m[:,k,:] += sigma_plus_0_plus
+                s_m[:,k,:] += sigma_minus_0_minus
+                s_m[:,k,:] += sigma_plus_0_minus
+                s_m[:,k,:] += sigma_minus_0_plus
+
+                # All elements with k1=0
+                s_m[k,:,:] += sigma_0_plus_plus
+                s_m[k,:,:] += sigma_0_minus_minus
+                s_m[k,:,:] += sigma_0_plus_minus
+                s_m[k,:,:] += sigma_0_minus_plus
+            # 1D
+            for i in xrange(N):
+                for j in xrange(N):
+                    s_m[i,j,:] = sigma_0_0_plus
+                    s_m[i,j,:] = sigma_0_0_minus
+                    s_m[i,:,j] = sigma_0_plus_0
+                    s_m[i,:,j] = sigma_0_minus_0
+                    s_m[:,i,j] = sigma_plus_0_0
+                    s_m[:,i,j] = sigma_minus_0_0
+
+            s_m *= (h_x * h_y * h_z) /(8*pi*pi*pi)
+            ot.Log.Info("End of precomputing delta grid")
+
+            # final computation
+            # We add the real part of the FFT to the gaussian
+            # pdf contributions
+            pdf += s_m.real
+            pdf *= (pdf > 0)
+
+        return [[x_grid, y_grid, z_grid], pdf]
+
     def getAlpha(self):
         """
         Returns the alpha parameter used for the evaluation of the range.
