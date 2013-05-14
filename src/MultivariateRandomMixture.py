@@ -252,6 +252,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         gaussian_pdf = self.equivalentNormal_.computePDF(y)
         i = 0
         condition = True
+        isGridSymmetric = self.meshAltGrid_.isSymmetric()
         while (condition):
             i = i + 1
             delta = 0.0
@@ -261,6 +262,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     point = iterator.next()
                     x = [y[k] + point[k] for k in xrange(self.dimension_)]
                     delta += self.equivalentNormal_.computePDF(x)
+                    if isGridSymmetric:
+                        x = [y[k] - point[k] for k in xrange(self.dimension_)]
+                        delta += self.equivalentNormal_.computePDF(x)
             except StopIteration:
                 pass
             gaussian_pdf += delta
