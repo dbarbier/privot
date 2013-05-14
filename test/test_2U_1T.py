@@ -38,10 +38,15 @@ if __name__ == "__main__":
     from MultivariateGaussianCharacteristicFunction import MGCF as mgcf
     import time
 
-    N = 2000
-    maxSize = 0
+    N = 10000
     blockMin = 3
     blockMax = 16
+    try :
+        import matplotlib.pylab as plt
+        from matplotlib.backends.backend_pdf import PdfPages
+        has_pylab = True
+    except ImportError:
+        has_pylab = False
 
     """
     Test
@@ -52,6 +57,8 @@ if __name__ == "__main__":
     collection = ot.DistributionCollection([ot.Uniform(-50, -35), ot.Uniform(35, 50)])
     matrix = ot.Matrix([2 * [1.0]])
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
+    distribution.setBlockMin(blockMin)
+    distribution.setBlockMax(blockMax)
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
@@ -62,11 +69,9 @@ if __name__ == "__main__":
     print "mean = ", mean
     print "cov = ", cov
     print "sigma = ", sigma
+
     # Equivalent random mixture
     random_mixture = ot.RandomMixture(collection)
-
-    distribution.setBlockMin(blockMin)
-    distribution.setBlockMax(blockMax)
 
     random_mixture.setBlockMin(blockMin)
     random_mixture.setBlockMax(blockMax)
@@ -76,13 +81,28 @@ if __name__ == "__main__":
     print "mean = ", random_mixture.getMean()
     print "cov = ", random_mixture.getCovariance()
     print "sigma = ", random_mixture.getStandardDeviation()
+
+    # Reference distribution
+    ref_dist = ot.Triangular(-15.0,0,15.0)
+
+    print "RandomMixture distribution"
+    print "range = ", random_mixture.getRange()
+    print "mean = ", random_mixture.getMean()
+    print "cov = ", random_mixture.getCovariance()
+    print "sigma = ", random_mixture.getStandardDeviation()
+
     print "sample :"
     print "min = %s\nmax = %s\nmean = %s, cov = %s" %(sample.getMin(),sample.getMax(), sample.computeMean(), sample.computeCovariance())
     # evaluation of the characteristic function between xmin and xmax
-    xmin, xmax, dx = -5.0, 5.0, 0.5
+    xmin, xmax, dx = -14.5, 14.5, 0.5
     x = np.arange(xmin, xmax + dx, dx)
     t1 = []
     t2 = []
+    if has_pylab:
+        pdf_file = 'validation_2U_1T_PDF.pdf'
+        pdf_plot = PdfPages(pdf_file)
+        pdf_mv = []
+        pdf_theorique = []    
     for value in x:
         tic = time.time()
         c1 = distribution.computePDF([value])
@@ -94,25 +114,51 @@ if __name__ == "__main__":
         toc = time.time()
         dt2 = toc - tic
         t2.append(dt2)
+        pdf_th = ref_dist.computePDF(value)
+        if has_pylab:
+            pdf_mv.append(c1)
+            pdf_theorique.append(pdf_th)
         print "time of computation : distribution=%s, rm=%s, ratio=%s" %(dt1, dt2, dt1/dt2)
-        print "values comparison : dist_pdf=%s, rm_pdf=%s, error=%s" %(c1, c2, (c1 - c2)/c2)
+        print "value=%s, dist_pdf=%s, rm_pdf=%s, pdf_th=%s, error=%s" %(value, c1, c2, pdf_th, abs(c1 - pdf_th)/pdf_th)
 
-    size = len(t1)
-    import matplotlib.pylab as plt
-    plt.ion()
-    plt.loglog(x, t1, 'r', label = 'MV')
-    plt.loglog(x, t2, 'b', label = 'RM')
-    plt.legend()
+    # Variation of characteristic function
+    if has_pylab:
+        fig = plt.figure()
+        plt.subplot(211)
+        plt.plot(x, pdf_mv, 'r', label = 'MV')
+        plt.plot(x, pdf_theorique, '-b', label = 'RM')
+        plt.xlabel('')
+        plt.ylabel('pdf plot')
+        plt.title("validation of pdf function")
+        plt.legend()
+        plt.subplot(212)
+        plt.semilogy(x, abs(plt.np.array(pdf_th)-plt.np.array(pdf_mv))/plt.np.array(pdf_th), 'r', label = 'MV')
+        plt.xlabel('')
+        plt.ylabel('Relative error on PDF')
+        plt.legend()
+        pdf_plot.savefig(fig)
+        plt.close()
 
     # compute the pdf on a grid of form mu +/- b *sigma with N points
-    b = 3.0
+    b = 6.0
     N = pow(2, 16)
     [y, pdf] = distribution.computePDFOn1DGrid(b, N)
-    pdf_theorique = np.array([random_mixture.computePDF(el) for el in y])
-    fig = plt.figure()
-    plt.subplot(211)
-    plt.plot(y, pdf_theorique, 'r', label = 'RM')
-    plt.plot(y, pdf, 'g-', label = 'MV')
-    plt.legend()
-    plt.subplot(212)
-    plt.plot(y, pdf_theorique - pdf, 'b', label = 'RM')
+    pdf_theorique = np.array([ref_dist.computePDF(el) for el in y])
+    if has_pylab:
+        fig = plt.figure()
+        plt.subplot(211)
+        plt.plot(y, pdf_theorique, 'r', label = 'RM')
+        plt.plot(y, pdf, 'g-', label = 'MV')
+        plt.legend()
+        plt.xlabel('')
+        plt.ylabel('pdf plot')
+        plt.title("validation of pdf function on a regular grid")
+        plt.legend()
+        plt.subplot(212)
+        plt.semilogy(y, abs(pdf_theorique- pdf)/pdf_theorique, 'r', label = 'MV')
+        plt.xlabel('')
+        plt.ylabel('Relative error on PDF')
+        plt.legend()
+        pdf_plot.savefig(fig)
+        plt.close()
+        pdf_plot.close()
