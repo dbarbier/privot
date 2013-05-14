@@ -404,6 +404,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             distributions.append(collection[k])
         self.collection_ = distributions
 
+    def clone(self, steps):
+        """
+        Clone the current distribution
+
+        """
+        return PythonMultivariateRandomMixture(self.collection_, self.matrix_, self.constant_)
+
     def computeLogCharacteristicFunction(self, y):
         """
         Return the Log-characteristic function evaluated on y.
