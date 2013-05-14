@@ -50,7 +50,7 @@ if __name__ == "__main__":
     print "mean = ", mean
     print "cov = ", cov
     print "sigma = ", sigma
-    # evaluation of the characteristic function in [xmin,ymin]x[xmax,ymax]
+    # evaluation of the characteristic function in [xmin,xmax]x[ymin,ymax]x[zmin,zmax]
     xmin, ymin, zmin = tuple(interval.getLowerBound())
     xmax, ymax, zmax = tuple(interval.getUpperBound())
     # length of interval in each dimension
