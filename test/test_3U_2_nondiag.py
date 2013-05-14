@@ -60,7 +60,7 @@ if __name__ == "__main__":
     maxSize = 1 << blockMax
     distribution.setBlockMin(blockMin)
     distribution.setBlockMax(blockMax)
-    distribution.setPDFPrecision(1.e-6)
+    distribution.setPDFPrecision(1.e-8)
 
     # importing validation sample
     validation_sample = ot.NumericalSample.ImportFromCSVFile("../validation/valid_d2_3unif.csv")
@@ -81,6 +81,14 @@ if __name__ == "__main__":
         print "dt = %s"%(toc-tic)
         delta += abs((pdf_estimate - pdf_theoretical))**2
         print "x=%s, y=%s, pdf_estimate=%s pdf_theoretical=%s"%(x, y, pdf_estimate, pdf_theoretical)
+        if abs(pdf_theoretical) < 1e-16:
+            pdf_theoretical = 0.0
+        try :
+            error = abs(pdf_theoretical - pdf_estimate)/pdf_theoretical
+            print "relative_error=%s"%error
+        except ZeroDivisionError:
+            error = abs(pdf_theoretical - pdf_estimate)
+            print "absolute_error=%s"%error
         print "pdf_error=%s" %distribution.getLastPDFError()
     # Variation of characteristic function
     delta /= len(validation_sample)
