@@ -66,11 +66,23 @@ if __name__ == "__main__":
     z = slice(zmin + 0.2 * dZ, zmax - 0.2 * dZ, dz)
     grid_x, grid_y, grid_z = np.mgrid[x, y, z]
     shape = grid_x.shape
-    values = np.ndarray(shape)
+    values_th = np.ndarray(shape)
+    values_app = np.ndarray(shape)
     # Compute inverse of transformation matrix
     for ix in range(shape[0]):
         for iy in range(shape[1]):
             for iz in range(shape[2]):
                 u = [grid_x[ix, iy, iz], grid_y[ix, iy, iz], grid_z[ix, iy, iz]]
                 pdf_estimate = distribution.computePDF(u)
-                values[ix, iy, iz]=  pdf_estimate
+                print "point=%s, pdf_value=%s"%(u, pdf_estimate)
+                values_th[ix, iy, iz]=  pdf_estimate
+    # For the validation of the poisson formula, we compute again the pdf
+    print "Non analytic estimate"
+    distribution.isAnalyticPDF_ = False
+    for ix in range(shape[0]):
+        for iy in range(shape[1]):
+            for iz in range(shape[2]):
+                u = [grid_x[ix, iy, iz], grid_y[ix, iy, iz], grid_z[ix, iy, iz]]
+                pdf_estimate = distribution.computePDF(u)
+                values_app[ix, iy, iz]=  pdf_estimate
+                print "point=%s, pdf_value=%s"%(u, pdf_estimate)
