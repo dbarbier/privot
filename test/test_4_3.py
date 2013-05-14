@@ -42,11 +42,16 @@ if __name__ == "__main__":
     Test
     ------
     """
-    randomMixture = ot.RandomMixture(ot.DistributionCollection([ot.Normal(2, 1), ot.Normal(-2, 1)]))
+    blockMin = 3
+    blockMax = 7
+    n_blockMax = 2**blockMax
+    n = 4 * n_blockMax * (n_blockMax + 1) * (2 * n_blockMax + 1) + 2 * n_blockMax
+    maxSize = n
+    randomMixture = ot.Normal(0, np.sqrt(2) / 2.0)
     collection = ot.DistributionCollection([ot.Normal(0.0,1.0), randomMixture, ot.Uniform(0,1), ot.Uniform(0,1)])
     matrix = ot.Matrix([[1, -0.05, 1, -0.5], [0.5, 1, -0.05, 0.3], [-0.5, -0.1, 1.2, -0.8]])
+    ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultCacheSize", maxSize)
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
-    distribution.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(MaxNormMeshGrid.SkinCube2D(distribution.getReferenceBandwidth(), symmetric=True), size=40000000))
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
@@ -55,12 +60,9 @@ if __name__ == "__main__":
     print "mean = ", mean
     print "cov = ", cov
     print "sigma = ", sigma
-    blockMin = 3
-    blockMax = 9
-    maxSize = 1 << blockMax
     distribution.setBlockMin(blockMin)
     distribution.setBlockMax(blockMax)
-    distribution.setPDFPrecision(1.e-6)
+    #distribution.setPDFPrecision(1.e-6)
     # importing validation sample
     validation_sample = ot.NumericalSample.ImportFromCSVFile("../validation/valid_d3_4dists.csv")
     # sample for error observation
