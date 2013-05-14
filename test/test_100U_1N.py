@@ -36,8 +36,12 @@ if __name__ == "__main__":
     import openturns as ot
     import MultivariateRandomMixture as MV
     import numpy as np
-     
+    import time
+
     N = 20000
+    maxSize = 2**16
+    blockMin = 3
+    blockMax = 16
     try :
         import matplotlib.pylab as plt
         from matplotlib.backends.backend_pdf import PdfPages
@@ -55,6 +59,10 @@ if __name__ == "__main__":
     collection = ot.DistributionCollection(100 * [ot.Uniform()])
     matrix = ot.Matrix([100 * [1.0]])
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
+    distribution.setGridMesher(MV.MaxNormMeshGrid.CachedMeshGrid(MV.MaxNormMeshGrid.Cube1D(distribution.getReferenceBandwidth(), symmetric=True), size=maxSize))
+    distribution.setBlockMin(blockMin)
+    distribution.setBlockMax(blockMax)
+
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
@@ -65,13 +73,18 @@ if __name__ == "__main__":
     print "mean = ", mean
     print "cov = ", cov
     print "sigma = ", sigma
+
     # Equivalent random mixture
     random_mixture = ot.RandomMixture(collection)
+    random_mixture.setBlockMin(blockMin)
+    random_mixture.setBlockMax(blockMax)
     print "RandomMixture distribution"
     print "range = ", random_mixture.getRange()
     print "mean = ", random_mixture.getMean()
     print "cov = ", random_mixture.getCovariance()
     print "sigma = ", random_mixture.getStandardDeviation()
+
+    # Sample issued from MVRM
     print "sample :"
     print "min = %s\nmax = %s\nmean = %s, cov = %s" %(sample.getMin(),sample.getMax(), sample.computeMean(), sample.computeCovariance())
     # evaluation of the characteristic function between xmin and xmax
@@ -87,14 +100,22 @@ if __name__ == "__main__":
     for value in x:
         c1 = distribution.computeCharacteristicFunction([value])
         c2 = random_mixture.computeCharacteristicFunction(value)
+        tic = time.time()
         pdf1 = distribution.computePDF([value])
+        toc = time.time()
+        dt1 = toc - tic
+        tic = time.time()
         pdf2 = random_mixture.computePDF([value])
+        toc = time.time()
+        dt2 = toc - tic
         delta += abs((c1 - c2))**2
         pdf += abs((pdf1 - pdf2))**2
         if has_pylab:
             pdf_mv.append(pdf1)
             pdf_rm.append(pdf2)
-        print pdf1, pdf2, abs(pdf2 - pdf1)/pdf2
+        print "time MV=%s, RM=%s, ratio=%s" %(dt1, dt2, dt1/dt2)
+        print "value=%s, dist_pdf=%s, rm_pdf=%s, error=%s" %(value, pdf1, pdf2, pdf1 - pdf2)
+
     # Variation of characteristic function
     delta /= len(x)
     print "delta of characteristic function=%s" %(np.sqrt(delta))
