@@ -35,15 +35,24 @@ if __name__ == "__main__":
     import openturns as ot
     import MultivariateRandomMixture as MV
     import numpy as np
+    import time
 
-    """
-    Test
-    ------
-    """
+    # Constants
+
+    blockMin = 3
+    blockMax = 6
+    n_blockMax = 2**blockMax
+    maxSize = 4 * n_blockMax * (n_blockMax + 1)
+    b = 5.0
+    N = 256
+    # Elements of distribution
     collection = ot.DistributionCollection([ot.Uniform(-1, 1), ot.Uniform(-1, 1)])
     matrix = ot.Matrix([[1, 4], [3, 2]])
     constant = [0.0, 0.0]
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+    distribution.setBlockMin(blockMin)
+    distribution.setBlockMax(blockMax)
+    distribution.setGridMesher(MV.MaxNormMeshGrid.CachedMeshGrid(MV.MaxNormMeshGrid.SkinCube2D(distribution.getReferenceBandwidth(), symmetric=True), size=maxSize))
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
@@ -58,28 +67,62 @@ if __name__ == "__main__":
     # length of interval in each dimension
     dX = xmax - xmin
     dY = ymax - ymin
-    dx = 0.1
-    dy = 0.1
+    dx = 0.5
+    dy = 0.5
     # 2D grid
-    x = np.arange(xmin - 0.1 * dX, xmax + 0.1 * dX, dx)
-    y = np.arange(ymin - 0.1 * dY, ymax + 0.1 * dY, dy)
+    x = np.arange(xmin - 0.5 * dX, xmax + 0.5 * dX, dx)
+    y = np.arange(ymin - 0.5 * dY, ymax + 0.5 * dY, dy)
     # Compute inverse of transformation matrix
     grid_x, grid_y = np.meshgrid(x,y)
     shape = grid_x.shape
-    values = np.ndarray(grid_x.shape)
+    values_th = np.ndarray(grid_x.shape)
     for ix in range(shape[0]):
         for iy in range(shape[1]):
             valuex, valuey = grid_x[ix,iy],grid_y[ix,iy]
             u = [valuex, valuey]
             pdf_estimate = distribution.computePDF(u)
-            values[ix,iy] = pdf_estimate
+            values_th[ix,iy] = pdf_estimate
+    # computation on a regular grid
+    [regular_grid, values_th_grid]= distribution.computePDFOn2DGrid(b, N)
+    # For the validation of the poisson formula, we compute again the pdf
+    print "Non analytic estimate"
+    distribution.isAnalyticPDF_ = False
+    values_app = np.ndarray(grid_x.shape)
+    for ix in range(shape[0]):
+        for iy in range(shape[1]):
+            valuex, valuey = grid_x[ix,iy],grid_y[ix,iy]
+            u = [valuex, valuey]
+            pdf_estimate = distribution.computePDF(u)
+            values_app[ix, iy] = pdf_estimate
+            pdf_theo = values_th[ix, iy]
+            print "point=%s, pdf_value=%s, pdf_theo=%s"%(u, pdf_estimate, pdf_theo)
+            error = abs(float(pdf_theo - pdf_estimate))
+            try :
+                error /= float(pdf_theo)
+                print "relative error=%s"%error
+            except ZeroDivisionError:
+                print "absolute error=%s"%error
+    # computation on a regular grid
+    [regular_grid, values_app_grid]= distribution.computePDFOn2DGrid(b, N)
     try :
         import matplotlib.pylab as plt
         fig = plt.figure()
-        plt.contour(values, 20,  vmin=np.min(values), vmax=np.max(values), origin='lower', extent=[np.min(x), np.max(x), np.min(y), np.max(y)])
+        plt.contour(values_th, 20,  vmin=np.min(values_th), vmax=np.max(values_th), origin='lower', extent=[np.min(x), np.max(x), np.min(y), np.max(y)])
         plt.colorbar()
-        plt.title("Estimated PDF with MVRM")
-        plt.savefig("2Uniform2d_pdf.pdf")
+        plt.title("Estimated PDF with MVRM using exact formula")
+        plt.savefig("2Uniform2d_pdf_th.pdf")
+        plt.close('all')
+        fig = plt.figure()
+        plt.contour(values_app, 20,  vmin=np.min(values_th), vmax=np.max(values_th), origin='lower', extent=[np.min(x), np.max(x), np.min(y), np.max(y)])
+        plt.colorbar()
+        plt.title("Estimated PDF with MVRM using Poisson formula")
+        plt.savefig("2Uniform2d_pdf_nmu.pdf")
+        plt.close('all')
+        fig = plt.figure()
+        plt.contour(values_app-values_th, 20,  vmin=np.min(values_th), vmax=np.max(values_th), origin='lower', extent=[np.min(x), np.max(x), np.min(y), np.max(y)])
+        plt.colorbar()
+        plt.title("Error with PDF estimate")
+        plt.savefig("2Uniform2d_pdf_err.pdf")
         plt.close('all')
     except ImportError:
         ot.log.Warn("Matplotlib not found. Could not create iso values graph of pdf")
