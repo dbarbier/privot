@@ -1,0 +1,1771 @@
+range =  [-2, 2]
+[-3, 2]
+mean =  [0,-0.5]
+cov =  [[  0.5      -0.333333 ]
+ [ -0.333333  0.916667 ]]
+sigma =  [0.707107,0.957427]
+dt = 18.719285965
+x=-2.0, y=-2.0, pdf_estimate=2.48869583487e-07 pdf_theoretical=0.0
+absolute_error=2.48869583487e-07
+pdf_error=1.01365952747e-06
+dt = 18.64767313
+x=-2.0, y=-1.8, pdf_estimate=4.36308295034e-07 pdf_theoretical=0.0
+absolute_error=4.36308295034e-07
+pdf_error=1.38586681246e-06
+dt = 18.7416069508
+x=-2.0, y=-1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.55290609321e-06
+dt = 18.6305730343
+x=-2.0, y=-1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=2.17820245237e-07
+dt = 18.6069729328
+x=-2.0, y=-1.2, pdf_estimate=4.75040680725e-07 pdf_theoretical=0.0
+absolute_error=4.75040680725e-07
+pdf_error=2.12479794018e-06
+dt = 18.718711853
+x=-2.0, y=-1.0, pdf_estimate=3.74774077494e-07 pdf_theoretical=0.0
+absolute_error=3.74774077494e-07
+pdf_error=2.9577354868e-06
+dt = 18.7436289787
+x=-2.0, y=-0.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.49669214903e-06
+dt = 18.6356229782
+x=-2.0, y=-0.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.19190624737e-08
+dt = 18.7254750729
+x=-2.0, y=-0.4, pdf_estimate=8.61679446161e-07 pdf_theoretical=0.0
+absolute_error=8.61679446161e-07
+pdf_error=1.3421338082e-06
+dt = 18.6783359051
+x=-2.0, y=-0.2, pdf_estimate=3.30799795137e-07 pdf_theoretical=0.0
+absolute_error=3.30799795137e-07
+pdf_error=3.46983597341e-06
+dt = 18.687515974
+x=-2.0, y=0.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=4.69449423463e-06
+dt = 18.6391119957
+x=-2.0, y=0.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.29080305775e-06
+dt = 18.6893019676
+x=-2.0, y=0.4, pdf_estimate=1.52333794499e-06 pdf_theoretical=0.0
+absolute_error=1.52333794499e-06
+pdf_error=5.34197661056e-06
+dt = 18.6902298927
+x=-2.0, y=0.6, pdf_estimate=3.00295352152e-07 pdf_theoretical=0.0
+absolute_error=3.00295352152e-07
+pdf_error=9.54870783617e-06
+dt = 18.7167918682
+x=-2.0, y=0.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=8.28389277414e-06
+dt = 18.6904408932
+x=-2.0, y=1.0, pdf_estimate=3.49425883856e-05 pdf_theoretical=0.0
+absolute_error=3.49425883856e-05
+pdf_error=3.41762296804e-05
+dt = 18.7984058857
+x=-2.0, y=1.2, pdf_estimate=4.36570045715e-07 pdf_theoretical=0.0
+absolute_error=4.36570045715e-07
+pdf_error=2.65409375275e-06
+dt = 18.648086071
+x=-2.0, y=1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=2.40059696937e-06
+dt = 18.6810340881
+x=-2.0, y=1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.2038834071e-06
+dt = 18.6626758575
+x=-2.0, y=1.8, pdf_estimate=3.61548050048e-07 pdf_theoretical=0.0
+absolute_error=3.61548050048e-07
+pdf_error=3.3064693461e-07
+dt = 18.6397118568
+x=-2.0, y=2.0, pdf_estimate=1.5536933291e-07 pdf_theoretical=0.0
+absolute_error=1.5536933291e-07
+pdf_error=6.60067826316e-07
+dt = 18.683093071
+x=-1.8, y=-2.0, pdf_estimate=4.64928190128e-08 pdf_theoretical=0.0
+absolute_error=4.64928190128e-08
+pdf_error=2.91444736562e-07
+dt = 18.7052168846
+x=-1.8, y=-1.8, pdf_estimate=4.98985382036e-07 pdf_theoretical=0.0
+absolute_error=4.98985382036e-07
+pdf_error=1.99138427086e-06
+dt = 18.7611250877
+x=-1.8, y=-1.6, pdf_estimate=1.70244378383e-07 pdf_theoretical=0.0
+absolute_error=1.70244378383e-07
+pdf_error=2.70291547112e-06
+dt = 18.7199680805
+x=-1.8, y=-1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.50243547878e-06
+dt = 18.7380208969
+x=-1.8, y=-1.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=3.77047457265e-07
+dt = 18.7669839859
+x=-1.8, y=-1.0, pdf_estimate=9.74786373808e-07 pdf_theoretical=0.0
+absolute_error=9.74786373808e-07
+pdf_error=9.38855853612e-07
+dt = 18.7339401245
+x=-1.8, y=-0.8, pdf_estimate=3.22217322182e-09 pdf_theoretical=0.0
+absolute_error=3.22217322182e-09
+pdf_error=3.89067938225e-06
+dt = 18.773209095
+x=-1.8, y=-0.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.44710999747e-06
+dt = 18.6451518536
+x=-1.8, y=-0.4, pdf_estimate=3.3964424616e-09 pdf_theoretical=0.0
+absolute_error=3.3964424616e-09
+pdf_error=1.39071464378e-06
+dt = 18.7205989361
+x=-1.8, y=-0.2, pdf_estimate=2.20934694213e-06 pdf_theoretical=0.0
+absolute_error=2.20934694213e-06
+pdf_error=5.68944060131e-06
+dt = 18.6424980164
+x=-1.8, y=0.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=9.29336877448e-06
+dt = 18.6988639832
+x=-1.8, y=0.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.52742164616e-06
+dt = 18.7163438797
+x=-1.8, y=0.4, pdf_estimate=0.00011899462865 pdf_theoretical=0.0
+absolute_error=0.00011899462865
+pdf_error=0.000115152018572
+dt = 18.7556438446
+x=-1.8, y=0.6, pdf_estimate=0.00999716157189 pdf_theoretical=0.01
+relative_error=0.000283842810983
+pdf_error=1.33311451547e-05
+dt = 18.7381129265
+x=-1.8, y=0.8, pdf_estimate=0.0200022292047 pdf_theoretical=0.02
+relative_error=0.000111460236794
+pdf_error=1.60502501365e-05
+dt = 18.789413929
+x=-1.8, y=1.0, pdf_estimate=0.0166687354233 pdf_theoretical=0.0166666666667
+relative_error=0.000124125397503
+pdf_error=1.08699889968e-05
+dt = 18.7785789967
+x=-1.8, y=1.2, pdf_estimate=8.39576281882e-05 pdf_theoretical=0.0
+absolute_error=8.39576281882e-05
+pdf_error=7.70409987968e-05
+dt = 18.6963789463
+x=-1.8, y=1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.03038081749e-06
+dt = 18.710062027
+x=-1.8, y=1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=4.30438085818e-06
+dt = 18.7533650398
+x=-1.8, y=1.8, pdf_estimate=6.83846413444e-07 pdf_theoretical=0.0
+absolute_error=6.83846413444e-07
+pdf_error=3.5237995974e-06
+dt = 18.7556068897
+x=-1.8, y=2.0, pdf_estimate=7.5276510684e-07 pdf_theoretical=0.0
+absolute_error=7.5276510684e-07
+pdf_error=9.28245879393e-07
+dt = 18.7642030716
+x=-1.6, y=-2.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=2.74539857055e-07
+dt = 18.7065958977
+x=-1.6, y=-1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.61378163002e-06
+dt = 18.7531330585
+x=-1.6, y=-1.6, pdf_estimate=5.12593960306e-07 pdf_theoretical=0.0
+absolute_error=5.12593960306e-07
+pdf_error=2.92162313182e-06
+dt = 18.7766411304
+x=-1.6, y=-1.4, pdf_estimate=2.31162173533e-07 pdf_theoretical=0.0
+absolute_error=2.31162173533e-07
+pdf_error=3.86494400481e-06
+dt = 18.7132050991
+x=-1.6, y=-1.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=3.29725515345e-06
+dt = 18.734924078
+x=-1.6, y=-1.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.24455488485e-06
+dt = 18.7659780979
+x=-1.6, y=-0.8, pdf_estimate=1.50192576094e-06 pdf_theoretical=0.0
+absolute_error=1.50192576094e-06
+pdf_error=7.89668435915e-06
+dt = 18.631994009
+x=-1.6, y=-0.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.09694650859e-05
+dt = 18.7654390335
+x=-1.6, y=-0.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.55469028529e-06
+dt = 18.7076931
+x=-1.6, y=-0.2, pdf_estimate=0.000119606113545 pdf_theoretical=0.0
+absolute_error=0.000119606113545
+pdf_error=0.000119065993037
+dt = 18.6948130131
+x=-1.6, y=0.0, pdf_estimate=0.00999554834929 pdf_theoretical=0.01
+relative_error=0.000445165071272
+pdf_error=3.61232627559e-06
+dt = 18.7560479641
+x=-1.6, y=0.2, pdf_estimate=0.0199990977939 pdf_theoretical=0.02
+relative_error=4.51103025319e-05
+pdf_error=3.6493289098e-06
+dt = 18.722069025
+x=-1.6, y=0.4, pdf_estimate=0.0300015518645 pdf_theoretical=0.03
+relative_error=5.17288159591e-05
+pdf_error=4.92328473113e-07
+dt = 18.6600089073
+x=-1.6, y=0.6, pdf_estimate=0.0400022680403 pdf_theoretical=0.04
+relative_error=5.6701007674e-05
+pdf_error=2.3025398954e-06
+dt = 18.7381739616
+x=-1.6, y=0.8, pdf_estimate=0.0498673951373 pdf_theoretical=0.05
+relative_error=0.00265209725418
+pdf_error=0.000131529319402
+dt = 18.7080578804
+x=-1.6, y=1.0, pdf_estimate=0.0333348134377 pdf_theoretical=0.0333333333333
+relative_error=4.44031312421e-05
+pdf_error=9.86318916011e-07
+dt = 18.7185268402
+x=-1.6, y=1.2, pdf_estimate=0.0166658509835 pdf_theoretical=0.0166666666667
+relative_error=4.89409922786e-05
+pdf_error=6.20406559041e-07
+dt = 18.6935629845
+x=-1.6, y=1.4, pdf_estimate=8.22005769105e-05 pdf_theoretical=0.0
+absolute_error=8.22005769105e-05
+pdf_error=8.50427487825e-05
+dt = 18.7910909653
+x=-1.6, y=1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=3.55525247641e-07
+dt = 18.7572319508
+x=-1.6, y=1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.15404222994e-06
+dt = 18.7805290222
+x=-1.6, y=2.0, pdf_estimate=7.42270534897e-07 pdf_theoretical=0.0
+absolute_error=7.42270534897e-07
+pdf_error=2.32011773018e-06
+dt = 18.7159671783
+x=-1.4, y=-2.0, pdf_estimate=7.46026024646e-08 pdf_theoretical=0.0
+absolute_error=7.46026024646e-08
+pdf_error=1.50955839363e-06
+dt = 18.773651123
+x=-1.4, y=-1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=2.98271704894e-06
+dt = 18.7548282146
+x=-1.4, y=-1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.91826809765e-07
+dt = 18.8483030796
+x=-1.4, y=-1.4, pdf_estimate=1.73765375013e-06 pdf_theoretical=0.0
+absolute_error=1.73765375013e-06
+pdf_error=7.08778758071e-06
+dt = 18.7772359848
+x=-1.4, y=-1.2, pdf_estimate=3.60355173381e-07 pdf_theoretical=0.0
+absolute_error=3.60355173381e-07
+pdf_error=9.5030795289e-06
+dt = 18.8099389076
+x=-1.4, y=-1.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.52453193989e-06
+dt = 18.7612178326
+x=-1.4, y=-0.8, pdf_estimate=0.000118966012833 pdf_theoretical=0.0
+absolute_error=0.000118966012833
+pdf_error=0.000120340488723
+dt = 18.7302451134
+x=-1.4, y=-0.6, pdf_estimate=0.00999582964078 pdf_theoretical=0.01
+relative_error=0.000417035922303
+pdf_error=4.63316543715e-06
+dt = 18.661053896
+x=-1.4, y=-0.4, pdf_estimate=0.0200001828532 pdf_theoretical=0.02
+relative_error=9.14265883799e-06
+pdf_error=7.50582768422e-06
+dt = 18.7368900776
+x=-1.4, y=-0.2, pdf_estimate=0.0300013123956 pdf_theoretical=0.03
+relative_error=4.37465193279e-05
+pdf_error=5.36085233223e-06
+dt = 18.6681540012
+x=-1.4, y=0.0, pdf_estimate=0.039999593467 pdf_theoretical=0.04
+relative_error=1.01633260719e-05
+pdf_error=9.83709166971e-07
+dt = 18.6740870476
+x=-1.4, y=0.2, pdf_estimate=0.049998811101 pdf_theoretical=0.05
+relative_error=2.37779803892e-05
+pdf_error=4.70170979096e-07
+dt = 18.6292419434
+x=-1.4, y=0.4, pdf_estimate=0.0600009039749 pdf_theoretical=0.06
+relative_error=1.5066247666e-05
+pdf_error=3.16167319321e-06
+dt = 18.6247889996
+x=-1.4, y=0.6, pdf_estimate=0.0700030520189 pdf_theoretical=0.07
+relative_error=4.36002694323e-05
+pdf_error=5.78944013542e-06
+dt = 18.7093989849
+x=-1.4, y=0.8, pdf_estimate=0.0666694527388 pdf_theoretical=0.0666666666667
+relative_error=4.17910816057e-05
+pdf_error=7.1758966893e-06
+dt = 18.7363100052
+x=-1.4, y=1.0, pdf_estimate=0.0500010177598 pdf_theoretical=0.05
+relative_error=2.03551951451e-05
+pdf_error=6.57168822228e-06
+dt = 18.7062709332
+x=-1.4, y=1.2, pdf_estimate=0.0333324833018 pdf_theoretical=0.0333333333333
+relative_error=2.55009447875e-05
+pdf_error=3.22473105089e-06
+dt = 18.6843428612
+x=-1.4, y=1.4, pdf_estimate=0.0166652236349 pdf_theoretical=0.0166666666667
+relative_error=8.65819040134e-05
+pdf_error=1.50669840039e-06
+dt = 18.7098360062
+x=-1.4, y=1.6, pdf_estimate=8.29567879919e-05 pdf_theoretical=0.0
+absolute_error=8.29567879919e-05
+pdf_error=8.26217703109e-05
+dt = 18.5994420052
+x=-1.4, y=1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=2.10220948128e-06
+dt = 18.7763237953
+x=-1.4, y=2.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=2.11232952837e-06
+dt = 18.743363142
+x=-1.2, y=-2.0, pdf_estimate=8.79216548485e-07 pdf_theoretical=0.0
+absolute_error=8.79216548485e-07
+pdf_error=4.61797379421e-06
+dt = 18.7506439686
+x=-1.2, y=-1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=8.20907272457e-06
+dt = 18.7470469475
+x=-1.2, y=-1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=4.37218196396e-06
+dt = 18.6803219318
+x=-1.2, y=-1.4, pdf_estimate=0.000119195054792 pdf_theoretical=0.0
+absolute_error=0.000119195054792
+pdf_error=0.000120835646997
+dt = 18.6784169674
+x=-1.2, y=-1.2, pdf_estimate=0.00999587923887 pdf_theoretical=0.01
+relative_error=0.000412076112575
+pdf_error=5.49061416809e-06
+dt = 18.6544640064
+x=-1.2, y=-1.0, pdf_estimate=0.0199997397891 pdf_theoretical=0.02
+relative_error=1.30105439262e-05
+pdf_error=8.63368307012e-06
+dt = 18.664000988
+x=-1.2, y=-0.8, pdf_estimate=0.0300010985656 pdf_theoretical=0.03
+relative_error=3.66188526467e-05
+pdf_error=6.50801934395e-06
+dt = 18.6014239788
+x=-1.2, y=-0.6, pdf_estimate=0.0400004233372 pdf_theoretical=0.04
+relative_error=1.05834301477e-05
+pdf_error=2.63245495068e-06
+dt = 18.7455239296
+x=-1.2, y=-0.4, pdf_estimate=0.0499996443885 pdf_theoretical=0.05
+relative_error=7.11223018077e-06
+pdf_error=7.44772808253e-07
+dt = 18.6462209225
+x=-1.2, y=-0.2, pdf_estimate=0.0599994981444 pdf_theoretical=0.06
+relative_error=8.3642606311e-06
+pdf_error=2.86306385053e-06
+dt = 18.683604002
+x=-1.2, y=0.0, pdf_estimate=0.0699999138045 pdf_theoretical=0.07
+relative_error=1.23136439834e-06
+pdf_error=3.4511762781e-06
+dt = 18.6673901081
+x=-1.2, y=0.2, pdf_estimate=0.0800005317182 pdf_theoretical=0.08
+relative_error=6.6464774448e-06
+pdf_error=3.6422091777e-06
+dt = 18.6879940033
+x=-1.2, y=0.4, pdf_estimate=0.0900014572488 pdf_theoretical=0.09
+relative_error=1.61916535958e-05
+pdf_error=3.69467370896e-06
+dt = 18.5700609684
+x=-1.2, y=0.6, pdf_estimate=0.0998676528464 pdf_theoretical=0.1
+relative_error=0.0013234715362
+pdf_error=0.000131233317795
+dt = 18.5856719017
+x=-1.2, y=0.8, pdf_estimate=0.0833358669389 pdf_theoretical=0.0833333333333
+relative_error=3.04032662769e-05
+pdf_error=3.10401125331e-06
+dt = 18.6309108734
+x=-1.2, y=1.0, pdf_estimate=0.0666674208458 pdf_theoretical=0.0666666666667
+relative_error=1.13126873098e-05
+pdf_error=2.74361835745e-06
+dt = 18.6279921532
+x=-1.2, y=1.2, pdf_estimate=0.0499992186639 pdf_theoretical=0.05
+relative_error=1.56267225644e-05
+pdf_error=2.19963725707e-07
+dt = 18.6878890991
+x=-1.2, y=1.4, pdf_estimate=0.033332579561 pdf_theoretical=0.0333333333333
+relative_error=2.26131688683e-05
+pdf_error=3.89936407e-06
+dt = 18.6548349857
+x=-1.2, y=1.6, pdf_estimate=0.0166665536068 pdf_theoretical=0.0166666666667
+relative_error=6.7835927569e-06
+pdf_error=6.17145621442e-06
+dt = 18.6527359486
+x=-1.2, y=1.8, pdf_estimate=8.31028298011e-05 pdf_theoretical=0.0
+absolute_error=8.31028298011e-05
+pdf_error=8.0578293698e-05
+dt = 18.7019650936
+x=-1.2, y=2.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.2548767532e-06
+dt = 18.6890161037
+x=-1.0, y=-2.0, pdf_estimate=8.40879332162e-05 pdf_theoretical=-1e-25
+absolute_error=8.40879332162e-05
+pdf_error=8.46073625366e-05
+dt = 18.7133190632
+x=-1.0, y=-1.8, pdf_estimate=0.00999509199165 pdf_theoretical=0.01
+relative_error=0.000490800834714
+pdf_error=8.6356535377e-06
+dt = 18.6794400215
+x=-1.0, y=-1.6, pdf_estimate=0.0200004825615 pdf_theoretical=0.02
+relative_error=2.41280751523e-05
+pdf_error=1.07593258277e-05
+dt = 18.7695260048
+x=-1.0, y=-1.4, pdf_estimate=0.0300017243341 pdf_theoretical=0.03
+relative_error=5.74778049772e-05
+pdf_error=6.58261609546e-06
+dt = 18.6840019226
+x=-1.0, y=-1.2, pdf_estimate=0.0399997225998 pdf_theoretical=0.04
+relative_error=6.93500465231e-06
+pdf_error=5.4388305565e-07
+dt = 18.7235701084
+x=-1.0, y=-1.0, pdf_estimate=0.0499987661505 pdf_theoretical=0.05
+relative_error=2.46769894952e-05
+pdf_error=4.42049847372e-06
+dt = 18.7672269344
+x=-1.0, y=-0.8, pdf_estimate=0.0599998034945 pdf_theoretical=0.06
+relative_error=3.27509144041e-06
+pdf_error=3.73884544007e-06
+dt = 18.7821800709
+x=-1.0, y=-0.6, pdf_estimate=0.0700010467564 pdf_theoretical=0.07
+relative_error=1.49536631448e-05
+pdf_error=1.06979553709e-06
+dt = 18.7348909378
+x=-1.0, y=-0.4, pdf_estimate=0.080000433156 pdf_theoretical=0.08
+relative_error=5.41445035959e-06
+pdf_error=5.69906644809e-07
+dt = 18.7392599583
+x=-1.0, y=-0.2, pdf_estimate=0.0899989070648 pdf_theoretical=0.09
+relative_error=1.21437245887e-05
+pdf_error=1.31191189658e-06
+dt = 18.7720029354
+x=-1.0, y=0.0, pdf_estimate=0.0999993083521 pdf_theoretical=0.1
+relative_error=6.91647851006e-06
+pdf_error=2.95222862522e-06
+dt = 18.7212250233
+x=-1.0, y=0.2, pdf_estimate=0.11000191578 pdf_theoretical=0.11
+relative_error=1.7416177954e-05
+pdf_error=5.87920393748e-06
+dt = 18.6905250549
+x=-1.0, y=0.4, pdf_estimate=0.12000292427 pdf_theoretical=0.12
+relative_error=2.43689156755e-05
+pdf_error=5.4568753199e-06
+dt = 18.652711153
+x=-1.0, y=0.6, pdf_estimate=0.116668393231 pdf_theoretical=0.116666666667
+relative_error=1.47991255455e-05
+pdf_error=4.86989538307e-06
+dt = 18.7723391056
+x=-1.0, y=0.8, pdf_estimate=0.100000673893 pdf_theoretical=0.1
+relative_error=6.73893397432e-06
+pdf_error=6.07313522991e-06
+dt = 18.6400048733
+x=-1.0, y=1.0, pdf_estimate=0.0833337936217 pdf_theoretical=0.0833333333333
+relative_error=5.52346050281e-06
+pdf_error=5.70733709827e-06
+dt = 18.7363939285
+x=-1.0, y=1.2, pdf_estimate=0.0666668209281 pdf_theoretical=0.0666666666667
+relative_error=2.31392131976e-06
+pdf_error=3.15964244826e-06
+dt = 18.774420023
+x=-1.0, y=1.4, pdf_estimate=0.0499990693506 pdf_theoretical=0.05
+relative_error=1.8612987854e-05
+pdf_error=2.48244904183e-06
+dt = 18.7244470119
+x=-1.0, y=1.6, pdf_estimate=0.0333328789247 pdf_theoretical=0.0333333333333
+relative_error=1.3632259648e-05
+pdf_error=7.01898553453e-06
+dt = 18.7339339256
+x=-1.0, y=1.8, pdf_estimate=0.0166695298437 pdf_theoretical=0.0166666666667
+relative_error=0.000171790621357
+pdf_error=6.95800867455e-06
+dt = 18.749671936
+x=-1.0, y=2.0, pdf_estimate=4.76386047284e-05 pdf_theoretical=0.0
+absolute_error=4.76386047284e-05
+pdf_error=4.90633482826e-05
+dt = 18.7481629848
+x=-0.8, y=-2.0, pdf_estimate=0.0133323426943 pdf_theoretical=0.0133333333333
+relative_error=7.42979294205e-05
+pdf_error=6.90574379971e-06
+dt = 18.7592248917
+x=-0.8, y=-1.8, pdf_estimate=0.0399159257837 pdf_theoretical=0.04
+relative_error=0.00210185540818
+pdf_error=7.66381855662e-05
+dt = 18.7202820778
+x=-0.8, y=-1.6, pdf_estimate=0.0500012330952 pdf_theoretical=0.05
+relative_error=2.46619035606e-05
+pdf_error=7.15969173739e-06
+dt = 18.6860349178
+x=-0.8, y=-1.4, pdf_estimate=0.0600011487955 pdf_theoretical=0.06
+relative_error=1.91465914736e-05
+pdf_error=5.43750476766e-06
+dt = 18.7594008446
+x=-0.8, y=-1.2, pdf_estimate=0.069999650976 pdf_theoretical=0.07
+relative_error=4.98605748554e-06
+pdf_error=3.30654849988e-06
+dt = 18.7151098251
+x=-0.8, y=-1.0, pdf_estimate=0.0799990922562 pdf_theoretical=0.08
+relative_error=1.13467968913e-05
+pdf_error=2.12267096527e-07
+dt = 18.7511548996
+x=-0.8, y=-0.8, pdf_estimate=0.0899999129959 pdf_theoretical=0.09
+relative_error=9.66712039893e-07
+pdf_error=2.55564402937e-06
+dt = 18.7014758587
+x=-0.8, y=-0.6, pdf_estimate=0.100000649592 pdf_theoretical=0.1
+relative_error=6.49591845855e-06
+pdf_error=2.7743590576e-06
+dt = 18.7169239521
+x=-0.8, y=-0.4, pdf_estimate=0.11000028201 pdf_theoretical=0.11
+relative_error=2.56372732563e-06
+pdf_error=5.74390868211e-07
+dt = 18.7793819904
+x=-0.8, y=-0.2, pdf_estimate=0.119999233711 pdf_theoretical=0.12
+relative_error=6.38574412862e-06
+pdf_error=2.71448265527e-06
+dt = 18.6927142143
+x=-0.8, y=0.0, pdf_estimate=0.12999940658 pdf_theoretical=0.13
+relative_error=4.56476877558e-06
+pdf_error=4.19613994806e-06
+dt = 18.717828989
+x=-0.8, y=0.2, pdf_estimate=0.140002226795 pdf_theoretical=0.14
+relative_error=1.59056784767e-05
+pdf_error=1.52111346879e-06
+dt = 18.7625570297
+x=-0.8, y=0.4, pdf_estimate=0.149869390303 pdf_theoretical=0.15
+relative_error=0.000870731315017
+pdf_error=0.000135613465864
+dt = 18.7570858002
+x=-0.8, y=0.6, pdf_estimate=0.133335285985 pdf_theoretical=0.133333333333
+relative_error=1.46448884848e-05
+pdf_error=2.01606250031e-06
+dt = 18.7493419647
+x=-0.8, y=0.8, pdf_estimate=0.116664756127 pdf_theoretical=0.116666666667
+relative_error=1.63760502186e-05
+pdf_error=8.3651388488e-06
+dt = 18.7042899132
+x=-0.8, y=1.0, pdf_estimate=0.0999991937887 pdf_theoretical=0.1
+relative_error=8.06211280902e-06
+pdf_error=1.10762513271e-05
+dt = 18.7225430012
+x=-0.8, y=1.2, pdf_estimate=0.0833382312397 pdf_theoretical=0.0833333333333
+relative_error=5.87748763552e-05
+pdf_error=7.41899407911e-06
+dt = 18.7361741066
+x=-0.8, y=1.4, pdf_estimate=0.066548403589 pdf_theoretical=0.0666666666667
+relative_error=0.00177394616438
+pdf_error=0.000117517119024
+dt = 18.6865568161
+x=-0.8, y=1.6, pdf_estimate=0.0400033068322 pdf_theoretical=0.04
+relative_error=8.26708053127e-05
+pdf_error=1.07679983986e-05
+dt = 18.7007470131
+x=-0.8, y=1.8, pdf_estimate=0.0133304219593 pdf_theoretical=0.0133333333333
+relative_error=0.000218353052661
+pdf_error=1.45022791371e-05
+dt = 18.6808958054
+x=-0.8, y=2.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.01444068899e-05
+dt = 18.683328867
+x=-0.6, y=-2.0, pdf_estimate=0.0266648157321 pdf_theoretical=0.0266666666667
+relative_error=6.9410046759e-05
+pdf_error=1.92396655166e-07
+dt = 18.7620069981
+x=-0.6, y=-1.8, pdf_estimate=0.0533346460119 pdf_theoretical=0.0533333333333
+relative_error=2.46127227354e-05
+pdf_error=2.81956302971e-07
+dt = 18.7304120064
+x=-0.6, y=-1.6, pdf_estimate=0.07991826911 pdf_theoretical=0.08
+relative_error=0.00102163612507
+pdf_error=8.46314458673e-05
+dt = 18.6995899677
+x=-0.6, y=-1.4, pdf_estimate=0.0900014320659 pdf_theoretical=0.09
+relative_error=1.59118430523e-05
+pdf_error=1.0644417977e-06
+dt = 18.6876878738
+x=-0.6, y=-1.2, pdf_estimate=0.0999995657736 pdf_theoretical=0.1
+relative_error=4.34226360757e-06
+pdf_error=2.87694365148e-06
+dt = 18.697329998
+x=-0.6, y=-1.0, pdf_estimate=0.109999532515 pdf_theoretical=0.11
+relative_error=4.24986549197e-06
+pdf_error=2.76940472621e-06
+dt = 18.7130379677
+x=-0.6, y=-0.8, pdf_estimate=0.120000760398 pdf_theoretical=0.12
+relative_error=6.33665195547e-06
+pdf_error=5.46831962144e-07
+dt = 18.7086617947
+x=-0.6, y=-0.6, pdf_estimate=0.130000206839 pdf_theoretical=0.13
+relative_error=1.59107238538e-06
+pdf_error=1.70234793673e-06
+dt = 18.6914641857
+x=-0.6, y=-0.4, pdf_estimate=0.139999099278 pdf_theoretical=0.14
+relative_error=6.43372807093e-06
+pdf_error=3.10131934605e-06
+dt = 18.7641398907
+x=-0.6, y=-0.2, pdf_estimate=0.149999839104 pdf_theoretical=0.15
+relative_error=1.07263968744e-06
+pdf_error=4.98854501346e-06
+dt = 18.7471048832
+x=-0.6, y=0.0, pdf_estimate=0.160001208106 pdf_theoretical=0.16
+relative_error=7.55066455541e-06
+pdf_error=5.92562845844e-06
+dt = 18.7820150852
+x=-0.6, y=0.2, pdf_estimate=0.170001340985 pdf_theoretical=0.17
+relative_error=7.88814544582e-06
+pdf_error=1.38078226342e-06
+dt = 18.7484848499
+x=-0.6, y=0.4, pdf_estimate=0.166669406009 pdf_theoretical=0.166666666667
+relative_error=1.6436055828e-05
+pdf_error=2.75951259757e-06
+dt = 18.7496170998
+x=-0.6, y=0.6, pdf_estimate=0.150005316741 pdf_theoretical=0.15
+relative_error=3.54449375147e-05
+pdf_error=1.83397137598e-06
+dt = 18.7720310688
+x=-0.6, y=0.8, pdf_estimate=0.133213453056 pdf_theoretical=0.133333333333
+relative_error=0.000899102080639
+pdf_error=0.00012021218143
+dt = 18.7676129341
+x=-0.6, y=1.0, pdf_estimate=0.106670778409 pdf_theoretical=0.106666666667
+relative_error=3.8547586783e-05
+pdf_error=5.02594319596e-06
+dt = 18.757764101
+x=-0.6, y=1.2, pdf_estimate=0.080000652135 pdf_theoretical=0.08
+relative_error=8.15168806727e-06
+pdf_error=5.97497933337e-06
+dt = 18.7549278736
+x=-0.6, y=1.4, pdf_estimate=0.0533319145282 pdf_theoretical=0.0533333333333
+relative_error=2.66025957199e-05
+pdf_error=2.11493522179e-06
+dt = 18.7385818958
+x=-0.6, y=1.6, pdf_estimate=0.0266647843969 pdf_theoretical=0.0266666666667
+relative_error=7.05851168237e-05
+pdf_error=2.65593175317e-06
+dt = 18.7399568558
+x=-0.6, y=1.8, pdf_estimate=0.000132636793136 pdf_theoretical=0.0
+absolute_error=0.000132636793136
+pdf_error=0.000129258111993
+dt = 18.6972858906
+x=-0.6, y=2.0, pdf_estimate=0.0 pdf_theoretical=-1e-25
+absolute_error=0.0
+pdf_error=4.64152308606e-06
+dt = 18.7839589119
+x=-0.4, y=-2.0, pdf_estimate=0.0399983821281 pdf_theoretical=0.04
+relative_error=4.04467982214e-05
+pdf_error=8.12836138949e-06
+dt = 18.7996890545
+x=-0.4, y=-1.8, pdf_estimate=0.0666674512683 pdf_theoretical=0.0666666666667
+relative_error=1.17690245718e-05
+pdf_error=3.14403271478e-06
+dt = 18.7910890579
+x=-0.4, y=-1.6, pdf_estimate=0.0933354513431 pdf_theoretical=0.0933333333333
+relative_error=2.26929620229e-05
+pdf_error=5.01097864367e-07
+dt = 18.7555680275
+x=-0.4, y=-1.4, pdf_estimate=0.11991721257 pdf_theoretical=0.12
+relative_error=0.00068989525008
+pdf_error=8.51279735007e-05
+dt = 18.7469680309
+x=-0.4, y=-1.2, pdf_estimate=0.130000584252 pdf_theoretical=0.13
+relative_error=4.49424559149e-06
+pdf_error=2.19944255774e-07
+dt = 18.7643311024
+x=-0.4, y=-1.0, pdf_estimate=0.140000213261 pdf_theoretical=0.14
+relative_error=1.52329378674e-06
+pdf_error=3.35684544903e-07
+dt = 18.7721891403
+x=-0.4, y=-0.8, pdf_estimate=0.150001096568 pdf_theoretical=0.15
+relative_error=7.31045456874e-06
+pdf_error=6.06035354512e-07
+dt = 18.7610869408
+x=-0.4, y=-0.6, pdf_estimate=0.160000353919 pdf_theoretical=0.16
+relative_error=2.21199391651e-06
+pdf_error=2.9067994967e-06
+dt = 18.740929842
+x=-0.4, y=-0.4, pdf_estimate=0.169997923727 pdf_theoretical=0.17
+relative_error=1.22133721119e-05
+pdf_error=9.08898627574e-06
+dt = 18.7735769749
+x=-0.4, y=-0.2, pdf_estimate=0.179999451528 pdf_theoretical=0.18
+relative_error=3.0470652899e-06
+pdf_error=1.11968697545e-05
+dt = 18.726102829
+x=-0.4, y=0.0, pdf_estimate=0.190006385799 pdf_theoretical=0.19
+relative_error=3.36094705549e-05
+pdf_error=6.60034049721e-06
+dt = 18.754502058
+x=-0.4, y=0.2, pdf_estimate=0.199749196217 pdf_theoretical=0.2
+relative_error=0.00125401891477
+pdf_error=0.000252822944808
+dt = 18.7866790295
+x=-0.4, y=0.4, pdf_estimate=0.173339551775 pdf_theoretical=0.173333333333
+relative_error=3.5875626856e-05
+pdf_error=8.55449419888e-06
+dt = 18.7471299171
+x=-0.4, y=0.6, pdf_estimate=0.146666447878 pdf_theoretical=0.146666666667
+relative_error=1.49174109467e-06
+pdf_error=1.30141961741e-05
+dt = 18.7489068508
+x=-0.4, y=0.8, pdf_estimate=0.119998020286 pdf_theoretical=0.12
+relative_error=1.64976170802e-05
+pdf_error=9.35982036101e-06
+dt = 18.7186598778
+x=-0.4, y=1.0, pdf_estimate=0.0933339456718 pdf_theoretical=0.0933333333333
+relative_error=6.5607693751e-06
+pdf_error=1.82150121605e-06
+dt = 18.7800731659
+x=-0.4, y=1.2, pdf_estimate=0.0666681648645 pdf_theoretical=0.0666666666667
+relative_error=2.24729673935e-05
+pdf_error=1.52926787995e-06
+dt = 18.7547981739
+x=-0.4, y=1.4, pdf_estimate=0.0399987269073 pdf_theoretical=0.04
+relative_error=3.18273169779e-05
+pdf_error=1.7734116248e-06
+dt = 18.7488429546
+x=-0.4, y=1.6, pdf_estimate=0.0133301020977 pdf_theoretical=0.0133333333333
+relative_error=0.000242342672814
+pdf_error=4.23718579168e-06
+dt = 18.7410829067
+x=-0.4, y=1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.77361734088e-06
+dt = 18.7715671062
+x=-0.4, y=2.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.97489458089e-06
+dt = 18.7632889748
+x=-0.2, y=-2.0, pdf_estimate=0.0533329129688 pdf_theoretical=0.0533333333333
+relative_error=7.88183465903e-06
+pdf_error=4.70513286882e-06
+dt = 18.6787881851
+x=-0.2, y=-1.8, pdf_estimate=0.08000055332 pdf_theoretical=0.08
+relative_error=6.91650025413e-06
+pdf_error=9.73711975293e-07
+dt = 18.6443309784
+x=-0.2, y=-1.6, pdf_estimate=0.106667056855 pdf_theoretical=0.106666666667
+relative_error=3.65801779297e-06
+pdf_error=4.3386570129e-06
+dt = 18.6715259552
+x=-0.2, y=-1.4, pdf_estimate=0.133333859509 pdf_theoretical=0.133333333333
+relative_error=3.94631472e-06
+pdf_error=7.22888896717e-06
+dt = 18.782959938
+x=-0.2, y=-1.2, pdf_estimate=0.159917286137 pdf_theoretical=0.16
+relative_error=0.000516961646528
+pdf_error=7.79130227951e-05
+dt = 18.7181961536
+x=-0.2, y=-1.0, pdf_estimate=0.17000116721 pdf_theoretical=0.17
+relative_error=6.86594032397e-06
+pdf_error=6.76408520018e-06
+dt = 18.7490651608
+x=-0.2, y=-0.8, pdf_estimate=0.180000034124 pdf_theoretical=0.18
+relative_error=1.89575422027e-07
+pdf_error=8.79792228092e-06
+dt = 18.6617329121
+x=-0.2, y=-0.6, pdf_estimate=0.190003237664 pdf_theoretical=0.19
+relative_error=1.70403362082e-05
+pdf_error=2.9634513838e-06
+dt = 18.6860089302
+x=-0.2, y=-0.4, pdf_estimate=0.199880864342 pdf_theoretical=0.2
+relative_error=0.000595678287589
+pdf_error=0.00012565951595
+dt = 18.7320568562
+x=-0.2, y=-0.2, pdf_estimate=0.200005868415 pdf_theoretical=0.2
+relative_error=2.93420753024e-05
+pdf_error=6.72078068542e-07
+dt = 18.7184779644
+x=-0.2, y=0.0, pdf_estimate=0.20000233711 pdf_theoretical=0.2
+relative_error=1.16855524454e-05
+pdf_error=3.97456833294e-06
+dt = 18.7149870396
+x=-0.2, y=0.2, pdf_estimate=0.186667974617 pdf_theoretical=0.186666666667
+relative_error=7.00687587193e-06
+pdf_error=2.26601526249e-07
+dt = 18.6787118912
+x=-0.2, y=0.4, pdf_estimate=0.160000760686 pdf_theoretical=0.16
+relative_error=4.75428886676e-06
+pdf_error=4.39003753306e-06
+dt = 18.7529370785
+x=-0.2, y=0.6, pdf_estimate=0.133333317659 pdf_theoretical=0.133333333333
+relative_error=1.175552828e-07
+pdf_error=5.3791364817e-06
+dt = 18.7137629986
+x=-0.2, y=0.8, pdf_estimate=0.106666484945 pdf_theoretical=0.106666666667
+relative_error=1.70364460742e-06
+pdf_error=5.11252043249e-06
+dt = 18.7161860466
+x=-0.2, y=1.0, pdf_estimate=0.0800003742876 pdf_theoretical=0.08
+relative_error=4.67859558213e-06
+pdf_error=4.05870301447e-06
+dt = 18.7225430012
+x=-0.2, y=1.2, pdf_estimate=0.0533335387826 pdf_theoretical=0.0533333333333
+relative_error=3.8521744833e-06
+pdf_error=2.40811982011e-06
+dt = 18.757062912
+x=-0.2, y=1.4, pdf_estimate=0.0266649242601 pdf_theoretical=0.0266666666667
+relative_error=6.53402458246e-05
+pdf_error=2.36766026031e-07
+dt = 18.755286932
+x=-0.2, y=1.6, pdf_estimate=0.000131645808256 pdf_theoretical=0.0
+absolute_error=0.000131645808256
+pdf_error=0.000134898245507
+dt = 18.7203030586
+x=-0.2, y=1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=2.17928825363e-06
+dt = 18.7188999653
+x=-0.2, y=2.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=4.6188602461e-06
+dt = 18.7309820652
+x=0.0, y=-2.0, pdf_estimate=0.0666671156347 pdf_theoretical=0.0666666666667
+relative_error=6.73452012177e-06
+pdf_error=5.30197359512e-06
+dt = 18.6741080284
+x=0.0, y=-1.8, pdf_estimate=0.0933340594558 pdf_theoretical=0.0933333333333
+relative_error=7.77988397603e-06
+pdf_error=3.66937985483e-06
+dt = 18.7251219749
+x=0.0, y=-1.6, pdf_estimate=0.119999501077 pdf_theoretical=0.12
+relative_error=4.15769421068e-06
+pdf_error=1.87498761359e-06
+dt = 18.6844930649
+x=0.0, y=-1.4, pdf_estimate=0.146666053565 pdf_theoretical=0.146666666667
+relative_error=4.18023591386e-06
+pdf_error=1.03108547227e-06
+dt = 18.7261021137
+x=0.0, y=-1.2, pdf_estimate=0.173334763781 pdf_theoretical=0.173333333333
+relative_error=8.25258398733e-06
+pdf_error=5.59013936246e-06
+dt = 18.7091159821
+x=0.0, y=-1.0, pdf_estimate=0.199834701217 pdf_theoretical=0.2
+relative_error=0.000826493913858
+pdf_error=0.000172912117543
+dt = 18.7280130386
+x=0.0, y=-0.8, pdf_estimate=0.200006446542 pdf_theoretical=0.2
+relative_error=3.22327082353e-05
+pdf_error=1.06976215116e-05
+dt = 18.7002270222
+x=0.0, y=-0.6, pdf_estimate=0.199997460021 pdf_theoretical=0.2
+relative_error=1.26998950316e-05
+pdf_error=2.23525520087e-05
+dt = 18.6942481995
+x=0.0, y=-0.4, pdf_estimate=0.199997460021 pdf_theoretical=0.2
+relative_error=1.26998950316e-05
+pdf_error=2.23525520087e-05
+dt = 18.7121448517
+x=0.0, y=-0.2, pdf_estimate=0.200006446542 pdf_theoretical=0.2
+relative_error=3.22327082353e-05
+pdf_error=1.06976215116e-05
+dt = 18.6948781013
+x=0.0, y=0.0, pdf_estimate=0.199834701217 pdf_theoretical=0.2
+relative_error=0.000826493913858
+pdf_error=0.000172912117543
+dt = 18.726195097
+x=0.0, y=0.2, pdf_estimate=0.173334763781 pdf_theoretical=0.173333333333
+relative_error=8.25258398733e-06
+pdf_error=5.59013936246e-06
+dt = 18.7410109043
+x=0.0, y=0.4, pdf_estimate=0.146666053565 pdf_theoretical=0.146666666667
+relative_error=4.18023591405e-06
+pdf_error=1.03108547227e-06
+dt = 18.6885471344
+x=0.0, y=0.6, pdf_estimate=0.119999501077 pdf_theoretical=0.12
+relative_error=4.15769421044e-06
+pdf_error=1.87498761359e-06
+dt = 18.7376260757
+x=0.0, y=0.8, pdf_estimate=0.0933340594558 pdf_theoretical=0.0933333333333
+relative_error=7.77988397633e-06
+pdf_error=3.66937985483e-06
+dt = 18.6899609566
+x=0.0, y=1.0, pdf_estimate=0.0666671156347 pdf_theoretical=0.0666666666667
+relative_error=6.73452012177e-06
+pdf_error=5.30197359512e-06
+dt = 18.6863029003
+x=0.0, y=1.2, pdf_estimate=0.039998625117 pdf_theoretical=0.04
+relative_error=3.43720762476e-05
+pdf_error=6.87872476643e-06
+dt = 18.6581850052
+x=0.0, y=1.4, pdf_estimate=0.0133308736781 pdf_theoretical=0.0133333333333
+relative_error=0.00018447414553
+pdf_error=5.48334505888e-06
+dt = 18.64113307
+x=0.0, y=1.6, pdf_estimate=0.0 pdf_theoretical=4e-25
+absolute_error=0.0
+pdf_error=4.48729666846e-06
+dt = 18.6735630035
+x=0.0, y=1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=4.34092050125e-06
+dt = 18.722671032
+x=0.0, y=2.0, pdf_estimate=2.98549896451e-07 pdf_theoretical=0.0
+absolute_error=2.98549896451e-07
+pdf_error=2.18055100063e-06
+dt = 18.7605760098
+x=0.2, y=-2.0, pdf_estimate=0.0800003742876 pdf_theoretical=0.08
+relative_error=4.67859558196e-06
+pdf_error=4.05870301447e-06
+dt = 18.7562859058
+x=0.2, y=-1.8, pdf_estimate=0.106666484945 pdf_theoretical=0.106666666667
+relative_error=1.70364460755e-06
+pdf_error=5.11252043249e-06
+dt = 18.7266030312
+x=0.2, y=-1.6, pdf_estimate=0.133333317659 pdf_theoretical=0.133333333333
+relative_error=1.175552828e-07
+pdf_error=5.3791364817e-06
+dt = 18.7774419785
+x=0.2, y=-1.4, pdf_estimate=0.160000760686 pdf_theoretical=0.16
+relative_error=4.75428886693e-06
+pdf_error=4.39003753306e-06
+dt = 18.7617099285
+x=0.2, y=-1.2, pdf_estimate=0.186667974617 pdf_theoretical=0.186666666667
+relative_error=7.00687587193e-06
+pdf_error=2.26601526249e-07
+dt = 18.7962229252
+x=0.2, y=-1.0, pdf_estimate=0.20000233711 pdf_theoretical=0.2
+relative_error=1.16855524453e-05
+pdf_error=3.97456833294e-06
+dt = 18.7237071991
+x=0.2, y=-0.8, pdf_estimate=0.200005868415 pdf_theoretical=0.2
+relative_error=2.93420753024e-05
+pdf_error=6.72078068543e-07
+dt = 18.4937000275
+x=0.2, y=-0.6, pdf_estimate=0.199880864342 pdf_theoretical=0.2
+relative_error=0.000595678287589
+pdf_error=0.00012565951595
+dt = 18.4481880665
+x=0.2, y=-0.4, pdf_estimate=0.190003237664 pdf_theoretical=0.19
+relative_error=1.70403362082e-05
+pdf_error=2.9634513838e-06
+dt = 18.4785778522
+x=0.2, y=-0.2, pdf_estimate=0.180000034124 pdf_theoretical=0.18
+relative_error=1.89575422027e-07
+pdf_error=8.79792228092e-06
+dt = 18.4472038746
+x=0.2, y=0.0, pdf_estimate=0.17000116721 pdf_theoretical=0.17
+relative_error=6.86594032397e-06
+pdf_error=6.76408520018e-06
+dt = 18.4984858036
+x=0.2, y=0.2, pdf_estimate=0.159917286137 pdf_theoretical=0.16
+relative_error=0.000516961646528
+pdf_error=7.79130227951e-05
+dt = 18.4828209877
+x=0.2, y=0.4, pdf_estimate=0.133333859509 pdf_theoretical=0.133333333333
+relative_error=3.94631471959e-06
+pdf_error=7.22888896717e-06
+dt = 18.5055501461
+x=0.2, y=0.6, pdf_estimate=0.106667056855 pdf_theoretical=0.106666666667
+relative_error=3.6580177931e-06
+pdf_error=4.3386570129e-06
+dt = 18.4585549831
+x=0.2, y=0.8, pdf_estimate=0.08000055332 pdf_theoretical=0.08
+relative_error=6.91650025413e-06
+pdf_error=9.73711975294e-07
+dt = 18.4831340313
+x=0.2, y=1.0, pdf_estimate=0.0533329129688 pdf_theoretical=0.0533333333333
+relative_error=7.88183465916e-06
+pdf_error=4.70513286882e-06
+dt = 18.4741921425
+x=0.2, y=1.2, pdf_estimate=0.0266643048668 pdf_theoretical=0.0266666666667
+relative_error=8.85674942632e-05
+pdf_error=5.08115647547e-06
+dt = 18.4949271679
+x=0.2, y=1.4, pdf_estimate=0.000132043328388 pdf_theoretical=0.0
+absolute_error=0.000132043328388
+pdf_error=0.000130090777279
+dt = 18.4564051628
+x=0.2, y=1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=4.01966813721e-06
+dt = 18.5051851273
+x=0.2, y=1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=3.09395912827e-06
+dt = 18.4439218044
+x=0.2, y=2.0, pdf_estimate=3.9783093145e-07 pdf_theoretical=0.0
+absolute_error=3.9783093145e-07
+pdf_error=1.58788129591e-06
+dt = 18.4946219921
+x=0.4, y=-2.0, pdf_estimate=0.0933339456718 pdf_theoretical=0.0933333333333
+relative_error=6.5607693751e-06
+pdf_error=1.82150121605e-06
+dt = 18.4711329937
+x=0.4, y=-1.8, pdf_estimate=0.119998020286 pdf_theoretical=0.12
+relative_error=1.64976170803e-05
+pdf_error=9.35982036101e-06
+dt = 18.5004019737
+x=0.4, y=-1.6, pdf_estimate=0.146666447878 pdf_theoretical=0.146666666667
+relative_error=1.49174109485e-06
+pdf_error=1.30141961741e-05
+dt = 18.4936878681
+x=0.4, y=-1.4, pdf_estimate=0.173339551775 pdf_theoretical=0.173333333333
+relative_error=3.58756268561e-05
+pdf_error=8.55449419888e-06
+dt = 18.7474470139
+x=0.4, y=-1.2, pdf_estimate=0.199749196217 pdf_theoretical=0.2
+relative_error=0.00125401891477
+pdf_error=0.000252822944808
+dt = 18.7342438698
+x=0.4, y=-1.0, pdf_estimate=0.190006385799 pdf_theoretical=0.19
+relative_error=3.36094705549e-05
+pdf_error=6.60034049721e-06
+dt = 18.7471048832
+x=0.4, y=-0.8, pdf_estimate=0.179999451528 pdf_theoretical=0.18
+relative_error=3.04706529005e-06
+pdf_error=1.11968697545e-05
+dt = 18.724930048
+x=0.4, y=-0.6, pdf_estimate=0.169997923727 pdf_theoretical=0.17
+relative_error=1.22133721119e-05
+pdf_error=9.08898627574e-06
+dt = 18.7772219181
+x=0.4, y=-0.4, pdf_estimate=0.160000353919 pdf_theoretical=0.16
+relative_error=2.21199391651e-06
+pdf_error=2.9067994967e-06
+dt = 18.7246108055
+x=0.4, y=-0.2, pdf_estimate=0.150001096568 pdf_theoretical=0.15
+relative_error=7.31045456874e-06
+pdf_error=6.06035354512e-07
+dt = 18.7298541069
+x=0.4, y=0.0, pdf_estimate=0.140000213261 pdf_theoretical=0.14
+relative_error=1.52329378655e-06
+pdf_error=3.35684544903e-07
+dt = 18.6998939514
+x=0.4, y=0.2, pdf_estimate=0.130000584252 pdf_theoretical=0.13
+relative_error=4.49424559149e-06
+pdf_error=2.19944255774e-07
+dt = 18.7232401371
+x=0.4, y=0.4, pdf_estimate=0.11991721257 pdf_theoretical=0.12
+relative_error=0.00068989525008
+pdf_error=8.51279735007e-05
+dt = 18.678593874
+x=0.4, y=0.6, pdf_estimate=0.0933354513431 pdf_theoretical=0.0933333333333
+relative_error=2.26929620229e-05
+pdf_error=5.01097864366e-07
+dt = 18.7347049713
+x=0.4, y=0.8, pdf_estimate=0.0666674512683 pdf_theoretical=0.0666666666667
+relative_error=1.1769024572e-05
+pdf_error=3.14403271478e-06
+dt = 18.6887559891
+x=0.4, y=1.0, pdf_estimate=0.0399983821281 pdf_theoretical=0.04
+relative_error=4.04467982216e-05
+pdf_error=8.12836138949e-06
+dt = 18.7297391891
+x=0.4, y=1.2, pdf_estimate=0.0133305250007 pdf_theoretical=0.0133333333333
+relative_error=0.000210624949198
+pdf_error=9.02665764744e-06
+dt = 18.6835179329
+x=0.4, y=1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.47927290096e-06
+dt = 18.6709570885
+x=0.4, y=1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.18831302964e-06
+dt = 18.7501308918
+x=0.4, y=1.8, pdf_estimate=4.10025067189e-07 pdf_theoretical=0.0
+absolute_error=4.10025067189e-07
+pdf_error=1.22754568121e-06
+dt = 18.6894440651
+x=0.4, y=2.0, pdf_estimate=2.57635545622e-07 pdf_theoretical=0.0
+absolute_error=2.57635545622e-07
+pdf_error=3.73464695427e-07
+dt = 18.7159929276
+x=0.6, y=-2.0, pdf_estimate=0.106670778409 pdf_theoretical=0.106666666667
+relative_error=3.85475867827e-05
+pdf_error=5.02594319596e-06
+dt = 18.7665040493
+x=0.6, y=-1.8, pdf_estimate=0.133213453056 pdf_theoretical=0.133333333333
+relative_error=0.000899102080639
+pdf_error=0.00012021218143
+dt = 18.6924099922
+x=0.6, y=-1.6, pdf_estimate=0.150005316741 pdf_theoretical=0.15
+relative_error=3.54449375149e-05
+pdf_error=1.83397137598e-06
+dt = 18.7941529751
+x=0.6, y=-1.4, pdf_estimate=0.166669406009 pdf_theoretical=0.166666666667
+relative_error=1.6436055828e-05
+pdf_error=2.75951259757e-06
+dt = 18.7834398746
+x=0.6, y=-1.2, pdf_estimate=0.170001340985 pdf_theoretical=0.17
+relative_error=7.88814544566e-06
+pdf_error=1.38078226342e-06
+dt = 18.7963130474
+x=0.6, y=-1.0, pdf_estimate=0.160001208106 pdf_theoretical=0.16
+relative_error=7.55066455558e-06
+pdf_error=5.92562845844e-06
+dt = 18.5692260265
+x=0.6, y=-0.8, pdf_estimate=0.149999839104 pdf_theoretical=0.15
+relative_error=1.07263968744e-06
+pdf_error=4.98854501346e-06
+dt = 18.4818739891
+x=0.6, y=-0.6, pdf_estimate=0.139999099278 pdf_theoretical=0.14
+relative_error=6.43372807113e-06
+pdf_error=3.10131934604e-06
+dt = 18.4735450745
+x=0.6, y=-0.4, pdf_estimate=0.130000206839 pdf_theoretical=0.13
+relative_error=1.59107238517e-06
+pdf_error=1.70234793673e-06
+dt = 18.4914338589
+x=0.6, y=-0.2, pdf_estimate=0.120000760398 pdf_theoretical=0.12
+relative_error=6.33665195581e-06
+pdf_error=5.46831962145e-07
+dt = 18.4705660343
+x=0.6, y=0.0, pdf_estimate=0.109999532515 pdf_theoretical=0.11
+relative_error=4.2498654921e-06
+pdf_error=2.76940472621e-06
+dt = 18.5181500912
+x=0.6, y=0.2, pdf_estimate=0.0999995657736 pdf_theoretical=0.1
+relative_error=4.34226360757e-06
+pdf_error=2.87694365148e-06
+dt = 18.518089056
+x=0.6, y=0.4, pdf_estimate=0.0900014320659 pdf_theoretical=0.09
+relative_error=1.5911843052e-05
+pdf_error=1.0644417977e-06
+dt = 18.488380909
+x=0.6, y=0.6, pdf_estimate=0.07991826911 pdf_theoretical=0.08
+relative_error=0.00102163612507
+pdf_error=8.46314458673e-05
+dt = 18.4508211613
+x=0.6, y=0.8, pdf_estimate=0.0533346460119 pdf_theoretical=0.0533333333333
+relative_error=2.46127227356e-05
+pdf_error=2.81956302972e-07
+dt = 18.4744479656
+x=0.6, y=1.0, pdf_estimate=0.0266648157321 pdf_theoretical=0.0266666666667
+relative_error=6.94100467605e-05
+pdf_error=1.92396655166e-07
+dt = 18.4547469616
+x=0.6, y=1.2, pdf_estimate=0.000131843123207 pdf_theoretical=0.0
+absolute_error=0.000131843123207
+pdf_error=0.000132609137918
+dt = 18.4523379803
+x=0.6, y=1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=3.77411120171e-06
+dt = 18.462143898
+x=0.6, y=1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=4.7742070901e-06
+dt = 18.5094678402
+x=0.6, y=1.8, pdf_estimate=6.48330333018e-07 pdf_theoretical=0.0
+absolute_error=6.48330333018e-07
+pdf_error=3.30858195359e-06
+dt = 18.4970889091
+x=0.6, y=2.0, pdf_estimate=1.16769040755e-07 pdf_theoretical=0.0
+absolute_error=1.16769040755e-07
+pdf_error=6.69686163951e-07
+dt = 18.4274699688
+x=0.8, y=-2.0, pdf_estimate=0.0999991937887 pdf_theoretical=0.1
+relative_error=8.06211280902e-06
+pdf_error=1.10762513271e-05
+dt = 18.4437201023
+x=0.8, y=-1.8, pdf_estimate=0.116664756127 pdf_theoretical=0.116666666667
+relative_error=1.63760502187e-05
+pdf_error=8.3651388488e-06
+dt = 18.4590270519
+x=0.8, y=-1.6, pdf_estimate=0.133335285985 pdf_theoretical=0.133333333333
+relative_error=1.46448884848e-05
+pdf_error=2.01606250031e-06
+dt = 18.4733490944
+x=0.8, y=-1.4, pdf_estimate=0.149869390303 pdf_theoretical=0.15
+relative_error=0.000870731315017
+pdf_error=0.000135613465864
+dt = 18.4775729179
+x=0.8, y=-1.2, pdf_estimate=0.140002226795 pdf_theoretical=0.14
+relative_error=1.59056784767e-05
+pdf_error=1.52111346878e-06
+dt = 18.4905240536
+x=0.8, y=-1.0, pdf_estimate=0.12999940658 pdf_theoretical=0.13
+relative_error=4.56476877579e-06
+pdf_error=4.19613994806e-06
+dt = 18.5011088848
+x=0.8, y=-0.8, pdf_estimate=0.119999233711 pdf_theoretical=0.12
+relative_error=6.38574412885e-06
+pdf_error=2.71448265527e-06
+dt = 18.4628229141
+x=0.8, y=-0.6, pdf_estimate=0.11000028201 pdf_theoretical=0.11
+relative_error=2.56372732563e-06
+pdf_error=5.74390868211e-07
+dt = 18.4583711624
+x=0.8, y=-0.4, pdf_estimate=0.100000649592 pdf_theoretical=0.1
+relative_error=6.49591845828e-06
+pdf_error=2.7743590576e-06
+dt = 18.4101278782
+x=0.8, y=-0.2, pdf_estimate=0.0899999129959 pdf_theoretical=0.09
+relative_error=9.66712039585e-07
+pdf_error=2.55564402937e-06
+dt = 18.4981620312
+x=0.8, y=0.0, pdf_estimate=0.0799990922562 pdf_theoretical=0.08
+relative_error=1.13467968911e-05
+pdf_error=2.12267096527e-07
+dt = 18.4668290615
+x=0.8, y=0.2, pdf_estimate=0.069999650976 pdf_theoretical=0.07
+relative_error=4.98605748574e-06
+pdf_error=3.30654849988e-06
+dt = 18.5050120354
+x=0.8, y=0.4, pdf_estimate=0.0600011487955 pdf_theoretical=0.06
+relative_error=1.91465914734e-05
+pdf_error=5.43750476766e-06
+dt = 18.4504311085
+x=0.8, y=0.6, pdf_estimate=0.0500012330952 pdf_theoretical=0.05
+relative_error=2.46619035604e-05
+pdf_error=7.15969173739e-06
+dt = 18.4649410248
+x=0.8, y=0.8, pdf_estimate=0.0399159257837 pdf_theoretical=0.04
+relative_error=0.00210185540818
+pdf_error=7.66381855662e-05
+dt = 18.4705071449
+x=0.8, y=1.0, pdf_estimate=0.0133323426943 pdf_theoretical=0.0133333333333
+relative_error=7.42979294214e-05
+pdf_error=6.90574379971e-06
+dt = 18.4585978985
+x=0.8, y=1.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=8.9283966735e-06
+dt = 18.511729002
+x=0.8, y=1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.98994812355e-06
+dt = 18.4748930931
+x=0.8, y=1.6, pdf_estimate=6.56559277463e-08 pdf_theoretical=0.0
+absolute_error=6.56559277463e-08
+pdf_error=4.05783507149e-06
+dt = 18.5197679996
+x=0.8, y=1.8, pdf_estimate=3.95334608608e-07 pdf_theoretical=0.0
+absolute_error=3.95334608608e-07
+pdf_error=6.22783816398e-07
+dt = 18.4804580212
+x=0.8, y=2.0, pdf_estimate=7.73401634262e-08 pdf_theoretical=0.0
+absolute_error=7.73401634262e-08
+pdf_error=1.40492182058e-06
+dt = 18.4558959007
+x=1.0, y=-2.0, pdf_estimate=0.0833337936217 pdf_theoretical=0.0833333333333
+relative_error=5.52346050281e-06
+pdf_error=5.70733709827e-06
+dt = 18.5052170753
+x=1.0, y=-1.8, pdf_estimate=0.100000673893 pdf_theoretical=0.1
+relative_error=6.73893397418e-06
+pdf_error=6.07313522992e-06
+dt = 18.4796049595
+x=1.0, y=-1.6, pdf_estimate=0.116668393231 pdf_theoretical=0.116666666667
+relative_error=1.47991255453e-05
+pdf_error=4.86989538307e-06
+dt = 18.5114219189
+x=1.0, y=-1.4, pdf_estimate=0.12000292427 pdf_theoretical=0.12
+relative_error=2.43689156752e-05
+pdf_error=5.4568753199e-06
+dt = 18.4877450466
+x=1.0, y=-1.2, pdf_estimate=0.11000191578 pdf_theoretical=0.11
+relative_error=1.74161779539e-05
+pdf_error=5.87920393748e-06
+dt = 18.5276119709
+x=1.0, y=-1.0, pdf_estimate=0.0999993083521 pdf_theoretical=0.1
+relative_error=6.91647851034e-06
+pdf_error=2.95222862522e-06
+dt = 18.4793131351
+x=1.0, y=-0.8, pdf_estimate=0.0899989070648 pdf_theoretical=0.09
+relative_error=1.21437245889e-05
+pdf_error=1.31191189658e-06
+dt = 18.4936509132
+x=1.0, y=-0.6, pdf_estimate=0.080000433156 pdf_theoretical=0.08
+relative_error=5.41445035925e-06
+pdf_error=5.69906644809e-07
+dt = 18.4621191025
+x=1.0, y=-0.4, pdf_estimate=0.0700010467564 pdf_theoretical=0.07
+relative_error=1.49536631447e-05
+pdf_error=1.06979553709e-06
+dt = 18.5270068645
+x=1.0, y=-0.2, pdf_estimate=0.0599998034945 pdf_theoretical=0.06
+relative_error=3.27509144087e-06
+pdf_error=3.73884544007e-06
+dt = 18.4970419407
+x=1.0, y=0.0, pdf_estimate=0.0499987661505 pdf_theoretical=0.05
+relative_error=2.46769894956e-05
+pdf_error=4.42049847372e-06
+dt = 18.5046749115
+x=1.0, y=0.2, pdf_estimate=0.0399997225998 pdf_theoretical=0.04
+relative_error=6.93500465249e-06
+pdf_error=5.4388305565e-07
+dt = 18.4727449417
+x=1.0, y=0.4, pdf_estimate=0.0300017243341 pdf_theoretical=0.03
+relative_error=5.74778049761e-05
+pdf_error=6.58261609546e-06
+dt = 18.5174429417
+x=1.0, y=0.6, pdf_estimate=0.0200004825615 pdf_theoretical=0.02
+relative_error=2.41280751523e-05
+pdf_error=1.07593258277e-05
+dt = 18.5069549084
+x=1.0, y=0.8, pdf_estimate=0.00999509199165 pdf_theoretical=0.01
+relative_error=0.000490800834715
+pdf_error=8.6356535377e-06
+dt = 18.5134320259
+x=1.0, y=1.0, pdf_estimate=8.40879332162e-05 pdf_theoretical=-1e-25
+absolute_error=8.40879332162e-05
+pdf_error=8.46073625366e-05
+dt = 18.4630858898
+x=1.0, y=1.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.29501420402e-06
+dt = 18.5212659836
+x=1.0, y=1.4, pdf_estimate=0.0 pdf_theoretical=-1e-25
+absolute_error=0.0
+pdf_error=3.26349207027e-07
+dt = 18.4354310036
+x=1.0, y=1.6, pdf_estimate=9.47633565804e-09 pdf_theoretical=-1e-25
+absolute_error=9.47633565804e-09
+pdf_error=8.11166014468e-07
+dt = 18.4775059223
+x=1.0, y=1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.34755385925e-07
+dt = 18.4442257881
+x=1.0, y=2.0, pdf_estimate=4.80954711307e-08 pdf_theoretical=1e-25
+absolute_error=4.80954711307e-08
+pdf_error=1.13798964189e-07
+dt = 18.5059361458
+x=1.2, y=-2.0, pdf_estimate=0.0666674208458 pdf_theoretical=0.0666666666667
+relative_error=1.13126873098e-05
+pdf_error=2.74361835745e-06
+dt = 18.451791048
+x=1.2, y=-1.8, pdf_estimate=0.0833358669389 pdf_theoretical=0.0833333333333
+relative_error=3.04032662771e-05
+pdf_error=3.10401125331e-06
+dt = 18.5014739037
+x=1.2, y=-1.6, pdf_estimate=0.0998676528464 pdf_theoretical=0.1
+relative_error=0.0013234715362
+pdf_error=0.000131233317795
+dt = 18.4532728195
+x=1.2, y=-1.4, pdf_estimate=0.0900014572488 pdf_theoretical=0.09
+relative_error=1.61916535955e-05
+pdf_error=3.69467370896e-06
+dt = 18.5216879845
+x=1.2, y=-1.2, pdf_estimate=0.0800005317182 pdf_theoretical=0.08
+relative_error=6.64647744463e-06
+pdf_error=3.6422091777e-06
+dt = 18.5009059906
+x=1.2, y=-1.0, pdf_estimate=0.0699999138045 pdf_theoretical=0.07
+relative_error=1.23136439914e-06
+pdf_error=3.4511762781e-06
+dt = 18.4948401451
+x=1.2, y=-0.8, pdf_estimate=0.0599994981444 pdf_theoretical=0.06
+relative_error=8.36426063145e-06
+pdf_error=2.86306385053e-06
+dt = 18.5089199543
+x=1.2, y=-0.6, pdf_estimate=0.0499996443885 pdf_theoretical=0.05
+relative_error=7.11223018118e-06
+pdf_error=7.44772808253e-07
+dt = 18.6649720669
+x=1.2, y=-0.4, pdf_estimate=0.0400004233372 pdf_theoretical=0.04
+relative_error=1.0583430147e-05
+pdf_error=2.63245495068e-06
+dt = 18.667249918
+x=1.2, y=-0.2, pdf_estimate=0.0300010985656 pdf_theoretical=0.03
+relative_error=3.6618852646e-05
+pdf_error=6.50801934395e-06
+dt = 18.6851530075
+x=1.2, y=0.0, pdf_estimate=0.0199997397891 pdf_theoretical=0.02
+relative_error=1.30105439271e-05
+pdf_error=8.63368307012e-06
+dt = 18.6273639202
+x=1.2, y=0.2, pdf_estimate=0.00999587923887 pdf_theoretical=0.01
+relative_error=0.000412076112576
+pdf_error=5.49061416809e-06
+dt = 18.7425570488
+x=1.2, y=0.4, pdf_estimate=0.000119195054792 pdf_theoretical=0.0
+absolute_error=0.000119195054792
+pdf_error=0.000120835646997
+dt = 18.6423649788
+x=1.2, y=0.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=4.37218196396e-06
+dt = 18.7060599327
+x=1.2, y=0.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=8.20907272457e-06
+dt = 18.6437242031
+x=1.2, y=1.0, pdf_estimate=8.79216548471e-07 pdf_theoretical=0.0
+absolute_error=8.79216548471e-07
+pdf_error=4.61797379421e-06
+dt = 18.723845005
+x=1.2, y=1.2, pdf_estimate=1.07597359047e-07 pdf_theoretical=0.0
+absolute_error=1.07597359047e-07
+pdf_error=1.35991704026e-06
+dt = 18.6231329441
+x=1.2, y=1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.30061927557e-06
+dt = 18.6728470325
+x=1.2, y=1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=6.83882529251e-07
+dt = 18.6231389046
+x=1.2, y=1.8, pdf_estimate=0.0 pdf_theoretical=-1e-25
+absolute_error=0.0
+pdf_error=1.79277246398e-07
+dt = 18.6242830753
+x=1.2, y=2.0, pdf_estimate=7.87579397857e-08 pdf_theoretical=0.0
+absolute_error=7.87579397857e-08
+pdf_error=4.41044019893e-07
+dt = 18.6089570522
+x=1.4, y=-2.0, pdf_estimate=0.0500010177598 pdf_theoretical=0.05
+relative_error=2.03551951448e-05
+pdf_error=6.57168822228e-06
+dt = 18.7169671059
+x=1.4, y=-1.8, pdf_estimate=0.0666694527388 pdf_theoretical=0.0666666666667
+relative_error=4.17910816055e-05
+pdf_error=7.1758966893e-06
+dt = 18.6277699471
+x=1.4, y=-1.6, pdf_estimate=0.0700030520189 pdf_theoretical=0.07
+relative_error=4.36002694321e-05
+pdf_error=5.78944013542e-06
+dt = 18.6952369213
+x=1.4, y=-1.4, pdf_estimate=0.0600009039749 pdf_theoretical=0.06
+relative_error=1.50662476657e-05
+pdf_error=3.16167319321e-06
+dt = 18.6688671112
+x=1.4, y=-1.2, pdf_estimate=0.049998811101 pdf_theoretical=0.05
+relative_error=2.37779803894e-05
+pdf_error=4.70170979096e-07
+dt = 18.6648740768
+x=1.4, y=-1.0, pdf_estimate=0.039999593467 pdf_theoretical=0.04
+relative_error=1.01633260724e-05
+pdf_error=9.83709166971e-07
+dt = 18.6439611912
+x=1.4, y=-0.8, pdf_estimate=0.0300013123956 pdf_theoretical=0.03
+relative_error=4.37465193272e-05
+pdf_error=5.36085233223e-06
+dt = 18.6483888626
+x=1.4, y=-0.6, pdf_estimate=0.0200001828532 pdf_theoretical=0.02
+relative_error=9.14265883677e-06
+pdf_error=7.50582768422e-06
+dt = 18.6081569195
+x=1.4, y=-0.4, pdf_estimate=0.00999582964078 pdf_theoretical=0.01
+relative_error=0.000417035922305
+pdf_error=4.63316543715e-06
+dt = 18.4649410248
+x=1.4, y=-0.2, pdf_estimate=0.000118966012833 pdf_theoretical=0.0
+absolute_error=0.000118966012833
+pdf_error=0.000120340488723
+dt = 18.4324450493
+x=1.4, y=0.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.52453193989e-06
+dt = 18.4569687843
+x=1.4, y=0.2, pdf_estimate=3.60355173361e-07 pdf_theoretical=0.0
+absolute_error=3.60355173361e-07
+pdf_error=9.5030795289e-06
+dt = 18.4599239826
+x=1.4, y=0.4, pdf_estimate=1.73765375012e-06 pdf_theoretical=0.0
+absolute_error=1.73765375012e-06
+pdf_error=7.08778758071e-06
+dt = 18.4486699104
+x=1.4, y=0.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.91826809765e-07
+dt = 18.5314528942
+x=1.4, y=0.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=2.98271704894e-06
+dt = 18.7141928673
+x=1.4, y=1.0, pdf_estimate=7.46026024544e-08 pdf_theoretical=0.0
+absolute_error=7.46026024544e-08
+pdf_error=1.50955839363e-06
+dt = 18.6984579563
+x=1.4, y=1.2, pdf_estimate=1.67884107763e-07 pdf_theoretical=0.0
+absolute_error=1.67884107763e-07
+pdf_error=5.25899092095e-07
+dt = 18.7336850166
+x=1.4, y=1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.03024334173e-06
+dt = 18.6815228462
+x=1.4, y=1.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.42098544802e-07
+dt = 18.7457950115
+x=1.4, y=1.8, pdf_estimate=1.28161017991e-07 pdf_theoretical=0.0
+absolute_error=1.28161017991e-07
+pdf_error=1.09791397091e-07
+dt = 18.6545109749
+x=1.4, y=2.0, pdf_estimate=1.21611741728e-07 pdf_theoretical=0.0
+absolute_error=1.21611741728e-07
+pdf_error=3.36502261095e-07
+dt = 18.6929318905
+x=1.6, y=-2.0, pdf_estimate=0.0333348134377 pdf_theoretical=0.0333333333333
+relative_error=4.44031312419e-05
+pdf_error=9.8631891601e-07
+dt = 18.6172020435
+x=1.6, y=-1.8, pdf_estimate=0.0498673951373 pdf_theoretical=0.05
+relative_error=0.00265209725418
+pdf_error=0.000131529319402
+dt = 18.6837899685
+x=1.6, y=-1.6, pdf_estimate=0.0400022680403 pdf_theoretical=0.04
+relative_error=5.6701007674e-05
+pdf_error=2.3025398954e-06
+dt = 18.6240508556
+x=1.6, y=-1.4, pdf_estimate=0.0300015518645 pdf_theoretical=0.03
+relative_error=5.17288159585e-05
+pdf_error=4.92328473112e-07
+dt = 18.6830408573
+x=1.6, y=-1.2, pdf_estimate=0.0199990977939 pdf_theoretical=0.02
+relative_error=4.51103025326e-05
+pdf_error=3.6493289098e-06
+dt = 18.6416490078
+x=1.6, y=-1.0, pdf_estimate=0.00999554834929 pdf_theoretical=0.01
+relative_error=0.000445165071274
+pdf_error=3.61232627559e-06
+dt = 18.4834210873
+x=1.6, y=-0.8, pdf_estimate=0.000119606113545 pdf_theoretical=0.0
+absolute_error=0.000119606113545
+pdf_error=0.000119065993037
+dt = 18.5365440845
+x=1.6, y=-0.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.55469028529e-06
+dt = 18.7452769279
+x=1.6, y=-0.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.09694650859e-05
+dt = 18.7817080021
+x=1.6, y=-0.2, pdf_estimate=1.50192576091e-06 pdf_theoretical=0.0
+absolute_error=1.50192576091e-06
+pdf_error=7.89668435915e-06
+dt = 18.8141567707
+x=1.6, y=0.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.24455488485e-06
+dt = 18.720348835
+x=1.6, y=0.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=3.29725515345e-06
+dt = 18.8066442013
+x=1.6, y=0.4, pdf_estimate=2.31162173524e-07 pdf_theoretical=0.0
+absolute_error=2.31162173524e-07
+pdf_error=3.86494400481e-06
+dt = 18.7686150074
+x=1.6, y=0.6, pdf_estimate=5.12593960284e-07 pdf_theoretical=0.0
+absolute_error=5.12593960284e-07
+pdf_error=2.92162313182e-06
+dt = 18.8051989079
+x=1.6, y=0.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.61378163002e-06
+dt = 18.7921030521
+x=1.6, y=1.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=2.74539857055e-07
+dt = 18.8432178497
+x=1.6, y=1.2, pdf_estimate=1.1458016618e-07 pdf_theoretical=0.0
+absolute_error=1.1458016618e-07
+pdf_error=6.78291906118e-07
+dt = 18.8776071072
+x=1.6, y=1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.10574878191e-06
+dt = 18.8092160225
+x=1.6, y=1.6, pdf_estimate=0.0 pdf_theoretical=4e-25
+absolute_error=0.0
+pdf_error=1.13860413314e-06
+dt = 18.7590098381
+x=1.6, y=1.8, pdf_estimate=1.60139221778e-07 pdf_theoretical=0.0
+absolute_error=1.60139221778e-07
+pdf_error=8.42805548393e-07
+dt = 18.7401480675
+x=1.6, y=2.0, pdf_estimate=1.35547032314e-07 pdf_theoretical=0.0
+absolute_error=1.35547032314e-07
+pdf_error=7.49179977334e-08
+dt = 18.7845358849
+x=1.8, y=-2.0, pdf_estimate=0.0166687354233 pdf_theoretical=0.0166666666667
+relative_error=0.000124125397503
+pdf_error=1.08699889968e-05
+dt = 18.7728099823
+x=1.8, y=-1.8, pdf_estimate=0.0200022292047 pdf_theoretical=0.02
+relative_error=0.000111460236794
+pdf_error=1.60502501365e-05
+dt = 18.7567970753
+x=1.8, y=-1.6, pdf_estimate=0.00999716157189 pdf_theoretical=0.01
+relative_error=0.000283842810983
+pdf_error=1.33311451547e-05
+dt = 18.7343950272
+x=1.8, y=-1.4, pdf_estimate=0.00011899462865 pdf_theoretical=0.0
+absolute_error=0.00011899462865
+pdf_error=0.000115152018572
+dt = 18.7242388725
+x=1.8, y=-1.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.52742164616e-06
+dt = 18.838643074
+x=1.8, y=-1.0, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=9.29336877448e-06
+dt = 18.7321310043
+x=1.8, y=-0.8, pdf_estimate=2.20934694211e-06 pdf_theoretical=0.0
+absolute_error=2.20934694211e-06
+pdf_error=5.68944060131e-06
+dt = 18.8195719719
+x=1.8, y=-0.6, pdf_estimate=3.39644243893e-09 pdf_theoretical=0.0
+absolute_error=3.39644243893e-09
+pdf_error=1.39071464378e-06
+dt = 18.7563478947
+x=1.8, y=-0.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.44710999747e-06
+dt = 18.7376420498
+x=1.8, y=-0.2, pdf_estimate=3.22217320294e-09 pdf_theoretical=0.0
+absolute_error=3.22217320294e-09
+pdf_error=3.89067938225e-06
+dt = 18.714348793
+x=1.8, y=0.0, pdf_estimate=9.74786373795e-07 pdf_theoretical=0.0
+absolute_error=9.74786373795e-07
+pdf_error=9.38855853613e-07
+dt = 18.7657129765
+x=1.8, y=0.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=3.77047457265e-07
+dt = 18.7597520351
+x=1.8, y=0.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.50243547878e-06
+dt = 18.7926239967
+x=1.8, y=0.6, pdf_estimate=1.70244378373e-07 pdf_theoretical=0.0
+absolute_error=1.70244378373e-07
+pdf_error=2.70291547112e-06
+dt = 18.7491219044
+x=1.8, y=0.8, pdf_estimate=4.98985382038e-07 pdf_theoretical=0.0
+absolute_error=4.98985382038e-07
+pdf_error=1.99138427086e-06
+dt = 18.7767279148
+x=1.8, y=1.0, pdf_estimate=4.64928190109e-08 pdf_theoretical=0.0
+absolute_error=4.64928190109e-08
+pdf_error=2.91444736562e-07
+dt = 18.7730488777
+x=1.8, y=1.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.943369679e-07
+dt = 18.7003819942
+x=1.8, y=1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=8.01550606543e-07
+dt = 18.6893498898
+x=1.8, y=1.6, pdf_estimate=0.0 pdf_theoretical=-5e-25
+absolute_error=0.0
+pdf_error=5.89140991954e-07
+dt = 18.8036670685
+x=1.8, y=1.8, pdf_estimate=5.85226609518e-08 pdf_theoretical=0.0
+absolute_error=5.85226609518e-08
+pdf_error=7.12529299206e-09
+dt = 18.7158961296
+x=1.8, y=2.0, pdf_estimate=6.12826213526e-08 pdf_theoretical=0.0
+absolute_error=6.12826213526e-08
+pdf_error=5.55841176869e-07
+dt = 18.7064599991
+x=2.0, y=-2.0, pdf_estimate=3.49425883856e-05 pdf_theoretical=0.0
+absolute_error=3.49425883856e-05
+pdf_error=3.41762296804e-05
+dt = 18.7209060192
+x=2.0, y=-1.8, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=8.28389277414e-06
+dt = 18.7156119347
+x=2.0, y=-1.6, pdf_estimate=3.00295352138e-07 pdf_theoretical=0.0
+absolute_error=3.00295352138e-07
+pdf_error=9.54870783617e-06
+dt = 18.661149025
+x=2.0, y=-1.4, pdf_estimate=1.52333794498e-06 pdf_theoretical=0.0
+absolute_error=1.52333794498e-06
+pdf_error=5.34197661056e-06
+dt = 18.7188749313
+x=2.0, y=-1.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.29080305775e-06
+dt = 18.6480300426
+x=2.0, y=-1.0, pdf_estimate=0.0 pdf_theoretical=3e-26
+absolute_error=0.0
+pdf_error=4.69449423463e-06
+dt = 18.7638089657
+x=2.0, y=-0.8, pdf_estimate=3.3079979513e-07 pdf_theoretical=3e-26
+absolute_error=3.3079979513e-07
+pdf_error=3.46983597341e-06
+dt = 18.8223731518
+x=2.0, y=-0.6, pdf_estimate=8.61679446128e-07 pdf_theoretical=0.0
+absolute_error=8.61679446128e-07
+pdf_error=1.3421338082e-06
+dt = 18.8218669891
+x=2.0, y=-0.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.19190624738e-08
+dt = 18.8189589977
+x=2.0, y=-0.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.49669214903e-06
+dt = 18.7496809959
+x=2.0, y=0.0, pdf_estimate=3.74774077485e-07 pdf_theoretical=0.0
+absolute_error=3.74774077485e-07
+pdf_error=2.9577354868e-06
+dt = 18.6487829685
+x=2.0, y=0.2, pdf_estimate=4.75040680715e-07 pdf_theoretical=0.0
+absolute_error=4.75040680715e-07
+pdf_error=2.12479794018e-06
+dt = 18.7016699314
+x=2.0, y=0.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=2.17820245238e-07
+dt = 18.6780099869
+x=2.0, y=0.6, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=1.55290609321e-06
+dt = 18.7974169254
+x=2.0, y=0.8, pdf_estimate=4.36308295029e-07 pdf_theoretical=0.0
+absolute_error=4.36308295029e-07
+pdf_error=1.38586681246e-06
+dt = 18.6722009182
+x=2.0, y=1.0, pdf_estimate=2.48869583492e-07 pdf_theoretical=0.0
+absolute_error=2.48869583492e-07
+pdf_error=1.01365952747e-06
+dt = 18.6778259277
+x=2.0, y=1.2, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=5.3880500648e-07
+dt = 18.7456989288
+x=2.0, y=1.4, pdf_estimate=0.0 pdf_theoretical=0.0
+absolute_error=0.0
+pdf_error=7.05597370213e-08
+dt = 18.722951889
+x=2.0, y=1.6, pdf_estimate=1.17276587428e-07 pdf_theoretical=-4e-25
+absolute_error=1.17276587428e-07
+pdf_error=4.7730522109e-07
+dt = 18.702352047
+x=2.0, y=1.8, pdf_estimate=8.7355347715e-09 pdf_theoretical=2e-25
+absolute_error=8.7355347715e-09
+pdf_error=5.60568938449e-07
+dt = 18.6973361969
+x=2.0, y=2.0, pdf_estimate=0.0 pdf_theoretical=-4e-25
+absolute_error=0.0
+pdf_error=1.93371809657e-07
+delta of pdf=3.81444394235e-05
