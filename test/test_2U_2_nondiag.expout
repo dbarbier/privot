@@ -1,0 +1,3207 @@
+range =  [-5, 5]
+[-5, 5]
+mean =  [0,0]
+cov =  [[ 5.66667 3.66667 ]
+ [ 3.66667 4.33333 ]]
+sigma =  [2.38048,2.08167]
+Non analytic estimate
+point=[-10.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -10.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -5.0], pdf_value=0.00409004977954, pdf_theo=0.025
+relative error=0.836398008818
+point=[-4.5, -5.0], pdf_value=0.000502033724614, pdf_theo=0.0
+absolute error=0.000502033724614
+point=[-4.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, -5.0], pdf_value=0.000232477007063, pdf_theo=0.0
+absolute error=0.000232477007063
+point=[-2.5, -5.0], pdf_value=0.00018727703632, pdf_theo=0.0
+absolute error=0.00018727703632
+point=[-2.0, -5.0], pdf_value=0.000128235449604, pdf_theo=0.0
+absolute error=0.000128235449604
+point=[-1.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -5.0], pdf_value=6.45579488729e-05, pdf_theo=0.0
+absolute error=6.45579488729e-05
+point=[0.0, -5.0], pdf_value=8.81627569178e-05, pdf_theo=0.0
+absolute error=8.81627569178e-05
+point=[0.5, -5.0], pdf_value=7.39831227457e-05, pdf_theo=0.0
+absolute error=7.39831227457e-05
+point=[1.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -5.0], pdf_value=2.89409710911e-05, pdf_theo=0.0
+absolute error=2.89409710911e-05
+point=[2.5, -5.0], pdf_value=6.08571174858e-05, pdf_theo=0.0
+absolute error=6.08571174858e-05
+point=[3.0, -5.0], pdf_value=6.19025779855e-05, pdf_theo=0.0
+absolute error=6.19025779855e-05
+point=[3.5, -5.0], pdf_value=1.09369003723e-05, pdf_theo=0.0
+absolute error=1.09369003723e-05
+point=[4.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -5.0], pdf_value=6.66612809281e-07, pdf_theo=0.0
+absolute error=6.66612809281e-07
+point=[5.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -4.5], pdf_value=0.0237518416405, pdf_theo=0.025
+relative error=0.0499263343803
+point=[-4.0, -4.5], pdf_value=0.0127994186977, pdf_theo=0.025
+relative error=0.488023252094
+point=[-3.5, -4.5], pdf_value=0.000105705154341, pdf_theo=0.0
+absolute error=0.000105705154341
+point=[-3.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -4.5], pdf_value=0.000374251870586, pdf_theo=0.0
+absolute error=0.000374251870586
+point=[-1.0, -4.5], pdf_value=1.04723220861e-05, pdf_theo=0.0
+absolute error=1.04723220861e-05
+point=[-0.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -4.5], pdf_value=0.000199280782832, pdf_theo=0.0
+absolute error=0.000199280782832
+point=[1.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -4.5], pdf_value=4.46851329009e-05, pdf_theo=0.0
+absolute error=4.46851329009e-05
+point=[4.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -4.5], pdf_value=8.16297538022e-05, pdf_theo=0.0
+absolute error=8.16297538022e-05
+point=[5.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -4.0], pdf_value=0.00100957775673, pdf_theo=0.0
+absolute error=0.00100957775673
+point=[-4.5, -4.0], pdf_value=0.0275484513218, pdf_theo=0.025
+relative error=0.101938052871
+point=[-4.0, -4.0], pdf_value=0.0252459587566, pdf_theo=0.025
+relative error=0.00983835026518
+point=[-3.5, -4.0], pdf_value=0.0249617502653, pdf_theo=0.025
+relative error=0.00152998938622
+point=[-3.0, -4.0], pdf_value=0.0125226436096, pdf_theo=0.025
+relative error=0.499094255614
+point=[-2.5, -4.0], pdf_value=5.25263473002e-05, pdf_theo=0.0
+absolute error=5.25263473002e-05
+point=[-2.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, -4.0], pdf_value=0.000195662563838, pdf_theo=0.0
+absolute error=0.000195662563838
+point=[-0.5, -4.0], pdf_value=0.000258097434306, pdf_theo=0.0
+absolute error=0.000258097434306
+point=[0.0, -4.0], pdf_value=2.09425667258e-05, pdf_theo=0.0
+absolute error=2.09425667258e-05
+point=[0.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -4.0], pdf_value=0.000111727505928, pdf_theo=0.0
+absolute error=0.000111727505928
+point=[2.0, -4.0], pdf_value=9.13369370049e-05, pdf_theo=0.0
+absolute error=9.13369370049e-05
+point=[2.5, -4.0], pdf_value=2.37877953972e-05, pdf_theo=0.0
+absolute error=2.37877953972e-05
+point=[3.0, -4.0], pdf_value=1.98120621206e-05, pdf_theo=0.0
+absolute error=1.98120621206e-05
+point=[3.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -4.0], pdf_value=5.2706561982e-05, pdf_theo=0.0
+absolute error=5.2706561982e-05
+point=[5.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -3.5], pdf_value=0.0121919241382, pdf_theo=0.025
+relative error=0.512323034474
+point=[-4.0, -3.5], pdf_value=0.0255050125649, pdf_theo=0.025
+relative error=0.0202005025961
+point=[-3.5, -3.5], pdf_value=0.0251699867229, pdf_theo=0.025
+relative error=0.00679946891775
+point=[-3.0, -3.5], pdf_value=0.0257099562865, pdf_theo=0.025
+relative error=0.0283982514613
+point=[-2.5, -3.5], pdf_value=0.0248912551275, pdf_theo=0.025
+relative error=0.00434979490148
+point=[-2.0, -3.5], pdf_value=0.012285688728, pdf_theo=0.0
+absolute error=0.012285688728
+point=[-1.5, -3.5], pdf_value=0.000326104748608, pdf_theo=0.0
+absolute error=0.000326104748608
+point=[-1.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, -3.5], pdf_value=0.000148715027932, pdf_theo=0.0
+absolute error=0.000148715027932
+point=[0.5, -3.5], pdf_value=0.000205578010746, pdf_theo=0.0
+absolute error=0.000205578010746
+point=[1.0, -3.5], pdf_value=0.000141848953893, pdf_theo=0.0
+absolute error=0.000141848953893
+point=[1.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -3.5], pdf_value=4.18190542003e-05, pdf_theo=0.0
+absolute error=4.18190542003e-05
+point=[3.0, -3.5], pdf_value=1.90647917641e-05, pdf_theo=0.0
+absolute error=1.90647917641e-05
+point=[3.5, -3.5], pdf_value=9.92629907802e-05, pdf_theo=0.0
+absolute error=9.92629907802e-05
+point=[4.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -3.5], pdf_value=3.03440637798e-05, pdf_theo=0.0
+absolute error=3.03440637798e-05
+point=[5.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -3.0], pdf_value=0.000517277741008, pdf_theo=0.0
+absolute error=0.000517277741008
+point=[-4.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -3.0], pdf_value=0.0238559840415, pdf_theo=0.025
+relative error=0.0457606383383
+point=[-3.5, -3.0], pdf_value=0.0249962718813, pdf_theo=0.025
+relative error=0.000149124747831
+point=[-3.0, -3.0], pdf_value=0.0247719857525, pdf_theo=0.025
+relative error=0.00912056989916
+point=[-2.5, -3.0], pdf_value=0.0253739253564, pdf_theo=0.025
+relative error=0.0149570142568
+point=[-2.0, -3.0], pdf_value=0.0258771529564, pdf_theo=0.025
+relative error=0.0350861182549
+point=[-1.5, -3.0], pdf_value=0.0246250131393, pdf_theo=0.025
+relative error=0.0149994744284
+point=[-1.0, -3.0], pdf_value=0.0125479195519, pdf_theo=0.0
+absolute error=0.0125479195519
+point=[-0.5, -3.0], pdf_value=0.0001357035689, pdf_theo=0.0
+absolute error=0.0001357035689
+point=[0.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, -3.0], pdf_value=4.52115909202e-05, pdf_theo=0.0
+absolute error=4.52115909202e-05
+point=[1.5, -3.0], pdf_value=0.000350493794987, pdf_theo=0.0
+absolute error=0.000350493794987
+point=[2.0, -3.0], pdf_value=1.46718345658e-06, pdf_theo=0.0
+absolute error=1.46718345658e-06
+point=[2.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -3.0], pdf_value=3.35331274236e-05, pdf_theo=0.0
+absolute error=3.35331274236e-05
+point=[4.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -3.0], pdf_value=6.57847881317e-05, pdf_theo=0.0
+absolute error=6.57847881317e-05
+point=[5.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -2.5], pdf_value=0.0010138739258, pdf_theo=0.0
+absolute error=0.0010138739258
+point=[-4.0, -2.5], pdf_value=0.0273112092717, pdf_theo=0.025
+relative error=0.0924483708667
+point=[-3.5, -2.5], pdf_value=0.0247536187592, pdf_theo=0.025
+relative error=0.00985524963096
+point=[-3.0, -2.5], pdf_value=0.0250567059299, pdf_theo=0.025
+relative error=0.00226823719426
+point=[-2.5, -2.5], pdf_value=0.0246503428544, pdf_theo=0.025
+relative error=0.0139862858227
+point=[-2.0, -2.5], pdf_value=0.0247003543866, pdf_theo=0.025
+relative error=0.0119858245375
+point=[-1.5, -2.5], pdf_value=0.0256184097975, pdf_theo=0.025
+relative error=0.0247363919019
+point=[-1.0, -2.5], pdf_value=0.0256032531724, pdf_theo=0.025
+relative error=0.0241301268963
+point=[-0.5, -2.5], pdf_value=0.0248469620528, pdf_theo=0.025
+relative error=0.00612151788818
+point=[0.0, -2.5], pdf_value=0.0124235905483, pdf_theo=0.025
+relative error=0.503056378069
+point=[0.5, -2.5], pdf_value=0.000149985377127, pdf_theo=0.0
+absolute error=0.000149985377127
+point=[1.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, -2.5], pdf_value=0.00019549998849, pdf_theo=0.0
+absolute error=0.00019549998849
+point=[2.5, -2.5], pdf_value=0.000231157279265, pdf_theo=0.0
+absolute error=0.000231157279265
+point=[3.0, -2.5], pdf_value=3.44493822795e-05, pdf_theo=0.0
+absolute error=3.44493822795e-05
+point=[3.5, -2.5], pdf_value=9.86320525542e-05, pdf_theo=0.0
+absolute error=9.86320525542e-05
+point=[4.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -2.0], pdf_value=0.000267779696763, pdf_theo=0.0
+absolute error=0.000267779696763
+point=[-4.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -2.0], pdf_value=0.0123487747413, pdf_theo=0.025
+relative error=0.506049010347
+point=[-3.5, -2.0], pdf_value=0.0255888879468, pdf_theo=0.025
+relative error=0.0235555178706
+point=[-3.0, -2.0], pdf_value=0.0249826389033, pdf_theo=0.025
+relative error=0.000694443869553
+point=[-2.5, -2.0], pdf_value=0.0252628161742, pdf_theo=0.025
+relative error=0.0105126469681
+point=[-2.0, -2.0], pdf_value=0.0250108477783, pdf_theo=0.025
+relative error=0.000433911131448
+point=[-1.5, -2.0], pdf_value=0.0244430320121, pdf_theo=0.025
+relative error=0.0222787195171
+point=[-1.0, -2.0], pdf_value=0.024975536665, pdf_theo=0.025
+relative error=0.000978533401314
+point=[-0.5, -2.0], pdf_value=0.0253702985723, pdf_theo=0.025
+relative error=0.0148119428925
+point=[0.0, -2.0], pdf_value=0.0257661326227, pdf_theo=0.025
+relative error=0.0306453049062
+point=[0.5, -2.0], pdf_value=0.0247935209333, pdf_theo=0.025
+relative error=0.0082591626679
+point=[1.0, -2.0], pdf_value=0.0123737698295, pdf_theo=0.025
+relative error=0.505049206819
+point=[1.5, -2.0], pdf_value=0.000273700856534, pdf_theo=0.0
+absolute error=0.000273700856534
+point=[2.0, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, -2.0], pdf_value=4.03217988623e-05, pdf_theo=0.0
+absolute error=4.03217988623e-05
+point=[3.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -2.0], pdf_value=0.000100061040578, pdf_theo=0.0
+absolute error=0.000100061040578
+point=[4.5, -2.0], pdf_value=2.9609447489e-06, pdf_theo=0.0
+absolute error=2.9609447489e-06
+point=[5.0, -2.0], pdf_value=4.32119026708e-05, pdf_theo=0.0
+absolute error=4.32119026708e-05
+point=[5.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -1.5], pdf_value=0.000516198555546, pdf_theo=0.0
+absolute error=0.000516198555546
+point=[-4.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -1.5], pdf_value=0.0238874660711, pdf_theo=0.025
+relative error=0.0445013571562
+point=[-3.0, -1.5], pdf_value=0.0250875843883, pdf_theo=0.025
+relative error=0.00350337553277
+point=[-2.5, -1.5], pdf_value=0.0248534996456, pdf_theo=0.025
+relative error=0.00586001417476
+point=[-2.0, -1.5], pdf_value=0.0251652471406, pdf_theo=0.025
+relative error=0.00660988562495
+point=[-1.5, -1.5], pdf_value=0.0254160520372, pdf_theo=0.025
+relative error=0.016642081488
+point=[-1.0, -1.5], pdf_value=0.0247459153852, pdf_theo=0.025
+relative error=0.0101633845938
+point=[-0.5, -1.5], pdf_value=0.0247111468943, pdf_theo=0.025
+relative error=0.0115541242274
+point=[0.0, -1.5], pdf_value=0.0247748369162, pdf_theo=0.025
+relative error=0.00900652335248
+point=[0.5, -1.5], pdf_value=0.0254668519474, pdf_theo=0.025
+relative error=0.0186740778962
+point=[1.0, -1.5], pdf_value=0.0257791513107, pdf_theo=0.025
+relative error=0.0311660524291
+point=[1.5, -1.5], pdf_value=0.0246909052249, pdf_theo=0.025
+relative error=0.012363791003
+point=[2.0, -1.5], pdf_value=0.0125306106572, pdf_theo=0.0
+absolute error=0.0125306106572
+point=[2.5, -1.5], pdf_value=9.74250492672e-05, pdf_theo=0.0
+absolute error=9.74250492672e-05
+point=[3.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, -1.5], pdf_value=4.07147639518e-05, pdf_theo=0.0
+absolute error=4.07147639518e-05
+point=[4.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -1.5], pdf_value=1.95155969347e-05, pdf_theo=0.0
+absolute error=1.95155969347e-05
+point=[5.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -1.0], pdf_value=8.81542607835e-05, pdf_theo=0.0
+absolute error=8.81542607835e-05
+point=[-4.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, -1.0], pdf_value=0.0010289262434, pdf_theo=0.0
+absolute error=0.0010289262434
+point=[-3.5, -1.0], pdf_value=0.0272749053627, pdf_theo=0.025
+relative error=0.0909962145091
+point=[-3.0, -1.0], pdf_value=0.0246951908057, pdf_theo=0.025
+relative error=0.0121923677718
+point=[-2.5, -1.0], pdf_value=0.0250617433509, pdf_theo=0.025
+relative error=0.00246973403482
+point=[-2.0, -1.0], pdf_value=0.0247256851671, pdf_theo=0.025
+relative error=0.0109725933161
+point=[-1.5, -1.0], pdf_value=0.0247776806573, pdf_theo=0.025
+relative error=0.00889277370855
+point=[-1.0, -1.0], pdf_value=0.0254255232163, pdf_theo=0.025
+relative error=0.0170209286508
+point=[-0.5, -1.0], pdf_value=0.0250942578073, pdf_theo=0.025
+relative error=0.00377031229038
+point=[0.0, -1.0], pdf_value=0.0250392594891, pdf_theo=0.025
+relative error=0.00157037956567
+point=[0.5, -1.0], pdf_value=0.0245100317941, pdf_theo=0.025
+relative error=0.019598728237
+point=[1.0, -1.0], pdf_value=0.0248446399572, pdf_theo=0.025
+relative error=0.00621440171122
+point=[1.5, -1.0], pdf_value=0.0255478566887, pdf_theo=0.025
+relative error=0.0219142675487
+point=[2.0, -1.0], pdf_value=0.0255307491119, pdf_theo=0.025
+relative error=0.0212299644746
+point=[2.5, -1.0], pdf_value=0.0251933118921, pdf_theo=0.025
+relative error=0.0077324756826
+point=[3.0, -1.0], pdf_value=0.00831083943916, pdf_theo=0.0
+absolute error=0.00831083943916
+point=[3.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, -1.0], pdf_value=0.000197998987862, pdf_theo=0.0
+absolute error=0.000197998987862
+point=[4.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, -0.5], pdf_value=0.000330511177002, pdf_theo=0.0
+absolute error=0.000330511177002
+point=[-4.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, -0.5], pdf_value=0.0123674958422, pdf_theo=0.025
+relative error=0.505300166311
+point=[-3.0, -0.5], pdf_value=0.0256581133126, pdf_theo=0.025
+relative error=0.026324532503
+point=[-2.5, -0.5], pdf_value=0.0249903977493, pdf_theo=0.025
+relative error=0.000384090028248
+point=[-2.0, -0.5], pdf_value=0.02531074747, pdf_theo=0.025
+relative error=0.0124298987982
+point=[-1.5, -0.5], pdf_value=0.0249826138352, pdf_theo=0.025
+relative error=0.000695446591206
+point=[-1.0, -0.5], pdf_value=0.0245364779091, pdf_theo=0.025
+relative error=0.0185408836354
+point=[-0.5, -0.5], pdf_value=0.0251128499118, pdf_theo=0.025
+relative error=0.00451399647202
+point=[0.0, -0.5], pdf_value=0.0250393207552, pdf_theo=0.025
+relative error=0.00157283020625
+point=[0.5, -0.5], pdf_value=0.0254487560074, pdf_theo=0.025
+relative error=0.0179502402956
+point=[1.0, -0.5], pdf_value=0.0247902076177, pdf_theo=0.025
+relative error=0.00839169529337
+point=[1.5, -0.5], pdf_value=0.0245848476753, pdf_theo=0.025
+relative error=0.0166060929885
+point=[2.0, -0.5], pdf_value=0.0250241918046, pdf_theo=0.025
+relative error=0.000967672183341
+point=[2.5, -0.5], pdf_value=0.0249449009247, pdf_theo=0.025
+relative error=0.00220396301353
+point=[3.0, -0.5], pdf_value=0.0275759377228, pdf_theo=0.025
+relative error=0.103037508913
+point=[3.5, -0.5], pdf_value=0.00100870286665, pdf_theo=0.0
+absolute error=0.00100870286665
+point=[4.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, -0.5], pdf_value=0.000136515338941, pdf_theo=0.0
+absolute error=0.000136515338941
+point=[5.0, -0.5], pdf_value=6.25377721872e-05, pdf_theo=0.0
+absolute error=6.25377721872e-05
+point=[5.5, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, -0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 0.0], pdf_value=0.000497252064309, pdf_theo=0.0
+absolute error=0.000497252064309
+point=[-3.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 0.0], pdf_value=0.0237675808985, pdf_theo=0.025
+relative error=0.0492967640615
+point=[-2.5, 0.0], pdf_value=0.0249826703876, pdf_theo=0.025
+relative error=0.000693184497228
+point=[-2.0, 0.0], pdf_value=0.0247746999362, pdf_theo=0.025
+relative error=0.00901200255185
+point=[-1.5, 0.0], pdf_value=0.0252343327619, pdf_theo=0.025
+relative error=0.00937331047453
+point=[-1.0, 0.0], pdf_value=0.0253896872093, pdf_theo=0.025
+relative error=0.0155874883733
+point=[-0.5, 0.0], pdf_value=0.0247077874212, pdf_theo=0.025
+relative error=0.0116885031515
+point=[0.0, 0.0], pdf_value=0.0249170115259, pdf_theo=0.025
+relative error=0.00331953896311
+point=[0.5, 0.0], pdf_value=0.0247077874212, pdf_theo=0.025
+relative error=0.0116885031515
+point=[1.0, 0.0], pdf_value=0.0253896872093, pdf_theo=0.025
+relative error=0.0155874883733
+point=[1.5, 0.0], pdf_value=0.0252343327619, pdf_theo=0.025
+relative error=0.00937331047453
+point=[2.0, 0.0], pdf_value=0.0247746999362, pdf_theo=0.025
+relative error=0.00901200255185
+point=[2.5, 0.0], pdf_value=0.0249826703876, pdf_theo=0.025
+relative error=0.000693184497228
+point=[3.0, 0.0], pdf_value=0.0237675808985, pdf_theo=0.025
+relative error=0.0492967640615
+point=[3.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 0.0], pdf_value=0.000497252064309, pdf_theo=0.0
+absolute error=0.000497252064309
+point=[4.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 0.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 0.5], pdf_value=6.25377721872e-05, pdf_theo=0.0
+absolute error=6.25377721872e-05
+point=[-4.5, 0.5], pdf_value=0.000136515338941, pdf_theo=0.0
+absolute error=0.000136515338941
+point=[-4.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 0.5], pdf_value=0.00100870286665, pdf_theo=0.0
+absolute error=0.00100870286665
+point=[-3.0, 0.5], pdf_value=0.0275759377228, pdf_theo=0.025
+relative error=0.103037508913
+point=[-2.5, 0.5], pdf_value=0.0249449009247, pdf_theo=0.025
+relative error=0.00220396301353
+point=[-2.0, 0.5], pdf_value=0.0250241918046, pdf_theo=0.025
+relative error=0.000967672183341
+point=[-1.5, 0.5], pdf_value=0.0245848476753, pdf_theo=0.025
+relative error=0.0166060929885
+point=[-1.0, 0.5], pdf_value=0.0247902076177, pdf_theo=0.025
+relative error=0.00839169529337
+point=[-0.5, 0.5], pdf_value=0.0254487560074, pdf_theo=0.025
+relative error=0.0179502402956
+point=[0.0, 0.5], pdf_value=0.0250393207552, pdf_theo=0.025
+relative error=0.00157283020625
+point=[0.5, 0.5], pdf_value=0.0251128499118, pdf_theo=0.025
+relative error=0.00451399647202
+point=[1.0, 0.5], pdf_value=0.0245364779091, pdf_theo=0.025
+relative error=0.0185408836354
+point=[1.5, 0.5], pdf_value=0.0249826138352, pdf_theo=0.025
+relative error=0.000695446591206
+point=[2.0, 0.5], pdf_value=0.02531074747, pdf_theo=0.025
+relative error=0.0124298987982
+point=[2.5, 0.5], pdf_value=0.0249903977493, pdf_theo=0.025
+relative error=0.000384090028248
+point=[3.0, 0.5], pdf_value=0.0256581133126, pdf_theo=0.025
+relative error=0.026324532503
+point=[3.5, 0.5], pdf_value=0.0123674958422, pdf_theo=0.025
+relative error=0.505300166311
+point=[4.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 0.5], pdf_value=0.000330511177002, pdf_theo=0.0
+absolute error=0.000330511177002
+point=[5.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 0.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 1.0], pdf_value=0.000197998987862, pdf_theo=0.0
+absolute error=0.000197998987862
+point=[-3.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 1.0], pdf_value=0.00831083943916, pdf_theo=0.025
+relative error=0.667566422433
+point=[-2.5, 1.0], pdf_value=0.0251933118921, pdf_theo=0.025
+relative error=0.0077324756826
+point=[-2.0, 1.0], pdf_value=0.0255307491119, pdf_theo=0.025
+relative error=0.0212299644746
+point=[-1.5, 1.0], pdf_value=0.0255478566887, pdf_theo=0.025
+relative error=0.0219142675487
+point=[-1.0, 1.0], pdf_value=0.0248446399572, pdf_theo=0.025
+relative error=0.00621440171122
+point=[-0.5, 1.0], pdf_value=0.0245100317941, pdf_theo=0.025
+relative error=0.019598728237
+point=[0.0, 1.0], pdf_value=0.0250392594891, pdf_theo=0.025
+relative error=0.00157037956567
+point=[0.5, 1.0], pdf_value=0.0250942578073, pdf_theo=0.025
+relative error=0.00377031229038
+point=[1.0, 1.0], pdf_value=0.0254255232163, pdf_theo=0.025
+relative error=0.0170209286508
+point=[1.5, 1.0], pdf_value=0.0247776806573, pdf_theo=0.025
+relative error=0.00889277370855
+point=[2.0, 1.0], pdf_value=0.0247256851671, pdf_theo=0.025
+relative error=0.0109725933161
+point=[2.5, 1.0], pdf_value=0.0250617433509, pdf_theo=0.025
+relative error=0.00246973403482
+point=[3.0, 1.0], pdf_value=0.0246951908057, pdf_theo=0.025
+relative error=0.0121923677718
+point=[3.5, 1.0], pdf_value=0.0272749053627, pdf_theo=0.025
+relative error=0.0909962145091
+point=[4.0, 1.0], pdf_value=0.0010289262434, pdf_theo=0.0
+absolute error=0.0010289262434
+point=[4.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 1.0], pdf_value=8.81542607835e-05, pdf_theo=0.0
+absolute error=8.81542607835e-05
+point=[5.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 1.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 1.5], pdf_value=1.95155969347e-05, pdf_theo=0.0
+absolute error=1.95155969347e-05
+point=[-4.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 1.5], pdf_value=4.07147639518e-05, pdf_theo=0.0
+absolute error=4.07147639518e-05
+point=[-3.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 1.5], pdf_value=9.74250492672e-05, pdf_theo=0.0
+absolute error=9.74250492672e-05
+point=[-2.0, 1.5], pdf_value=0.0125306106572, pdf_theo=0.025
+relative error=0.498775573713
+point=[-1.5, 1.5], pdf_value=0.0246909052249, pdf_theo=0.025
+relative error=0.012363791003
+point=[-1.0, 1.5], pdf_value=0.0257791513107, pdf_theo=0.025
+relative error=0.0311660524291
+point=[-0.5, 1.5], pdf_value=0.0254668519474, pdf_theo=0.025
+relative error=0.0186740778962
+point=[0.0, 1.5], pdf_value=0.0247748369162, pdf_theo=0.025
+relative error=0.00900652335248
+point=[0.5, 1.5], pdf_value=0.0247111468943, pdf_theo=0.025
+relative error=0.0115541242274
+point=[1.0, 1.5], pdf_value=0.0247459153852, pdf_theo=0.025
+relative error=0.0101633845938
+point=[1.5, 1.5], pdf_value=0.0254160520372, pdf_theo=0.025
+relative error=0.016642081488
+point=[2.0, 1.5], pdf_value=0.0251652471406, pdf_theo=0.025
+relative error=0.00660988562495
+point=[2.5, 1.5], pdf_value=0.0248534996456, pdf_theo=0.025
+relative error=0.00586001417476
+point=[3.0, 1.5], pdf_value=0.0250875843883, pdf_theo=0.025
+relative error=0.00350337553277
+point=[3.5, 1.5], pdf_value=0.0238874660711, pdf_theo=0.025
+relative error=0.0445013571562
+point=[4.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 1.5], pdf_value=0.000516198555546, pdf_theo=0.0
+absolute error=0.000516198555546
+point=[5.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 1.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 2.0], pdf_value=4.32119026708e-05, pdf_theo=0.0
+absolute error=4.32119026708e-05
+point=[-4.5, 2.0], pdf_value=2.9609447489e-06, pdf_theo=0.0
+absolute error=2.9609447489e-06
+point=[-4.0, 2.0], pdf_value=0.000100061040578, pdf_theo=0.0
+absolute error=0.000100061040578
+point=[-3.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 2.0], pdf_value=4.03217988623e-05, pdf_theo=0.0
+absolute error=4.03217988623e-05
+point=[-2.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 2.0], pdf_value=0.000273700856534, pdf_theo=0.0
+absolute error=0.000273700856534
+point=[-1.0, 2.0], pdf_value=0.0123737698295, pdf_theo=0.025
+relative error=0.505049206819
+point=[-0.5, 2.0], pdf_value=0.0247935209333, pdf_theo=0.025
+relative error=0.0082591626679
+point=[0.0, 2.0], pdf_value=0.0257661326227, pdf_theo=0.025
+relative error=0.0306453049062
+point=[0.5, 2.0], pdf_value=0.0253702985723, pdf_theo=0.025
+relative error=0.0148119428925
+point=[1.0, 2.0], pdf_value=0.024975536665, pdf_theo=0.025
+relative error=0.000978533401314
+point=[1.5, 2.0], pdf_value=0.0244430320121, pdf_theo=0.025
+relative error=0.0222787195171
+point=[2.0, 2.0], pdf_value=0.0250108477783, pdf_theo=0.025
+relative error=0.000433911131448
+point=[2.5, 2.0], pdf_value=0.0252628161742, pdf_theo=0.025
+relative error=0.0105126469681
+point=[3.0, 2.0], pdf_value=0.0249826389033, pdf_theo=0.025
+relative error=0.000694443869553
+point=[3.5, 2.0], pdf_value=0.0255888879468, pdf_theo=0.025
+relative error=0.0235555178706
+point=[4.0, 2.0], pdf_value=0.0123487747413, pdf_theo=0.025
+relative error=0.506049010347
+point=[4.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 2.0], pdf_value=0.000267779696763, pdf_theo=0.0
+absolute error=0.000267779696763
+point=[5.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 2.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 2.5], pdf_value=9.86320525542e-05, pdf_theo=0.0
+absolute error=9.86320525542e-05
+point=[-3.0, 2.5], pdf_value=3.44493822795e-05, pdf_theo=0.0
+absolute error=3.44493822795e-05
+point=[-2.5, 2.5], pdf_value=0.000231157279265, pdf_theo=0.0
+absolute error=0.000231157279265
+point=[-2.0, 2.5], pdf_value=0.00019549998849, pdf_theo=0.0
+absolute error=0.00019549998849
+point=[-1.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 2.5], pdf_value=0.000149985377127, pdf_theo=0.0
+absolute error=0.000149985377127
+point=[0.0, 2.5], pdf_value=0.0124235905483, pdf_theo=0.025
+relative error=0.503056378069
+point=[0.5, 2.5], pdf_value=0.0248469620528, pdf_theo=0.025
+relative error=0.00612151788818
+point=[1.0, 2.5], pdf_value=0.0256032531724, pdf_theo=0.025
+relative error=0.0241301268963
+point=[1.5, 2.5], pdf_value=0.0256184097975, pdf_theo=0.025
+relative error=0.0247363919019
+point=[2.0, 2.5], pdf_value=0.0247003543866, pdf_theo=0.025
+relative error=0.0119858245375
+point=[2.5, 2.5], pdf_value=0.0246503428544, pdf_theo=0.025
+relative error=0.0139862858227
+point=[3.0, 2.5], pdf_value=0.0250567059299, pdf_theo=0.025
+relative error=0.00226823719426
+point=[3.5, 2.5], pdf_value=0.0247536187592, pdf_theo=0.025
+relative error=0.00985524963096
+point=[4.0, 2.5], pdf_value=0.0273112092717, pdf_theo=0.025
+relative error=0.0924483708667
+point=[4.5, 2.5], pdf_value=0.0010138739258, pdf_theo=0.0
+absolute error=0.0010138739258
+point=[5.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 2.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 3.0], pdf_value=6.57847881317e-05, pdf_theo=0.0
+absolute error=6.57847881317e-05
+point=[-4.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 3.0], pdf_value=3.35331274236e-05, pdf_theo=0.0
+absolute error=3.35331274236e-05
+point=[-3.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 3.0], pdf_value=1.46718345658e-06, pdf_theo=0.0
+absolute error=1.46718345658e-06
+point=[-1.5, 3.0], pdf_value=0.000350493794987, pdf_theo=0.0
+absolute error=0.000350493794987
+point=[-1.0, 3.0], pdf_value=4.52115909202e-05, pdf_theo=0.0
+absolute error=4.52115909202e-05
+point=[-0.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 3.0], pdf_value=0.0001357035689, pdf_theo=0.0
+absolute error=0.0001357035689
+point=[1.0, 3.0], pdf_value=0.0125479195519, pdf_theo=0.025
+relative error=0.498083217924
+point=[1.5, 3.0], pdf_value=0.0246250131393, pdf_theo=0.025
+relative error=0.0149994744284
+point=[2.0, 3.0], pdf_value=0.0258771529564, pdf_theo=0.025
+relative error=0.0350861182549
+point=[2.5, 3.0], pdf_value=0.0253739253564, pdf_theo=0.025
+relative error=0.0149570142568
+point=[3.0, 3.0], pdf_value=0.0247719857525, pdf_theo=0.025
+relative error=0.00912056989916
+point=[3.5, 3.0], pdf_value=0.0249962718813, pdf_theo=0.025
+relative error=0.000149124747831
+point=[4.0, 3.0], pdf_value=0.0238559840415, pdf_theo=0.025
+relative error=0.0457606383383
+point=[4.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 3.0], pdf_value=0.000517277741008, pdf_theo=0.0
+absolute error=0.000517277741008
+point=[5.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 3.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 3.5], pdf_value=3.03440637798e-05, pdf_theo=0.0
+absolute error=3.03440637798e-05
+point=[-4.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 3.5], pdf_value=9.92629907802e-05, pdf_theo=0.0
+absolute error=9.92629907802e-05
+point=[-3.0, 3.5], pdf_value=1.90647917641e-05, pdf_theo=0.0
+absolute error=1.90647917641e-05
+point=[-2.5, 3.5], pdf_value=4.18190542003e-05, pdf_theo=0.0
+absolute error=4.18190542003e-05
+point=[-2.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 3.5], pdf_value=0.000141848953893, pdf_theo=0.0
+absolute error=0.000141848953893
+point=[-0.5, 3.5], pdf_value=0.000205578010746, pdf_theo=0.0
+absolute error=0.000205578010746
+point=[0.0, 3.5], pdf_value=0.000148715027932, pdf_theo=0.0
+absolute error=0.000148715027932
+point=[0.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 3.5], pdf_value=0.000326104748608, pdf_theo=0.0
+absolute error=0.000326104748608
+point=[2.0, 3.5], pdf_value=0.012285688728, pdf_theo=0.025
+relative error=0.508572450879
+point=[2.5, 3.5], pdf_value=0.0248912551275, pdf_theo=0.025
+relative error=0.00434979490148
+point=[3.0, 3.5], pdf_value=0.0257099562865, pdf_theo=0.025
+relative error=0.0283982514613
+point=[3.5, 3.5], pdf_value=0.0251699867229, pdf_theo=0.025
+relative error=0.00679946891775
+point=[4.0, 3.5], pdf_value=0.0255050125649, pdf_theo=0.025
+relative error=0.0202005025961
+point=[4.5, 3.5], pdf_value=0.0121919241382, pdf_theo=0.025
+relative error=0.512323034474
+point=[5.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 3.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 4.0], pdf_value=5.2706561982e-05, pdf_theo=0.0
+absolute error=5.2706561982e-05
+point=[-4.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 4.0], pdf_value=1.98120621206e-05, pdf_theo=0.0
+absolute error=1.98120621206e-05
+point=[-2.5, 4.0], pdf_value=2.37877953972e-05, pdf_theo=0.0
+absolute error=2.37877953972e-05
+point=[-2.0, 4.0], pdf_value=9.13369370049e-05, pdf_theo=0.0
+absolute error=9.13369370049e-05
+point=[-1.5, 4.0], pdf_value=0.000111727505928, pdf_theo=0.0
+absolute error=0.000111727505928
+point=[-1.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 4.0], pdf_value=2.09425667259e-05, pdf_theo=0.0
+absolute error=2.09425667259e-05
+point=[0.5, 4.0], pdf_value=0.000258097434306, pdf_theo=0.0
+absolute error=0.000258097434306
+point=[1.0, 4.0], pdf_value=0.000195662563838, pdf_theo=0.0
+absolute error=0.000195662563838
+point=[1.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 4.0], pdf_value=5.25263473002e-05, pdf_theo=0.0
+absolute error=5.25263473002e-05
+point=[3.0, 4.0], pdf_value=0.0125226436096, pdf_theo=0.025
+relative error=0.499094255614
+point=[3.5, 4.0], pdf_value=0.0249617502653, pdf_theo=0.025
+relative error=0.00152998938622
+point=[4.0, 4.0], pdf_value=0.0252459587566, pdf_theo=0.025
+relative error=0.00983835026518
+point=[4.5, 4.0], pdf_value=0.0275484513218, pdf_theo=0.025
+relative error=0.101938052871
+point=[5.0, 4.0], pdf_value=0.00100957775673, pdf_theo=0.0
+absolute error=0.00100957775673
+point=[5.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 4.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 4.5], pdf_value=8.16297538022e-05, pdf_theo=0.0
+absolute error=8.16297538022e-05
+point=[-4.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 4.5], pdf_value=4.46851329009e-05, pdf_theo=0.0
+absolute error=4.46851329009e-05
+point=[-3.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 4.5], pdf_value=0.000199280782832, pdf_theo=0.0
+absolute error=0.000199280782832
+point=[-0.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 4.5], pdf_value=1.04723220861e-05, pdf_theo=0.0
+absolute error=1.04723220861e-05
+point=[1.5, 4.5], pdf_value=0.000374251870586, pdf_theo=0.0
+absolute error=0.000374251870586
+point=[2.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, 4.5], pdf_value=0.000105705154341, pdf_theo=0.0
+absolute error=0.000105705154341
+point=[4.0, 4.5], pdf_value=0.0127994186977, pdf_theo=0.025
+relative error=0.488023252094
+point=[4.5, 4.5], pdf_value=0.0237518416405, pdf_theo=0.025
+relative error=0.0499263343803
+point=[5.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 4.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 5.0], pdf_value=6.6661280928e-07, pdf_theo=0.0
+absolute error=6.6661280928e-07
+point=[-4.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 5.0], pdf_value=1.09369003723e-05, pdf_theo=0.0
+absolute error=1.09369003723e-05
+point=[-3.0, 5.0], pdf_value=6.19025779855e-05, pdf_theo=0.0
+absolute error=6.19025779855e-05
+point=[-2.5, 5.0], pdf_value=6.08571174858e-05, pdf_theo=0.0
+absolute error=6.08571174858e-05
+point=[-2.0, 5.0], pdf_value=2.89409710911e-05, pdf_theo=0.0
+absolute error=2.89409710911e-05
+point=[-1.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 5.0], pdf_value=7.39831227457e-05, pdf_theo=0.0
+absolute error=7.39831227457e-05
+point=[0.0, 5.0], pdf_value=8.81627569178e-05, pdf_theo=0.0
+absolute error=8.81627569178e-05
+point=[0.5, 5.0], pdf_value=6.45579488729e-05, pdf_theo=0.0
+absolute error=6.45579488729e-05
+point=[1.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 5.0], pdf_value=0.000128235449604, pdf_theo=0.0
+absolute error=0.000128235449604
+point=[2.5, 5.0], pdf_value=0.00018727703632, pdf_theo=0.0
+absolute error=0.00018727703632
+point=[3.0, 5.0], pdf_value=0.000232477007063, pdf_theo=0.0
+absolute error=0.000232477007063
+point=[3.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 5.0], pdf_value=0.000502033724614, pdf_theo=0.0
+absolute error=0.000502033724614
+point=[5.0, 5.0], pdf_value=0.00409004977954, pdf_theo=0.025
+relative error=0.836398008818
+point=[5.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 5.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 5.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 6.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 6.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 7.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 7.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 8.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 8.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 9.0], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-10.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-9.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-8.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-7.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-6.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-5.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-4.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-3.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-2.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-1.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[-0.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[0.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[1.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[2.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[3.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[4.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[5.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[6.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[7.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[8.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.0, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
+point=[9.5, 9.5], pdf_value=0.0, pdf_theo=0.0
+absolute error=0.0
