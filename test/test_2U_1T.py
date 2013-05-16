@@ -39,8 +39,10 @@ if __name__ == "__main__":
     import time
 
     N = 10000
-    blockMin = 3
-    blockMax = 16
+    blockMin = 1
+    blockMax = 11
+    comparison_fft_nominal = True
+
     try :
         import matplotlib.pylab as plt
         from matplotlib.backends.backend_pdf import PdfPages
@@ -141,9 +143,23 @@ if __name__ == "__main__":
 
     # compute the pdf on a grid of form mu +/- b *sigma with N points
     b = 6.0
-    N = pow(2, 16)
+    N = 2**(blockMax)
     [y, pdf] = distribution.computePDFOn1DGrid(b, N)
     pdf_theorique = np.array([ref_dist.computePDF(el) for el in y])
+    for m in xrange(len(y)):
+        ym = y[m]
+        pdf_t = pdf_theorique[m]
+        pdf_v = pdf[m]
+        print "value=%s, pdf_fft=%s, pdf_th=%s, rel_error=%s" %(ym, pdf_v, pdf_t, abs(pdf_v - pdf_t)/pdf_t)
+    if comparison_fft_nominal:
+        distribution.setReferenceBandwidth(list(np.pi / np.array(sigma * b)))
+        pdf_evaluation = np.array([distribution.computePDF([el]) for el in y])
+        for m in xrange(len(y)):
+            ym = y[m]
+            pdf_v = pdf[m]
+            pdf_value = pdf_evaluation[m]
+            print "value=%s, pdf_without_fft=%s, pdf_fft=%s, rel_error=%s" %(ym, pdf_value ,pdf_v, abs(pdf_v - pdf_value)/pdf_value)
+
     if has_pylab:
         fig = plt.figure()
         plt.subplot(211)
