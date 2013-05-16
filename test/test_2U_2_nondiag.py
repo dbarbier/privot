@@ -42,9 +42,9 @@ if __name__ == "__main__":
     blockMin = 3
     blockMax = 6
     n_blockMax = 2**blockMax
-    maxSize = 4 * n_blockMax * (n_blockMax + 1)
+    maxSize = 2 * n_blockMax * (n_blockMax + 1)
     b = 5.0
-    N = 256
+    N = n_blockMax
     # Elements of distribution
     collection = ot.DistributionCollection([ot.Uniform(-1, 1), ot.Uniform(-1, 1)])
     matrix = ot.Matrix([[1, 4], [3, 2]])
@@ -104,6 +104,7 @@ if __name__ == "__main__":
                 print "absolute error=%s"%error
     # computation on a regular grid
     [regular_grid, values_app_grid]= distribution.computePDFOn2DGrid(b, N)
+
     try :
         import matplotlib.pylab as plt
         fig = plt.figure()
