@@ -39,9 +39,10 @@ if __name__ == "__main__":
     import time
 
     N = 10000
-    blockMin = 1
-    blockMax = 11
+    blockMin = 3
+    blockMax = 10
     comparison_fft_nominal = True
+    pdf_precision = 1.e-30
 
     try :
         import matplotlib.pylab as plt
@@ -61,6 +62,7 @@ if __name__ == "__main__":
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
     distribution.setBlockMin(blockMin)
     distribution.setBlockMax(blockMax)
+    distribution.setPDFPrecision(pdf_precision)
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
