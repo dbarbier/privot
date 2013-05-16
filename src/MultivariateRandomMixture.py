@@ -681,10 +681,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     iterator  = skin_cube.get_skin_iterator(k)
                     delta = 0.0
                     try:
-                        dyk = iterator.next()
-                        delta += normal_pdf([ym + dyk])
-                        if isGridSymmetric:
-                            delta += normal_pdf([ym - dyk])
+                        while True:
+                            dyk = iterator.next()
+                            delta += normal_pdf([ym + dyk])
+                            if isGridSymmetric:
+                                delta += normal_pdf([ym - dyk])
                     except StopIteration:
                         pass
                     k += 1
