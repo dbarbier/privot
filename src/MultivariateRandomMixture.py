@@ -148,6 +148,17 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # set equivalent Normal distribution, i.e a normal distribution with mean = self.mean_
         # and covariance = self.cov_
         self.computeEquivalentNormal()
+        if len(self.referenceBandwidth_) == 1:
+            gridMesherNd = MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True)
+        elif len(self.referenceBandwidth_) == 2:
+            gridMesherNd = MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True)
+        elif len(self.referenceBandwidth_) == 3:
+            gridMesherNd = MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True)
+        cacheSize = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultCacheSize")
+        if cacheSize > 0:
+            self.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(gridMesherNd, size=cacheSize))
+        else:
+            self.setGridMesher(gridMesherNd)
 
     def __repr__(self):
         """
@@ -286,11 +297,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # Shrink a little bit the bandwidth if the range is finite
             isFinite = [self.getRange().getFiniteLowerBound()[k] and self.getRange().getFiniteUpperBound()[k] for k in xrange(self.dimension_)]
             if (all(isFinite)):
-                referenceBandwidth = [self.referenceBandwidth_[k] * 0.5 for k in xrange(self.dimension_)]
+                self.referenceBandwidth_ = [self.referenceBandwidth_[k] * 0.5 for k in xrange(self.dimension_)]
         # Else use a kind of Normal approximation
         else:
-            referenceBandwidth = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.dimension_)]
-        self.setReferenceBandwidth(referenceBandwidth)
+            self.referenceBandwidth_ = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.dimension_)]
 
     def computeRange(self):
         """
