@@ -286,10 +286,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # Shrink a little bit the bandwidth if the range is finite
             isFinite = [self.getRange().getFiniteLowerBound()[k] and self.getRange().getFiniteUpperBound()[k] for k in xrange(self.dimension_)]
             if (all(isFinite)):
-                self.referenceBandwidth_ = [self.referenceBandwidth_[k] * 0.5 for k in xrange(self.dimension_)]
+                referenceBandwidth = [self.referenceBandwidth_[k] * 0.5 for k in xrange(self.dimension_)]
         # Else use a kind of Normal approximation
         else:
-            self.referenceBandwidth_ = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.dimension_)]
+            referenceBandwidth = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.dimension_)]
+        self.setReferenceBandwidth(referenceBandwidth)
 
     def computeRange(self):
         """
@@ -669,15 +670,24 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             pdf = normal_pdf(ym_grid)
             # interest is to build 2 * (k+1)*b *sigma and compute the gaussian pdf on the grid of form
             # grid of k, k =1,...,N
+            skin_cube = MaxNormMeshGrid.Cube1D([2.0 * b_sigma])
+            isGridSymmetric = skin_cube.isSymmetric()
             for m, ym in enumerate(ym_grid):
-                k = 0
+                k = 1
                 condition = True
                 # Take into account the contributions y_m + 2k*b*sigma and y_m - 2k*b*sigma
                 # while contribution is not negligible
                 while condition:
-                    dyk = 2.0 * b_sigma * (k + 1)
+                    iterator  = skin_cube.get_skin_iterator(k)
+                    delta = 0.0
+                    try:
+                        dyk = iterator.next()
+                        delta += normal_pdf([ym + dyk])
+                        if isGridSymmetric:
+                            delta += normal_pdf([ym - dyk])
+                    except StopIteration:
+                        pass
                     k += 1
-                    delta = np.sum(normal_pdf([ym + dyk, ym - dyk]))
                     pdf[m] += delta
                     condition = (delta > pdf[m] * self.pdfEpsilon_) and k < N
             ot.Log.Info("End of gaussian approximation")
