@@ -671,37 +671,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         else:
             # to check here
             ot.Log.Info("Precomputing gaussian pdf")
-            pdf = normal_pdf(ym_grid)
-            # interest is to build 2 * (k+1)*b *sigma and compute the gaussian pdf on the grid of form
-            # grid of k, k =1,...,N
             skin_cube = MaxNormMeshGrid.Cube1D([2.0 * b_sigma])
-            isGridSymmetric = skin_cube.isSymmetric()
-            for m, ym in enumerate(ym_grid):
-                k = 1
-                condition = True
-                # Take into account the contributions y_m + 2k*b*sigma and y_m - 2k*b*sigma
-                # while contribution is not negligible
-                while condition:
-                    iterator  = skin_cube.get_skin_iterator(k)
-                    delta = 0.0
-                    try:
-                        while True:
-                            dyk = iterator.next()
-                            delta += normal_pdf([ym + dyk])
-                            if isGridSymmetric:
-                                delta += normal_pdf([ym - dyk])
-                    except StopIteration:
-                        pass
-                    k += 1
-                    pdf[m] += delta
-                    condition = (delta > pdf[m] * self.pdfEpsilon_) and k < N
+            pdf = [self.computeEquivalentNormalPDFSum([el], skin_cube) for el in ym_grid]
             ot.Log.Info("End of gaussian approximation")
 
             # Precompute the grid of delta functions
             # the concerning grid is of form h,2h,...,Nh
             ot.Log.Info("Precomputing delta grid")
             delta_grid = np.arange(1, N + 1) * h
-            dcf = np.array([self.computeCharacteristicFunction([k]) for k in delta_grid]) - normal_cf(delta_grid)
+            dcf = np.array([self.computeDeltaCharacteristicFunction([k]) for k in delta_grid])
             ot.Log.Info("End of precomputing delta grid")
 
             # compute \Sigma_+ term
@@ -711,7 +689,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # zm_m = exp(-2.0 * pi* 1j * k / N), k=0,1,...,N-1, m =0,1,...,N-1
             yk = dcf * np.exp(- pi* 1j * (tau - 1.0 + 1.0 / N) * np.arange(1, N+1))
             yk_hat = np.fft.fft(yk)
-            zm = np.exp(-2.0 * pi* 1j * np.arange(N) / N)
+            zm = np.exp(-2.0 * pi * 1j * np.arange(N) / N)
             sigma_plus = yk_hat * zm
 
             # compute the \Sigma_- term
