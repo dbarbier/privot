@@ -148,17 +148,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # set equivalent Normal distribution, i.e a normal distribution with mean = self.mean_
         # and covariance = self.cov_
         self.computeEquivalentNormal()
-        if len(self.referenceBandwidth_) == 1:
-            gridMesherNd = MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True)
-        elif len(self.referenceBandwidth_) == 2:
-            gridMesherNd = MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True)
-        elif len(self.referenceBandwidth_) == 3:
-            gridMesherNd = MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True)
-        cacheSize = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultCacheSize")
-        if cacheSize > 0:
-            self.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(gridMesherNd, size=cacheSize))
-        else:
-            self.setGridMesher(gridMesherNd)
 
     def __repr__(self):
         """
@@ -268,8 +257,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             except StopIteration:
                 pass
             gaussian_pdf += delta
-            error = delta > gaussian_pdf * self.pdfEpsilon_
-            condition = error
+            condition = delta > gaussian_pdf * self.pdfEpsilon_
         return gaussian_pdf
 
     def computeMean(self):
@@ -788,23 +776,20 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         b_sigma_x, b_sigma_y = sigma_x * b, sigma_y * b
         tau_x, tau_y = mu_x / b_sigma_x, mu_y / b_sigma_y
         h_x, h_y = pi / b_sigma_x, pi / b_sigma_y
-        # Vectorizing some functions
-        normal_pdf = self.equivalentNormal_.__getattribute__("computePDF")
-        normal_cf = self.equivalentNormal_.__getattribute__("computeCharacteristicFunction")
-        delta_cf = lambda x: self.computeCharacteristicFunction(x) - normal_cf(x)
         # compute the gaussian pdf on y_m + 2(k+1)b \sigma, k in 0,..,N-1, m in 0,..,N-1
         x_grid = mu_x + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_x
         y_grid = mu_y + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_y
 
         if self.isAnalyticPDF_:
-            pdf = np.array( [[self.computePDF([x_grid[i], y_grid[j]]) for j in xrange(N)] for i in xrange(N)] )
+            pdf = np.array([[self.computePDF([x_grid[i], y_grid[j]]) for j in xrange(N)] for i in xrange(N)])
             return [[x_grid, y_grid], pdf]
         else:
             # gaussian pdf computation
             ot.Log.Info("Precomputing gaussian pdf")
-            pdf = np.array( [[normal_pdf([x_grid[i], y_grid[j]]) for j in xrange(N)] for i in xrange(N)] )
+            pdf = np.array( [[self.equivalentNormal_.computePDF([x_grid[i], y_grid[j]]) for j in xrange(N)] for i in xrange(N)] )
             # external terms
             skin_cube = MaxNormMeshGrid.SkinCube2D([2.0 * b_sigma_x, 2.0 * b_sigma_y])
+            isGridSymmetric = skin_cube.isSymmetric()
             for j, dy in enumerate(y_grid):
                 for i, dx in enumerate(x_grid):
                     k = 1
@@ -817,10 +802,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                         try :
                             while True:
                                 dyk_x, dyk_y = iterator.next()
-                                delta_plus = normal_pdf([dx + dyk_x, dy + dyk_y])
+                                delta_plus = self.equivalentNormal_.computePDF([dx + dyk_x, dy + dyk_y])
+                                delta += delta_plus
                                 # using symetries
-                                delta_minus = normal_pdf([dx - dyk_x, dy - dyk_y])
-                                delta += delta_plus + delta_minus
+                                if isGridSymmetric:
+                                    delta_minus = self.equivalentNormal_.computePDF([dx - dyk_x, dy - dyk_y])
+                                    delta += delta_minus
                         except StopIteration :
                             pass
                         pdf[i,j] += delta
@@ -837,7 +824,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # y_{k1, k2} = \delta[(k1+1) * hx, (k2+1) * hy] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
             # exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N))
             # zm_{m1,m2} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m2 / N),forall k1,k2,m1,m2=0,1,...,N-1
-            dcf = np.array( [[delta_cf([(i + 1) * h_x, (j + 1) * h_y]) for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array( [[self.computeDeltaCharacteristicFunction([(i + 1) * h_x, (j + 1) * h_y]) for j in xrange(N)] for i in xrange(N)] )
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
             yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
@@ -867,7 +854,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # y_{k1, k2} = \delta[(k1+1)*hx, (N-k2)*hy]* exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N)) *
             # exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N))
             # zm_{m1,m2} = exp(-2.0 * pi* 1j * m1/N) * exp(2.0 * pi* 1j * m2),forall k1,k2,m1,m2=0,1,...,N-1
-            dcf = np.array( [[delta_cf([(i + 1) * h_x, (j - N) * h_y]) for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array( [[self.computeDeltaCharacteristicFunction([(i + 1) * h_x, (j - N) * h_y]) for j in xrange(N)] for i in xrange(N)] )
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N + 1))
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
             yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
@@ -906,7 +893,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # \Sigma_{m1, m2}^{+0} = fft(y_{k1}) * z_{m1} with :
             # y_{k1} = \delta[(k1+1) * hx, 0] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N))
             # zm_{m1} = exp(-2.0 * pi* 1j * m1 / N), forall k1,m1,m2=0,1,...,N-1
-            dcf = np.array([delta_cf([(i + 1) * h_x, 0]) for i in xrange(N)])
+            dcf = np.array([self.computeDeltaCharacteristicFunction([(i + 1) * h_x, 0]) for i in xrange(N)])
             yk = dcf * np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
             yk_hat = np.fft.fft(yk)
             sigma_plus_0 = yk_hat * np.exp(-two_pi* 1j * np.arange(N) / N)
@@ -925,7 +912,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # \Sigma_{m1, m2}^{0+} = fft(y_{k2}) * z_{m2} with :
             # y_{k1} = \delta[0, (k2+1) * hy] * exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N))
             # zm_{m1} = exp(-2.0 * pi* 1j * m2 / N), forall k2,m1,m2=0,1,...,N-1
-            dcf = np.array([delta_cf([0, (i + 1) * h_y]) for i in xrange(N)])
+            dcf = np.array([self.computeDeltaCharacteristicFunction([0, (i + 1) * h_y]) for i in xrange(N)])
             yk = dcf * np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
             yk_hat = np.fft.fft(yk)
             sigma_0_plus = yk_hat * np.exp(-two_pi* 1j * np.arange(N) / N)
@@ -1044,15 +1031,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         if self.isAnalyticPDF_:
             pdf = np.array([[[self.computePDF([x_grid[i], y_grid[j], z_grid[k]]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
         else:
-            # Vectorizing some functions
-            normal_pdf = self.equivalentNormal_.__getattribute__("computePDF")
-            normal_cf = self.equivalentNormal_.__getattribute__("computeCharacteristicFunction")
-            delta_cf = lambda x: self.computeCharacteristicFunction(x) - normal_cf(x)
             # gaussian pdf computation
+            # Could not use computeEquivalentNormalPDFSum because of the grid
             ot.Log.Info("Precomputing gaussian pdf")
-            pdf = np.array([[[normal_pdf([x_grid[i], y_grid[j], z_grid[k]]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+            pdf = np.array([[[self.equivalentNormal_.computePDF([x_grid[i], y_grid[j], z_grid[k]]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
             # external terms
             skin_cube = MaxNormMeshGrid.SkinCube3D([2.0 * b_sigma_x, 2.0 * b_sigma_y, 2.0 * b_sigma_z])
+            isGridSymmetric = skin_cube.isSymmetric()
+            # The computeEquivalentNormalPDFSum could not be used, because of the referenceBandwidth_ is different
             for k, dz in enumerate(z_grid):
                 for j, dy in enumerate(y_grid):
                     for i, dx in enumerate(x_grid):
@@ -1064,10 +1050,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                             try :
                                 while True:
                                     dyk_x, dyk_y, dyk_z = iterator.next()
-                                    delta_plus = normal_pdf([dx + dyk_x, dy + dyk_y, dz + dyk_z])
+                                    delta_plus = self.equivalentNormal_.computePDF([dx + dyk_x, dy + dyk_y, dz + dyk_z])
+                                    delta += delta_plus
                                     # using symetries
-                                    delta_minus = normal_pdf([dx - dyk_x, dy - dyk_y, dz - dyk_z])
-                                    delta += delta_plus + delta_minus
+                                    if isGridSymmetric:
+                                        delta_minus = self.equivalentNormal_.computePDF([dx - dyk_x, dy - dyk_y, dz - dyk_z])
+                                        delta += delta_minus
                             except StopIteration :
                                 pass
                             pdf[i,j,k] += delta
@@ -1085,7 +1073,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3+1) * (tau_z - 1.0 + 1.0 / N))
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m2 / N) * exp(-2.0 * pi* 1j * m3 / N)
             # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
-            dcf = np.array([[[delta_cf([(i+1)*h_x, (j+1)*h_y, (k+1)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array([[[self.computeDeltaCharacteristicFunction([(i+1)*h_x, (j+1)*h_y, (k+1)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1,N+1))
@@ -1123,7 +1111,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m2 / N) * exp(2.0 * pi* 1j * m3)
             # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
-            dcf = np.array([[[delta_cf([(i+1)*h_x, (j+1)*h_y, (k-N)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array([[[self.computeDeltaCharacteristicFunction([(i+1)*h_x, (j+1)*h_y, (k-N)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N)-N))
@@ -1165,7 +1153,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3+1) * (tau_z - 1.0 + 1.0 / N))
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(2.0 * pi* 1j * m2) * exp(-2.0 * pi* 1j * m3 / N)
             # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
-            dcf = np.array([[[delta_cf([(i+1)*h_x, (j-N)*h_y, (k+1)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array([[[self.computeDeltaCharacteristicFunction([(i+1)*h_x, (j-N)*h_y, (k+1)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N)-N))
             yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1,N+1))
@@ -1207,7 +1195,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # exp(-pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N)) * exp(- pi* 1j * (k3-N) * (tau_z - 1.0 + 1.0 / N))
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(2.0 * pi* 1j * m2) * exp(2.0 * pi* 1j * m3)
             # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
-            dcf = np.array([[[delta_cf([(i+1)*h_x, (j-N)*h_y, (k-N)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array([[[self.computeDeltaCharacteristicFunction([(i+1)*h_x, (j-N)*h_y, (k-N)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N)-N))
             yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N)-N))
@@ -1256,7 +1244,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m2 / N)
             # forall k1,k2,m1,m2,m3=0,1,...,N-1
             # Care components here are of dimension 2, FFT should be of dimension 2
-            dcf = np.array([[delta_cf([(i+1) * h_x, (j+1) * h_y, 0]) for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array([[self.computeDeltaCharacteristicFunction([(i+1) * h_x, (j+1) * h_y, 0]) for j in xrange(N)] for i in xrange(N)] )
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
@@ -1290,7 +1278,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m2 / N) * exp(-2.0 * pi* 1j * m3 / N)
             # forall k2,k3,m1,m2,m3=0,1,...,N-1
             # Care components here are of dimension 2, FFT should be of dimension 2
-            dcf = np.array([[delta_cf([0, (i+1)*h_y, (j+1)*h_z]) for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array([[self.computeDeltaCharacteristicFunction([0, (i+1)*h_y, (j+1)*h_z]) for j in xrange(N)] for i in xrange(N)] )
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk = yk_y.reshape(N,1) * yk_z.reshape(1,N)
@@ -1324,7 +1312,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m3 / N)
             # forall k1,k3,m1,m2,m3=0,1,...,N-1
             # Care components here are of dimension 2, FFT should be of dimension 2
-            dcf = np.array([[delta_cf([(i + 1) * h_x, 0, (j + 1) * h_z]) for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array([[self.computeDeltaCharacteristicFunction([(i + 1) * h_x, 0, (j + 1) * h_z]) for j in xrange(N)] for i in xrange(N)] )
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk = yk_x.reshape(N,1) * yk_z.reshape(1,N)
@@ -1358,7 +1346,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(2.0 * pi* 1j * m2)
             # forall k1,k2,m1,m2,m3=0,1,...,N-1
             # Care components here are of dimension 2, FFT should be of dimension 2
-            dcf = np.array([[delta_cf([(i+1)*h_x, (j-N)*h_y, 0]) for j in xrange(N)] for i in xrange(N)])
+            dcf = np.array([[self.computeDeltaCharacteristicFunction([(i+1)*h_x, (j-N)*h_y, 0]) for j in xrange(N)] for i in xrange(N)])
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N)-N))
             yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
@@ -1394,7 +1382,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(2.0 * pi* 1j * m3)
             # forall k1,k3,m1,m2,m3=0,1,...,N-1
             # Care components here are of dimension 2, FFT should be of dimension 2
-            dcf = np.array([[delta_cf([(i+1)*h_x, 0, (j-N)*h_z]) for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array([[self.computeDeltaCharacteristicFunction([(i+1)*h_x, 0, (j-N)*h_z]) for j in xrange(N)] for i in xrange(N)] )
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N)-N))
             yk = yk_x.reshape(N, 1) * yk_z.reshape(1, N)
@@ -1430,7 +1418,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m2 / N) * exp(2.0 * pi* 1j * m3)
             # forall k2,k3,m1,m2,m3=0,1,...,N-1
             # Care components here are of dimension 2, FFT should be of dimension 2
-            dcf = np.array([[delta_cf([0, (i+1)*h_y, (j-N)*h_z]) for j in xrange(N)] for i in xrange(N)] )
+            dcf = np.array([[self.computeDeltaCharacteristicFunction([0, (i+1)*h_y, (j-N)*h_z]) for j in xrange(N)] for i in xrange(N)] )
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * (np.arange(N)-N))
             yk = yk_y.reshape(N,1) * yk_z.reshape(1,N)
@@ -1471,7 +1459,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N)
             # forall k1,m1,m2,m3=0,1,...,N-1
             # Care components here are of dimension 1, FFT should be of dimension 1
-            dcf = np.array([delta_cf([(i+1)*h_x,0,0]) for i in xrange(N)])
+            dcf = np.array([self.computeDeltaCharacteristicFunction([(i+1)*h_x,0,0]) for i in xrange(N)])
             yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_hat = np.fft.fft(dcf * yk_x)
             zm1 = np.exp(-two_pi * 1j * np.arange(N) / N)
@@ -1497,7 +1485,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m2 / N)
             # forall k2,m1,m2,m3=0,1,...,N-1
             # Care components here are of dimension 1, FFT should be of dimension 1
-            dcf = np.array([delta_cf([0,(i+1)*h_y,0]) for i in xrange(N)])
+            dcf = np.array([self.computeDeltaCharacteristicFunction([0,(i+1)*h_y,0]) for i in xrange(N)])
             yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_hat = np.fft.fft(dcf * yk_y)
             zm2 = np.exp(-two_pi* 1j * np.arange(N) / N)
@@ -1523,7 +1511,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m3 / N)
             # forall k3,m1,m2,m3=0,1,...,N-1
             # Care components here are of dimension 1, FFT should be of dimension 1
-            dcf = np.array([delta_cf([0,0,(i+1)*h_z]) for i in xrange(N)])
+            dcf = np.array([self.computeDeltaCharacteristicFunction([0,0,(i+1)*h_z]) for i in xrange(N)])
             yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1,N+1))
             yk_hat = np.fft.fft(dcf * yk_z)
             zm3 = np.exp(-two_pi* 1j * np.arange(N) / N)
@@ -2047,6 +2035,18 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         if len(bandwidth) != self.dimension_:
             raise ValueError("The given bandwidth's size differ with the dimension of distribution")
         self.referenceBandwidth_ = [float(element) for element in bandwidth]
+        # with new bandwidth, the cache should be re-initialized
+        if len(self.referenceBandwidth_) == 1:
+            gridMesherNd = MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True)
+        elif len(self.referenceBandwidth_) == 2:
+            gridMesherNd = MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True)
+        elif len(self.referenceBandwidth_) == 3:
+            gridMesherNd = MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True)
+        cacheSize = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultCacheSize")
+        if cacheSize > 0:
+            self.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(gridMesherNd, size=cacheSize))
+        else:
+            self.setGridMesher(gridMesherNd)
 
 
 class MultivariateRandomMixture(ot.Distribution):
