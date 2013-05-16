@@ -36,8 +36,11 @@ if __name__ == "__main__":
     import numpy as np
     from MultivariateGaussianCharacteristicFunction import MGCF as mgcf
 
-    N = 2000000
-
+    Nreal = 100000
+    blockMin = 3
+    blockMax = 10
+    comparison_fft_nominal = True
+    pdf_precision = 1.e-30
     """
     Test 
     ----
@@ -48,11 +51,15 @@ if __name__ == "__main__":
     matrix = ot.Matrix([[4, 1.4]])
     constant = [2.0]
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix, constant)
+    distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
+    distribution.setBlockMin(blockMin)
+    distribution.setBlockMax(blockMax)
+    distribution.setPDFPrecision(pdf_precision)
     interval = distribution.getRange()
     mean = distribution.getMean()
     cov = distribution.getCovariance()
     sigma = distribution.getStandardDeviation()
-    sample = distribution.getSample(N)
+    sample = distribution.getSample(Nreal)
     print "MultivariateRandomMixture distribution"
     print "range = ", interval
     print "mean = ", mean
@@ -67,14 +74,22 @@ if __name__ == "__main__":
     print "sigma = ", random_mixture.getStandardDeviation()
     print "sample :"
     print "min = %s\nmax = %s\nmean = %s, cov = %s" %(sample.getMin(),sample.getMax(), sample.computeMean(), sample.computeCovariance())
-    # evaluation of the characteristic function between -10 and 10
-    xmin, xmax, dx = -5, 5, 0.5
-    x = np.arange(xmin, xmax, dx)
-    delta = 0.0
-    for value in x:
-        c1 = distribution.computeCharacteristicFunction([value])
-        c2 = random_mixture.computeCharacteristicFunction(value)
-        delta += abs((c1 - c2))**2
-    # Variation of characteristic function
-    delta /= len(x)
-    print "delta of characteristic function=%s" %(np.sqrt(delta))
+    # compute the pdf on a grid of form mu +/- b *sigma with N points
+    b = 6.0
+    N = 2**(blockMax)
+    [y, pdf] = distribution.computePDFOn1DGrid(b, N)
+    pdf_theorique = np.array([random_mixture.computePDF(el) for el in y])
+    for m in xrange(len(y)):
+        ym = y[m]
+        pdf_t = pdf_theorique[m]
+        pdf_v = pdf[m]
+        print "value=%s, pdf_fft=%s, pdf_th=%s, rel_error=%s" %(ym, pdf_v, pdf_t, abs(pdf_v - pdf_t)/pdf_t)
+    if comparison_fft_nominal:
+        distribution.setReferenceBandwidth(list(np.pi / np.array(sigma * b)))
+        pdf_evaluation = np.array([distribution.computePDF([el]) for el in y])
+        for m in xrange(len(y)):
+            ym = y[m]
+            pdf_v = pdf[m]
+            pdf_value = pdf_evaluation[m]
+            print "value=%s, pdf_without_fft=%s, pdf_fft=%s, rel_error=%s" %(ym, pdf_value ,pdf_v, abs(pdf_v - pdf_value)/pdf_value)
+    
