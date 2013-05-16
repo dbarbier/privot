@@ -259,16 +259,13 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             i = i + 1
             delta = 0.0
             iterator = mesh_grid.get_skin_iterator(i)
-            try:
-                while True:
-                    point = iterator.next()
-                    x = [y[k] + point[k] for k in xrange(self.dimension_)]
+            for n in xrange(mesh_grid.get_size_of_level(i)):
+                point = iterator.next()
+                x = [y[k] + point[k] for k in xrange(self.dimension_)]
+                delta += self.equivalentNormal_.computePDF(x)
+                if isGridSymmetric:
+                    x = [y[k] - point[k] for k in xrange(self.dimension_)]
                     delta += self.equivalentNormal_.computePDF(x)
-                    if isGridSymmetric:
-                        x = [y[k] - point[k] for k in xrange(self.dimension_)]
-                        delta += self.equivalentNormal_.computePDF(x)
-            except StopIteration:
-                pass
             gaussian_pdf += delta
             condition = delta > gaussian_pdf * self.pdfEpsilon_
         return gaussian_pdf
@@ -586,15 +583,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # k calculations are done
             for m in xrange(k, 2*k):
                 iterator = self.meshGrid_.get_skin_iterator_evaluate(m, self.computeDeltaCharacteristicFunction)
-                try :
-                    while True:
-                        h, cfValue = iterator.next()
-                        h_y = self.meshGrid_.dot(h, y)
-                        cos_hy = cmath.cos(h_y).real
-                        sin_hy = cmath.sin(h_y).real
-                        error += cfValue.real * cos_hy + cfValue.imag * sin_hy
-                except StopIteration:
-                  pass
+                for n in xrange(self.meshGrid_.get_size_of_level(m)):
+                    h, cfValue = iterator.next()
+                    h_y = self.meshGrid_.dot(h, y)
+                    cos_hy = cmath.cos(h_y).real
+                    sin_hy = cmath.sin(h_y).real
+                    error += cfValue.real * cos_hy + cfValue.imag * sin_hy
             error *= factor
             if self.meshGrid_.isSymmetric():
                 error *= 2.0
@@ -725,7 +719,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # \Sigma_{m}^{-}_{m} = fft(yk) * zm with :
             # yk = conj(\delta[(N-k)*h]) * exp(- pi* 1j * (k-N) * (tau - 1.0 + 1.0 / N))
             # zm_m = exp(2.0 * pi* 1j * k), k=0,1,...,N-1, m =0,1,...,N-1
-            yk = np.conjugate(dcf[N - np.arange(N) - 1]) * np.exp(-pi* 1j * (tau -1.0 + 1.0 /N) * (np.arange(N) - N))
+            yk = np.conjugate(yk[N - np.arange(N) - 1])
             yk_hat = np.fft.fft(yk)
             zm = np.exp(2 * pi* 1j * np.arange(N))
             sigma_minus = yk_hat * zm
