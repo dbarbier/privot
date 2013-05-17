@@ -35,7 +35,7 @@ if __name__ == "__main__":
     import MultivariateRandomMixture as MV
     import numpy as np
     blockMin = 3
-    blockMax = 6
+    blockMax = 7
     n_blockMax = 2**blockMax
     n = 4 * n_blockMax * (n_blockMax + 1) * (2 * n_blockMax + 1) + 2 * n_blockMax
     maxSize = n

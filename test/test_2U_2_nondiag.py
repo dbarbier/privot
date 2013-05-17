@@ -40,7 +40,7 @@ if __name__ == "__main__":
     # Constants
 
     blockMin = 3
-    blockMax = 6
+    blockMax = 8
     n_blockMax = 2**blockMax
     maxSize = 2 * n_blockMax * (n_blockMax + 1)
     b = 5.0
