@@ -685,8 +685,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             # compute \Sigma_+ term
             # \Sigma_{m}^{+}=\sum_{k=0}^{N-1}\delta((k+1)h) E_{m}(k+1)
             # \Sigma_{m}^{+}_{m} = fft(yk) * zm with :
-            # yk = \delta[(k+1) * h] * exp(- pi* 1j * (k+1) * (tau - 1.0 + 1.0 / N))
-            # zm_m = exp(-2.0 * pi* 1j * k / N), k=0,1,...,N-1, m =0,1,...,N-1
+            # yk = \delta[(k+1) * h] * exp(- pi* 1j * (k+1) * (tau - 1.0 + 1.0 / N)), k=0,1,...,N-1
+            # zm = exp(-2.0 * pi* 1j * m / N), m =0,1,...,N-1
             yk = dcf * np.exp(- pi* 1j * (tau - 1.0 + 1.0 / N) * np.arange(1, N+1))
             yk_hat = np.fft.fft(yk)
             zm = np.exp(-2.0 * pi * 1j * np.arange(N) / N)
@@ -694,13 +694,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
             # compute the \Sigma_- term
             # \Sigma_{m}^{-}=\sum_{k=0}^{N-1}\delta(-(k+1)h) E_{m}(-(k+1))
-            # \Sigma_{m}^{-}_{m} = fft(yk) * zm with :
-            # yk = conj(\delta[(N-k)*h]) * exp(- pi* 1j * (k-N) * (tau - 1.0 + 1.0 / N))
-            # zm_m = exp(2.0 * pi* 1j * k), k=0,1,...,N-1, m =0,1,...,N-1
-            yk = np.conjugate(yk[N - np.arange(N) - 1])
-            yk_hat = np.fft.fft(yk)
-            zm = np.exp(2 * pi* 1j * np.arange(N))
-            sigma_minus = yk_hat * zm
+            # \Sigma_{m}^{-}_{m} = fft(zk)
+            # zk = conj(\delta[(N-k)*h]) * exp(- pi* 1j * (k-N) * (tau - 1.0 + 1.0 / N))
+            zk = np.conjugate(yk[N - np.arange(N) - 1])
+            sigma_minus = np.fft.fft(zk)
 
             # final computation
             s_m = h / (2.0 * pi) * (sigma_plus + sigma_minus)
