@@ -45,10 +45,10 @@ if __name__ == "__main__":
     blockMin = 3
     blockMax = 7
     n_blockMax = 2**blockMax
-    n = 4 * n_blockMax * (n_blockMax + 1) * (2 * n_blockMax + 1) + 2 * n_blockMax
-    maxSize = n
-    randomMixture = ot.Normal(0, np.sqrt(2) / 2.0)
-    collection = ot.DistributionCollection([ot.Normal(0.0,1.0), randomMixture, ot.Uniform(0,1), ot.Uniform(0,1)])
+    maxSize = 2 * n_blockMax * (n_blockMax + 1) * (2 * n_blockMax + 1) + n_blockMax
+    mixture = ot.Normal(0, np.sqrt(2) / 2.0)
+    mixture = ot.Mixture(ot.DistributionCollection([ot.Normal(2,1), ot.Normal(-2,1)]))
+    collection = ot.DistributionCollection([ot.Normal(0.0,1.0), mixture, ot.Uniform(0,1), ot.Uniform(0,1)])
     matrix = ot.Matrix([[1, -0.05, 1, -0.5], [0.5, 1, -0.05, 0.3], [-0.5, -0.1, 1.2, -0.8]])
     ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultCacheSize", maxSize)
     distribution = MV.PythonMultivariateRandomMixture(collection, matrix)
