@@ -372,3 +372,52 @@ with $fft1d$ a unidimensionnal Fourier transformation.
   \Sigma_{m_1,m_2}^{0-}=z_{m_2}e^{2i\pi\left(m_2 N\right)} \forall m_1
 \end{align*}
 \end{enumerate}
+
+\subsection{The tridimensionnal case}
+In dimension 3, the expression of interest is~:
+\begin{align*}
+S_{m_1,m_2,m_3}=\frac{h_1h_2h_3}{8\pi^3}\Big\{& \Sigma_{m1,m2,m3}^{+++} + \Sigma_{m1,m2,m3}^{---} + \Sigma_{m1,m2,m3}^{++-} +\nonumber\\
+     &\Sigma_{m1,m2,m3}^{--+} + \Sigma_{m1,m2,m3}^{+-+} + \Sigma_{m1,m2,m3}^{-+-} +\nonumber\\
+     &\Sigma_{m1,m2,m3}^{+--} + \Sigma_{m1,m2,m3}^{-++} + \Sigma_{m1,m2,m3}^{++0} +\nonumber\\
+     &\Sigma_{m1,m2,m3}^{--0} + \Sigma_{m1,m2,m3}^{0++} + \Sigma_{m1,m2,m3}^{0--} +\nonumber\\
+     &\Sigma_{m1,m2,m3}^{+0+} + \Sigma_{m1,m2,m3}^{-0-} + \Sigma_{m1,m2,m3}^{+-0} +\nonumber\\
+     &\Sigma_{m1,m2,m3}^{-+0} + \Sigma_{m1,m2,m3}^{+0-} + \Sigma_{m1,m2,m3}^{-0+} +\nonumber\\
+     &\Sigma_{m1,m2,m3}^{0+-} + \Sigma_{m1,m2,m3}^{0-+} + \Sigma_{m1,m2,m3}^{+00} +\nonumber\\
+     &\Sigma_{m1,m2,m3}^{-00} + \Sigma_{m1,m2,m3}^{0+0} + \Sigma_{m1,m2,m3}^{0-0} +\nonumber\\
+     &\Sigma_{m1,m2,m3}^{00+} + \Sigma_{m1,m2,m3}^{00-}
+\Big\}
+\end{align*}
+
+with
+\begin{align*}
+\Sigma_{m1,m2,m3}^{+++}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,k3+1)\\
+\Sigma_{m1,m2,m3}^{---}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),-(k3+1))\\
+\Sigma_{m1,m2,m3}^{++-}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,-(k3+1))\\
+\Sigma_{m1,m2,m3}^{--+}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),k3+1)\\
+\Sigma_{m1,m2,m3}^{+-+}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),k3+1)\\
+\Sigma_{m1,m2,m3}^{-+-}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),(k2+1),-(k3+1))\\
+\Sigma_{m1,m2,m3}^{+--}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))\\
+\Sigma_{m1,m2,m3}^{-++}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))\\
+\Sigma_{m1,m2,m3}^{++0}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,0) E_{m1,m2,m3}(k1+1,k2+1,0)\\
+\Sigma_{m1,m2,m3}^{--0}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,0) E_{m1,m2,m3}(-(k1+1),-(k2+1),0)\\
+\Sigma_{m1,m2,m3}^{0++}&=&\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(0,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)\\
+\Sigma_{m1,m2,m3}^{0--}&=&\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(0,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)\\
+\Sigma_{m1,m2,m3}^{+0+}&=&\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)\\
+\Sigma_{m1,m2,m3}^{-0-}&=&\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)\\
+\Sigma_{m1,m2,m3}^{+-0}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy, 0) E_{m1,m2,m3}(k1+1,-(k2+1),0)\\
+\end{align*}
+\begin{align*}
+\Sigma_{m1,m2,m3}^{-+0}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta(-(k1+1)hx,(k2+1)hy, 0) E_{m1,m2,m3}(-(k1+1),(k2+1),0)\\
+\Sigma_{m1,m2,m3}^{+0-}&=&\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,-(k3+1)\\
+\Sigma_{m1,m2,m3}^{-0+}&=&\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),0,(k3+1)\\
+\Sigma_{m1,m2,m3}^{0+-}&=&\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k2+1))\\
+\Sigma_{m1,m2,m3}^{0-+}&=&\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k3+1))\\
+\Sigma_{m1,m2,m3}^{+00}&=&\sum_{k1=0}^{N-1}\delta((k1+1)hx,0,0) E_{m1,m2,m3}(k1+1,0,0)\\
+\Sigma_{m1,m2,m3}^{-00}&=&\sum_{k1=0}^{N-1}\delta(-(k1+1)hx,0,0) E_{m1,m2,m3}(-(k1+1),0,0)\\
+\Sigma_{m1,m2,m3}^{0+0}&=&\sum_{k2=0}^{N-1}\delta(0,(k2+1)hy,0) E_{m1,m2,m3}(0,k2+1,0)\\
+\Sigma_{m1,m2,m3}^{0-0}&=&\sum_{k2=0}^{N-1}\delta(0,-(k2+1)hy,0) E_{m1,m2,m3}(0,-(k2+1),0)\\
+\Sigma_{m1,m2,m3}^{00+}&=&\sum_{k3=0}^{N-1}\delta(0,0,(k3+1)hz) E_{m1,m2,m3}(0,0,k3+1)\\
+\Sigma_{m1,m2,m3}^{00-}&=&\sum_{k3=0}^{N-1}\delta(0,0,-(k3+1)hz) E_{m1,m2,m3}(0,0,-(k3+1))\\
+\end{align*}
+
+
