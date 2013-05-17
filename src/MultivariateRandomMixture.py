@@ -148,17 +148,20 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # set equivalent Normal distribution, i.e a normal distribution with mean = self.mean_
         # and covariance = self.cov_
         self.computeEquivalentNormal()
+        # self.temp_mesh_grid_ is a grid which is used by computePDF and its FFT variants.
+        # It must not be cached.  It is initialized by self.referenceBandwidth_, but only its
+        # dimension is used, to check that dimension is right when cloning this grid.
         if len(self.referenceBandwidth_) == 1:
-            gridMesherNd = MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True)
+            self.temp_mesh_grid_ = MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True)
         elif len(self.referenceBandwidth_) == 2:
-            gridMesherNd = MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True)
+            self.temp_mesh_grid_ = MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True)
         elif len(self.referenceBandwidth_) == 3:
-            gridMesherNd = MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True)
+            self.temp_mesh_grid_ = MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True)
         cacheSize = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultCacheSize")
         if cacheSize > 0:
-            self.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(gridMesherNd, size=cacheSize))
+            self.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(self.temp_mesh_grid_, size=cacheSize))
         else:
-            self.setGridMesher(gridMesherNd)
+            self.setGridMesher(self.temp_mesh_grid_.clone(self.referenceBandwidth_))
 
     def __repr__(self):
         """
@@ -556,7 +559,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             return 0.0
         # General case : two different steps
         # 1) Compute a gaussian pdf approximation
-        value = self.computeEquivalentNormalPDFSum(y, self.meshAltGrid_)
+        two_pi_on_h = [2.0 * cmath.pi / element for element in self.referenceBandwidth_]
+        alt_grid_mesher = self.temp_mesh_grid_.clone(two_pi_on_h)
+        value = self.computeEquivalentNormalPDFSum(y, alt_grid_mesher)
         # Compute the factor \prod_{k=1}^{d} h_k/'2\pi
         # h_k are supposed to be small values, we must care about
         # numerical troubles
@@ -668,8 +673,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             return [ym_grid, pdf]
 
         ot.Log.Info("Precomputing gaussian pdf")
-        skin_cube = MaxNormMeshGrid.Cube1D([2.0 * b_sigma])
-        pdf = [self.computeEquivalentNormalPDFSum([el], skin_cube) for el in ym_grid]
+        alt_grid_mesher = self.temp_mesh_grid_.clone([2.0 * b_sigma])
+        pdf = [self.computeEquivalentNormalPDFSum([el], alt_grid_mesher) for el in ym_grid]
         ot.Log.Info("End of gaussian approximation")
 
         # Precompute the grid of delta functions
@@ -775,8 +780,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         # gaussian sum pdf computation
         ot.Log.Info("Precomputing gaussian pdf")
-        skin_cube = MaxNormMeshGrid.SkinCube2D([2.0 * b_sigma_x, 2.0 * b_sigma_y])
-        pdf = np.array([[self.computeEquivalentNormalPDFSum([xm, ym], skin_cube) for ym in y_grid] for xm in x_grid])
+        alt_grid_mesher = self.temp_mesh_grid_.clone([2.0 * b_sigma_x, 2.0 * b_sigma_y])
+        pdf = np.array([[self.computeEquivalentNormalPDFSum([xm, ym], alt_grid_mesher) for ym in y_grid] for xm in x_grid])
         ot.Log.Info("End of gaussian approximation")
 
         # Precompute the grid of delta functions
@@ -998,8 +1003,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         # gaussian sum pdf computation
         ot.Log.Info("Precomputing gaussian pdf")
-        skin_cube = MaxNormMeshGrid.SkinCube3D([2.0 * b_sigma_x, 2.0 * b_sigma_y, 2.0 * b_sigma_z])
-        pdf = np.array([[[self.computeEquivalentNormalPDFSum([xm, ym, zm], skin_cube) for zm in z_grid] for ym in y_grid] for xm in x_grid])
+        alt_grid_mesher = self.temp_mesh_grid_.clone([2.0 * b_sigma_x, 2.0 * b_sigma_y, 2.0 * b_sigma_z])
+        pdf = np.array([[[self.computeEquivalentNormalPDFSum([xm, ym, zm], alt_grid_mesher) for zm in z_grid] for ym in y_grid] for xm in x_grid])
         ot.Log.Info("End of gaussian approximation")
 
         # 1) compute \Sigma_+++
@@ -1930,8 +1935,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         self.meshGrid_ = gridMesher
-        two_pi_on_h = [2.0 * cmath.pi / element for element in self.referenceBandwidth_]
-        self.meshAltGrid_ = self.meshGrid_.clone(two_pi_on_h)
 
     def setPDFPrecision(self, pdfPrecision):
         """
