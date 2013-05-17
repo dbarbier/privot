@@ -38,11 +38,14 @@ if __name__ == "__main__":
     from MultivariateGaussianCharacteristicFunction import MGCF as mgcf
     import time
 
-    N = 10000
+    Nreal = 10000
     blockMin = 3
-    blockMax = 10
+    blockMax = 13
     comparison_fft_nominal = True
     pdf_precision = 1.e-30
+    # for fft
+    b = 6.0
+    N = 2**(blockMax)
 
     try :
         import matplotlib.pylab as plt
@@ -67,7 +70,7 @@ if __name__ == "__main__":
     mean = distribution.getMean()
     cov = distribution.getCovariance()
     sigma = distribution.getStandardDeviation()
-    sample = distribution.getSample(N)
+    sample = distribution.getSample(Nreal)
     print "MultivariateRandomMixture distribution"
     print "range = ", interval
     print "mean = ", mean
@@ -144,8 +147,6 @@ if __name__ == "__main__":
         plt.close()
 
     # compute the pdf on a grid of form mu +/- b *sigma with N points
-    b = 6.0
-    N = 2**(blockMax)
     [y, pdf] = distribution.computePDFOn1DGrid(b, N)
     pdf_theorique = np.array([ref_dist.computePDF(el) for el in y])
     for m in xrange(len(y)):
