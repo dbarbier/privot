@@ -1,0 +1,73 @@
+restart:
+Digits := 25:
+with(Statistics):
+assume(m11, real, m12, real, m13, real, m21, real, m22, real, m23, real);
+valnum := m11 = 1, m12 = -2, m13 = 1, m21 = 1, m22 = 1, m23 = -3;
+p1 := PDF(RandomVariable(Uniform(0, 1)), x1);
+p2 := PDF(RandomVariable(Uniform(0, 1)), x2);
+p3 := PDF(RandomVariable(Uniform(0, 1)), x3);
+M := Matrix(3, 3, [m11, m12, m13, m21, m22, m23, 0, 0, 1]);
+with(LinearAlgebra):
+R := MatrixInverse(M);
+x := R . Vector([z1, z2, z3]);
+pdfZ := subs(x1 = x[1], p1) * subs(x2 = x[2], p2) * subs(x3 = x[3], p3) * abs(Determinant(R));
+pdfZsimp := simplify(subs(valnum, pdfZ)) assuming z3>0, z3<1;
+pdfY := int(pdfZsimp, z3 = 0..1);
+muX := [evalf(Int(x1*p1, x1=-infinity..infinity)), evalf(Int(x2*p2, x2=-infinity..infinity)), evalf(Int(x3*p3, x3=0..1))];
+varX := Matrix(3, 3, [evalf(Int((x1-muX[1])^2*p1, x1=-infinity..infinity)), 0,0,0,evalf(Int((x2-muX[2])^2*p2, x2=-infinity..infinity)), 0,0,0,evalf(Int((x3-muX[3])^2*p3, x3=0..1))]);
+Mnum := subs(valnum, M[1..2,1..3]);
+mu := Mnum . Vector(muX);
+var := Mnum . varX . Transpose(Mnum);
+sigma := [sqrt(var[1,1]), sqrt(var[2,2])];
+fd := fopen("valid_d2_3unif_3_512.csv", WRITE, TEXT);
+b := 3;
+N := 512;
+for i from 0 to N-1 do
+  for j from 0 to N-1 do
+    v1 := evalf(mu[1] + b * sigma[1] * ((2 * i + 1) / N - 1));
+    v2 := evalf(mu[2] + b * sigma[2] * ((2 * j + 1) / N - 1));
+    pdf := evalf(subs(z1 = v1, z2 = v2, pdfY));
+    fprintf(fd, "%.20g; %.20g; %.20g\n", v1, v2, pdf);
+  end do:
+  print([v1,v2,pdf]);
+end do:
+fclose(fd):
+fd := fopen("valid_d2_3unif_3_1024.csv", WRITE, TEXT);
+b := 3;
+N := 1024;
+for i from 0 to N-1 do
+  for j from 0 to N-1 do
+    v1 := evalf(mu[1] + b * sigma[1] * ((2 * i + 1) / N - 1));
+    v2 := evalf(mu[2] + b * sigma[2] * ((2 * j + 1) / N - 1));
+    pdf := evalf(subs(z1 = v1, z2 = v2, pdfY));
+    fprintf(fd, "%.20g; %.20g; %.20g\n", v1, v2, pdf);
+  end do:
+  print([v1,v2,pdf]);
+end do:
+fclose(fd):
+fd := fopen("valid_d2_3unif_4_512.csv", WRITE, TEXT);
+b := 4;
+N := 512;
+for i from 0 to N-1 do
+  for j from 0 to N-1 do
+    v1 := evalf(mu[1] + b * sigma[1] * ((2 * i + 1) / N - 1));
+    v2 := evalf(mu[2] + b * sigma[2] * ((2 * j + 1) / N - 1));
+    pdf := evalf(subs(z1 = v1, z2 = v2, pdfY));
+    fprintf(fd, "%.20g; %.20g; %.20g\n", v1, v2, pdf);
+  end do:
+  print([v1,v2,pdf]);
+end do:
+fclose(fd):
+fd := fopen("valid_d2_3unif_4_1024.csv", WRITE, TEXT);
+b := 4;
+N := 1024;
+for i from 0 to N-1 do
+  for j from 0 to N-1 do
+    v1 := evalf(mu[1] + b * sigma[1] * ((2 * i + 1) / N - 1));
+    v2 := evalf(mu[2] + b * sigma[2] * ((2 * j + 1) / N - 1));
+    pdf := evalf(subs(z1 = v1, z2 = v2, pdfY));
+    fprintf(fd, "%.20g; %.20g; %.20g\n", v1, v2, pdf);
+  end do:
+  print([v1,v2,pdf]);
+end do:
+fclose(fd):
