@@ -2030,19 +2030,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         if len(bandwidth) != self.dimension_:
             raise ValueError("The given bandwidth's size differ with the dimension of distribution")
         self.referenceBandwidth_ = [float(element) for element in bandwidth]
-        # with new bandwidth, the cache should be re-initialized
-        if len(self.referenceBandwidth_) == 1:
-            gridMesherNd = MaxNormMeshGrid.Cube1D(self.referenceBandwidth_, symmetric=True)
-        elif len(self.referenceBandwidth_) == 2:
-            gridMesherNd = MaxNormMeshGrid.SkinCube2D(self.referenceBandwidth_, symmetric=True)
-        elif len(self.referenceBandwidth_) == 3:
-            gridMesherNd = MaxNormMeshGrid.SkinCube3D(self.referenceBandwidth_, symmetric=True)
-        cacheSize = ot.ResourceMap.GetAsUnsignedLong("MultivariateRandomMixture-DefaultCacheSize")
-        if cacheSize > 0:
-            self.setGridMesher(MaxNormMeshGrid.CachedMeshGrid(gridMesherNd, size=cacheSize))
-        else:
-            self.setGridMesher(gridMesherNd)
-
+        # Update the grid mesher
+        self.setGridMesher(self.meshGrid_.clone(self.referenceBandwidth_))
 
 class MultivariateRandomMixture(ot.Distribution):
     """
