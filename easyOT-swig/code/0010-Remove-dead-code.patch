@@ -1,0 +1,28 @@
+From 969169ab1ebb66745ee8c91fe4a9e1d19186c790 Mon Sep 17 00:00:00 2001
+From: Denis Barbier <bouzim@gmail.com>
+Date: Mon, 4 Mar 2013 23:10:03 +0100
+Subject: [PATCH 10/10] Remove dead code
+
+---
+ python/src/GraphImplementation.i |    5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/python/src/GraphImplementation.i b/python/src/GraphImplementation.i
+index 57e1b2a..3b6da4c 100644
+--- a/python/src/GraphImplementation.i
++++ b/python/src/GraphImplementation.i
+@@ -6,11 +6,6 @@
+ #include "GraphImplementation.hxx"
+ %}
+ 
+-%template(DrawableCollection) OT::Collection<OT::Drawable>;
+-
+-%ignore OT::GraphImplementation::addDrawable(const OT::Drawable&);
+-%ignore OT::GraphImplementation::addDrawables(const DrawableCollection&);
+-
+ %include GraphImplementation.hxx
+ 
+ namespace OT{ %extend GraphImplementation { GraphImplementation(const GraphImplementation & other) { return new OT::GraphImplementation(other); } } }
+-- 
+1.7.10.4
+

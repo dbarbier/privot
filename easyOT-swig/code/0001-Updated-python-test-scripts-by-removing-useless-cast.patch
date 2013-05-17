@@ -1,0 +1,124 @@
+From 475c80f6290ab002332a36cc39d9aee52b865f33 Mon Sep 17 00:00:00 2001
+From: Sofiane HADDAD <sofiane_haddad@yahoo.fr>
+Date: Fri, 1 Mar 2013 11:25:22 +0100
+Subject: [PATCH 01/10] Updated python test scripts by removing useless cast
+ to LowDiscrepancySequence and Drawable classes
+
+---
+ python/test/t_FunctionalChaos_gsobol.py            |    2 +-
+ python/test/t_FunctionalChaos_gsobol_sparse.py     |    2 +-
+ python/test/t_FunctionalChaos_ishigami.py          |    2 +-
+ python/test/t_FunctionalChaos_ishigami_database.py |    2 +-
+ python/test/t_FunctionalChaos_ishigami_sparse.py   |    2 +-
+ python/test/t_LAR_std.py                           |    2 +-
+ python/test/t_Pairs_std.py                         |    2 +-
+ python/test/t_Viewer.py                            |    2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/python/test/t_FunctionalChaos_gsobol.py b/python/test/t_FunctionalChaos_gsobol.py
+index 78b5eb7..987eb52 100755
+--- a/python/test/t_FunctionalChaos_gsobol.py
++++ b/python/test/t_FunctionalChaos_gsobol.py
+@@ -71,7 +71,7 @@ try :
+         # LHS sampling
+         listProjectionStrategy.append(LeastSquaresStrategy(LHSExperiment(samplingSize)))
+         # Low Discrepancy sequence
+-        listProjectionStrategy.append(LeastSquaresStrategy(LowDiscrepancyExperiment(LowDiscrepancySequence(SobolSequence()),samplingSize)))
++        listProjectionStrategy.append(LeastSquaresStrategy(LowDiscrepancyExperiment(SobolSequence(),samplingSize)))
+         for projectionStrategyIndex in range(len(listProjectionStrategy)):
+             projectionStrategy = listProjectionStrategy[projectionStrategyIndex]
+             # Create the polynomial chaos algorithm
+diff --git a/python/test/t_FunctionalChaos_gsobol_sparse.py b/python/test/t_FunctionalChaos_gsobol_sparse.py
+index d7d1426..4b1dd42 100755
+--- a/python/test/t_FunctionalChaos_gsobol_sparse.py
++++ b/python/test/t_FunctionalChaos_gsobol_sparse.py
+@@ -65,7 +65,7 @@ try :
+     for fittingAlgorithmIndex in range(len(listFittingAlgorithm)):
+         fittingAlgorithm = listFittingAlgorithm[fittingAlgorithmIndex]
+         adaptiveStrategy = FixedStrategy( productBasis, basisSize )
+-        projectionStrategy = LeastSquaresStrategy( LowDiscrepancyExperiment( LowDiscrepancySequence(SobolSequence(dimension)), samplingSize), LeastSquaresMetaModelSelectionFactory ( LAR(), fittingAlgorithm) );
++        projectionStrategy = LeastSquaresStrategy( LowDiscrepancyExperiment( SobolSequence(dimension), samplingSize), LeastSquaresMetaModelSelectionFactory ( LAR(), fittingAlgorithm) );
+         algo = FunctionalChaosAlgorithm(model, distribution, adaptiveStrategy, projectionStrategy)
+         RandomGenerator.SetSeed(0)
+         algo.run()
+diff --git a/python/test/t_FunctionalChaos_ishigami.py b/python/test/t_FunctionalChaos_ishigami.py
+index f00b5a5..c4a2e40 100755
+--- a/python/test/t_FunctionalChaos_ishigami.py
++++ b/python/test/t_FunctionalChaos_ishigami.py
+@@ -71,7 +71,7 @@ try :
+         # LHS sampling
+         listProjectionStrategy.append(LeastSquaresStrategy(LHSExperiment(samplingSize)))
+         # Low Discrepancy sequence
+-        listProjectionStrategy.append(LeastSquaresStrategy(LowDiscrepancyExperiment(LowDiscrepancySequence(SobolSequence()),samplingSize)))
++        listProjectionStrategy.append(LeastSquaresStrategy(LowDiscrepancyExperiment(SobolSequence(),samplingSize)))
+         for projectionStrategyIndex in range(len(listProjectionStrategy)):
+             projectionStrategy = listProjectionStrategy[projectionStrategyIndex]
+             # Create the polynomial chaos algorithm
+diff --git a/python/test/t_FunctionalChaos_ishigami_database.py b/python/test/t_FunctionalChaos_ishigami_database.py
+index 36845b0..7768ae2 100755
+--- a/python/test/t_FunctionalChaos_ishigami_database.py
++++ b/python/test/t_FunctionalChaos_ishigami_database.py
+@@ -50,7 +50,7 @@ try :
+     samplingSize = 250
+     listProjectionStrategy = list()
+     # Monte Carlo sampling
+-    inputSample = LowDiscrepancyExperiment(LowDiscrepancySequence(SobolSequence()), distribution, samplingSize).generate()
++    inputSample = LowDiscrepancyExperiment(SobolSequence(), distribution, samplingSize).generate()
+     outputSample = model(inputSample)
+     # From here, the model is no more needed
+     listProjectionStrategy.append(LeastSquaresStrategy())
+diff --git a/python/test/t_FunctionalChaos_ishigami_sparse.py b/python/test/t_FunctionalChaos_ishigami_sparse.py
+index 1b78e38..eb75753 100755
+--- a/python/test/t_FunctionalChaos_ishigami_sparse.py
++++ b/python/test/t_FunctionalChaos_ishigami_sparse.py
+@@ -62,7 +62,7 @@ try :
+     for fittingAlgorithmIndex in range(len(listFittingAlgorithm)):
+         fittingAlgorithm = listFittingAlgorithm[fittingAlgorithmIndex]
+         adaptiveStrategy = FixedStrategy( productBasis, basisSize )
+-        projectionStrategy = LeastSquaresStrategy( LowDiscrepancyExperiment( LowDiscrepancySequence(SobolSequence(dimension)), samplingSize), LeastSquaresMetaModelSelectionFactory ( LAR(), fittingAlgorithm) );
++        projectionStrategy = LeastSquaresStrategy( LowDiscrepancyExperiment( SobolSequence(dimension), samplingSize), LeastSquaresMetaModelSelectionFactory ( LAR(), fittingAlgorithm) );
+         algo = FunctionalChaosAlgorithm(model, distribution, adaptiveStrategy, projectionStrategy)
+         RandomGenerator.SetSeed(0)
+         algo.run()
+diff --git a/python/test/t_LAR_std.py b/python/test/t_LAR_std.py
+index dafd27e..5df7054 100755
+--- a/python/test/t_LAR_std.py
++++ b/python/test/t_LAR_std.py
+@@ -47,7 +47,7 @@ try :
+ 
+     # design experiment
+     samplingSize = 75
+-    experiment = Experiment(LowDiscrepancyExperiment(LowDiscrepancySequence(SobolSequence(dimension)), distribution, samplingSize))
++    experiment = Experiment(LowDiscrepancyExperiment(SobolSequence(dimension), distribution, samplingSize))
+ 
+     # iso transfo
+     algo = FunctionalChaosAlgorithm(model, distribution, AdaptiveStrategy(FixedStrategy(productBasis, enumerateFunction.getStrataCumulatedCardinal(1))))
+diff --git a/python/test/t_Pairs_std.py b/python/test/t_Pairs_std.py
+index 567d0b1..cdbce18 100755
+--- a/python/test/t_Pairs_std.py
++++ b/python/test/t_Pairs_std.py
+@@ -28,7 +28,7 @@ try :
+     myPairs = Pairs(sample, "Pairs example", sample.getDescription(), "green", "bullet")
+ 
+     # Then, draw it
+-    myGraph.add(Drawable(myPairs))
++    myGraph.add(myPairs)
+     myGraph.draw("Graph_Pairs_OT")
+ 
+     # Check that the correct files have been generated by computing their checksum
+diff --git a/python/test/t_Viewer.py b/python/test/t_Viewer.py
+index 549a457..ca3c647 100755
+--- a/python/test/t_Viewer.py
++++ b/python/test/t_Viewer.py
+@@ -113,7 +113,7 @@ size = 1000
+ sample = distribution.getSample( size )
+ graph = ot.Graph("Pairs", " ", " ", True, "topright")
+ myPairs = ot.Pairs(sample, "Pairs example", sample.getDescription(), "green", "bullet")
+-graph.add(ot.Drawable(myPairs))
++graph.add(myPairs)
+ #graph.draw('curve9', width, height, ot.GraphImplementation.PNG)
+ view = View(graph)
+ #view.save('curve9.png', dpi=fdpi)
+-- 
+1.7.10.4
+

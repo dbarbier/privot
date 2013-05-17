@@ -1,0 +1,66 @@
+From 1649b0f7e3723b7bdedd3aaffec4faa86ceab214 Mon Sep 17 00:00:00 2001
+From: Denis Barbier <bouzim@gmail.com>
+Date: Mon, 25 Feb 2013 21:05:38 +0100
+Subject: [PATCH 03/10] Add a new macro
+ OTTypedInterfaceObjectImplementationHelper(interface,implementation)
+
+Some classes do not follow the usual pattern by appending
+"Implementation" to interface classes, like
+DistributionImplementationFactory.
+
+Rewrite OTTypedInterfaceObjectHelper to use this macro.
+---
+ python/src/TypedInterfaceObject.i |   19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/python/src/TypedInterfaceObject.i b/python/src/TypedInterfaceObject.i
+index 658ed8d..1172448 100644
+--- a/python/src/TypedInterfaceObject.i
++++ b/python/src/TypedInterfaceObject.i
+@@ -7,32 +7,35 @@
+ %}
+ 
+ 
+-%define OTTypedInterfaceObjectHelper(Interface)
++%define OTTypedInterfaceObjectImplementationHelper(Interface,Implementation)
+ 
+-%template(Interface ## ImplementationTypedInterfaceObject)           OT::TypedInterfaceObject<OT::Interface ## Implementation>;
++%template(Implementation ## TypedInterfaceObject)           OT::TypedInterfaceObject<OT::Implementation>;
+ 
+ %typemap(in) const OT::Interface & {
+   void * ptr = 0;
+   if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0))) {
+     // From interface class, ok
+-  } else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_OT__ ## Interface ## Implementation, 0))) {
++  } else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIGTYPE_p_OT__ ## Implementation, 0))) {
+     // From Implementation*
+-    OT::Interface ## Implementation * p_impl = reinterpret_cast< OT::Interface ## Implementation * >( ptr );
++    OT::Implementation * p_impl = reinterpret_cast< OT::Implementation * >( ptr );
+     $1 = new OT::Interface( *p_impl );
+-  } else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIG_TypeQuery("OT::Pointer<OT::Interface" "Implementation> *"), 0))) {
++  } else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIG_TypeQuery("OT::Pointer<OT::Implementation> *"), 0))) {
+     // From Pointer<Implementation>
+-    OT::Pointer<OT::Interface ## Implementation> * p_impl = reinterpret_cast< OT::Pointer<OT::Interface ## Implementation> * >( ptr );
++    OT::Pointer<OT::Implementation> * p_impl = reinterpret_cast< OT::Pointer<OT::Implementation> * >( ptr );
+     $1 = new OT::Interface( **p_impl );
+   }
+ }
+ 
+ %typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const OT::Interface & {
+   $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
+-    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIGTYPE_p_OT__ ## Interface ## Implementation, 0))
+-    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("OT::Pointer<OT::Interface" "Implementation> *"), 0));
++    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIGTYPE_p_OT__ ## Implementation, 0))
++    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("OT::Pointer<OT::Implementation> *"), 0));
+ }
+ 
+ %enddef
+ 
++%define OTTypedInterfaceObjectHelper(Interface)
++OTTypedInterfaceObjectImplementationHelper(Interface,Interface ## Implementation)
++%enddef
+ 
+ %include TypedInterfaceObject.hxx
+-- 
+1.7.10.4
+

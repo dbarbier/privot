@@ -1,0 +1,372 @@
+From 610d46d4925e42fd83d5db63843636a37b68d108 Mon Sep 17 00:00:00 2001
+From: Denis Barbier <bouzim@gmail.com>
+Date: Wed, 27 Feb 2013 00:56:49 +0100
+Subject: [PATCH 09/10] Automatic conversion from a Python sequence into
+ Collection<foo>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When defining collections with OTTypedCollectionInterfaceObjectHelper,
+struct traitsPythonType must be defined like this:
+  template <> struct traitsPythonType<OT::Interface>
+  {
+    typedef _PyObject_ Type;
+  };
+and the following two functions must be defined:
+
+  template <> inline bool canConvert< _PyObject_, OT::Interface>(PyObject * pyObj)
+  template <> inline OT::Interface convert< _PyObject_, OT::Interface>(PyObject * pyObj)
+
+If Collection<foo> is used in a different module from where it is defined, this
+module will fail to build:
+  error: invalid use of incomplete type ‘struct OT::traitsPythonType<foo>’
+
+These functions must then be written into a separate file.  It had been decided to
+write them into <module>Collection.i, where <module> is named after <module>TemplateDefs.i.
+Then
+  %include <module>Collection.i
+is written into foo.i, and the same line is inserted into xxx_module.i if this module
+needs these functions in order to be compiled.
+---
+ python/src/CalibrationStrategy.i                  |   37 +++------------------
+ python/src/Distribution.i                         |   36 ++------------------
+ python/src/DistributionFactory.i                  |   35 ++-----------------
+ python/src/Drawable.i                             |   36 +++-----------------
+ python/src/OrthogonalProductPolynomialFactory.i   |    4 ---
+ python/src/OrthogonalUniVariatePolynomialFamily.i |   28 ++--------------
+ python/src/UncertaintyModelCopulaCollection.i     |    5 +++
+ python/src/bayesian_module.i                      |    1 +
+ python/src/dist_bundle2_module.i                  |    1 +
+ python/src/stattests_module.i                     |    1 +
+ python/src/transformation_module.i                |    1 +
+ 11 files changed, 26 insertions(+), 159 deletions(-)
+ create mode 100644 python/src/UncertaintyModelCopulaCollection.i
+
+diff --git a/python/src/CalibrationStrategy.i b/python/src/CalibrationStrategy.i
+index 5f0dc05..96eca99 100644
+--- a/python/src/CalibrationStrategy.i
++++ b/python/src/CalibrationStrategy.i
+@@ -4,44 +4,15 @@
+ 
+ %{
+ #include "CalibrationStrategy.hxx"
+-
+-namespace OT { 
+-
+-  template <>
+-  struct traitsPythonType<OT::CalibrationStrategy>
+-  {
+-    typedef _PyObject_ Type;
+-  };
+-
+-
+-  template <>
+-  inline
+-  OT::CalibrationStrategy
+-  convert< _PyObject_, OT::CalibrationStrategy >(PyObject * pyObj)
+-  {
+-    void * ptr = 0;
+-    if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::CalibrationStrategyImplementation *"), 0 |  0 ) ) ) {
+-      OT::CalibrationStrategyImplementation * p_dist = reinterpret_cast< OT::CalibrationStrategyImplementation * >( ptr );
+-      return *p_dist;
+-    }
+-    else if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::CalibrationStrategy *"), 0 |  0 ) ) ) {
+-      OT::CalibrationStrategy * p_dist = reinterpret_cast< OT::CalibrationStrategy * >( ptr );
+-      return *p_dist;
+-    }
+-    else {
+-      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a CalibrationStrategy";  
+-    }
+-    return OT::CalibrationStrategy();
+-  }
+-
+-} /* namespace OT */
+-
+-
+ %}
+ 
++OTDefaultCollectionConvertFunctions(CalibrationStrategy)
++
+ OTTypedInterfaceObjectHelper(CalibrationStrategy)
++OTTypedCollectionInterfaceObjectHelper(CalibrationStrategy)
+ 
+ %include CalibrationStrategy.hxx
++
+ namespace OT {  
+ %extend CalibrationStrategy {
+   const String __str__() const { return self->__repr__(); }
+diff --git a/python/src/Distribution.i b/python/src/Distribution.i
+index 88bc894..440c320 100644
+--- a/python/src/Distribution.i
++++ b/python/src/Distribution.i
+@@ -5,39 +5,6 @@
+ %{
+ #include "Distribution.hxx"
+ #include "PythonDistributionImplementation.hxx"
+-
+-namespace OT { 
+-
+-  template <>
+-  struct traitsPythonType< OT::Distribution >
+-  {
+-    typedef _PyObject_ Type;
+-  };
+-
+-
+-  template <>
+-  inline
+-  OT::Distribution
+-  convert< _PyObject_, OT::Distribution >(PyObject * pyObj)
+-  {
+-    void * ptr = 0;
+-    if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::DistributionImplementation *"), 0 |  0 ) ) ) {
+-      OT::DistributionImplementation * p_dist = reinterpret_cast< OT::DistributionImplementation * >( ptr );
+-      return *p_dist;
+-    }
+-    else if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::Distribution *"), 0 |  0 ) ) ) {
+-      OT::Distribution * p_dist = reinterpret_cast< OT::Distribution * >( ptr );
+-      return *p_dist;
+-    }
+-    else {
+-      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a Distribution";  
+-    }
+-    return OT::Distribution();
+-  }
+-
+-} /* namespace OT */
+-
+-
+ %}
+ 
+ %pythoncode %{
+@@ -122,7 +89,10 @@ class SciPyDistribution(PythonDistribution):
+         return [moment]  
+ %}
+ 
++%include UncertaintyModelCopulaCollection.i
++
+ OTTypedInterfaceObjectHelper(Distribution)
++OTTypedCollectionInterfaceObjectHelper(Distribution)
+ 
+ %include Distribution.hxx
+ //%copyctor Distribution;
+diff --git a/python/src/DistributionFactory.i b/python/src/DistributionFactory.i
+index 9f581f6..6d2f37a 100644
+--- a/python/src/DistributionFactory.i
++++ b/python/src/DistributionFactory.i
+@@ -4,41 +4,12 @@
+ 
+ %{
+ #include "DistributionFactory.hxx"
+-
+-namespace OT { 
+-
+-  template <>
+-  struct traitsPythonType< OT::DistributionFactory >
+-  {
+-    typedef _PyObject_ Type;
+-  };
+-
+-  template <>
+-  inline
+-  OT::DistributionFactory
+-  convert< _PyObject_, OT::DistributionFactory >(PyObject * pyObj)
+-  {
+-    void * ptr = 0;
+-    if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::DistributionImplementationFactory *"), 0 |  0 ) ) ) {
+-      OT::DistributionImplementationFactory * p_distf = reinterpret_cast< OT::DistributionImplementationFactory * >( ptr );
+-      return *p_distf;
+-    }
+-    else if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::DistributionFactory *"), 0 |  0 ) ) ) {
+-      OT::DistributionFactory * p_distf = reinterpret_cast< OT::DistributionFactory * >( ptr );
+-      return *p_distf;
+-    }
+-    else {
+-      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a DistributionFactory";
+-    }
+-    return OT::DistributionFactory();
+-  }
+-
+-
+-} /* namespace OT */
+-
+ %}
+ 
++%include UncertaintyModelCopulaCollection.i
++
+ OTTypedInterfaceObjectImplementationHelper(DistributionFactory, DistributionImplementationFactory)
++OTTypedCollectionInterfaceObjectHelper(DistributionFactory)
+ 
+ %include DistributionFactory.hxx
+ 
+diff --git a/python/src/Drawable.i b/python/src/Drawable.i
+index 3872237..f320abc 100644
+--- a/python/src/Drawable.i
++++ b/python/src/Drawable.i
+@@ -4,43 +4,15 @@
+ 
+ %{
+ #include "Drawable.hxx"
+-
+-namespace OT { 
+-
+-  template <>
+-  struct traitsPythonType< OT::Drawable >
+-  {
+-    typedef _PyObject_ Type;
+-  };
+-
+-  template <>
+-  inline
+-  OT::Drawable
+-  convert< _PyObject_, OT::Drawable >(PyObject * pyObj)
+-  {
+-    void * ptr = 0;
+-    if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::DrawableImplementation *"), 0 |  0 ) ) ) {
+-      OT::DrawableImplementation * p_dist = reinterpret_cast< OT::DrawableImplementation * >( ptr );
+-      return *p_dist;
+-    }
+-    else if ( SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::Drawable *"), 0 |  0 ) ) ) {
+-      OT::Drawable * p_dist = reinterpret_cast< OT::Drawable * >( ptr );
+-      return *p_dist;
+-    }
+-    else {
+-      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a Drawable";  
+-    }
+-    return OT::Drawable();
+-  }
+-
+-
+-} /* namespace OT */
+-
+ %}
+ 
++OTDefaultCollectionConvertFunctions(Drawable)
++
+ OTTypedInterfaceObjectHelper(Drawable)
++OTTypedCollectionInterfaceObjectHelper(Drawable)
+ 
+ %include Drawable.hxx
++
+ namespace OT{  
+ 
+ %extend Drawable {
+diff --git a/python/src/OrthogonalProductPolynomialFactory.i b/python/src/OrthogonalProductPolynomialFactory.i
+index 164f06c..80bf4a1 100644
+--- a/python/src/OrthogonalProductPolynomialFactory.i
++++ b/python/src/OrthogonalProductPolynomialFactory.i
+@@ -6,9 +6,5 @@
+ #include "OrthogonalProductPolynomialFactory.hxx"
+ %}
+ 
+-%template(PolynomialFamilyCollection) OT::Collection<OT::OrthogonalUniVariatePolynomialFamily>;
+-
+-%template(PolynomialFamilyPersistentCollection) OT::PersistentCollection<OT::OrthogonalUniVariatePolynomialFamily>;
+-
+ %include OrthogonalProductPolynomialFactory.hxx
+ namespace OT{ %extend OrthogonalProductPolynomialFactory { OrthogonalProductPolynomialFactory(const OrthogonalProductPolynomialFactory & other) { return new OT::OrthogonalProductPolynomialFactory(other); } } }
+diff --git a/python/src/OrthogonalUniVariatePolynomialFamily.i b/python/src/OrthogonalUniVariatePolynomialFamily.i
+index d62a60b..7518479 100644
+--- a/python/src/OrthogonalUniVariatePolynomialFamily.i
++++ b/python/src/OrthogonalUniVariatePolynomialFamily.i
+@@ -4,34 +4,12 @@
+ 
+ %{
+ #include "OrthogonalUniVariatePolynomialFamily.hxx"
+-
+-namespace OT { 
+-
+-  template <>
+-  struct traitsPythonType<OT::OrthogonalUniVariatePolynomialFamily>
+-  {
+-    typedef _PyObject_ Type;
+-  };
+-
+-
+-  template <>
+-  inline
+-  OT::OrthogonalUniVariatePolynomialFamily
+-  convert<_PyObject_,OT::OrthogonalUniVariatePolynomialFamily>(PyObject * pyObj)
+-  {
+-    void * ptr = 0;
+-    if (! SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::OrthogonalUniVariatePolynomialFactory *"), 0 |  0 )))
+-      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not an object convertible to an OrthogonalUniVariatePolynomialFactory";
+-    OT::OrthogonalUniVariatePolynomialFactory * p_fact = reinterpret_cast< OT::OrthogonalUniVariatePolynomialFactory * >( ptr );
+-    return *p_fact;
+-  }
+-
+-} /* namespace OT */
+-
+-
+ %}
+ 
++OTDefaultCollectionConvertFunctionsMisnamed(OrthogonalUniVariatePolynomialFamily, OrthogonalUniVariatePolynomialFactory)
++
+ OTTypedInterfaceObjectImplementationHelper(OrthogonalUniVariatePolynomialFamily, OrthogonalUniVariatePolynomialFactory)
++OTTypedCollectionInterfaceObjectMisnamedHelper(OrthogonalUniVariatePolynomialFamily, PolynomialFamilyCollection)
+ 
+ %include OrthogonalUniVariatePolynomialFamily.hxx
+ 
+diff --git a/python/src/UncertaintyModelCopulaCollection.i b/python/src/UncertaintyModelCopulaCollection.i
+new file mode 100644
+index 0000000..ca05e86
+--- /dev/null
++++ b/python/src/UncertaintyModelCopulaCollection.i
+@@ -0,0 +1,5 @@
++// SWIG file UncertaintyModelCopulaCollection.i
++
++OTDefaultCollectionConvertFunctions(Distribution)
++OTDefaultCollectionConvertFunctionsMisnamed(DistributionFactory, DistributionImplementationFactory)
++
+diff --git a/python/src/bayesian_module.i b/python/src/bayesian_module.i
+index f064f03..f6cd175 100644
+--- a/python/src/bayesian_module.i
++++ b/python/src/bayesian_module.i
+@@ -24,6 +24,7 @@
+ 
+ /* Uncertainty/Model */
+ /* Uncertainty/Distribution */
++%include UncertaintyModelCopulaCollection.i
+ %import model_copula_module.i
+ %import UncertaintyModelCopulaTemplateDefs.i
+ %import dist_bundle1_module.i
+diff --git a/python/src/dist_bundle2_module.i b/python/src/dist_bundle2_module.i
+index b536034..6e0add5 100644
+--- a/python/src/dist_bundle2_module.i
++++ b/python/src/dist_bundle2_module.i
+@@ -22,6 +22,7 @@
+ %import typ_module.i
+ %include TestResult.i
+ %import base_module.i
++%include UncertaintyModelCopulaCollection.i
+ %import model_copula_module.i
+ 
+ /* Uncertainty/Distribution (except copulas) */
+diff --git a/python/src/stattests_module.i b/python/src/stattests_module.i
+index dd86dd5..a5276de 100644
+--- a/python/src/stattests_module.i
++++ b/python/src/stattests_module.i
+@@ -26,6 +26,7 @@
+ 
+ /* Uncertainty/Model */
+ /* Uncertainty/Distribution */
++%include UncertaintyModelCopulaCollection.i
+ %import model_copula_module.i
+ %import UncertaintyModelCopulaTemplateDefs.i
+ 
+diff --git a/python/src/transformation_module.i b/python/src/transformation_module.i
+index bd8e1d1..77aa232 100644
+--- a/python/src/transformation_module.i
++++ b/python/src/transformation_module.i
+@@ -26,6 +26,7 @@
+ 
+ /* Uncertainty/Model */
+ /* Uncertainty/Distribution */
++%include UncertaintyModelCopulaCollection.i
+ %import model_copula_module.i
+ %import UncertaintyModelCopulaTemplateDefs.i
+ 
+-- 
+1.7.10.4
+

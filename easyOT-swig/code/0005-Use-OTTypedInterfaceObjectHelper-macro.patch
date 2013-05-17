@@ -1,0 +1,27 @@
+From 62b7cee95ee4f11699fb3e83d453e6a62ee68f20 Mon Sep 17 00:00:00 2001
+From: Denis Barbier <bouzim@gmail.com>
+Date: Mon, 4 Mar 2013 23:34:13 +0100
+Subject: [PATCH 05/10] Use OTTypedInterfaceObjectHelper macro
+
+Automatic conversion:
+ * NumericalMathFunctionImplementation --> NumericalMathFunction
+---
+ python/src/NumericalMathFunction.i |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/python/src/NumericalMathFunction.i b/python/src/NumericalMathFunction.i
+index f02cc9f..45e951a 100644
+--- a/python/src/NumericalMathFunction.i
++++ b/python/src/NumericalMathFunction.i
+@@ -29,7 +29,7 @@ namespace OT {
+ 
+ %}
+ 
+-%template(NumericalMathFunctionImplementationTypedInterfaceObject) OT::TypedInterfaceObject<OT::NumericalMathFunctionImplementation>;
++OTTypedInterfaceObjectHelper(NumericalMathFunction)
+ 
+ %include NumericalMathFunction.hxx
+ //%copyctor NumericalMathFunction;
+-- 
+1.7.10.4
+

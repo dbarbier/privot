@@ -1,0 +1,409 @@
+Index: src/UseCasesGuide/script_bayesianRandomVector.py
+===================================================================
+--- src/UseCasesGuide/script_bayesianRandomVector.py	(révision 1718)
++++ src/UseCasesGuide/script_bayesianRandomVector.py	(copie de travail)
+@@ -7,7 +7,7 @@
+ meanDist = Uniform(0,1)
+ sigmaDist = Exponential(4)
+ 
+-thetaDist = ComposedDistribution(DistributionCollection([meanDist,sigmaDist]))
++thetaDist = ComposedDistribution([meanDist,sigmaDist])
+ thetaRV = RandomVector(thetaDist)
+ Y2 = ConditionalRandomVector(Normal(),thetaRV)
+ 
+@@ -20,7 +20,7 @@
+ sampleY2 = Y2.getSample(n)
+ 
+ # Y2 : Normal kernel smoothing
+-distRNY2 = KernelSmoothing(Normal(), True, 1024).build(sampleY2)
++distRNY2 = KernelSmoothing(Normal()).build(sampleY2, True)
+ graph_Y2 = distRNY2.drawPDF()
+ graph_Y2_draw = graph_Y2.getDrawable(0)
+ graph_Y2_draw.setLegendName('bayesian random vector')
+Index: src/UseCasesGuide/script_composedDistribution.py
+===================================================================
+--- src/UseCasesGuide/script_composedDistribution.py	(révision 1718)
++++ src/UseCasesGuide/script_composedDistribution.py	(copie de travail)
+@@ -9,17 +9,17 @@
+ # Create the first marginal : Weibul(mu, sigma, gamma) = Weibull(2.0, 1.0, 0.0)
+ weibDist = Weibull(2.0, 1.0, 0.0, Weibull.MUSIGMA)
+ weibDist.setName("First Marginal : Weibull")
+-aCollection[0] = Distribution(weibDist)
++aCollection[0] = weibDist
+ 
+ # Create the second marginal : Triangular(a,m,b) = Triangular(1.0, 3.0, 5.0)
+ triangularDist = Triangular(1.0, 3.0, 5.0)
+ triangularDist.setName("Second Marginal : Triangular")
+-aCollection[1] = Distribution(triangularDist)
++aCollection[1] = triangularDist
+ 
+ # Create the third marginal : Uniform(a,b) = Uniform(2.0, 4.0)
+ uniformDist = Uniform(2.0, 4.0)
+ uniformDist.setName("Third Marginal : Uniform")
+-aCollection[2] = Distribution(uniformDist)
++aCollection[2] = uniformDist
+ 
+ # Create a copula : Normal copula of dimension 3 fom Spearman rank correlation matrix
+ spearmanMatrix = CorrelationMatrix(3)
+@@ -29,7 +29,7 @@
+ aCopula.setName("Normal copula")
+ 
+ # Instanciate one distribution object
+-myDistribution = ComposedDistribution(aCollection, Copula(aCopula))
++myDistribution = ComposedDistribution(aCollection, aCopula)
+ 
+ # Give a Description to the Distribution
+ aDescription = Description(3)
+@@ -45,7 +45,7 @@
+ pointMax = NumericalPoint(2)
+ pointMax[0] = 5.0
+ pointMax[1] = 4.0
+-pointNumber = NumericalPoint(2)
++pointNumber = Indices(2)
+ pointNumber[0] = 101
+ pointNumber[1] = 101
+ 
+Index: src/UseCasesGuide/script_CopulaEstimation.py
+===================================================================
+--- src/UseCasesGuide/script_CopulaEstimation.py	(révision 1718)
++++ src/UseCasesGuide/script_CopulaEstimation.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ 
+ 
+ # Creation of the 2d distributino
+-myDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), Copula(ClaytonCopula(2.5)))
++myDist = ComposedDistribution([Normal(), Normal()], ClaytonCopula(2.5))
+ 
+ # Creation of a sample
+ initSample = myDist.getSample(500)
+@@ -18,7 +18,7 @@
+ graphInit.draw('initSample', 800, 600, GraphImplementation.PDF)
+ 
+ # Creation of the operator which transforms the marginals into the uniform ones
+-ranksTransf = MarginalTransformationEvaluation(DistributionCollection([Normal(), Normal()]), MarginalTransformationEvaluation.FROM)
++ranksTransf = MarginalTransformationEvaluation([Normal(), Normal()], MarginalTransformationEvaluation.FROM)
+ 
+ 
+ # Transformation of the initial sample into the ranked sample
+Index: src/UseCasesGuide/script_distribution_manipulation.py
+===================================================================
+--- src/UseCasesGuide/script_distribution_manipulation.py	(révision 1718)
++++ src/UseCasesGuide/script_distribution_manipulation.py	(copie de travail)
+@@ -14,9 +14,9 @@
+   mean[1] = R * sin(theta)
+   dist = Normal(2)
+   dist.setMean(mean)
+-  coll[i] = Distribution(dist)
++  coll[i] = dist
+ 
+-coll[n] = Distribution(Normal(NumericalPoint(2, 0.0), NumericalPoint(2, 1.2), CorrelationMatrix(2)))
++coll[n] = Normal(NumericalPoint(2, 0.0), NumericalPoint(2, 1.2), CorrelationMatrix(2))
+ 
+ distribution = Mixture(coll)
+ 
+@@ -33,25 +33,25 @@
+ coll = DistributionCollection(2)
+ 
+ collMarginal = DistributionCollection(3)
+-collMarginal[0] = Distribution(Normal(-5,1))
+-collMarginal[1] = Distribution(Normal(0,2))
+-collMarginal[2] = Distribution(Normal(6,1))
++collMarginal[0] = Normal(-5,1)
++collMarginal[1] = Normal(0,2)
++collMarginal[2] = Normal(6,1)
+ dist = Mixture(collMarginal)
+ dist.setName("Marginal 1 :  mixture of normals")
+ 
+-coll[0] = Distribution(dist)
++coll[0] = dist
+ 
+-collMarginal[0] = Distribution(Normal(-5,1))
+-collMarginal[1] = Distribution(Normal(0,1.2))
+-collMarginal[2] = Distribution(Normal(5,1.5))
++collMarginal[0] = Normal(-5,1)
++collMarginal[1] = Normal(0,1.2)
++collMarginal[2] = Normal(5,1.5)
+ dist = Mixture(collMarginal)
+ dist.setName("Marginal 2 :  mixture of normals")
+ 
+-coll[1] = Distribution(dist)
++coll[1] = dist
+ 
+ copula = GumbelCopula(3.5)
+ #copula = IndependentCopula(2)
+-distribution = ComposedDistribution(coll, Copula(copula))
++distribution = ComposedDistribution(coll, copula)
+ 
+ xMin = [-10.0, -10.0]
+ xMax = [10.0, 10.0]
+Index: src/UseCasesGuide/script_FORM.py
+===================================================================
+--- src/UseCasesGuide/script_FORM.py	(révision 1718)
++++ src/UseCasesGuide/script_FORM.py	(copie de travail)
+@@ -12,13 +12,13 @@
+ distributionI = Beta(2.5,4.0,3.1e2,4.5e2)
+ 
+ collectionMarginales = DistributionCollection(4)
+-collectionMarginales[0] = Distribution(distributionE)
+-collectionMarginales[1] = Distribution(distributionF)
+-collectionMarginales[2] = Distribution(distributionL)
+-collectionMarginales[3] = Distribution(distributionI)
++collectionMarginales[0] = distributionE
++collectionMarginales[1] = distributionF
++collectionMarginales[2] = distributionL
++collectionMarginales[3] = distributionI
+ 
+ 
+-inputDistribution = ComposedDistribution(collectionMarginales, Copula(IndependentCopula(4)))
++inputDistribution = ComposedDistribution(collectionMarginales, IndependentCopula(4))
+ 
+ inputDesc = Description(4)
+ inputDesc[0] = "E"
+Index: src/UseCasesGuide/script_kernelMixture.py
+===================================================================
+--- src/UseCasesGuide/script_kernelMixture.py	(révision 1718)
++++ src/UseCasesGuide/script_kernelMixture.py	(copie de travail)
+@@ -8,9 +8,9 @@
+ norm = Normal(-1.0, 1.0)
+ unif = Uniform(2.0, 3.0)
+ aCollection = DistributionCollection(3)
+-aCollection[0] = Distribution(triang)
+-aCollection[1] = Distribution(norm)
+-aCollection[2] = Distribution(unif)
++aCollection[0] = triang
++aCollection[1] = norm
++aCollection[2] = unif
+ aCollection[0].setWeight(0.20)
+ aCollection[1].setWeight(0.50)
+ aCollection[2].setWeight(0.30)
+Index: src/UseCasesGuide/script_kernelSmoothing2.py
+===================================================================
+--- src/UseCasesGuide/script_kernelSmoothing2.py	(révision 1718)
++++ src/UseCasesGuide/script_kernelSmoothing2.py	(copie de travail)
+@@ -8,9 +8,9 @@
+ norm = Normal(-1.0, 1.0)
+ norm2 = Normal(3.0, 1.0)
+ aCollection = DistributionCollection(3)
+-aCollection[0] = Distribution(triang)
+-aCollection[1] = Distribution(norm)
+-aCollection[2] = Distribution(norm2)
++aCollection[0] = triang
++aCollection[1] = norm
++aCollection[2] = norm2
+ aCollection[0].setWeight(0.20)
+ aCollection[1].setWeight(0.50)
+ aCollection[2].setWeight(0.30)
+Index: src/UseCasesGuide/script_kernelSmoothing.py
+===================================================================
+--- src/UseCasesGuide/script_kernelSmoothing.py	(révision 1718)
++++ src/UseCasesGuide/script_kernelSmoothing.py	(copie de travail)
+@@ -8,9 +8,9 @@
+ norm = Normal(-1.0, 1.0)
+ norm2 = Normal(3.0, 1.0)
+ aCollection = DistributionCollection(3)
+-aCollection[0] = Distribution(triang)
+-aCollection[1] = Distribution(norm)
+-aCollection[2] = Distribution(norm2)
++aCollection[0] = triang
++aCollection[1] = norm
++aCollection[2] = norm2
+ aCollection[0].setWeight(0.20)
+ aCollection[1].setWeight(0.50)
+ aCollection[2].setWeight(0.30)
+@@ -69,7 +69,7 @@
+ 
+ # Triangular kernel smoothing
+ 
+-kernel = KernelSmoothing(Distribution(Triangular()))
++kernel = KernelSmoothing(Triangular())
+ triangularSmoothed = kernel.build(sample)
+ 
+ triangularSmoothedPDF = triangularSmoothed.drawPDF(-4,8,251)
+@@ -87,7 +87,7 @@
+ 
+ # Epanechnikov kernel smoothing
+ 
+-kernel = KernelSmoothing(Distribution(Epanechnikov()))
++kernel = KernelSmoothing(Epanechnikov())
+ epanechnikovSmoothed = kernel.build(sample)
+ 
+ epanechnikovSmoothedPDF = epanechnikovSmoothed.drawPDF(-4,8,251)
+Index: src/UseCasesGuide/script_mixture.py
+===================================================================
+--- src/UseCasesGuide/script_mixture.py	(révision 1718)
++++ src/UseCasesGuide/script_mixture.py	(copie de travail)
+@@ -8,9 +8,9 @@
+ norm = Normal(-1.0, 1.0)
+ unif = Uniform(5.0,6.0)
+ aCollection = DistributionCollection(3)
+-aCollection[0] = Distribution(triang)
+-aCollection[1] = Distribution(norm)
+-aCollection[2] = Distribution(unif)
++aCollection[0] = triang
++aCollection[1] = norm
++aCollection[2] = unif
+ aCollection[0].setWeight(0.20)
+ aCollection[1].setWeight(0.50)
+ aCollection[2].setWeight(0.30)
+Index: src/UseCasesGuide/script_MonteCarloProcess.py
+===================================================================
+--- src/UseCasesGuide/script_MonteCarloProcess.py	(révision 1718)
++++ src/UseCasesGuide/script_MonteCarloProcess.py	(copie de travail)
+@@ -12,13 +12,13 @@
+ # Create a collection of distribution
+ # The collection is composed of standard gaussian
+ myDistribution = Normal()
+-myCollection = DistributionCollection(dimension, myDistribution)
++myCollection = [myDistribution, myDistribution]
+ 
+ # Finally get the composed distribution
+ myComposedDistribution = ComposedDistribution(myCollection)
+ 
+ # The white noise is ready
+-myWhiteNoise = WhiteNoise(Distribution(myComposedDistribution), myTimeGrid)
++myWhiteNoise = WhiteNoise(myComposedDistribution, myTimeGrid)
+ myProcess = Process(myWhiteNoise)
+ 
+ # Definition of the domain
+Index: src/UseCasesGuide/script_PolynomialChaosExpansion.py
+===================================================================
+--- src/UseCasesGuide/script_PolynomialChaosExpansion.py	(révision 1718)
++++ src/UseCasesGuide/script_PolynomialChaosExpansion.py	(copie de travail)
+@@ -33,17 +33,17 @@
+ distributionI = Beta(2.5,4.0,3.1e2,4.5e2)
+ 
+ collectionMarginales = DistributionCollection(4)
+-collectionMarginales[0] = Distribution(distributionE)
+-collectionMarginales[1] = Distribution(distributionF)
+-collectionMarginales[2] = Distribution(distributionL)
+-collectionMarginales[3] = Distribution(distributionI)
++collectionMarginales[0] = distributionE
++collectionMarginales[1] = distributionF
++collectionMarginales[2] = distributionL
++collectionMarginales[3] = distributionI
+ 
+ copule = IndependentCopula(4)
+ 
+-inputDistribution = ComposedDistribution(collectionMarginales, Copula(copule))
++inputDistribution = ComposedDistribution(collectionMarginales, copule)
+ 
+ # Create the input random vecrtor (E,F,L,I)
+-inputRandomVector = RandomVector(Distribution(inputDistribution))
++inputRandomVector = RandomVector(inputDistribution)
+ 
+ # Cretae the ouput variable of interest
+ outputVariable = RandomVector(modelePoutre, inputRandomVector)
+@@ -62,22 +62,22 @@
+ alphaJ = 1.3
+ betaJ = -0.1
+ jacobiFamily = JacobiFactory(alphaJ, betaJ)
+-polyColl[0] = OrthogonalUniVariatePolynomialFamily(jacobiFamily)
++polyColl[0] = jacobiFamily
+ 
+ # Laguerre(k) <=> Gamma(k+1,1,0) (parametrage ppal)
+ kLaguerre = 1.78
+ laguerreFamily = LaguerreFactory(kLaguerre)
+-polyColl[1] = OrthogonalUniVariatePolynomialFamily(laguerreFamily)
++polyColl[1] = laguerreFamily
+ 
+ # Legendre <=> Unif(-1,1)
+ legendreFamily = LegendreFactory()
+-polyColl[2] = OrthogonalUniVariatePolynomialFamily(legendreFamily)
++polyColl[2] = legendreFamily
+ 
+ # Jacobi(alpha, beta) <=> Beta(\beta + 1, \alpha + \beta + 2, -1, 1)
+ alphaJ2 = 0.5
+ betaJ2 = 1.5
+ jacobiFamily2 = JacobiFactory(alphaJ2, betaJ2)
+-polyColl[3] = OrthogonalUniVariatePolynomialFamily(jacobiFamily2)
++polyColl[3] = jacobiFamily2
+ 
+ 
+ # Create the multivariate orthonormal basis
+@@ -100,13 +100,13 @@
+ # all the polynoms af degree <=2
+ # which corresponds to the 15 first ones
+ p = 50
+-truncatureBasisStrategy = FixedStrategy(OrthogonalBasis(multivariateBasis), p)
++truncatureBasisStrategy = FixedStrategy(multivariateBasis, p)
+ 
+ # SequentialStrategy :
+ ### among the maximumCardinalBasis = 100 first polynoms
+ ### of the multivariate basis those verfying the convergence criterion,
+ ##maximumCardinalBasis = 100
+-##truncatureBasisStrategy = SequentialStrategy(OrthogonalBasis(multivariateBasis), maximumCardinalBasis)
++##truncatureBasisStrategy = SequentialStrategy(multivariateBasis, maximumCardinalBasis)
+ 
+ 
+ # CleaningStrategy :
+@@ -119,7 +119,7 @@
+ maximumConsideredTerms = 500
+ mostSignificant = p
+ significanceFactor = 1.0e-4
+-truncatureBasisStrategy = CleaningStrategy(OrthogonalBasis(multivariateBasis), maximumConsideredTerms, mostSignificant, significanceFactor, True)
++truncatureBasisStrategy = CleaningStrategy(multivariateBasis, maximumConsideredTerms, mostSignificant, significanceFactor, True)
+ 
+ 
+ ################################################################
+@@ -138,7 +138,7 @@
+ # the distribution of the input random vector : Xdistribution
+ # the truncature strategy of the multivariate basis
+ # and the evaluation strategy of the coefficients
+-polynomialChaosAlgorithm = FunctionalChaosAlgorithm(modelePoutre, Distribution(inputDistribution), AdaptiveStrategy(truncatureBasisStrategy), ProjectionStrategy(evaluationCoeffStrategy))
++polynomialChaosAlgorithm = FunctionalChaosAlgorithm(modelePoutre, inputDistribution, truncatureBasisStrategy, evaluationCoeffStrategy)
+ 
+ #########################################################
+ # Run and results exploitation
+Index: src/UseCasesGuide/script_QQPlot.py
+===================================================================
+--- src/UseCasesGuide/script_QQPlot.py	(révision 1718)
++++ src/UseCasesGuide/script_QQPlot.py	(copie de travail)
+@@ -11,12 +11,12 @@
+ betaPDF.draw("BetaPDFajeter")
+ #View(betaPDF).show()
+ 
+-sampleQQplot = VisualTest.DrawQQplot(sample,Distribution(beta),100)
++sampleQQplot = VisualTest.DrawQQplot(sample, beta,100)
+ sampleQQplot.draw("beta_QQplot")
+ #View(sampleQQplot).show()
+ 
+ weibull = Weibull(1.5, 1.0, 1.0)
+-sampleFalseQQplot = VisualTest.DrawQQplot(sample,Distribution(weibull),100)
++sampleFalseQQplot = VisualTest.DrawQQplot(sample, weibull,100)
+ sampleFalseQQplot.draw("weibull_QQplot")
+ #View(sampleFalseQQplot).show()
+ 
+Index: src/UseCasesGuide/script_quadraticCumul.py
+===================================================================
+--- src/UseCasesGuide/script_quadraticCumul.py	(révision 1718)
++++ src/UseCasesGuide/script_quadraticCumul.py	(copie de travail)
+@@ -12,10 +12,10 @@
+ distributionI = Beta(2.5,4.0,3.1e2,4.5e2)
+ 
+ collectionMarginales = DistributionCollection(4)
+-collectionMarginales[0] = Distribution(distributionE)
+-collectionMarginales[1] = Distribution(distributionF)
+-collectionMarginales[2] = Distribution(distributionL)
+-collectionMarginales[3] = Distribution(distributionI)
++collectionMarginales[0] = distributionE
++collectionMarginales[1] = distributionF
++collectionMarginales[2] = distributionL
++collectionMarginales[3] = distributionI
+ 
+ # The independent copula is assumed if no copula is given
+ inputDistribution = ComposedDistribution(collectionMarginales)
+Index: src/UseCasesGuide/script_RandomMixture.py
+===================================================================
+--- src/UseCasesGuide/script_RandomMixture.py	(révision 1718)
++++ src/UseCasesGuide/script_RandomMixture.py	(copie de travail)
+@@ -11,8 +11,8 @@
+ 
+ # Put them in a DistributionCollection
+ distribList = DistributionCollection(2)
+-distribList[0] = Distribution(X1)
+-distribList[1] = Distribution(X2)
++distribList[0] = X1
++distribList[1] = X2
+ 
+ 
+ # Create the constant coefficient a0

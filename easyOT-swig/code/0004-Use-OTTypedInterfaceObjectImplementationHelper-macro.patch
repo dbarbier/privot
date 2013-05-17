@@ -1,0 +1,58 @@
+From 03a8385cc5190bb1feba5a435d85d718ce0781b7 Mon Sep 17 00:00:00 2001
+From: Denis Barbier <bouzim@gmail.com>
+Date: Mon, 25 Feb 2013 21:08:35 +0100
+Subject: [PATCH 04/10] Use OTTypedInterfaceObjectImplementationHelper macro
+
+Automatic conversion:
+ * OrthogonalUniVariatePolynomialFactory --> OrthogonalUniVariatePolynomialFamily
+ * DistributionImplementationFactory --> DistributionFactory
+ * OrthogonalFunctionFactory --> OrthogonalBasis
+---
+ python/src/DistributionFactory.i                  |    3 ++-
+ python/src/OrthogonalBasis.i                      |    2 +-
+ python/src/OrthogonalUniVariatePolynomialFamily.i |    2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/python/src/DistributionFactory.i b/python/src/DistributionFactory.i
+index 34d0242..9f581f6 100644
+--- a/python/src/DistributionFactory.i
++++ b/python/src/DistributionFactory.i
+@@ -38,7 +38,8 @@ namespace OT {
+ 
+ %}
+ 
+-%template(DistributionImplementationFactoryTypedInterfaceObject)           OT::TypedInterfaceObject<OT::DistributionImplementationFactory>;
++OTTypedInterfaceObjectImplementationHelper(DistributionFactory, DistributionImplementationFactory)
++
+ %include DistributionFactory.hxx
+ 
+ namespace OT {  
+diff --git a/python/src/OrthogonalBasis.i b/python/src/OrthogonalBasis.i
+index 688a61d..a9be36e 100644
+--- a/python/src/OrthogonalBasis.i
++++ b/python/src/OrthogonalBasis.i
+@@ -6,7 +6,7 @@
+ #include "OrthogonalBasis.hxx"
+ %}
+ 
+-%template(OrthogonalFunctionFactoryTypedInterfaceObject)           OT::TypedInterfaceObject<OT::OrthogonalFunctionFactory>;
++OTTypedInterfaceObjectImplementationHelper(OrthogonalBasis, OrthogonalFunctionFactory)
+ 
+ %include OrthogonalBasis.hxx
+ 
+diff --git a/python/src/OrthogonalUniVariatePolynomialFamily.i b/python/src/OrthogonalUniVariatePolynomialFamily.i
+index 143a33f..d62a60b 100644
+--- a/python/src/OrthogonalUniVariatePolynomialFamily.i
++++ b/python/src/OrthogonalUniVariatePolynomialFamily.i
+@@ -31,7 +31,7 @@ namespace OT {
+ 
+ %}
+ 
+-%template(OrthogonalUniVariatePolynomialFactoryTypedInterfaceObject)           OT::TypedInterfaceObject<OT::OrthogonalUniVariatePolynomialFactory>;
++OTTypedInterfaceObjectImplementationHelper(OrthogonalUniVariatePolynomialFamily, OrthogonalUniVariatePolynomialFactory)
+ 
+ %include OrthogonalUniVariatePolynomialFamily.hxx
+ 
+-- 
+1.7.10.4
+

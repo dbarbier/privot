@@ -1,0 +1,592 @@
+Index: src/UseCasesGuide/Scripts/script_docUC_StocProc_FunctionalBasisProcess.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_StocProc_FunctionalBasisProcess.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_StocProc_FunctionalBasisProcess.py	(copie de travail)
+@@ -2,7 +2,7 @@
+ 
+ # Create the N distribution of the random coefficients
+ # For example N=2 : two coefficients
+-coefDist = ComposedDistribution(DistributionCollection([Exponential(0.2), Normal()]), ClaytonCopula(0.2))
++coefDist = ComposedDistribution([Exponential(0.2), Normal()], ClaytonCopula(0.2))
+ 
+ # Create a basis function
+ # for example phi : R --> R^3
+Index: src/UseCasesGuide/Scripts/script_docUC_InputNoData_Mixture.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_InputNoData_Mixture.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_InputNoData_Mixture.py	(copie de travail)
+@@ -17,7 +17,7 @@
+ unif.setWeight(30)
+ 
+ # Create a collection of distribution
+-aCollection = DistributionCollection( (triang, norm, unif) )
++aCollection = (triang, norm, unif)
+ 
+ # Instanciate one distribution object
+ myMixture = Mixture(aCollection)
+Index: src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_SimulationAlgoExploitation.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_SimulationAlgoExploitation.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_SimulationAlgoExploitation.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1+2*x2"])
+ 
+ # Create the input distribution and random vector X
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1', 'X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_SimulationAlgo.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_SimulationAlgo.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_SimulationAlgo.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1+2*x2"])
+ 
+ # Create the input distribution and random vector X
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1', 'X2'])
+ 
+ inputVector = RandomVector(inputDist)
+@@ -30,7 +30,7 @@
+ 
+ # Create a Importance Sampling  algorithm
+ # from the distribution myImportanceDistribution
+-myImportanceDist = Distribution(Normal(NumericalPoint([4,0]), IdentityMatrix(2)))
++myImportanceDist = Normal(NumericalPoint([4,0]), IdentityMatrix(2))
+ myISAlgo = ImportanceSampling(myEvent, myImportanceDist)
+ 
+ # Create a Quasi Monte Carlo algorithm
+Index: src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_TaylorVarDecomposition.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_TaylorVarDecomposition.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_TaylorVarDecomposition.py	(copie de travail)
+@@ -3,7 +3,7 @@
+ # Create the model (x1,x2) --> (y1,y2) = x1^2 + x2^2
+ model = NumericalMathFunction(["x1", "x2"], ["y1"], ["x1^2+x2^2"])
+ 
+-inputDist = ComposedDistribution(DistributionCollection([Normal(1., 0.5), Normal(1.0, 0.5)]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(1., 0.5), Normal(1.0, 0.5)], IndependentCopula(2))
+ inputDist.setDescription(['X1','X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_InputWithData_CopulaKendallPlotTest.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_InputWithData_CopulaKendallPlotTest.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_InputWithData_CopulaKendallPlotTest.py	(copie de travail)
+@@ -2,13 +2,13 @@
+ 
+ # Create a bidimensionnal sample
+ # For example :
+-dist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), GumbelCopula(3))
++dist = ComposedDistribution([Normal(), Normal()], GumbelCopula(3))
+ N = 500
+ sample1 = dist.getSample(N)
+ sample1.setName('sample1')
+ 
+ # Create another distribution and sample
+-dist2 = ComposedDistribution(DistributionCollection([Normal(), Normal()]), ClaytonCopula(0.2))
++dist2 = ComposedDistribution([Normal(), Normal()], ClaytonCopula(0.2))
+ N = 500
+ sample2 = dist2.getSample(N)
+ sample2.setName('sample2')
+Index: src/UseCasesGuide/Scripts/script_docUC_InputNoData_DistManipulation.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_InputNoData_DistManipulation.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_InputNoData_DistManipulation.py	(copie de travail)
+@@ -5,14 +5,14 @@
+ dist_1.setName("dist1")
+                       
+ # Distribution of dimension 2
+-dist_2 = ComposedDistribution(DistributionCollection([Normal(), Triangular(0.0, 2.0, 3.0)]), ClaytonCopula(2.3))
++dist_2 = ComposedDistribution([Normal(), Triangular(0.0, 2.0, 3.0)], ClaytonCopula(2.3))
+ dist_2.setName("dist2")
+ 
+ # Distribution of dimension 3
+ # create a copula of dimension 3
+ # from the Student distribution of distribution 3
+ copula_dim3 = Student(5.0,3).getCopula()
+-dist_3 = ComposedDistribution(DistributionCollection([Normal(), Triangular(0.0, 2.0, 3.0), Exponential(0.2)]), Copula(copula_dim3))
++dist_3 = ComposedDistribution([Normal(), Triangular(0.0, 2.0, 3.0), Exponential(0.2)], Copula(copula_dim3))
+ dist_3.setName("dist3")
+ 
+ # BEGIN_TEX
+Index: src/UseCasesGuide/Scripts/script_docUC_InputBayesian.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_InputBayesian.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_InputBayesian.py	(copie de travail)
+@@ -2,13 +2,13 @@
+ 
+ # Case 1 : the distribution of theta is explicitely known
+ # The distribution of the Theta : dimension 2
+-myThetaDist = ComposedDistribution(DistributionCollection([Normal(), Exponential(0.2)]), IndependentCopula(2))
++myThetaDist = ComposedDistribution([Normal(), Exponential(0.2)], IndependentCopula(2))
+ 
+ # Case 2 : the random vector Theta is the result of f(X)
+ # Create the model Y = (x1 + 2*x2)
+ model = NumericalMathFunction(["x1", "x2"], ["y1"], ["x1+2*x2"])
+ # Create the input distribution and random vector X
+-inputDistX = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDistX = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDistX.setDescription(['X1','X2'])
+ # create the X random vector
+ inputXRV = RandomVector(inputDistX)
+Index: src/UseCasesGuide/Scripts/script_docUC_InputWithData_ChoiceFittedDistributions.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_InputWithData_ChoiceFittedDistributions.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_InputWithData_ChoiceFittedDistributions.py	(copie de travail)
+@@ -25,7 +25,7 @@
+ 
+ # Create a collection of factories for all the models
+ # to be tested
+-collContFact = DistributionFactoryCollection( [BetaFactory(), TriangularFactory()] )
++collContFact = [BetaFactory(), TriangularFactory()]
+ 
+ # Rank the continuous models by the Kolmogorov p-values :
+ bestContModelKol = FittingTest.BestModelKolmogorov(sample_cont, collContFact)
+@@ -50,7 +50,7 @@
+ # Then Open TURNS tests the model
+ 
+ # Create a collection of the distributions to be tested
+-collContDist = DistributionCollection( [Beta(2.0, 4.0, 0.0, 1.), Triangular(0., 0.5, 1.)] )
++collContDist = [Beta(2.0, 4.0, 0.0, 1.), Triangular(0., 0.5, 1.)]
+ 
+ # Rank the continuous models by the Kolmogorov p-values :
+ bestcontDistKol = FittingTest.BestModelKolmogorov(sample_cont, collContDist)
+@@ -80,7 +80,7 @@
+ 
+ # Create a collection of factories for all the models
+ # to be tested (here no idea for another discrete distributions ...)
+-collDiscFact = DistributionFactoryCollection( [PoissonFactory()])
++collDiscFact = [PoissonFactory()]
+ 
+ # Rank the discrete models wrt the ChiSquared p-values :
+ bestDiscModelChiSq = FittingTest.BestModelChiSquared(sample_disc, collDiscFact)
+@@ -102,7 +102,7 @@
+ # Then Open TURNS only tests the distributions
+ 
+ # Create a collection of the distributions to be tested
+-collDiscDist = DistributionCollection( [Poisson(2), Geometric(0.1)])
++collDiscDist = [Poisson(2), Geometric(0.1)]
+ 
+ # Rank the discrete distributions wrt the ChiSquared p-values :
+ bestDiscDistChiSq= FittingTest.BestModelChiSquared(sample_disc, collDiscDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_FORMandImportanceSampling.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_FORMandImportanceSampling.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_FORMandImportanceSampling.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1^2+2*x2"])
+ 
+ # Create the input distribution and random vector X
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1','X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_SobolIndices.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_SobolIndices.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_SobolIndices.py	(copie de travail)
+@@ -3,7 +3,7 @@
+ # Create the model (x1,x2) --> (y1,y2) = (x1^2 + x2, x2^2+x1)
+ model = NumericalMathFunction(["x1", "x2"], ["y1", "y2"], ["x1^2+x2", "x2^2+x1"])
+ 
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1','X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_InputWithData_KernelSmoothing.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_InputWithData_KernelSmoothing.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_InputWithData_KernelSmoothing.py	(copie de travail)
+@@ -2,7 +2,7 @@
+ 
+ # Generate a sample
+ # here a scalar one
+-dist = Mixture(DistributionCollection([Normal(2.,1.), Normal(5., 1.)]))
++dist = Mixture([Normal(2.,1.), Normal(5., 1.)])
+ dist.setName('real dist')
+ sample = dist.getSample(1000)
+ sample.setName('My sample')
+Index: src/UseCasesGuide/Scripts/script_docUC_InputNoData_ComposedDistribution.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_InputNoData_ComposedDistribution.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_InputNoData_ComposedDistribution.py	(copie de travail)
+@@ -15,7 +15,7 @@
+ 
+ # Create a collection of distribution of dimension 3
+ # using List python
+-aCollection = DistributionCollection([weibDist, triangularDist, uniformDist])
++aCollection = [weibDist, triangularDist, uniformDist]
+ 
+ #############################
+ # CASE 1 : independent copula
+Index: src/UseCasesGuide/Scripts/script_docUC_InputWithData_EmpiricalDrawing.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_InputWithData_EmpiricalDrawing.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_InputWithData_EmpiricalDrawing.py	(copie de travail)
+@@ -7,7 +7,7 @@
+ 
+ # Create a bidimensionnal sample
+ # For example  :
+-dist2D = ComposedDistribution(DistributionCollection([Normal(), Normal()]), GumbelCopula(3))
++dist2D = ComposedDistribution([Normal(), Normal()], GumbelCopula(3))
+ dist2D.setDescription(['Marg1', 'Marg2'])
+ sample2 = dist2D.getSample(N)
+ sample2.setName('sample 2')
+Index: src/UseCasesGuide/Scripts/script_docUC_RespSurface_PolyChaosExpansion.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_RespSurface_PolyChaosExpansion.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_RespSurface_PolyChaosExpansion.py	(copie de travail)
+@@ -6,7 +6,7 @@
+ 
+ # Create a distribution of dimension n
+ # for example n=3 with indpendent components
+-Xdist = ComposedDistribution(DistributionCollection([Normal(), Uniform(), Gamma(2.75, 1.0), Beta(2.5, 3.5, -1.0, 2.0)]))
++Xdist = ComposedDistribution([Normal(), Uniform(), Gamma(2.75, 1.0), Beta(2.5, 3.5, -1.0, 2.0)])
+ 
+ # BEGIN_TEX
+ #############################################################
+@@ -20,14 +20,14 @@
+ # which regroups the polynomial families for each direction
+ polyColl = PolynomialFamilyCollection(dim)
+ # For information, with the Krawtchouk and Charlier families : 
+-polyColl[0] = OrthogonalUniVariatePolynomialFamily(KrawtchoukFactory())
+-polyColl[1] = OrthogonalUniVariatePolynomialFamily(CharlierFactory())
++polyColl[0] = KrawtchoukFactory()
++polyColl[1] = CharlierFactory()
+ # We overload these factories as they are dedicated to discrete distributions
+-polyColl[0] = OrthogonalUniVariatePolynomialFamily(HermiteFactory())
+-polyColl[1] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+-polyColl[2] = OrthogonalUniVariatePolynomialFamily(LaguerreFactory(2.75))
++polyColl[0] = HermiteFactory()
++polyColl[1] = LegendreFactory()
++polyColl[2] = LaguerreFactory(2.75)
+ # Parameter for the Jacobi factory : 'Probabilty' encoded with 1
+-polyColl[3] = OrthogonalUniVariatePolynomialFamily(JacobiFactory(2.5, 3.5, 1))
++polyColl[3] = JacobiFactory(2.5, 3.5, 1)
+ 
+ # Create the enumeration function
+ # LinearEnumerateFunction
+@@ -69,13 +69,13 @@
+ # all the polynomials af degree <=2
+ # which corresponds to the 15 first ones
+ p = 15
+-truncatureBasisStrategy = FixedStrategy(OrthogonalBasis(multivariateBasis), p)
++truncatureBasisStrategy = FixedStrategy(multivariateBasis, p)
+ 
+ # SequentialStrategy :
+ # among the maximumCardinalBasis = 100 first polynomials
+ # of the multivariate basis those verfying the convergence criterion,
+ maximumCardinalBasis = 100
+-truncatureBasisStrategy_1 = SequentialStrategy(OrthogonalBasis(multivariateBasis), maximumCardinalBasis)
++truncatureBasisStrategy_1 = SequentialStrategy(multivariateBasis, maximumCardinalBasis)
+ 
+ # CleaningStrategy : 
+ # among the maximumConsideredTerms = 500 first polynomials,
+@@ -87,7 +87,7 @@
+ maximumConsideredTerms = 500
+ mostSignificant = 50
+ significanceFactor = 1.0e-4
+-truncatureBasisStrategy_2 = CleaningStrategy(OrthogonalBasis(multivariateBasis), maximumConsideredTerms, mostSignificant, significanceFactor, True)
++truncatureBasisStrategy_2 = CleaningStrategy(multivariateBasis, maximumConsideredTerms, mostSignificant, significanceFactor, True)
+ 
+ ################################################################
+ # STEP 3 : Evaluation strategy of the approximation coefficients
+@@ -116,5 +116,5 @@
+ # the distribution of the input random vector : Xdist
+ # the truncature strategy of the multivariate basis
+ # and the evaluation strategy of the coefficients
+-polynomialChaosAlgorithm = FunctionalChaosAlgorithm(myModel, Distribution(Xdist), AdaptiveStrategy(truncatureBasisStrategy), ProjectionStrategy(evaluationCoeffStrategy))
++polynomialChaosAlgorithm = FunctionalChaosAlgorithm(myModel, Xdist, AdaptiveStrategy(truncatureBasisStrategy), ProjectionStrategy(evaluationCoeffStrategy))
+ # END_TEX
+Index: src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_FORMAlgorithm.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_FORMAlgorithm.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_FORMAlgorithm.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1+2*x2"])
+ 
+ # Create the input distribution and random vector X
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1','X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_SimulationAlgoParametrization.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_SimulationAlgoParametrization.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_SimulationAlgoParametrization.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1+2*x2"])
+ 
+ # Create the input distribution and random vector X
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1', 'X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_DirectionalSampling.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_DirectionalSampling.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_DirectionalSampling.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1+2*x2"])
+ 
+ # Create the input distribution and random vector X
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1','X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_CorrelationAnalysis.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_CorrelationAnalysis.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_CorrelationAnalysis.py	(copie de travail)
+@@ -3,7 +3,7 @@
+ # Create the model Y = x1^2 + x2
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1^2+x2"])
+ 
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1','X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_RespSurface_PolyChaosDrawings2.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_RespSurface_PolyChaosDrawings2.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_RespSurface_PolyChaosDrawings2.py	(copie de travail)
+@@ -7,7 +7,7 @@
+ 
+ # Create a distribution of dimension n
+ # for example n=3 with indpendent components
+-Xdist = ComposedDistribution(DistributionCollection([Normal(), Uniform(), Gamma(2.75, 1.0), Beta(2.5, 3.5, -1.0, 2.0)]))
++Xdist = ComposedDistribution([Normal(), Uniform(), Gamma(2.75, 1.0), Beta(2.5, 3.5, -1.0, 2.0)])
+ 
+ #############################################################
+ # STEP 1 : Construction of the multivariate orthonormal basis
+@@ -19,15 +19,15 @@
+ # Create the univariate polynomial family collection
+ polyColl = PolynomialFamilyCollection(dim)
+ # For information, with the Krawtchouk and Charlier families : 
+-polyColl[0] = OrthogonalUniVariatePolynomialFamily(KrawtchoukFactory())
+-polyColl[1] = OrthogonalUniVariatePolynomialFamily(CharlierFactory())
++polyColl[0] = KrawtchoukFactory()
++polyColl[1] = CharlierFactory()
+ # which regroups the polynomial families for each direction
+ polyColl = PolynomialFamilyCollection(dim)
+-polyColl[0] = OrthogonalUniVariatePolynomialFamily(HermiteFactory())
+-polyColl[1] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+-polyColl[2] = OrthogonalUniVariatePolynomialFamily(LaguerreFactory(2.75, 1))
++polyColl[0] = HermiteFactory()
++polyColl[1] = LegendreFactory()
++polyColl[2] = LaguerreFactory(2.75, 1)
+ # Parameter for the Jacobi factory : 'Probabilty' encoded with 1
+-polyColl[3] = OrthogonalUniVariatePolynomialFamily(JacobiFactory(2.5, 3.5, 1))
++polyColl[3] = JacobiFactory(2.5, 3.5, 1)
+ 
+ 
+ 
+@@ -51,7 +51,7 @@
+ # all the polynomials af degree <=2
+ # which corresponds to the 15 first ones
+ p = 15
+-truncatureBasisStrategy = FixedStrategy(OrthogonalBasis(multivariateBasis), p)
++truncatureBasisStrategy = FixedStrategy(multivariateBasis, p)
+ 
+ 
+ ################################################################
+Index: src/UseCasesGuide/Scripts/script_docUC_InputWithData_CopulaEstimation.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_InputWithData_CopulaEstimation.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_InputWithData_CopulaEstimation.py	(copie de travail)
+@@ -2,7 +2,7 @@
+ 
+ # Create a bidimensionnal sample
+ # For example  :
+-dist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), GumbelCopula(3))
++dist = ComposedDistribution([Normal(), Normal()], GumbelCopula(3))
+ N = 500
+ sample = dist.getSample(N)
+ 
+@@ -38,7 +38,7 @@
+ 
+ # Creation of the operator which transforms the marginals into the uniform ones
+ # We suppose here that the marginal distributions are both Normal(0,1)
+-ranksTransf = MarginalTransformationEvaluation(DistributionCollection([Normal(), Normal()]), MarginalTransformationEvaluation.FROM)
++ranksTransf = MarginalTransformationEvaluation([Normal(), Normal()], MarginalTransformationEvaluation.FROM)
+ 
+ # Transformation of the initial sample into the ranked sample
+ rankSample = NumericalSample(sample.getSize(), sample.getDimension())
+Index: src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_StrongMaxTest.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_StrongMaxTest.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_StrongMaxTest.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1+2*x2"])
+ 
+ # Create the input distribution and random vector X
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1', 'X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_RespSurface_PolyChaosExploitation.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_RespSurface_PolyChaosExploitation.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_RespSurface_PolyChaosExploitation.py	(copie de travail)
+@@ -7,7 +7,7 @@
+ 
+ # Create a distribution of dimension n
+ # for example n=3 with indpendent components
+-Xdist = ComposedDistribution(DistributionCollection([Normal(), Uniform(), Gamma(2.75, 1.0), Beta(2.5, 3.5, -1.0, 2.0)]))
++Xdist = ComposedDistribution([Normal(), Uniform(), Gamma(2.75, 1.0), Beta(2.5, 3.5, -1.0, 2.0)])
+ 
+ #############################################################
+ # STEP 1 : Construction of the multivariate orthonormal basis
+@@ -19,15 +19,15 @@
+ # Create the univariate polynomial family collection
+ polyColl = PolynomialFamilyCollection(dim)
+ # For information, with the Krawtchouk and Charlier families : 
+-polyColl[0] = OrthogonalUniVariatePolynomialFamily(KrawtchoukFactory())
+-polyColl[1] = OrthogonalUniVariatePolynomialFamily(CharlierFactory())
++polyColl[0] = KrawtchoukFactory()
++polyColl[1] = CharlierFactory()
+ # which regroups the polynomial families for each direction
+ polyColl = PolynomialFamilyCollection(dim)
+-polyColl[0] = OrthogonalUniVariatePolynomialFamily(HermiteFactory())
+-polyColl[1] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+-polyColl[2] = OrthogonalUniVariatePolynomialFamily(LaguerreFactory(2.75, 1))
++polyColl[0] = HermiteFactory()
++polyColl[1] = LegendreFactory()
++polyColl[2] = LaguerreFactory(2.75, 1)
+ # Parameter for the Jacobi factory : 'Probabilty' encoded with 1
+-polyColl[3] = OrthogonalUniVariatePolynomialFamily(JacobiFactory(2.5, 3.5, 1))
++polyColl[3] = JacobiFactory(2.5, 3.5, 1)
+ 
+ 
+ 
+@@ -51,7 +51,7 @@
+ # all the polynomials af degree <=2
+ # which corresponds to the 15 first ones
+ p = 15
+-truncatureBasisStrategy = FixedStrategy(OrthogonalBasis(multivariateBasis), p)
++truncatureBasisStrategy = FixedStrategy(multivariateBasis, p)
+ 
+ 
+ ################################################################
+Index: src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_MomentsEvaluation.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_MomentsEvaluation.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_CentralUncertainty_MomentsEvaluation.py	(copie de travail)
+@@ -3,7 +3,7 @@
+ # Create the model (x1,x2) --> (y1,y2) = (x1^2 + x2, x2^2+x1)
+ model = NumericalMathFunction(["x1", "x2"], ["y1", "y2"], ["x1^2+x2", "x2^2+x1"])
+ 
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1','X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_OVI_RandomMixture.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_OVI_RandomMixture.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_OVI_RandomMixture.py	(copie de travail)
+@@ -9,7 +9,7 @@
+ X2 = Normal(4,1)
+ 
+ # Put them in a DistributionCollection
+-distribList = DistributionCollection( [X1, X2] )
++distribList = [X1, X2]
+ 
+ # Create the numerical of the distribution weights
+ # coefficients a1, a2
+Index: src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_FORMExploitation.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_FORMExploitation.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_FORMExploitation.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1+2*x2"])
+ 
+ # Create the input distribution and random vector X
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1','X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_InputWithData_FittingTests.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_InputWithData_FittingTests.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_InputWithData_FittingTests.py	(copie de travail)
+@@ -21,7 +21,7 @@
+ print "Estimated Beta distribution=", estimatedBeta
+ 
+ # Validate the Beta fitted distribution with the Kolmogorov Test
+-resultKolmogorov =  FittingTest.Kolmogorov(sample_cont, Distribution(estimatedBeta), 0.95)
++resultKolmogorov =  FittingTest.Kolmogorov(sample_cont, estimatedBeta, 0.95)
+ 
+ # Print result of the Kolmogorov Test
+ print "Test Succes ? ", (resultKolmogorov.getBinaryQualityMeasure()==1)
+@@ -35,7 +35,7 @@
+ # Validate the Beta fitting with a visual test : QQ-plot test
+ # Generate the Graph structure for the QQ-plot graph
+ # number of points of the graph fixed to 100 (20 by default)
+-sampleBetaQQPlot = VisualTest.DrawQQplot(sample_cont, Distribution(estimatedBeta))
++sampleBetaQQPlot = VisualTest.DrawQQplot(sample_cont, estimatedBeta)
+ 
+ # To visualize the graph
+ # View(sampleBetaQQPlot).show()
+@@ -54,5 +54,5 @@
+ print "Estimated Geometric distribution=", estimatedGeom
+ 
+ # Validate the Geometric fitted distribution with the Chi-squared Test
+-resultChiSquared =  FittingTest.ChiSquared(sample_disc, Distribution(estimatedGeom), 0.95)
++resultChiSquared =  FittingTest.ChiSquared(sample_disc, estimatedGeom, 0.95)
+ # END_TEX
+Index: src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_Event.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_Event.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_Event.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1+2*x2"])
+ 
+ # Create the input distribution and random vector X
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1','X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_StandardEventManipulation.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_StandardEventManipulation.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_ThresholdExceedance_StandardEventManipulation.py	(copie de travail)
+@@ -4,7 +4,7 @@
+ model = NumericalMathFunction(["x1", "x2"], ["y"], ["x1+2*x2"])
+ 
+ # Create the input distribution and random vector X
+-inputDist = ComposedDistribution(DistributionCollection([Normal(), Normal()]), IndependentCopula(2))
++inputDist = ComposedDistribution([Normal(), Normal()], IndependentCopula(2))
+ inputDist.setDescription(['X1', 'X2'])
+ 
+ inputVector = RandomVector(inputDist)
+Index: src/UseCasesGuide/Scripts/script_docUC_StocProc_RandomWalk.py
+===================================================================
+--- src/UseCasesGuide/Scripts/script_docUC_StocProc_RandomWalk.py	(révision 1718)
++++ src/UseCasesGuide/Scripts/script_docUC_StocProc_RandomWalk.py	(copie de travail)
+@@ -8,10 +8,10 @@
+ 
+ # Create the distribution of the random walk
+ # Here dimension 2
+-myDist = ComposedDistribution(DistributionCollection([Normal(), Exponential(0.2)]), ClaytonCopula(0.5))
++myDist = ComposedDistribution([Normal(), Exponential(0.2)], ClaytonCopula(0.5))
+ 
+ # Create a second possible distribution
+-newDist = ComposedDistribution(DistributionCollection([Normal(), Exponential(0.2)]), ClaytonCopula(0.3))
++newDist = ComposedDistribution([Normal(), Exponential(0.2)], ClaytonCopula(0.3))
+ 
+ 
+ # Create the origin point

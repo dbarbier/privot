@@ -1,0 +1,208 @@
+From 679f0374f208ea30dc8aebe266050633033b468d Mon Sep 17 00:00:00 2001
+From: Denis Barbier <bouzim@gmail.com>
+Date: Mon, 4 Mar 2013 21:30:51 +0100
+Subject: [PATCH 08/10] New macros to convert Python sequences into
+ Collection<foo>
+
+The macro
+  OTTypedCollectionInterfaceObjectHelper(Interface)
+is expanded into:
+  %template(Interface ## Collection)   OT::Collection<OT::Interface>;
+  %typemap(in) const Interface ## Collection & {
+    if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0))) {
+      // From interface class, ok
+    } else {
+      $1 = OT::buildCollectionFromPySequence< OT::Interface >( $input );
+    }
+  }
+  %typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const Interface ## Collection & {
+    $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
+      || OT::canConvertCollectionObjectFromPySequence< OT::Interface >( $input );
+  }
+  %apply const Interface ## Collection & { const OT::Collection<OT::Interface> & };
+
+This means that a function which has an argument
+  const OT::Collection<OT::Interface> &
+will first checker whether this argument can be converted from
+its current type into this one.
+Next it will check whether this is a Python sequence, and in this case
+whether list elements can be converted into the right type.
+
+The macro
+  OTTypedCollectionInterfaceObjectMisnamedHelper(Interface,CollectionType)
+is used when Collection type does not follow this naming pattern.
+
+When defining collections with any of these macros, struct traitsPythonType
+must be defined like this:
+  template <> struct traitsPythonType<OT::Interface>
+  {
+    typedef _PyObject_ Type;
+  };
+and the following two functions must be defined:
+
+  template <> inline bool canConvert< _PyObject_, OT::Interface>(PyObject * pyObj)
+  template <> inline OT::Interface convert< _PyObject_, OT::Interface>(PyObject * pyObj)
+
+The macros
+  OTDefaultCollectionConvertFunctions(Interface)
+  OTDefaultCollectionConvertFunctionsMisnamed(Interface,Implementation)
+are provided in order to define these functions in the general case.
+If class does not follow the usual interface/implementation pattern, these
+functions must be written by hand, see for instance Copula.i
+---
+ python/src/PythonWrappingFunctions.hxx      |   35 +++++++++++
+ python/src/TypedCollectionInterfaceObject.i |   85 +++++++++++++++++++++++++++
+ 2 files changed, 120 insertions(+)
+
+diff --git a/python/src/PythonWrappingFunctions.hxx b/python/src/PythonWrappingFunctions.hxx
+index 1a6fc47..d029aef 100644
+--- a/python/src/PythonWrappingFunctions.hxx
++++ b/python/src/PythonWrappingFunctions.hxx
+@@ -37,6 +37,7 @@ template <class PYTHON_Type>                 static inline int          isAPytho
+ template <class PYTHON_Type>                 static inline const char * namePython();
+ template <class PYTHON_Type, class CPP_Type> static inline CPP_Type     convert(PyObject * pyObj);
+ template <class CPP_Type, class PYTHON_Type> static inline PyObject *   convert(CPP_Type);
++template <class PYTHON_Type, class CPP_Type> static inline bool         canConvert(PyObject * pyObj);
+ template <class PYTHON_Type>                 static inline void         check(PyObject * pyObj);
+ template <class PYTHON_Type, class CPP_Type> static inline CPP_Type     checkAndConvert(PyObject * pyObj);
+ template <class T>                           static inline T *          buildObjectFromPySequence(PyObject * pyObj);
+@@ -417,6 +418,40 @@ checkAndConvert(PyObject * pyObj)
+ 
+ template <class T>
+ static inline
++bool
++canConvertCollectionObjectFromPySequence(PyObject * pyObj)
++{
++  try
++    {
++      check<_PySequence_>( pyObj );
++    }
++  catch( InvalidArgumentException & ex )
++    {
++      return false;
++    }
++
++  PyObject * newPyObj = PySequence_Fast( pyObj, "" );
++
++  const UnsignedLong size = PySequence_Fast_GET_SIZE( newPyObj );
++  for(UnsignedLong i = 0; i < size; ++i)
++    {
++      PyObject * elt = PySequence_Fast_GET_ITEM( newPyObj, i );
++      if (!canConvert< typename traitsPythonType< T >::Type, T >( elt ))
++        {
++          Py_XDECREF( newPyObj );
++          return false;
++        }
++    }
++
++  Py_XDECREF( newPyObj );
++  return true;
++}
++
++
++
++
++template <class T>
++static inline
+ Collection<T> *
+ buildCollectionFromPySequence(PyObject * pyObj, int sz = 0)
+ {
+diff --git a/python/src/TypedCollectionInterfaceObject.i b/python/src/TypedCollectionInterfaceObject.i
+index d93df03..ab880ba 100644
+--- a/python/src/TypedCollectionInterfaceObject.i
++++ b/python/src/TypedCollectionInterfaceObject.i
+@@ -6,6 +6,91 @@
+ #include "TypedCollectionInterfaceObject.hxx"
+ %}
+ 
++%define OTTypedCollectionInterfaceObjectMisnamedHelper(Interface,CollectionType)
++
++%template(CollectionType)           OT::Collection<OT::Interface>;
++
++%typemap(in) const CollectionType & {
++  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0))) {
++    // From interface class, ok
++  } else {
++    $1 = OT::buildCollectionFromPySequence< OT::Interface >( $input );
++  }
++}
++
++%typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const CollectionType & {
++  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
++    || OT::canConvertCollectionObjectFromPySequence< OT::Interface >( $input );
++}
++
++%apply const CollectionType & { const OT::Collection<OT::Interface> & };
++
++%enddef
++
++%define OTTypedCollectionInterfaceObjectHelper(Interface)
++OTTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Collection)
++%enddef
++
++
++%define OTDefaultCollectionConvertFunctionsMisnamed(Interface,Implementation)
++%{
++namespace OT {
++  template <>
++  struct traitsPythonType<OT::Interface>
++  {
++    typedef _PyObject_ Type;
++  };
++
++  template <>
++  inline
++  bool
++  canConvert< _PyObject_, OT::Interface >(PyObject * pyObj)
++  {
++    void * ptr = 0;
++    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIGTYPE_p_OT__ ## Interface, 0 ))) {
++      OT::Interface * p_it = reinterpret_cast< OT::Interface * >( ptr );
++      return p_it != NULL;
++    } else if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIGTYPE_p_OT__ ## Implementation, 0 ))) {
++      OT::Implementation * p_impl = reinterpret_cast< OT::Implementation * >( ptr );
++      return p_impl != NULL;
++    } else if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::Pointer<OT::Implementation> *"), 0))) {
++      OT::Pointer<OT::Implementation> * p_impl = reinterpret_cast< OT::Pointer<OT::Implementation> * >( ptr );
++      return p_impl != NULL && !p_impl->isNull();
++    }
++    return false;
++  }
++
++  template <>
++  inline
++  OT::Interface
++  convert< _PyObject_, OT::Interface >(PyObject * pyObj)
++  {
++    void * ptr = 0;
++    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIGTYPE_p_OT__ ## Interface, 0 ))) {
++      OT::Interface * p_it = reinterpret_cast< OT::Interface * >( ptr );
++      return *p_it;
++    } else if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIGTYPE_p_OT__ ## Implementation, 0 ))) {
++      OT::Implementation * p_impl = reinterpret_cast< OT::Implementation * >( ptr );
++      return *p_impl;
++    } else if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::Pointer<OT::Implementation> *"), 0))) {
++      OT::Pointer<OT::Implementation> * p_impl = reinterpret_cast< OT::Pointer<OT::Implementation> * >( ptr );
++      return **p_impl;
++    }
++    else {
++      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a Interface";
++    }
++    return OT::Interface();
++  }
++
++} /* namespace OT */
++%}
++%enddef
++
++%define OTDefaultCollectionConvertFunctions(Interface)
++OTDefaultCollectionConvertFunctionsMisnamed(Interface,Interface ## Implementation)
++%enddef
++
++
+ %include TypedCollectionInterfaceObject.hxx
+ 
+ namespace OT {  
+-- 
+1.7.10.4
+

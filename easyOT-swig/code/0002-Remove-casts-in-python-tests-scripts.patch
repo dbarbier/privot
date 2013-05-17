@@ -1,0 +1,434 @@
+From 20e5e51b26b23779b42e31ffa141ca62f3bd3741 Mon Sep 17 00:00:00 2001
+From: Denis Barbier <bouzim@gmail.com>
+Date: Mon, 25 Feb 2013 22:26:34 +0100
+Subject: [PATCH 02/10] Remove casts in python/tests/ scripts
+
+---
+ python/test/t_ARMA_std.py                          |   12 ++++--------
+ python/test/t_ChebychevAlgorithm_std.py            |    2 +-
+ python/test/t_ComposedCopula_std.py                |    7 ++-----
+ python/test/t_ComposedDistribution_large.py        |    4 ++--
+ python/test/t_ComposedDistribution_std.py          |   10 +++++-----
+ python/test/t_CorrelationAnalysis_std.py           |    4 ++--
+ python/test/t_DiracFactory_std.py                  |    2 +-
+ python/test/t_FittingTest_std.py                   |    6 +++---
+ python/test/t_FunctionalChaos_gsobol.py            |    4 ++--
+ python/test/t_FunctionalChaos_gsobol_sparse.py     |    4 ++--
+ python/test/t_FunctionalChaos_ishigami.py          |    8 ++++----
+ python/test/t_FunctionalChaos_ishigami_database.py |    8 ++++----
+ python/test/t_FunctionalChaos_ishigami_sparse.py   |    6 +++---
+ python/test/t_FunctionalChaos_nd.py                |    4 ++--
+ python/test/t_GaussProductExperiment_std.py        |    2 +-
+ python/test/t_GramSchmidtAlgorithm_std.py          |    2 +-
+ python/test/t_LAR_std.py                           |    6 +++---
+ python/test/t_OrthogonalBasis_std.py               |    6 +++---
+ python/test/t_PosteriorRandomVector_std.py         |    2 +-
+ python/test/t_RandomWalkMetropolisHastings_std.py  |    2 +-
+ python/test/t_RandomWalk_std.py                    |    2 +-
+ python/test/t_SklarCopula_std.py                   |    2 +-
+ python/test/t_WhiteNoise_std.py                    |    2 +-
+ 23 files changed, 50 insertions(+), 57 deletions(-)
+
+diff --git a/python/test/t_ARMA_std.py b/python/test/t_ARMA_std.py
+index cebf392..8da96e1 100755
+--- a/python/test/t_ARMA_std.py
++++ b/python/test/t_ARMA_std.py
+@@ -52,15 +52,11 @@ try :
+     timeGrid = RegularGrid(Tmin, deltaT, steps)
+ 
+     # Distributions for the  choice
+-    dist1 = Distribution(Normal(0.0, 0.01))
+-    dist2 = Distribution(Normal(0.0, 0.02))
++    dist1 = Normal(0.0, 0.01)
++    dist2 = Normal(0.0, 0.02)
+ 
+-    # Create a collection of distribution
+-    aCollection = DistributionCollection()
+-    aCollection.add( dist1 )
+-    aCollection.add( dist2 )
+-
+-    dist  = Distribution(ComposedDistribution(aCollection))
++    # Create a composed distribution
++    dist  = ComposedDistribution([dist1, dist2])
+     print  "dist = " ,  dist
+ 
+     epsilon = WhiteNoise(dist)
+diff --git a/python/test/t_ChebychevAlgorithm_std.py b/python/test/t_ChebychevAlgorithm_std.py
+index 0f5d2a8..91941c3 100755
+--- a/python/test/t_ChebychevAlgorithm_std.py
++++ b/python/test/t_ChebychevAlgorithm_std.py
+@@ -12,7 +12,7 @@ try :
+     print "algo=", repr(algo)
+     for i in range(iMax):
+         print distribution.getClassName() + " polynomial(", i, ")=", algo.getRecurrenceCoefficients(i)
+-    algo.setReferenceFamily(OrthogonalUniVariatePolynomialFamily(HermiteFactory()))
++    algo.setReferenceFamily(HermiteFactory())
+     print "algo=", repr(algo)
+     for i in range(iMax):
+         print distribution.getClassName() + " polynomial(", i, ")=", algo.getRecurrenceCoefficients(i)
+diff --git a/python/test/t_ComposedCopula_std.py b/python/test/t_ComposedCopula_std.py
+index dc384f3..20a8d73 100755
+--- a/python/test/t_ComposedCopula_std.py
++++ b/python/test/t_ComposedCopula_std.py
+@@ -10,11 +10,8 @@ try :
+     R = CorrelationMatrix(3)
+     R[0, 1] = 0.5
+     R[0, 2] = 0.25
+-    collection = CopulaCollection(3)
+-    collection[0] = FrankCopula(3.0)
+-    collection[1] = NormalCopula(R)
+-    collection[2] = ClaytonCopula(2.0)
+-    copula = ComposedCopula(collection)
++    copula = ComposedCopula([FrankCopula(3.0), NormalCopula(R), ClaytonCopula(2.0)])
++
+     print "Copula ", repr(copula)
+     print "Copula ", copula
+ 
+diff --git a/python/test/t_ComposedDistribution_large.py b/python/test/t_ComposedDistribution_large.py
+index 01d2e39..c7f0b38 100755
+--- a/python/test/t_ComposedDistribution_large.py
++++ b/python/test/t_ComposedDistribution_large.py
+@@ -17,9 +17,9 @@ try :
+ # Create a collection of distribution
+     dimension = 2000
+     print "Creating a composed distribution of dimension ", dimension
+-    aCollection = DistributionCollection(dimension, Normal(meanPoint, sigma, R))
++    aCollection = []
+     for i in range(dimension) :
+-        aCollection[i] = Normal(meanPoint, sigma, R)
++        aCollection.append(Normal(meanPoint, sigma, R))
+ 
+ # Create a a copula
+     aCopula = IndependentCopula(dimension)
+diff --git a/python/test/t_ComposedDistribution_std.py b/python/test/t_ComposedDistribution_std.py
+index 4d82ee3..8e44824 100755
+--- a/python/test/t_ComposedDistribution_std.py
++++ b/python/test/t_ComposedDistribution_std.py
+@@ -17,7 +17,7 @@ try :
+     sigma[2] = 4.0
+ 
+     # Create a collection of distribution attente TUI
+-    aCollection = DistributionCollection(3)
++    aCollection = []
+     try:
+         aCollection[10] = Normal()
+     except:
+@@ -29,23 +29,23 @@ try :
+     component[0] = "One"
+     marginal.setDescription(component)
+     # Fill the first marginal of aCollection
+-    aCollection[0] = Distribution(marginal, "First")
++    aCollection.append(Distribution(marginal, "First"))
+     # Create a second marginal : distribution 1D
+     marginal = Normal(mean[1], sigma[1])
+     marginal.setName("Second")
+     component[0] = "Two"
+     marginal.setDescription(component)
+     # Fill the second marginal of aCollection
+-    aCollection[1] = Distribution(marginal, "Second")
++    aCollection.append(Distribution(marginal, "Second"))
+     # Create a third marginal : distribution 1D
+     marginal = Normal(mean[2], sigma[2])
+     marginal.setName("Third")
+     component[0] = "Three"
+     marginal.setDescription(component)
+     # Fill the third marginal of aCollection
+-    aCollection[2] = Distribution(marginal, "Third")
++    aCollection.append(Distribution(marginal, "Third"))
+     # Create a copula : IndependentCopula
+-    dim = aCollection.getSize()
++    dim = len(aCollection)
+     aCopula = IndependentCopula(dim)
+     aCopula.setName("Independent copula")
+     print "Copula = ", repr(aCopula)
+diff --git a/python/test/t_CorrelationAnalysis_std.py b/python/test/t_CorrelationAnalysis_std.py
+index fad1a36..eef810b 100755
+--- a/python/test/t_CorrelationAnalysis_std.py
++++ b/python/test/t_CorrelationAnalysis_std.py
+@@ -23,10 +23,10 @@ try :
+     # we create a collection of uniform distributions over [-Pi Pi[
+     aCollection = DistributionCollection()
+     for i in range(dimension):
+-        aCollection.add(Distribution(Normal()))
++        aCollection.add(Normal())
+ 
+     # we create one distribution object
+-    aDistribution = ComposedDistribution(aCollection, Copula(IndependentCopula(dimension)))
++    aDistribution = ComposedDistribution(aCollection, IndependentCopula(dimension))
+ 
+     randomVector = RandomVector(aDistribution)
+     composite = RandomVector(analytical, randomVector)
+diff --git a/python/test/t_DiracFactory_std.py b/python/test/t_DiracFactory_std.py
+index e8049f1..2a56982 100755
+--- a/python/test/t_DiracFactory_std.py
++++ b/python/test/t_DiracFactory_std.py
+@@ -12,7 +12,7 @@ try :
+     factory = DiracFactory()
+     covariance = CovarianceMatrix()
+     # Distribution estimatedDistribution(factory.build(sample, covariance))
+-    estimatedDistribution = Distribution(factory.build(sample))
++    estimatedDistribution = factory.build(sample)
+     print "Distribution          =", distribution
+     print "Estimated distribution=", estimatedDistribution
+     # print "Covariance=", covariance
+diff --git a/python/test/t_FittingTest_std.py b/python/test/t_FittingTest_std.py
+index a62e736..854f4eb 100755
+--- a/python/test/t_FittingTest_std.py
++++ b/python/test/t_FittingTest_std.py
+@@ -104,9 +104,9 @@ try :
+         sampleCollection[continuousDistributionNumber + i] = discreteSampleCollection[i]
+ 
+     factoryCollection = DistributionFactoryCollection(3)
+-    factoryCollection[0] = DistributionFactory(UniformFactory())
+-    factoryCollection[1] = DistributionFactory(BetaFactory())
+-    factoryCollection[2] = DistributionFactory(NormalFactory())
++    factoryCollection[0] = UniformFactory()
++    factoryCollection[1] = BetaFactory()
++    factoryCollection[2] = NormalFactory()
+     aSample = Uniform(-1.5, 2.5).getSample(size)
+     print "best model BIC=", repr(FittingTest().BestModelBIC(aSample, factoryCollection))
+     print "best model Kolmogorov=", repr(FittingTest().BestModelKolmogorov(aSample, factoryCollection))
+diff --git a/python/test/t_FunctionalChaos_gsobol.py b/python/test/t_FunctionalChaos_gsobol.py
+index 987eb52..a2d81ee 100755
+--- a/python/test/t_FunctionalChaos_gsobol.py
++++ b/python/test/t_FunctionalChaos_gsobol.py
+@@ -43,9 +43,9 @@ try :
+     # Create the orthogonal basis
+     polynomialCollection = PolynomialFamilyCollection(dimension)
+     for i in range(dimension):
+-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
++        polynomialCollection[i] = LegendreFactory()
+     enumerateFunction = EnumerateFunction(dimension)
+-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, EnumerateFunction(enumerateFunction)))
++    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, EnumerateFunction(enumerateFunction))
+ 
+     # Create the adaptive strategy
+     # We can choose amongst several strategies
+diff --git a/python/test/t_FunctionalChaos_gsobol_sparse.py b/python/test/t_FunctionalChaos_gsobol_sparse.py
+index 4b1dd42..83c9760 100755
+--- a/python/test/t_FunctionalChaos_gsobol_sparse.py
++++ b/python/test/t_FunctionalChaos_gsobol_sparse.py
+@@ -46,10 +46,10 @@ try :
+     # Create the orthogonal basis
+     polynomialCollection = PolynomialFamilyCollection(dimension)
+     for i in range(dimension):
+-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
++        polynomialCollection[i] = LegendreFactory()
+     q = 0.4
+     enumerateFunction = HyperbolicAnisotropicEnumerateFunction(dimension, q)
+-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
++    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
+ 
+ 
+     # design experiment
+diff --git a/python/test/t_FunctionalChaos_ishigami.py b/python/test/t_FunctionalChaos_ishigami.py
+index c4a2e40..cede926 100755
+--- a/python/test/t_FunctionalChaos_ishigami.py
++++ b/python/test/t_FunctionalChaos_ishigami.py
+@@ -40,11 +40,11 @@ try :
+ 
+     # Create the orthogonal basis
+     polynomialCollection = PolynomialFamilyCollection(dimension)
+-    polynomialCollection[0] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+-    polynomialCollection[1] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+-    polynomialCollection[2] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
++    polynomialCollection[0] = LegendreFactory()
++    polynomialCollection[1] = LegendreFactory()
++    polynomialCollection[2] = LegendreFactory()
+     enumerateFunction = EnumerateFunction(dimension)
+-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
++    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
+ 
+     # Create the adaptive strategy
+     # We can choose amongst several strategies
+diff --git a/python/test/t_FunctionalChaos_ishigami_database.py b/python/test/t_FunctionalChaos_ishigami_database.py
+index 7768ae2..e330a56 100755
+--- a/python/test/t_FunctionalChaos_ishigami_database.py
++++ b/python/test/t_FunctionalChaos_ishigami_database.py
+@@ -40,11 +40,11 @@ try :
+ 
+     # Create the orthogonal basis
+     polynomialCollection = PolynomialFamilyCollection(dimension)
+-    polynomialCollection[0] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+-    polynomialCollection[1] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+-    polynomialCollection[2] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
++    polynomialCollection[0] = LegendreFactory()
++    polynomialCollection[1] = LegendreFactory()
++    polynomialCollection[2] = LegendreFactory()
+     enumerateFunction = EnumerateFunction(dimension)
+-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
++    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
+ 
+     # Create the projection strategy
+     samplingSize = 250
+diff --git a/python/test/t_FunctionalChaos_ishigami_sparse.py b/python/test/t_FunctionalChaos_ishigami_sparse.py
+index eb75753..751e67f 100755
+--- a/python/test/t_FunctionalChaos_ishigami_sparse.py
++++ b/python/test/t_FunctionalChaos_ishigami_sparse.py
+@@ -36,14 +36,14 @@ try :
+     marginalX = DistributionCollection(dimension)
+     for i in range(dimension):
+         marginalX[i] = Uniform(-pi, pi)
+-    distribution = Distribution(ComposedDistribution(marginalX))
++    distribution = ComposedDistribution(marginalX)
+ 
+     # Create the orthogonal basis
+     polynomialCollection = PolynomialFamilyCollection(dimension)
+     for i in range(dimension):
+-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
++        polynomialCollection[i] = LegendreFactory()
+     enumerateFunction = LinearEnumerateFunction(dimension)
+-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
++    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
+ 
+     # design experiment
+     samplingSize = 75
+diff --git a/python/test/t_FunctionalChaos_nd.py b/python/test/t_FunctionalChaos_nd.py
+index ec31629..3323917 100755
+--- a/python/test/t_FunctionalChaos_nd.py
++++ b/python/test/t_FunctionalChaos_nd.py
+@@ -121,9 +121,9 @@ try :
+     # Create the orthogonal basis
+     polynomialCollection = PolynomialFamilyCollection(inputDimension)
+     for i in range(inputDimension):
+-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
++        polynomialCollection[i] = LegendreFactory()
+     enumerateFunction = EnumerateFunction(inputDimension)
+-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
++    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
+ 
+     # Create the adaptive strategy
+     # We can choose amongst several strategies
+diff --git a/python/test/t_GaussProductExperiment_std.py b/python/test/t_GaussProductExperiment_std.py
+index 87c6418..5443c06 100755
+--- a/python/test/t_GaussProductExperiment_std.py
++++ b/python/test/t_GaussProductExperiment_std.py
+@@ -7,7 +7,7 @@ TESTPREAMBLE()
+ try :
+     distribution = ComposedDistribution(DistributionCollection([Exponential(), Triangular(-1.0, -0.5, 1.0)]))
+     marginalDegrees = Indices([3, 6])
+-    myPlane = GaussProductExperiment(Distribution(distribution), marginalDegrees)
++    myPlane = GaussProductExperiment(distribution, marginalDegrees)
+     print "myPlane = ", myPlane
+     weights = NumericalPoint(0)
+     sample = NumericalSample(myPlane.generate(weights))
+diff --git a/python/test/t_GramSchmidtAlgorithm_std.py b/python/test/t_GramSchmidtAlgorithm_std.py
+index 11100b6..77b5295 100755
+--- a/python/test/t_GramSchmidtAlgorithm_std.py
++++ b/python/test/t_GramSchmidtAlgorithm_std.py
+@@ -19,7 +19,7 @@ try :
+     print "algo=", repr(algo)
+     for i in range(iMax):
+         print distribution.getClassName() + " polynomial(", i, ")=", clean(algo.getRecurrenceCoefficients(i))
+-    algo.setReferenceFamily(OrthogonalUniVariatePolynomialFamily(LegendreFactory()))
++    algo.setReferenceFamily(LegendreFactory())
+     print "Reference family=", algo.getReferenceFamily()
+ 
+ except :
+diff --git a/python/test/t_LAR_std.py b/python/test/t_LAR_std.py
+index 5df7054..e506d90 100755
+--- a/python/test/t_LAR_std.py
++++ b/python/test/t_LAR_std.py
+@@ -36,14 +36,14 @@ try :
+     marginalX = DistributionCollection(dimension)
+     for i in range(dimension):
+         marginalX[i] = Uniform(-pi, pi)
+-    distribution = Distribution(ComposedDistribution(marginalX))
++    distribution = ComposedDistribution(marginalX)
+ 
+     # Create the orthogonal basis
+     polynomialCollection = PolynomialFamilyCollection(dimension)
+     for i in range(dimension):
+-        polynomialCollection[i] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
++        polynomialCollection[i] = LegendreFactory()
+     enumerateFunction = LinearEnumerateFunction(dimension)
+-    productBasis = OrthogonalBasis(OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction))
++    productBasis = OrthogonalProductPolynomialFactory(polynomialCollection, enumerateFunction)
+ 
+     # design experiment
+     samplingSize = 75
+diff --git a/python/test/t_OrthogonalBasis_std.py b/python/test/t_OrthogonalBasis_std.py
+index 4fa8002..d98dfd0 100755
+--- a/python/test/t_OrthogonalBasis_std.py
++++ b/python/test/t_OrthogonalBasis_std.py
+@@ -7,9 +7,9 @@ TESTPREAMBLE()
+ try:
+     dim = 3
+     polynomCollection = PolynomialFamilyCollection(3)
+-    polynomCollection[0] = OrthogonalUniVariatePolynomialFamily(LaguerreFactory(2.5))
+-    polynomCollection[1] = OrthogonalUniVariatePolynomialFamily(LegendreFactory())
+-    polynomCollection[2] = OrthogonalUniVariatePolynomialFamily(HermiteFactory())
++    polynomCollection[0] = LaguerreFactory(2.5)
++    polynomCollection[1] = LegendreFactory()
++    polynomCollection[2] = HermiteFactory()
+     basisFactory = OrthogonalProductPolynomialFactory(polynomCollection)
+     basis = OrthogonalBasis(basisFactory)
+     print "Basis=", basis
+diff --git a/python/test/t_PosteriorRandomVector_std.py b/python/test/t_PosteriorRandomVector_std.py
+index cf01266..e719bfe 100755
+--- a/python/test/t_PosteriorRandomVector_std.py
++++ b/python/test/t_PosteriorRandomVector_std.py
+@@ -15,7 +15,7 @@ try :
+     data = realDist.getSample(size)
+ 
+     # calibration parameters
+-    calibrationColl = CalibrationStrategyCollection(2)
++    calibrationColl = [ CalibrationStrategy(), CalibrationStrategy() ]
+ 
+     # proposal distribution
+     proposalColl = DistributionCollection()
+diff --git a/python/test/t_RandomWalkMetropolisHastings_std.py b/python/test/t_RandomWalkMetropolisHastings_std.py
+index 46fe3f5..aa29117 100755
+--- a/python/test/t_RandomWalkMetropolisHastings_std.py
++++ b/python/test/t_RandomWalkMetropolisHastings_std.py
+@@ -25,7 +25,7 @@ try :
+     data = realDist.getSample(size)
+ 
+     # calibration parameters
+-    calibrationColl = CalibrationStrategyCollection(2)
++    calibrationColl = [ CalibrationStrategy(), CalibrationStrategy() ]
+ 
+     # proposal distribution
+     proposalColl = DistributionCollection()
+diff --git a/python/test/t_RandomWalk_std.py b/python/test/t_RandomWalk_std.py
+index 6c96b82..22ca600 100755
+--- a/python/test/t_RandomWalk_std.py
++++ b/python/test/t_RandomWalk_std.py
+@@ -15,7 +15,7 @@ try :
+     timeGrid = RegularGrid(Tmin, deltaT, N)
+ 
+     # Fixing the distribution for the RandomWalk
+-    dist = Distribution(Uniform())
++    dist = Uniform()
+     print "dist = " , dist
+     origin = NumericalPoint(dist.getDimension())
+ 
+diff --git a/python/test/t_SklarCopula_std.py b/python/test/t_SklarCopula_std.py
+index b3fa405..e84d830 100755
+--- a/python/test/t_SklarCopula_std.py
++++ b/python/test/t_SklarCopula_std.py
+@@ -11,7 +11,7 @@ try :
+     R =  CorrelationMatrix(dim)
+     for i in range(dim-1) :
+         R[i, i + 1] = 0.25
+-    copula = SklarCopula(Distribution(Normal([1.0, 2.0, 3.0], [2.0, 3.0, 1.0], R)))
++    copula = SklarCopula(Normal([1.0, 2.0, 3.0], [2.0, 3.0, 1.0], R))
+     copulaRef = NormalCopula(R)
+     print "Copula " , repr(copula)
+     print "Copula " , copula
+diff --git a/python/test/t_WhiteNoise_std.py b/python/test/t_WhiteNoise_std.py
+index 65e9f23..f4f316f 100755
+--- a/python/test/t_WhiteNoise_std.py
++++ b/python/test/t_WhiteNoise_std.py
+@@ -15,7 +15,7 @@ try :
+     timeGrid = RegularGrid(Tmin, deltaT, N)
+ 
+     # Fixing the distribution for the WhiteNoise
+-    dist = Distribution(Uniform())
++    dist = Uniform()
+     print "dist = " , dist
+ 
+     # Building a process from a White Noise
+-- 
+1.7.10.4
+
