@@ -669,7 +669,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             pdf = np.array([self.computePDF([dyk]) for dyk in ym_grid])
             return [ym_grid, pdf]
         else:
-            # to check here
             ot.Log.Info("Precomputing gaussian pdf")
             skin_cube = MaxNormMeshGrid.Cube1D([2.0 * b_sigma])
             pdf = [self.computeEquivalentNormalPDFSum([el], skin_cube) for el in ym_grid]
@@ -776,35 +775,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             pdf = np.array([[self.computePDF([x_grid[i], y_grid[j]]) for j in xrange(N)] for i in xrange(N)])
             return [[x_grid, y_grid], pdf]
         else:
-            # gaussian pdf computation
+            # gaussian sum pdf computation
             ot.Log.Info("Precomputing gaussian pdf")
-            pdf = np.array( [[self.equivalentNormal_.computePDF([x_grid[i], y_grid[j]]) for j in xrange(N)] for i in xrange(N)] )
-            # external terms
             skin_cube = MaxNormMeshGrid.SkinCube2D([2.0 * b_sigma_x, 2.0 * b_sigma_y])
-            isGridSymmetric = skin_cube.isSymmetric()
-            for j, dy in enumerate(y_grid):
-                for i, dx in enumerate(x_grid):
-                    k = 1
-                    condition = True
-                    # Take into account the contributions y_m + 2k1*b*sigma1 + 2k2*b*sigma2 +  and y_m - 2k1*b*sigma1 - 2k2*b*sigma2
-                    # while contribution is not negligible
-                    while condition:
-                        iterator = skin_cube.get_skin_iterator(k)
-                        delta = 0.0
-                        try :
-                            while True:
-                                dyk_x, dyk_y = iterator.next()
-                                delta_plus = self.equivalentNormal_.computePDF([dx + dyk_x, dy + dyk_y])
-                                delta += delta_plus
-                                # using symetries
-                                if isGridSymmetric:
-                                    delta_minus = self.equivalentNormal_.computePDF([dx - dyk_x, dy - dyk_y])
-                                    delta += delta_minus
-                        except StopIteration :
-                            pass
-                        pdf[i,j] += delta
-                        k += 1
-                        condition = (delta > pdf[i, j] * self.pdfEpsilon_) and k < N
+            pdf = np.array([[self.computeEquivalentNormalPDFSum([xm, ym], skin_cube) for ym in y_grid] for xm in x_grid])
             ot.Log.Info("End of gaussian approximation")
 
             # Precompute the grid of delta functions
@@ -1023,40 +997,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         if self.isAnalyticPDF_:
             pdf = np.array([[[self.computePDF([x_grid[i], y_grid[j], z_grid[k]]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
         else:
-            # gaussian pdf computation
-            # Could not use computeEquivalentNormalPDFSum because of the grid
+            # gaussian sum pdf computation
             ot.Log.Info("Precomputing gaussian pdf")
-            pdf = np.array([[[self.equivalentNormal_.computePDF([x_grid[i], y_grid[j], z_grid[k]]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
-            # external terms
-            skin_cube = MaxNormMeshGrid.SkinCube3D([2.0 * b_sigma_x, 2.0 * b_sigma_y, 2.0 * b_sigma_z])
-            isGridSymmetric = skin_cube.isSymmetric()
-            # The computeEquivalentNormalPDFSum could not be used, because of the referenceBandwidth_ is different
-            for k, dz in enumerate(z_grid):
-                for j, dy in enumerate(y_grid):
-                    for i, dx in enumerate(x_grid):
-                        l = 1
-                        condition = True
-                        while condition:
-                            iterator = skin_cube.get_skin_iterator(l)
-                            delta = 0.0
-                            try :
-                                while True:
-                                    dyk_x, dyk_y, dyk_z = iterator.next()
-                                    delta_plus = self.equivalentNormal_.computePDF([dx + dyk_x, dy + dyk_y, dz + dyk_z])
-                                    delta += delta_plus
-                                    # using symetries
-                                    if isGridSymmetric:
-                                        delta_minus = self.equivalentNormal_.computePDF([dx - dyk_x, dy - dyk_y, dz - dyk_z])
-                                        delta += delta_minus
-                            except StopIteration :
-                                pass
-                            pdf[i,j,k] += delta
-                            l += 1
-                            condition = (delta > pdf[i, j, k] * self.pdfEpsilon_) and l < N
+            skin_cube = MaxNormMeshGrid.SkinCube2D([2.0 * b_sigma_x, 2.0 * b_sigma_y])
+            pdf = np.array([[[self.computeEquivalentNormalPDFSum([xm, ym, zm], skin_cube) for zm in z_grid] for ym in y_grid] for xm in x_grid])
             ot.Log.Info("End of gaussian approximation")
-
-            # Precompute the grid of delta functions
-            ot.Log.Info("Precomputing delta grid")
 
             # 1) compute \Sigma_+++
             # \Sigma_{m1,m2,m3}^{+++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,k3+1)
