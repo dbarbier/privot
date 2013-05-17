@@ -1,6 +1,6 @@
 #                                               -*- Python -*-
 #
-#  @file  test_4_3_nondiag.py
+#  @file  test_4_3.py
 #  @brief MultivariateRandomMixture validation tests
 #
 #  Copyright (C) 2013 EADS IW France
@@ -46,7 +46,6 @@ if __name__ == "__main__":
     blockMax = 7
     n_blockMax = 2**blockMax
     maxSize = 2 * n_blockMax * (n_blockMax + 1) * (2 * n_blockMax + 1) + n_blockMax
-    mixture = ot.Normal(0, np.sqrt(2) / 2.0)
     mixture = ot.Mixture(ot.DistributionCollection([ot.Normal(2,1), ot.Normal(-2,1)]))
     collection = ot.DistributionCollection([ot.Normal(0.0,1.0), mixture, ot.Uniform(0,1), ot.Uniform(0,1)])
     matrix = ot.Matrix([[1, -0.05, 1, -0.5], [0.5, 1, -0.05, 0.3], [-0.5, -0.1, 1.2, -0.8]])
