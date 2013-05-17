@@ -998,7 +998,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         # gaussian sum pdf computation
         ot.Log.Info("Precomputing gaussian pdf")
-        skin_cube = MaxNormMeshGrid.SkinCube2D([2.0 * b_sigma_x, 2.0 * b_sigma_y])
+        skin_cube = MaxNormMeshGrid.SkinCube3D([2.0 * b_sigma_x, 2.0 * b_sigma_y, 2.0 * b_sigma_z])
         pdf = np.array([[[self.computeEquivalentNormalPDFSum([xm, ym, zm], skin_cube) for zm in z_grid] for ym in y_grid] for xm in x_grid])
         ot.Log.Info("End of gaussian approximation")
 
