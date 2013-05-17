@@ -230,7 +230,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         self.equivalentNormal_ = ot.Normal(self.getMean(), self.getCovariance())
 
-    def computeEquivalentNormalPDFSum(self, y, mesh_grid = None):
+    def computeEquivalentNormalPDFSum(self, y, mesh_grid):
         """
         Compute the left-hand sum in Poisson's summation formula for the equivalent normal.
         The goal is to compute:
@@ -252,8 +252,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         gaussian_pdf = self.equivalentNormal_.computePDF(y)
         i = 0
         condition = True
-        if mesh_grid is None:
-            mesh_grid = self.meshAltGrid_
         isGridSymmetric = mesh_grid.isSymmetric()
         while (condition):
             i = i + 1
@@ -558,7 +556,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             return 0.0
         # General case : two different steps
         # 1) Compute a gaussian pdf approximation
-        value = self.computeEquivalentNormalPDFSum(y)
+        value = self.computeEquivalentNormalPDFSum(y, self.meshAltGrid_)
         # Compute the factor \prod_{k=1}^{d} h_k/'2\pi
         # h_k are supposed to be small values, we must care about
         # numerical troubles
