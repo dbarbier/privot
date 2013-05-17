@@ -484,7 +484,7 @@ class CachedMeshGrid:
         self.cachedValue_ = []
 
     def clone(self, steps):
-        return CachedMeshGrid(self.meshGrid_.clone(steps), self.currentSize_)
+        return CachedMeshGrid(self.meshGrid_.clone(steps), self.maxSize_)
 
     def setCacheSize(self, size):
         if size < self.currentSize_:
