@@ -15,73 +15,63 @@
 \subsection{Multivariate random mixtures}
 
 The objective is to manipulate a multivariate random vector $\vect{Y}$ with a specific structure:
-it is the image of a random vector $\vect{X} = (X_1, \hdots, X_n) $ of independent and continuous univariate distributions by an affine transformation $T$:
+it is the image of a random vector $\vect{X} = (X_1, \hdots, X_n) $ of independent and continuous univariate distributions by an affine transform $T$:
 \begin{align}\label{defY}
-  \vect{Y}=\vect{y}_0+\vect{M}\vect{X}
+  \vect{Y}=\vect{y}_0+\mat{M}\vect{X}
 \end{align}
 $\vect{y}_0\in\mathbb{R}^d$ is a deterministic vector with $d\in\{1,2,3\}$ and $\vect{M}\in\mathcal{M}_{d,n}(\mathbb{R})$
 a deterministic matrix. This particular form allows the calculation of the law of $\vect{Y} $ using the Poisson summation formula, which links the characteristic
 function $\phi $ of $\vect{Y}$ to its density $p$. This formula is given by:
 
 \begin{align}\label{poissonND}
-  \begin{array}{p{\textwidth}}
-    \multicolumn{1}{l}{\displaystyle\sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}}p\left(y_1+\frac{2\pi j_1}{h_1},\hdots,y_d+\frac{2\pi j_d}{h_d}\right)= }\\
-    \multicolumn{1}{r}{\displaystyle\frac{h_1\times\cdots\times h_d}{2^d\pi^d}\sum_{k_1\in\mathbb{Z}}\hdots\sum_{k_d\in\mathbb{Z}}\phi\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}}
-  \end{array}
+  \sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}} p\left(y_1+\frac{2\pi j_1}{h_1},\right.&\left.\hdots,y_d+\frac{2\pi j_d}{h_d}\right)=\notag\\
+    &\frac{h_1\times\cdots\times h_d}{2^d\pi^d}\sum_{k_1\in\mathbb{Z}}\hdots\sum_{k_d\in\mathbb{Z}}\phi\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}
 \end{align}
 
-By fixing $h_1,\hdots,h_d$ enough small, the nested sums of the right term are reduced to the central term $j_1=\hdots=j_d = 0$.
-The sums on the right are all nested truncated symmetrically to $ 2N +1 $ terms, which gives:
+By fixing $h_1,\hdots,h_d$ enough small, the nested sums of the left term are reduced to the central term $j_1=\hdots=j_d = 0$.
+The sums on the right are truncated symmetrically to $ 2N +1 $ terms, which gives:
 \begin{align}
   p\left(y_1,\hdots,y_d\right)\simeq\frac{H}{2^d\pi^d}\sum_{|k_1|\leq N}\hdots\sum_{|k_d|\leq N}\phi\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}
 \end{align}
 where $H = h_1\times\hdots\times h_d$.
 
-The characteristic function of such random vector $Y$ is obtained analitycally using $\vect{y}_0$, $\vect{M}$ and the characteristic functions of $X_1$,\dots,$X_n$:
+The characteristic function of such a random vector $Y$ is obtained analytically using $\vect{y}_0$, $\vect{M}$ and the characteristic functions of $X_1$,\dots,$X_n$:
 \begin{align}
   \forall \vect{u}\in\mathbb{R}^d,\quad\phi(u_1,\hdots,u_d)=\prod_{j=1}^de^{iu_j{y_0}_j}\prod_{k=1}^n\phi_{X_k}((M^tu)_k)
 \end{align}
 
-Using the symmetry of $\phi$, we get:
-\begin{align}
-  p\left(y_1,\hdots,y_d\right)\simeq\frac{H}{\pi^d} \left(1+
-  \sum_{k_1=1}^N\hdots\sum_{k_d=1}^N\left\{\prod_{j=1}^d\mathfrak{R}\left(e^{ih_jk_j{y_0}_j}
-  \times\prod_{\ell=1}^n\phi_{X_\ell}(M_{j,\ell}k_jh_j)\right)\right\}e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)} \right)
-\end{align}
-
-It is possible to greatly improve the performance of the algorithm by noting that the equation~(\ref{poissonND}) is linear between $p$
+It is possible to greatly improve the performance of the algorithm by noticing that equation~(\ref{poissonND}) is linear between $p$
 and $\phi $. We denote $q$ and $\psi$ respectively the density and the characteristic function of the multivariate normal distribution with the
 same mean $\vect{\mu}$ and same covariance matrix $\vect{C}$ as the the random mixture. By applying this multivariate normal distribution to the equation~(\ref{poissonND}), we obtain by subtraction:
 \begin{align}\label{algoPoisson}
-  \begin{array}{p{\textwidth}}
-    \multicolumn{1}{l}{\displaystyle p\left(y_1,\hdots,y_d\right)\simeq \sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}}q\left(y_1+\frac{2\pi j_1}{h_1},\hdots,y_d+\frac{2\pi j_d}{h_d}\right)+}\\
-    \multicolumn{1}{r}{+\displaystyle \frac{H}{2^d\pi^d}\sum_{|k_1|\leq N}\hdots\sum_{|k_d|\leq N}(\phi-\psi)\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}}
-  \end{array}
+p\left(y_1,\hdots,y_d\right)\simeq \sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}}
+  &q\left(y_1+\frac{2\pi j_1}{h_1},\hdots,y_d+\frac{2\pi j_d}{h_d}\right)+\notag\\
+  &\frac{H}{2^d\pi^d}\sum_{|k_1|\leq N}\hdots\sum_{|k_d|\leq N}(\phi-\psi)\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}
 \end{align}
 
-The vector $\vect{\mu}$ and the covariance matrix $\vect{C}$ of the random vector $\vect{Y}$ are obtained using $\vect{X}$ and the following formula:
+The vector $\vect{\mu}$ and the covariance matrix $\mat{C}$ of the random vector $\vect{Y}$ are obtained using $\vect{X}$ and the following formula:
 \begin{align}
-  \vect{\mu}=& y_0 + \vect{M}\mathbb{E}(\vect{X})\\
-  \vect{C}=&\vect{M}\vect{\mathrm{Cov}}(\vect{X})\vect{M}^t\\
+  \vect{\mu}=& \vect{y_0} + \mat{M}\mathbb{E}(\vect{X})\\
+  \mat{C}=&\mat{M}\,\mat{\mathrm{Cov}}(\vect{X})\mat{M}^t\\
 \end{align}
 
-The matrix $\vect{\mathrm{Cov}}(\vect{X})$ is diagonal thanks to the the independence of $X_i$.
-The element $C_{i,j}$ of $\vect{C}$ is given by:
+The matrix $\mat{\mathrm{Cov}}(\vect{X})$ is diagonal thanks to the the independence of $X_i$.
+The element $C_{i,j}$ of $\mat{C}$ is given by:
 \begin{align}
 \forall i,j\in\{1,\hdots,d\},\quad C_{i,j}=\sum_{k=1}^nM_{i,k}M_{j,k}\mathrm{Var}(X_k)
 \end{align}
 
-In the case where $n \gg $ 1, using the limit central theorem, the law of $\vect{Y} $ tends to the normal distribution density $q$.
-The sum on $q$ will be the dominant term in the value of $p$, which will reduce $N$.
-It notes the need to keep more terms than the central one in this sum, since the parameters $ h_1, \dots  h_d$ were calibrated
-with respect to $p$ not $q$.
+In the case where $n \gg $ 1, using the limit central theorem, the law of $\vect{Y} $ tends to the normal distribution density $q$,
+which will drastically reduce $N$.  The sum on $q$ will become the most CPU-intensive part, because in the general case we will
+have to keep more terms than the central one in this sum, since the parameters $ h_1, \dots  h_d$ were calibrated
+with respect to $p$ and not $q$.
 
 The parameters $h_1, \dots  h_d$ are calibrated using the following formula:
 \begin{align}
   h_\ell = \frac{2\pi}{(b+4a)\sigma_\ell}
 \end{align}
 where $\sigma_\ell=\sqrt{C_{\ell,\ell}}$ and $a$, $b$ are respectively the number of standard deviations covered by the marginal distribution
-($a=4$ per default) and $b$ the number of marginal deviations beyond which the density is negligible ($b=8$ per default).
+($a=4$ by default) and $b$ the number of marginal deviations beyond which the density is negligible ($b=8$ by default).
 
 The $N$ parameter is dynamically calibrated: we start with $N=8$ then we double $N$ value until the total contribution of the additional terms is negligible.
 
@@ -104,17 +94,18 @@ By denoting $p_{m_1,\hdots,m_d}=p_{\vect{Y}}(y_{1,m_1},\hdots,y_{d,m_d})$:
 \begin{align}
   p_{m_1,\hdots,m_d}= Q_{m_1,\hdots,m_d}+S_{m_1,\hdots,m_d}
 \end{align}
-for which the terme $S_{m_1,\hdots,m_d}$ is the most CPU consuming. This term rewrites:
+for which the term $S_{m_1,\hdots,m_d}$ is the most CPU consuming. This term rewrites:
 \begin{align}
-S_{m_1,\hdots,m_d}=&\frac{H}{2^d\pi^d}\sum_{k_1=-N}^{N}\hdots\sum_{k_d=-N}^{N}\delta\left(k_1h_1,\hdots,k_dh_d\right)\times\nonumber\\
-&E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)
+S_{m_1,\hdots,m_d}=&\frac{H}{2^d\pi^d}\sum_{k_1=-N}^{N}\hdots\sum_{k_d=-N}^{N}\delta\left(k_1h_1,\hdots,k_dh_d\right)
+E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)
 \end{align}
 with:
 \begin{align}
-  E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)=e^{-i\sum_{j=1}^d k_jh_j\left(\mu_j+b\left(\frac{2m_j+1}{M}-1\right)\sigma_j\right)}
+  \delta\left(k_1h_1,\hdots,k_dh_d\right)&=(\phi-\psi)\left(k_1h_1,\hdots,k_dh_d\right)\\
+  E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)&=e^{-i\sum_{j=1}^d k_jh_j\left(\mu_j+b\left(\frac{2m_j+1}{M}-1\right)\sigma_j\right)}
 \end{align}
 
-The aim is to rewrite the previous expression as a $d$- discrete Fourier transform, in order to apply Fast Fourier Transformation (\emph{FFT}) for its evaluation.
+The aim is to rewrite the previous expression as a $d$- discrete Fourier transform, in order to apply Fast Fourier Transform (\emph{FFT}) for its evaluation.
 We should before that divide the sums of the expression into blocks of optimal sizes for the FFT. This part of job is complex and some key issues are resumed here after.
 
 \subsection{The unidimensional case}
@@ -190,7 +181,7 @@ z_{k}= \bar{y}_{N-1-k}
 with $fft$ a FFT algorithm
 \end{enumerate}
 
-\subsection{The bidimensionnal case}
+\subsection{The bidimensional case}
 In dimension 2, the expression of interest is:
 \begin{align}
 S_{m_1,m_2}=\frac{h_1h_2}{4\pi^2}\Big\{
@@ -241,7 +232,7 @@ And thus
     e^{-i(k_2+1)\pi\left(\tau_2+\frac{1}{N}-1\right)}
 \end{align*}
 
-Similary to the unidimensional case, the evaluation of $\Sigma^{++}$ might be done using a FFT algorithm:
+As in the unidimensional case, the evaluation of $\Sigma^{++}$ might be done using a FFT algorithm:
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -251,7 +242,7 @@ y^{++}_{k_1,k_2}=\delta((k_1+1)h_1,(k_2+1)h_2)e^{-i\pi (k_1+1)\left(\tau_1-1+\fr
 \begin{align*}
   z_{m_1,m_2}=fft2d(y^{++}_{k_1,k_2})
 \end{align*}
-with $fft2d$ a bidimensionnal discrete Fourier transformation.
+with $fft2d$ a bidimensional discrete Fourier transform.
 \item The contribution $\Sigma_{m_1,m_2}^{++}$ equals to:
 \begin{align*}
   \Sigma_{m_1,m_2}^{++}=z_{m_1,m_2}e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)}
@@ -282,7 +273,7 @@ y^{+-}_{k_1,k_2}= \delta((k_1+1)h_1,(k_2-N)h_2)e^{-i\pi (k_1+1)\left(\tau_1-1+\f
 \begin{align*}
   z_{m_1,m_2}=fft2d(y^{+-}_{k_1,k_2})
 \end{align*}
-with $fft2d$ a bidimensionnal Fourier transformation.
+with $fft2d$ a bidimensional Fourier transform.
 \item The contribution $\Sigma_{m_1,m_2}^{+-}$ equals to:
 \begin{align*}
   \Sigma_{m_1,m_2}^{+-}=z_{m_1,m_2}e^{-2i\pi\left(\frac{m_1}{N}\right)}
@@ -301,7 +292,7 @@ y^{-+}_{k_1,k_2}&=\bar{y}^{+-}_{N-1-k_1,N-1-k_2}
 \begin{align*}
   z_{m_1,m_2}=fft2d(y^{-+}_{k_1,k_2})
 \end{align*}
-with $fft2d$ a bidimensionnal Fourier transformation.
+with $fft2d$ a bidimensional Fourier transform.
 \item The contribution $\Sigma_{m_1,m_2}^{-+}$ equals to:
 \begin{align*}
   \Sigma_{m_1,m_2}^{-+}=z_{m_1,m_2} e^{-2i\pi\left(\frac{m_2}{N}\right)}
@@ -319,7 +310,7 @@ y^{+0}_{k_1}= \delta((k_1+1)h_1,0)e^{-i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\rig
 \begin{align*}
   z_{m_1}=fft1d(y^{+0}_{k_1})
 \end{align*}
-with $fft1d$ a unidimensionnal Fourier transformation.
+with $fft1d$ a unidimensional Fourier transform.
 \item The contribution $\Sigma_{m_1,m_2}^{+0}$ equals to:
 \begin{align*}
   \Sigma_{m_1,m_2}^{+0}=z_{m_1} e^{-2i\pi\left(\frac{m_1}{N}\right)}
@@ -336,7 +327,7 @@ y^{-0}_{k_1}= \bar{y}^{+0}_{N-1-k_1}
 \begin{align*}
   \Sigma_{m_1,m_2}^{-0}=fft1d(y^{-0}_{k_1})
 \end{align*}
-with $fft1d$ a unidimensionnal Fourier transformation.
+with $fft1d$ a unidimensional Fourier transform.
 \end{enumerate}
 
 \subsubsection{$\Sigma_{m_1,m_2}^{0+}$}
@@ -349,7 +340,7 @@ y^{0+}_{k_2}= \delta(0,(k_2+1)h_2)e^{-i\pi (k_2+1)\left(\tau_2-1+\frac{1}{N}\rig
 \begin{align*}
   z_{m_2}=fft1d(y^{0+}_{k_2})
 \end{align*}
-with $fft1d$ a unidimensionnal Fourier transformation.
+with $fft1d$ a unidimensional Fourier transform.
 \item The contribution $\Sigma_{m_1,m_2}^{0+}$ equals to:
 \begin{align*}
   \Sigma_{m_1,m_2}^{0+}=z_{m_2}e^{-2i\pi\left(\frac{m_2}{N}\right)}
@@ -366,54 +357,57 @@ y^{0-}_{k_2}= \bar{y}^{0+}_{N-1-k_2}
 \begin{align*}
   \Sigma_{m_1,m_2}^{0-}=fft1d(y^{0-}_{k_2})
 \end{align*}
-with $fft1d$ a unidimensionnal Fourier transformation.
+with $fft1d$ a unidimensional Fourier transform.
 \end{enumerate}
 
-\subsection{The tridimensionnal case}
+\subsection{The tridimensional case}
 In dimension 3, the expression of interest is~:
 \begin{align*}
-S_{m_1,m_2,m_3}=\frac{h_1h_2h_3}{8\pi^3}\Big\{& \Sigma_{m1,m2,m3}^{+++} + \Sigma_{m1,m2,m3}^{---} + \Sigma_{m1,m2,m3}^{++-} +\nonumber\\
-     &\Sigma_{m1,m2,m3}^{--+} + \Sigma_{m1,m2,m3}^{+-+} + \Sigma_{m1,m2,m3}^{-+-} +\nonumber\\
-     &\Sigma_{m1,m2,m3}^{+--} + \Sigma_{m1,m2,m3}^{-++} + \Sigma_{m1,m2,m3}^{++0} +\nonumber\\
-     &\Sigma_{m1,m2,m3}^{--0} + \Sigma_{m1,m2,m3}^{0++} + \Sigma_{m1,m2,m3}^{0--} +\nonumber\\
-     &\Sigma_{m1,m2,m3}^{+0+} + \Sigma_{m1,m2,m3}^{-0-} + \Sigma_{m1,m2,m3}^{+-0} +\nonumber\\
-     &\Sigma_{m1,m2,m3}^{-+0} + \Sigma_{m1,m2,m3}^{+0-} + \Sigma_{m1,m2,m3}^{-0+} +\nonumber\\
-     &\Sigma_{m1,m2,m3}^{0+-} + \Sigma_{m1,m2,m3}^{0-+} + \Sigma_{m1,m2,m3}^{+00} +\nonumber\\
-     &\Sigma_{m1,m2,m3}^{-00} + \Sigma_{m1,m2,m3}^{0+0} + \Sigma_{m1,m2,m3}^{0-0} +\nonumber\\
-     &\Sigma_{m1,m2,m3}^{00+} + \Sigma_{m1,m2,m3}^{00-}
+S_{m_1,m_2,m_3}=\frac{h_1h_2h_3}{8\pi^3}\Big\{
+ &   \Sigma_{m1,m2,m3}^{+++} + \Sigma_{m1,m2,m3}^{---} +
+     \Sigma_{m1,m2,m3}^{++-} + \Sigma_{m1,m2,m3}^{--+} +
+     \Sigma_{m1,m2,m3}^{+-+} + \Sigma_{m1,m2,m3}^{-+-} + \\
+ &   \Sigma_{m1,m2,m3}^{+--} + \Sigma_{m1,m2,m3}^{-++} +
+     \Sigma_{m1,m2,m3}^{++0} + \Sigma_{m1,m2,m3}^{--0} +
+     \Sigma_{m1,m2,m3}^{0++} + \Sigma_{m1,m2,m3}^{0--} + \\
+ &   \Sigma_{m1,m2,m3}^{+0+} + \Sigma_{m1,m2,m3}^{-0-} +
+     \Sigma_{m1,m2,m3}^{+-0} + \Sigma_{m1,m2,m3}^{-+0} +
+     \Sigma_{m1,m2,m3}^{+0-} + \Sigma_{m1,m2,m3}^{-0+} + \\
+ &   \Sigma_{m1,m2,m3}^{0+-} + \Sigma_{m1,m2,m3}^{0-+} +
+     \Sigma_{m1,m2,m3}^{+00} + \Sigma_{m1,m2,m3}^{-00} +
+     \Sigma_{m1,m2,m3}^{0+0} + \Sigma_{m1,m2,m3}^{0-0} + \\
+ &   \Sigma_{m1,m2,m3}^{00+} + \Sigma_{m1,m2,m3}^{00-}
 \Big\}
 \end{align*}
 
 with
 \begin{align*}
-\Sigma_{m1,m2,m3}^{+++}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,k3+1)\\
-\Sigma_{m1,m2,m3}^{---}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),-(k3+1))\\
-\Sigma_{m1,m2,m3}^{++-}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,-(k3+1))\\
-\Sigma_{m1,m2,m3}^{--+}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),k3+1)\\
-\Sigma_{m1,m2,m3}^{+-+}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),k3+1)\\
-\Sigma_{m1,m2,m3}^{-+-}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),(k2+1),-(k3+1))\\
-\Sigma_{m1,m2,m3}^{+--}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))\\
-\Sigma_{m1,m2,m3}^{-++}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))\\
-\Sigma_{m1,m2,m3}^{++0}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,0) E_{m1,m2,m3}(k1+1,k2+1,0)\\
-\Sigma_{m1,m2,m3}^{--0}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,0) E_{m1,m2,m3}(-(k1+1),-(k2+1),0)\\
-\Sigma_{m1,m2,m3}^{0++}&=&\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(0,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)\\
-\Sigma_{m1,m2,m3}^{0--}&=&\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(0,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)\\
-\Sigma_{m1,m2,m3}^{+0+}&=&\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)\\
-\Sigma_{m1,m2,m3}^{-0-}&=&\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)\\
-\Sigma_{m1,m2,m3}^{+-0}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy, 0) E_{m1,m2,m3}(k1+1,-(k2+1),0)\\
-\end{align*}
-\begin{align*}
-\Sigma_{m1,m2,m3}^{-+0}&=&\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta(-(k1+1)hx,(k2+1)hy, 0) E_{m1,m2,m3}(-(k1+1),(k2+1),0)\\
-\Sigma_{m1,m2,m3}^{+0-}&=&\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,-(k3+1)\\
-\Sigma_{m1,m2,m3}^{-0+}&=&\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),0,(k3+1)\\
-\Sigma_{m1,m2,m3}^{0+-}&=&\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k2+1))\\
-\Sigma_{m1,m2,m3}^{0-+}&=&\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k3+1))\\
-\Sigma_{m1,m2,m3}^{+00}&=&\sum_{k1=0}^{N-1}\delta((k1+1)hx,0,0) E_{m1,m2,m3}(k1+1,0,0)\\
-\Sigma_{m1,m2,m3}^{-00}&=&\sum_{k1=0}^{N-1}\delta(-(k1+1)hx,0,0) E_{m1,m2,m3}(-(k1+1),0,0)\\
-\Sigma_{m1,m2,m3}^{0+0}&=&\sum_{k2=0}^{N-1}\delta(0,(k2+1)hy,0) E_{m1,m2,m3}(0,k2+1,0)\\
-\Sigma_{m1,m2,m3}^{0-0}&=&\sum_{k2=0}^{N-1}\delta(0,-(k2+1)hy,0) E_{m1,m2,m3}(0,-(k2+1),0)\\
-\Sigma_{m1,m2,m3}^{00+}&=&\sum_{k3=0}^{N-1}\delta(0,0,(k3+1)hz) E_{m1,m2,m3}(0,0,k3+1)\\
-\Sigma_{m1,m2,m3}^{00-}&=&\sum_{k3=0}^{N-1}\delta(0,0,-(k3+1)hz) E_{m1,m2,m3}(0,0,-(k3+1))\\
+\Sigma_{m1,m2,m3}^{+++}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,k_2h_2,k_3h_3) E_{m1,m2,m3}(k_1,k_2,k_3)\\
+\Sigma_{m1,m2,m3}^{---}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(-k_1h_1,-k_2h_2,-k_3h_3) E_{m1,m2,m3}(-k_1,-k_2,-k_3)\\
+\Sigma_{m1,m2,m3}^{++-}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,k_2h_2,-k_3h_3) E_{m1,m2,m3}(k_1,k_2,-k_3)\\
+\Sigma_{m1,m2,m3}^{--+}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(-k_1h_1,-k_2h_2,k_3h_3) E_{m1,m2,m3}(-k_1,-k_2,k_3)\\
+\Sigma_{m1,m2,m3}^{+-+}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,-k_2h_2,k_3h_3) E_{m1,m2,m3}(k_1,-k_2,k_3)\\
+\Sigma_{m1,m2,m3}^{-+-}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(-k_1h_1,k_2h_2,-k_3h_3) E_{m1,m2,m3}(-k_1,k_2,-k_3)\\
+\Sigma_{m1,m2,m3}^{+--}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,-k_2h_2,-k_3h_3) E_{m1,m2,m3}(k_1,-k_2,-k_3)\\
+\Sigma_{m1,m2,m3}^{-++}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,-k_2h_2,-k_3h_3) E_{m1,m2,m3}(k_1,-k_2,-k_3)\\
+\Sigma_{m1,m2,m3}^{++0}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\delta(k_1h_1,k_2h_2,0) E_{m1,m2,m3}(k_1,k_2,0)\\
+\Sigma_{m1,m2,m3}^{--0}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\delta(-k_1h_1,-k_2h_2,0) E_{m1,m2,m3}(-k_1,-k_2,0)\\
+\Sigma_{m1,m2,m3}^{0++}&=\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(0,k_2h_2,k_3h_3) E_{m1,m2,m3}(0,k_2,k_3)\\
+\Sigma_{m1,m2,m3}^{0--}&=\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(0,-k_2h_2,-k_3h_3) E_{m1,m2,m3}(0,k_2,k_3)\\
+\Sigma_{m1,m2,m3}^{+0+}&=\sum_{k1=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,0,k_3h_3) E_{m1,m2,m3}(k_1,0,k_3)\\
+\Sigma_{m1,m2,m3}^{-0-}&=\sum_{k1=1}^{N}\sum_{k3=1}^{N}\delta(-k_1h_1,0,-k_3h_3) E_{m1,m2,m3}(k_1,0,k_3)\\
+\Sigma_{m1,m2,m3}^{+-0}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\delta(k_1h_1,-k_2h_2, 0) E_{m1,m2,m3}(k_1,-k_2,0)\\
+\Sigma_{m1,m2,m3}^{-+0}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\delta(-k_1h_1,k_2h_2, 0) E_{m1,m2,m3}(-k_1,k_2,0)\\
+\Sigma_{m1,m2,m3}^{+0-}&=\sum_{k1=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,0,-k_3h_3) E_{m1,m2,m3}(k_1,0,-k_3\\
+\Sigma_{m1,m2,m3}^{-0+}&=\sum_{k1=1}^{N}\sum_{k3=1}^{N}\delta(-k_1h_1,0,k_3h_3) E_{m1,m2,m3}(-k_1,0,k_3\\
+\Sigma_{m1,m2,m3}^{0+-}&=\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(0, k_2h_2,-k_3h_3) E_{m1,m2,m3}(0, k_2,-k_2)\\
+\Sigma_{m1,m2,m3}^{0-+}&=\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(0, k_2h_2,-k_3h_3) E_{m1,m2,m3}(0, k_2,-k_3)\\
+\Sigma_{m1,m2,m3}^{+00}&=\sum_{k1=1}^{N}\delta(k_1h_1,0,0) E_{m1,m2,m3}(k_1,0,0)\\
+\Sigma_{m1,m2,m3}^{-00}&=\sum_{k1=1}^{N}\delta(-k_1h_1,0,0) E_{m1,m2,m3}(-k_1,0,0)\\
+\Sigma_{m1,m2,m3}^{0+0}&=\sum_{k2=1}^{N}\delta(0,k_2h_2,0) E_{m1,m2,m3}(0,k_2,0)\\
+\Sigma_{m1,m2,m3}^{0-0}&=\sum_{k2=1}^{N}\delta(0,-k_2h_2,0) E_{m1,m2,m3}(0,-k_2,0)\\
+\Sigma_{m1,m2,m3}^{00+}&=\sum_{k3=1}^{N}\delta(0,0,k_3h_3) E_{m1,m2,m3}(0,0,k_3)\\
+\Sigma_{m1,m2,m3}^{00-}&=\sum_{k3=1}^{N}\delta(0,0,-k_3h_3) E_{m1,m2,m3}(0,0,-k_3)
 \end{align*}
 
 
