@@ -1935,6 +1935,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         self.meshGrid_ = gridMesher
+        self.temp_mesh_grid_.setSymmetric(self.meshGrid_.isSymmetric())
 
     def setPDFPrecision(self, pdfPrecision):
         """

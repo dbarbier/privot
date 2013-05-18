@@ -29,6 +29,7 @@
 #  All classes define the following methods:
 #    __init__(self, steps, symmetric)
 #    isSymmetric(self)
+#    setSymmetric(self, symmetric)
 #    get_skin_iterator(self, index)
 #    get_size_of_level(self, index)
 #    get_size_upto_level(self, index)
@@ -75,6 +76,9 @@ class Cube1D:
 
     def isSymmetric(self):
         return self.symmetric_
+
+    def setSymmetric(self, symmetric):
+        self.symmetric_ = symmetric
 
     @staticmethod
     def dot(x, y):
@@ -138,6 +142,9 @@ class Cube2D:
 
     def isSymmetric(self):
         return self.symmetric_
+
+    def setSymmetric(self, symmetric):
+        self.symmetric_ = symmetric
 
     @staticmethod
     def dot(x, y):
@@ -213,6 +220,9 @@ class SkinCube2D:
 
     def isSymmetric(self):
         return self.symmetric_
+
+    def setSymmetric(self, symmetric):
+        self.symmetric_ = symmetric
 
     @staticmethod
     def dot(x, y):
@@ -298,6 +308,9 @@ class Cube3D:
 
     def isSymmetric(self):
         return self.symmetric_
+
+    def setSymmetric(self, symmetric):
+        self.symmetric_ = symmetric
 
     @staticmethod
     def dot(x, y):
@@ -387,6 +400,9 @@ class SkinCube3D:
 
     def isSymmetric(self):
         return self.symmetric_
+
+    def setSymmetric(self, symmetric):
+        self.symmetric_ = symmetric
 
     @staticmethod
     def dot(x, y):
@@ -495,6 +511,9 @@ class CachedMeshGrid:
 
     def isSymmetric(self):
         return self.meshGrid_.isSymmetric()
+
+    def setSymmetric(self, symmetric):
+        self.meshGrid_.setSymmetric(symmetric)
 
     def dot(self, x, y):
         return self.meshGrid_.dot(x, y)
