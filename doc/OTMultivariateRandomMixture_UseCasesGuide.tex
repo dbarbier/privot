@@ -20,8 +20,7 @@ $$
 \displaystyle   \vect{Y}=\vect{y}_0+\vect{M}\vect{X}
 $$
 where $\vect{y}_0\in\mathbb{R}^d$ a deterministic vector with  $d\in\{1,2,3\}$, $\vect{M}\in\mathcal{M}_{d,n}(\mathbb{R})$ a deterministic matrix
-and $(X_i)_{ 1 \leq i \leq n}$ are some  \emph{independent univariate} random variables.\\
-
+and $(X_i)_{ 1 \leq i \leq n}$ are some  \emph{independent univariate} random variables.
 
 The module evaluates the probability density function of the random variable $Y$, the mean\slash variance.
 
@@ -30,7 +29,7 @@ Open TURNS proposes an implementation of all its univariate distributions, conti
 But only some of the them have the implementation of a specific algorithm that evaluates the characteristic function: 
 it is the case of all the discrete distributions and most of (but not all) the continuous ones. 
 In that case, the evaluation is performant. 
-For the remaining distributions, the generic implementation might be time consuming for high arguments. \\
+For the remaining distributions, the generic implementation might be time consuming for high arguments.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -68,7 +67,8 @@ The parameters are:
  \item the constant vector (\texttt{NumericalPoint}) of the affine transformation.
 \end{itemize}
 
-The return object is a distribution which inherites from the \texttt{PythonDistribution} class.\\
+The return object is a distribution which inherites from the \texttt{PythonDistribution} class.
+
 \requirements{
   \begin{description}
   \item[$\bullet$] a collection of distribution, \textit{myCollection}
@@ -85,7 +85,6 @@ The return object is a distribution which inherites from the \texttt{PythonDistr
   \item[type:] a PythonDistribution
   \end{description}
 }
-\espace
 
 Python script for this use case:
 
@@ -98,7 +97,8 @@ myDistribution = PythonMultivariateRandomMixture(myCollection, myMatrix, myVecto
 
 \subsubsection{Manipulation of the moments of the multivariate random mixture}
 It is now possible to get the mean, the variance of distribution.
-The distribution allows to get some realizations.\\
+The distribution allows to get some realizations.
+
 \requirements{
   \begin{description}
   \item[$\bullet$] None
@@ -118,7 +118,6 @@ The distribution allows to get some realizations.\\
   \item[type:] a NumericalSample
   \end{description}
 }
-\espace
 
 Python script for this use case:
 
@@ -152,7 +151,6 @@ It is also possible to get the characteristic function, the probability density 
   \item[type:] a NumericalComplex
   \end{description}
 }
-\espace
 
 \begin{lstlisting}
 myPoint = [0.3]
