@@ -164,25 +164,23 @@ with $fft$ a FFT algorithm
 
 \subsubsection{$\Sigma_{m}^{-}$}
 
-We use the symmetry of the $\delta$ function in order to reuse values computed in the previous section:
+We apply a variable change $k \rightarrow k-N$ and use the symmetry of the $\delta$ function
 \begin{align*}
-\delta(-kh)=&\bar{\delta}(kh)\\
+\delta(-kh)=&\bar{\delta}(kh)
 \end{align*}
-
-We apply a variable change:
+in order to reuse values computed in the previous section:
 \begin{align*}
 \Sigma_{m}^{-}&=\sum_{k=1}^{N}\delta(-kh)E_{m}(-k)\\
   &=\sum_{k=0}^{N-1}\delta((k-N)h)E_{m}(k-N)\\
   &=\sum_{k=0}^{N-1}\delta((k-N)h) e^{-2i\pi\left(\frac{(k-N) m}{N}\right)}e^{-i\pi (k-N)\left(\tau-1+\frac{1}{N}\right)}\\
-  &=\sum_{k=0}^{N-1}\left(\bar{\delta}((N-k)h) e^{-i\pi (k-N)\left(\tau-1+\frac{1}{N}\right)}\right) e^{-2i\pi\left(\frac{k m}{N}\right)} \\
   &=\sum_{k=0}^{N-1}\left(\overline{\delta((N-k)h) e^{-i\pi (N-k)\left(\tau-1+\frac{1}{N}\right)}}\right) e^{-2i\pi\left(\frac{k m}{N}\right)} 
 \end{align*}
 
 We can again identify a discrete Fourier transform, and reuse $y_k$ computed previously.
 \begin{enumerate}
-\item Pour $k\in\{0,\hdots,N-1\}$, we set:
+\item Pour $k\in\{0,\hdots,N-1\}$,
 \begin{align}
-z_{k}= \overline{y_{N-1-k}}
+z_{k}= \bar{y}_{N-1-k}
 \end{align}
 \item For $m \in\{0,\hdots,N-1\}$,
 \begin{align}
