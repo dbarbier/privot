@@ -9,7 +9,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{User Manual}
 
-This section gives an exhaustive presentation of the objects and functions provided by the $MultivariateRandomMixture$ module.
+This section gives an exhaustive presentation of the objects and functions provided by the \texttt{Multivariate\-Random\-Mixture} module.
 
 \subsection{PythonMultivariateRandomMixture}
 
@@ -17,307 +17,307 @@ This section gives an exhaustive presentation of the objects and functions provi
 \begin{description}
 \item[Usage:]  \strut
   \begin{description}
-  \item $PythonMultivariateRandomMixture(collection, matrix)$
-  \item $PythonMultivariateRandomMixture(collection, matrix, vector)$
+  \item \texttt{PythonMultivariateRandomMixture(collection, matrix)}
+  \item \texttt{PythonMultivariateRandomMixture(collection, matrix, vector)}
   \end{description}
 \item[Arguments:] \strut
   \begin{description}
-  \item $collection$: a DistributionCollection, a collection of OpenTURNS distributions.
-  \item $matrix$: a Matrix, the matrix of the affine transformation.
-  \item $vector$: a NumericalPoint, the constant term of the affine transformation.
+  \item \textit{collection}: a \texttt{DistributionCollection}, a collection of OpenTURNS distributions.
+  \item \textit{matrix}: a \texttt{Matrix}, the matrix of the affine transformation.
+  \item \textit{vector}: a \texttt{NumericalPoint}, the constant term of the affine transformation.
   \end{description}
 \item[Some methods:]  \strut
 
   \begin{description}
 
-  \item $computeCharacteristicFunction$
+  \item \texttt{computeCharacteristicFunction}
     \begin{description}
-    \item[Usage:]  $computeCharacteristicFunction(u)$
+    \item[Usage:]  \texttt{computeCharacteristicFunction(u)}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $u$: a NumericalPoint of dimension $n \ge 1$
+      \item $u$: a \texttt{NumericalPoint} of dimension $n \ge 1$
     \end{description}
-    \item[Value:] a $NumericalComplex$, compute the characteristic function on $u$
+    \item[Value:] a \texttt{NumericalComplex}, compute the characteristic function on $u$
     \end{description}
 
-  \item $computeLogCharacteristicFunction$
+  \item \texttt{computeLogCharacteristicFunction}
     \begin{description}
-    \item[Usage:]  $computeLogCharacteristicFunction(u)$
+    \item[Usage:]  \texttt{computeLogCharacteristicFunction(u)}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $u$: a NumericalPoint of dimension $n \ge 1$
+      \item $u$: a \texttt{NumericalPoint} of dimension $n \ge 1$
     \end{description}
-    \item[Value:] a $NumericalComplex$, compute the log-characteristic function on $u$
+    \item[Value:] a \texttt{NumericalComplex}, compute the log-characteristic function on $u$
     \end{description}
 
-  \item $computePDF$
+  \item \texttt{computePDF}
     \begin{description}
-    \item[Usage:]  $computePDF(u)$
+    \item[Usage:]  \texttt{computePDF(u)}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $u$: a NumericalPoint of dimension $n \ge 1$
+      \item $u$: a \texttt{NumericalPoint} of dimension $n \ge 1$
     \end{description}
-    \item[Value:] a $NumericalScalar$, compute the probability density function on $u$
+    \item[Value:] a \texttt{NumericalScalar}, compute the probability density function on $u$
     \end{description}
 
-  \item $getAlpha$
+  \item \texttt{getAlpha}
     \begin{description}
-    \item[Usage:]  $getAlpha()$
+    \item[Usage:]  \texttt{getAlpha()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $NumericalScalar$, the $\alpha$ parameter used for the computation of the range (position indicator)
+    \item[Value:] a \texttt{NumericalScalar}, the $\alpha$ parameter used for the computation of the range (position indicator)
     \end{description}
 
-  \item $getBeta$
+  \item \texttt{getBeta}
     \begin{description}
-    \item[Usage:]  $getBeta()$
+    \item[Usage:]  \texttt{getBeta()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $NumericalScalar$, the $\beta$ parameter used for the computation of the range (dispersion indicator)
+    \item[Value:] a \texttt{NumericalScalar}, the $\beta$ parameter used for the computation of the range (dispersion indicator)
     \end{description}
 
-  \item $getBlockMax$
+  \item \texttt{getBlockMax}
     \begin{description}
-    \item[Usage:]  $getBlockMax()$
+    \item[Usage:]  \texttt{getBlockMax()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] an $UnsignedLong$, the maximal parameter size (i.e $2^{blocMax}$) used for the computation of the characteristic function differences
+    \item[Value:] an \texttt{UnsignedLong}, the maximal parameter size (i.e $2^{\text{blockMax}}$) used for the computation of the differences of characteristic functions
     \end{description}
 
-  \item $getBlockMin$
+  \item \texttt{getBlockMin}
     \begin{description}
-    \item[Usage:]  $getBlockMin()$
+    \item[Usage:]  \texttt{getBlockMin()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] an $UnsignedLong$, the minimal parameter size (i.e $2^{blocMin}$) used for the computation of the characteristic function differences
+    \item[Value:] an \texttt{UnsignedLong}, the minimal parameter size (i.e $2^{\text{blockMin}}$) used for the computation of the differences of characteristic functions
     \end{description}
 
-  \item $getConstant$
+  \item \texttt{getConstant}
     \begin{description}
-    \item[Usage:]  $getConstant()$
+    \item[Usage:]  \texttt{getConstant()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $NumericalPoint$, the deterministic vector of the transformation
+    \item[Value:] a \texttt{NumericalPoint}, the deterministic vector of the transformation
     \end{description}
 
-  \item $getCorrelation$
+  \item \texttt{getCorrelation}
     \begin{description}
-    \item[Usage:]  $getCorrelation()$
+    \item[Usage:]  \texttt{getCorrelation()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $CorrelationMatrix$, the correlation of the distribution
+    \item[Value:] a \texttt{CorrelationMatrix}, the correlation of the distribution
     \end{description}
 
-  \item $getCovariance$
+  \item \texttt{getCovariance}
     \begin{description}
-    \item[Usage:]  $getCovariance()$
+    \item[Usage:]  \texttt{getCovariance()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $CovarianceMatrix$, the covariance of the distribution
+    \item[Value:] a \texttt{CovarianceMatrix}, the covariance of the distribution
     \end{description}
 
-  \item $getDimension$
+  \item \texttt{getDimension}
     \begin{description}
-    \item[Usage:]  $getDimension()$
+    \item[Usage:]  \texttt{getDimension()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] an $UnsignedLong$, the dimension of the matrix
+    \item[Value:] an \texttt{UnsignedLong}, the dimension of the matrix
     \end{description}
 
-  \item $getDistributionCollection$
+  \item \texttt{getDistributionCollection}
     \begin{description}
-    \item[Usage:]  $getDistributionCollection()$
+    \item[Usage:]  \texttt{getDistributionCollection()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $DistributionCollection$, the collection of distributions used for the affine transformation
+    \item[Value:] a \texttt{DistributionCollection}, the collection of distributions used for the affine transformation
     \end{description}
 
-  \item $getLastPDFError$
+  \item \texttt{getLastPDFError}
     \begin{description}
-    \item[Usage:]  $getLastPDFError()$
+    \item[Usage:]  \texttt{getLastPDFError()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $NumericalScalar$, the last error obtained when computing the probability density function
+    \item[Value:] a \texttt{NumericalScalar}, the last error obtained when computing the probability density function
     \end{description}
 
-  \item $getMatrix$
+  \item \texttt{getMatrix}
     \begin{description}
-    \item[Usage:]  $getMatrix()$
+    \item[Usage:]  \texttt{getMatrix()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $Matrix$, the <<~weight~>> matrix used for the affine transformation
+    \item[Value:] a \texttt{Matrix}, the \emph{weight} matrix used for the affine transformation
     \end{description}
 
-  \item $getMaxSize$
+  \item \texttt{getMaxSize}
     \begin{description}
-    \item[Usage:]  $getMaxSize()$
+    \item[Usage:]  \texttt{getMaxSize()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] an $UnsignedLong$, the maximum size of the cache for the CharacteristicFunction values
+    \item[Value:] an \texttt{UnsignedLong}, the maximum size of the cache for the CharacteristicFunction values
     \end{description}
 
-  \item $getMean$
+  \item \texttt{getMean}
     \begin{description}
-    \item[Usage:]  $getMean()$
+    \item[Usage:]  \texttt{getMean()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $NumericalPoint$, the mean of the distribution
+    \item[Value:] a \texttt{NumericalPoint}, the mean of the distribution
     \end{description}
 
-  \item $getPDFPrecision$
+  \item \texttt{getPDFPrecision}
     \begin{description}
-    \item[Usage:]  $getPDFPrecision()$
+    \item[Usage:]  \texttt{getPDFPrecision()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $NumericalScalar$, the precision used for the computation of the probability density function
+    \item[Value:] a \texttt{NumericalScalar}, the precision used for the computation of the probability density function
     \end{description}
 
-  \item $getRange$
+  \item \texttt{getRange}
     \begin{description}
-    \item[Usage:]  $getRange()$
+    \item[Usage:]  \texttt{getRange()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] an $Interval$ of dimension $d$, the range of the distribution
+    \item[Value:] an \texttt{Interval} of dimension $d$, the range of the distribution
     \end{description}
 
-  \item $getRealization$
+  \item \texttt{getRealization}
     \begin{description}
-    \item[Usage:]  $getRealization()$
+    \item[Usage:]  \texttt{getRealization()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $NumericalPoint$, a realization the distribution
+    \item[Value:] a \texttt{NumericalPoint}, a realization of the distribution
     \end{description}
 
-  \item $getReferenceBandwidth$
+  \item \texttt{getReferenceBandwidth}
     \begin{description}
-    \item[Usage:]  $getReferenceBandwidth()$
+    \item[Usage:]  \texttt{getReferenceBandwidth()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $NumericalPoint$, the bandwidth used for $PDF$
+    \item[Value:] a \texttt{NumericalPoint}, the bandwidth used for the computation of the probability density function
     \end{description}
 
-  \item $getSample$
+  \item \texttt{getSample}
     \begin{description}
-    \item[Usage:]  $getSample()$
+    \item[Usage:]  \texttt{getSample()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $n$: a positive integer
+      \item \texttt{n}: a positive integer
     \end{description}
-    \item[Value:] a $NumericalSample$, a sample of $n$ realizations of the distribution
+    \item[Value:] a \texttt{NumericalSample}, a sample of $n$ realizations of the distribution
     \end{description}
 
-  \item $getStandardDeviation$
+  \item \texttt{getStandardDeviation}
     \begin{description}
-    \item[Usage:]  $getStandardDeviation()$
+    \item[Usage:]  \texttt{getStandardDeviation()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $None$
+      \item \texttt{None}
     \end{description}
-    \item[Value:] a $NumericalPoint$, the standard deviation of the distribution
+    \item[Value:] a \texttt{NumericalPoint}, the standard deviation of the distribution
     \end{description}
 
-  \item $setAlpha$
+  \item \texttt{setAlpha}
     \begin{description}
-    \item[Usage:]  $setAlpha(alpha)$
+    \item[Usage:]  \texttt{setAlpha(alpha)}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $alpha$, a $NumericalScalar$
+      \item $alpha$, a \texttt{NumericalScalar}
     \end{description}
-    \item[Value:]  $None$, sets the $\alpha$ parameter used for the computation of the range (position indicator)
+    \item[Value:]  \texttt{None}, sets the $\alpha$ parameter used for the computation of the range (position indicator)
     \end{description}
 
-  \item $setBeta$
+  \item \texttt{setBeta}
     \begin{description}
-    \item[Usage:] $setBeta(beta)$
+    \item[Usage:] \texttt{setBeta(beta)}
     \item[Arguments:] \strut
     \begin{description}
-      \item $beta$: a $NumericalScalar$
+      \item $beta$: a \texttt{NumericalScalar}
     \end{description}
-    \item[Value:] $None$, sets the $\beta$ parameter used for the computation of the range (dispersion indicator)
+    \item[Value:] \texttt{None}, sets the $\beta$ parameter used for the computation of the range (dispersion indicator)
     \end{description}
 
-  \item $setBlockMax$
+  \item \texttt{setBlockMax}
     \begin{description}
-    \item[Usage:]  $setBlockMax(blocMax)$
+    \item[Usage:]  \texttt{setBlockMax(blockMax)}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $blocMax$, an $UnsignedLong$
+      \item $blockMax$, an \texttt{UnsignedLong}
     \end{description}
-    \item[Value:] $None$, sets the maximal parameter size (i.e $2^{blocMax}$) used for the computation of the characteristic function differences
+    \item[Value:] \texttt{None}, sets the maximal parameter size (i.e $2^{\text{blockMax}}$) used for the computation of the differences of characteristic functions
     \end{description}
 
-  \item $setBlockMin$
+  \item \texttt{setBlockMin}
     \begin{description}
-    \item[Usage:]  $setBlockMin(blocMin)$
+    \item[Usage:]  \texttt{setBlockMin(blockMin)}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $blocMin$, an $UnsignedLong$
+      \item $blockMin$, an \texttt{UnsignedLong}
     \end{description}
-    \item[Value:] $None$, sets the minimal parameter size (i.e $2^{blocMin}$) used for the computation of the characteristic function differences
+    \item[Value:] \texttt{None}, sets the minimal parameter size (i.e $2^{\text{blockMin}}$) used for the computation of the differences of characteristic functions
     \end{description}
 
-  \item $setMaxSize$
+  \item \texttt{setMaxSize}
     \begin{description}
-    \item[Usage:]  $setMaxSize(maxSize)$
+    \item[Usage:]  \texttt{setMaxSize(maxSize)}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $maxSize$, an $UnsignedLong$
+      \item $maxSize$, an \texttt{UnsignedLong}
     \end{description}
-    \item[Value:] $None$, sets the maximum size of the cache for the CharacteristicFunction values
+    \item[Value:] \texttt{None}, sets the maximum size of the cache for the CharacteristicFunction values
     \end{description}
 
-  \item $setReferenceBandwidth$
+  \item \texttt{setReferenceBandwidth}
     \begin{description}
-    \item[Usage:]  $setReferenceBandwidth(bandwidth)$
+    \item[Usage:]  \texttt{setReferenceBandwidth(bandwidth)}
     \item[Arguments:] \strut
     \begin{description}
-      \item $bandwidth$, a $NumericalPoint$
+      \item $bandwidth$, a \texttt{NumericalPoint}
     \end{description}
-    \item[Value:] $None$, sets the bandwidth used for $PDF$
+    \item[Value:] \texttt{None}, sets the bandwidth used for the computation of the probability density function
     \end{description}
 
-  \item $setPDFPrecision$
+  \item \texttt{setPDFPrecision}
     \begin{description}
-    \item[Usage:]  $setPDFPrecision()$
+    \item[Usage:]  \texttt{setPDFPrecision()}
     \item[Arguments:]  \strut
     \begin{description}
-      \item $pdfPrecision$, a $NumericalScalar$
+      \item $pdfPrecision$, a \texttt{NumericalScalar}
     \end{description}
-    \item[Value:] $None$, sets the precision used for the computation of the probability density function
+    \item[Value:] \texttt{None}, sets the precision used for the computation of the probability density function
     \end{description}
 
   \end{description}
@@ -325,18 +325,18 @@ This section gives an exhaustive presentation of the objects and functions provi
 \end{description}
 
 \subsection{MultivariateRandomMixture}
-This class inherits from the $Distribution$ class.
+This class inherits from the \texttt{Distribution} class.
 
 \begin{description}
 \item[Usage:]  \strut
   \begin{description}
-  \item $MultivariateRandomMixture(collection, matrix)$
-  \item $MultivariateRandomMixture(collection, matrix, vector)$
+  \item \texttt{MultivariateRandomMixture(collection, matrix)}
+  \item \texttt{MultivariateRandomMixture(collection, matrix, vector)}
   \end{description}
 \item[Arguments:] \strut
   \begin{description}
-  \item $collection$: a DistributionCollection, a collection of OpenTURNS distributions.
-  \item $matrix$: a Matrix, the matrix of the affine transformation.
-  \item $vector$: a NumericalPoint, the constant term of the affine transformation.
+  \item \textit{collection}: a \texttt{DistributionCollection}, a collection of OpenTURNS distributions.
+  \item \textit{matrix}: a \texttt{Matrix}, the matrix of the affine transformation.
+  \item \textit{vector}: a \texttt{NumericalPoint}, the constant term of the affine transformation.
   \end{description}
 \end{description}

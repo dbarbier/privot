@@ -12,7 +12,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 \section{Use Cases Guide}
 
-This section presents the main functionalities of the module $MultivariateRandomMixture$ in their context.
+This section presents the main functionalities of the module \texttt{MultivariateRandomMixture} in their context.
 
 
 The objective is to define the a random vector as a MultivariateRandomMixture, which means an affine combination of input random variables:
@@ -59,29 +59,29 @@ We could also import $openturns$ separately to the module.
 
 \subsection{Creation of a multivariate random mixture through the PythonMultivariateRandomMixture class} \label{MVRM}
 
-In $MultivariateRandomMixture$, it is possible to create a python class for the manipulation of the multivariate random mixture distribution.
+In \texttt{MultivariateRandomMixture}, it is possible to create a python class for the manipulation of the multivariate random mixture distribution.
 The multivariate random mixture is considered as an affine transformation of random vector of independant marginals. 
 The parameters are:
 \begin{itemize}
- \item the collection of distributions ($DistributionCollection$) which characterize the input random vector,
- \item the $Matrix$ of the affine transformation, 
- \item the constant vector ($NumericalPoint$) of the affine transformation.
+ \item the collection of distributions (\texttt{DistributionCollection}) which characterize the input random vector,
+ \item the \texttt{Matrix} of the affine transformation, 
+ \item the constant vector (\texttt{NumericalPoint}) of the affine transformation.
 \end{itemize}
 
-The return object is a distribution which inherites from the $PythonDistribution$ class.\\
+The return object is a distribution which inherites from the \texttt{PythonDistribution} class.\\
 \requirements{
   \begin{description}
-  \item[$\bullet$] a collection of distribution, {\itshape myCollection}
+  \item[$\bullet$] a collection of distribution, \textit{myCollection}
   \item[type:] a PythonDistribution
-  \item[$\bullet$] a deterministic matrix of transformation, {\itshape myMatrix}
+  \item[$\bullet$] a deterministic matrix of transformation, \textit{myMatrix}
   \item[type:] a Matrix
-  \item[$\bullet$] a deterministic constant vector, {\itshape myVector}
+  \item[$\bullet$] a deterministic constant vector, \textit{myVector}
   \item[type:] a NumericalPoint
   \end{description}
 }
 {
   \begin{description}
-  \item[$\bullet$] a PythonMultivariateRandomMixture object: {\itshape myDistribution},
+  \item[$\bullet$] a PythonMultivariateRandomMixture object: \textit{myDistribution},
   \item[type:] a PythonDistribution
   \end{description}
 }
@@ -106,15 +106,15 @@ The distribution allows to get some realizations.\\
 }
 {
   \begin{description}
-  \item[$\bullet$] the mean value: {\itshape myMean},
+  \item[$\bullet$] the mean value: \textit{myMean},
   \item[type:] a NumericalPoint
-  \item[$\bullet$] the standard deviation value: {\itshape myStandardDeviation},
+  \item[$\bullet$] the standard deviation value: \textit{myStandardDeviation},
   \item[type:] a NumericalPoint
-  \item[$\bullet$] the covariance matrix: {\itshape myCovarianceMatrix},
+  \item[$\bullet$] the covariance matrix: \textit{myCovarianceMatrix},
   \item[type:] a CovarianceMatrix
-  \item[$\bullet$] a realization of the distribution: {\itshape myRealization},
+  \item[$\bullet$] a realization of the distribution: \textit{myRealization},
   \item[type:] a NumericalPoint
-  \item[$\bullet$] some realization of the distribution: {\itshape mySample},
+  \item[$\bullet$] some realization of the distribution: \textit{mySample},
   \item[type:] a NumericalSample
   \end{description}
 }
@@ -140,15 +140,15 @@ It is also possible to get the characteristic function, the probability density 
 
 \requirements{
   \begin{description}
-  \item[$\bullet$] the point of interest, {\itshape myPoint}
+  \item[$\bullet$] the point of interest, \textit{myPoint}
   \item[type:] a NumericalPoint
   \end{description}
 }
 {
   \begin{description}
-  \item[$\bullet$] probability density value: {\itshape myPDF},
+  \item[$\bullet$] probability density value: \textit{myPDF},
   \item[type:] a NumericalScalar
-  \item[$\bullet$] the characteristic function value: {\itshape myCF},
+  \item[$\bullet$] the characteristic function value: \textit{myCF},
   \item[type:] a NumericalComplex
   \end{description}
 }
