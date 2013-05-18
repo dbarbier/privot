@@ -91,6 +91,8 @@ The $N$ parameter is dynamically calibrated: we start with $N=8$ then we double 
 \end{itemize}
 
 \section{Computation on a regular grid}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
+
 The interest is to compute the density function on a regular grid. Purposes are drawing some iso-values.
 The regular grid is of form:
 \begin{align}
@@ -212,7 +214,7 @@ We use the same techniques as in dimension 1 (symetries, variable changes) in or
 \delta\left(-k_1h_1, k_2h_2\right)=&\bar{\delta}\left(k_1h_1,-k_2h_2\right)\\
 \end{align}
 
-\subsubsection{Terme $\Sigma_{m_1,m_2}^{++}$}
+\subsubsection{$\Sigma_{m_1,m_2}^{++}$}
 \begin{align*}
 &E_{m_1,m_2}((k_1+1),(k_2+1))=\\
 &=e^{-i\left((k_1+1)h_1\left(\mu_1+b\left(\frac{2m_1+1}{M}-1\right)\sigma_1\right)+(k_2+1)h_2\left(\mu_2+b\left(\frac{2m_2+1}{M}-1\right)\sigma_2\right)\right)}\\
@@ -249,7 +251,7 @@ Since
 \end{align*}
 we notice that the results in dimension 1 could be extended to higher dimensions, particularly how to rewrite $E_{m_1,m_2}$ and $E_{m_1,m_2,m_3}$
 
-\subsubsection{Terme $\Sigma_{m_1,m_2}^{--}$}
+\subsubsection{$\Sigma_{m_1,m_2}^{--}$}
 
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
@@ -267,7 +269,7 @@ with $fft2d$ a bidimensionnal Fourier transformation.
 \end{align*}
 \end{enumerate}
 
-\subsubsection{Terme $\Sigma_{m_1,m_2}^{+-}$}
+\subsubsection{$\Sigma_{m_1,m_2}^{+-}$}
 
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
@@ -286,7 +288,7 @@ with $fft2d$ a bidimensionnal Fourier transformation.
 \end{enumerate}
 
 
-\subsubsection{Terme $\Sigma_{m_1,m_2}^{-+}$}
+\subsubsection{$\Sigma_{m_1,m_2}^{-+}$}
 
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
@@ -305,7 +307,7 @@ with $fft2d$ a bidimensionnal Fourier transformation.
 \end{enumerate}
 
 
-\subsubsection{Terme $\Sigma_{m_1,m_2}^{+0}$}
+\subsubsection{$\Sigma_{m_1,m_2}^{+0}$}
 \begin{enumerate}
 \item For $k_1\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -322,7 +324,7 @@ with $fft1d$ a unidimensionnal Fourier transformation.
 \end{align*}
 \end{enumerate}
 
-\subsubsection{Terme $\Sigma_{m_1,m_2}^{-0}$}
+\subsubsection{$\Sigma_{m_1,m_2}^{-0}$}
 \begin{enumerate}
 \item For $k_1\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -339,7 +341,7 @@ with $fft1d$ a unidimensionnal Fourier transformation.
 \end{align*}
 \end{enumerate}
 
-\subsubsection{Terme $\Sigma_{m_1,m_2}^{0+}$}
+\subsubsection{$\Sigma_{m_1,m_2}^{0+}$}
 \begin{enumerate}
 \item For $k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -356,7 +358,7 @@ with $fft1d$ a unidimensionnal Fourier transformation.
 \end{align*}
 \end{enumerate}
 
-\subsubsection{Terme $\Sigma_{m_1,m_2}^{0-}$}
+\subsubsection{$\Sigma_{m_1,m_2}^{0-}$}
 \begin{enumerate}
 \item For $k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -421,3 +423,4 @@ with
 \end{align*}
 
 
+\addtocontents{toc}{\protect\setcounter{tocdepth}{4}}
