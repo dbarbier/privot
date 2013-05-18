@@ -192,78 +192,81 @@ with $fft$ a FFT algorithm
 \subsection{The bidimensionnal case}
 In dimension 2, the expression of interest is:
 \begin{align}
-S_{m_1,m_2}=\frac{h_1h_2}{4\pi^2}\Big\{&\Sigma_{m_1,m_2}^{++} + \Sigma_{m_1,m_2}^{--} + \Sigma_{m_1,m_2}^{+-} + \Sigma_{m_1,m_2}^{-+}+\nonumber\\
-  &\Sigma_{m_1,m_2}^{+0}+\Sigma_{m_1,m_2}^{-0}+\Sigma_{m_1,m_2}^{0+}+\Sigma_{m_1,m_2}^{0-}\Big\}
+S_{m_1,m_2}=\frac{h_1h_2}{4\pi^2}\Big\{
+  \Sigma_{m_1,m_2}^{++} + \Sigma_{m_1,m_2}^{--} + \Sigma_{m_1,m_2}^{+-} + \Sigma_{m_1,m_2}^{-+} +
+  \Sigma_{m_1,m_2}^{+0} + \Sigma_{m_1,m_2}^{-0} + \Sigma_{m_1,m_2}^{0+} + \Sigma_{m_1,m_2}^{0-}
+\Big\}
 \end{align}
 with:
 \begin{align}
-\Sigma_{m_1,m_2}^{++}=&\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta\left((k_1+1)h_1,(k_2+1)h_2\right)E_{m_1,m_2}(k_1+1,k_2+1)\\
-\Sigma_{m_1,m_2}^{--}=&\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta\left(-(k_1+1)h_1,-(k_2+1)h_2\right)E_{m_1,m_2}(-(k_1+1),-(k_2+1))\\
-\Sigma_{m_1,m_2}^{+-}=&\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta\left((k_1+1)h_1,-(k_2+1)h_2\right)E_{m_1,m_2}(k_1+1,-(k_2+1))\\
-\Sigma_{m_1,m_2}^{-+}=&\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta\left(-(k_1+1)h_1,(k_2+1)h_2\right)E_{m_1,m_2}(-(k_1+1),k_2+1)\\
-\Sigma_{m_1,m_2}^{+0}=&\sum_{k=0}^{N-1}\delta((k+1)h_1,0)E_{m_1,m_2}(k+1,0)\\
-\Sigma_{m_1,m_2}^{-0}=&\sum_{k=0}^{N-1}\delta(-(k+1)h_1,0)E_{m_1,m_2}(-(k+1),0)\\
-\Sigma_{m_1,m_2}^{0+}=&\sum_{k=0}^{N-1}\delta(0,(k+1)h_2)E_{m_1,m_2}(0,k+1)\\
-\Sigma_{m_1,m_2}^{0-}=&\sum_{k=0}^{N-1}\delta(0,-(k+1)h_2)E_{m_1,m_2}(0,-(k+1))\\
+\Sigma_{m_1,m_2}^{++}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2)\\
+\Sigma_{m_1,m_2}^{--}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,-k_2h_2\right)E_{m_1,m_2}(-k_1,-k_2)\\
+\Sigma_{m_1,m_2}^{+-}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,-k_2h_2\right)E_{m_1,m_2}(k_1,-k_2)\\
+\Sigma_{m_1,m_2}^{-+}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,k_2h_2\right)E_{m_1,m_2}(-k_1,k_2)\\
+\Sigma_{m_1,m_2}^{+0}&=\sum_{k_1=1}^{N}\delta(k_1h_1,0)E_{m_1}(k_1)\\
+\Sigma_{m_1,m_2}^{-0}&=\sum_{k_1=1}^{N}\delta(-k_1h_1,0)E_{m_1}(-k_1)\\
+\Sigma_{m_1,m_2}^{0+}&=\sum_{k_2=1}^{N}\delta(0,k_2h_2)E_{m_2}(k_2)\\
+\Sigma_{m_1,m_2}^{0-}&=\sum_{k_2=1}^{N}\delta(0,-k_2h_2)E_{m_2}(-k_2)
 \end{align}
-We use the same techniques as in dimension 1 (symetries, variable changes) in order to accuracy evaluate the $\delta$ applied to the couples$(k_1, k_2)$ with $k_1\geq 0$:
+We use the same techniques as in dimension~1 (symmetries, variable changes) in order to accurately evaluate the $\delta$ applied to the couples $(k_1, k_2)$ with $k_1\geq 0$:
 \begin{align}
 \delta\left(-k_1h_1,-k_2h_2\right)=&\bar{\delta}\left(k_1h_1,k_2h_2\right)\\
-\delta\left(-k_1h_1, k_2h_2\right)=&\bar{\delta}\left(k_1h_1,-k_2h_2\right)\\
+\delta\left(-k_1h_1, k_2h_2\right)=&\bar{\delta}\left(k_1h_1,-k_2h_2\right)
 \end{align}
 
 \subsubsection{$\Sigma_{m_1,m_2}^{++}$}
+
 \begin{align*}
-&E_{m_1,m_2}((k_1+1),(k_2+1))=\\
-&=e^{-i\left((k_1+1)h_1\left(\mu_1+b\left(\frac{2m_1+1}{M}-1\right)\sigma_1\right)+(k_2+1)h_2\left(\mu_2+b\left(\frac{2m_2+1}{M}-1\right)\sigma_2\right)\right)}\\
-&=e^{-i\frac{2b}{M}\left(k_1m_1h_1\sigma_1+k_2m_2h_2\sigma_2\right)}e^{-ik_1h_1\left(\mu_1+b\sigma_1\left(\frac{1}{M}-1\right)\right)}e^{-ik_2h_2\left(\mu_2+b\sigma_2\left(\frac{1}{M}-1\right)\right)}\\
-&\times e^{-i\frac{2b}{M}\left(h_1\sigma_1 m_1+h_2\sigma_2 m_2\right)}e^{-ih_1\left(\mu_1+b\sigma_1\left(\frac{1}{M}-1\right)\right)}e^{-ih_2\left(\mu_2+b\sigma_2\left(\frac{1}{M}-1\right)\right)}\\
+E_{m_1,m_2}(k_1,k_2)
+ &= e^{-ik_1h_1b\sigma_1\left(\frac{\mu_1}{b\sigma_1}+\frac{2m_1}{M}+\frac{1}{M}-1\right)}
+    e^{-ik_2h_2b\sigma_2\left(\frac{\mu_2}{b\sigma_2}+\frac{2m_2}{M}+\frac{1}{M}-1\right)}
 \end{align*}
-We fix $M=N$, $h_1=\frac{\pi}{b\sigma_1}$ et $h_2=\frac{\pi}{b\sigma_2}$ to get $e^{-2i\pi\left(\frac{k_1m_1}{N}+\frac{k_2m_2}{N}\right)}$, which is the Fourier term in dimension 2. We finally get:
+We fix $M=N$, $h_1=\frac{\pi}{b\sigma_1}$, $h_2=\frac{\pi}{b\sigma_2}$, $\tau_1=\frac{\mu_1}{b\sigma_1}$, $\tau_2=\frac{\mu_2}{b\sigma_2}$ and obtain
 \begin{align*}
-&E_{m_1,m_2}((k_1+1),(k_2+1))=\\
-&=e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}e^{-2i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\right)}e^{-2i\pi (k_2+1)\left(\tau_2-1+\frac{1}{N}\right)}e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)}
+E_{m_1,m_2}(k_1,k_2)
+ &= e^{-ik_1\pi\left(\tau_1+\frac{2m_1}{N}+\frac{1}{N}-1\right)}
+    e^{-ik_2\pi\left(\tau_2+\frac{2m_2}{N}+\frac{1}{N}-1\right)}\\
+ &= e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
+    e^{-ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
+    e^{-ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
 \end{align*}
-with $\tau_1=\frac{\mu_1}{b\sigma_1}$ et $\tau_2=\frac{\mu_2}{b\sigma_2}$.
+
+And thus
+\begin{align*}
+\Sigma_{m_1,m_2}^{++}=e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)}\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}
+  &\delta\left((k_1+1)h_1,(k_2+1)h_2\right) \times\\
+  & e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
+    e^{-i(k_1+1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
+    e^{-i(k_2+1)\pi\left(\tau_2+\frac{1}{N}-1\right)}
+\end{align*}
+
 Similary to the unidimensional case, the evaluation of $\Sigma^{++}$ might be done using a FFT algorithm:
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
-y_{k_1,k_2}=\delta((k_1+1)h_1,(k_2+1)h_2)e^{-2i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\right)}e^{-2i\pi (k_2+1)\left(\tau_2-1+\frac{1}{N}\right)}
+y^{++}_{k_1,k_2}=\delta((k_1+1)h_1,(k_2+1)h_2)e^{-i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\right)}e^{-i\pi (k_2+1)\left(\tau_2-1+\frac{1}{N}\right)}
 \end{align*}
 \item For $m_1,m_2\in\{0,\hdots,N-1\}$, we set:
 \begin{align*}
-  z_{m_1,m_2}=fft2d(y_{k_1,k_2})
+  z_{m_1,m_2}=fft2d(y^{++}_{k_1,k_2})
 \end{align*}
-with $fft2d$ a bidimensionnal Fourier transformation.
+with $fft2d$ a bidimensionnal discrete Fourier transformation.
 \item The contribution $\Sigma_{m_1,m_2}^{++}$ equals to:
 \begin{align*}
   \Sigma_{m_1,m_2}^{++}=z_{m_1,m_2}e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)}
 \end{align*}
 \end{enumerate}
 
-\paragraph{Important remark\\}
-Since
-\begin{align*}
-  \exp(a) * \exp(b) = \exp(a+b)
-\end{align*}
-we notice that the results in dimension 1 could be extended to higher dimensions, particularly how to rewrite $E_{m_1,m_2}$ and $E_{m_1,m_2,m_3}$
-
 \subsubsection{$\Sigma_{m_1,m_2}^{--}$}
 
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
-y_{k_1,k_2}=\bar{\delta}((N-k_1)h_1,(N-k_2)h_2)e^{-2i\pi (k_1-N)\left(\tau_1-1+\frac{1}{N}\right)}e^{-2i\pi (k_2-N)\left(\tau_2-1+\frac{1}{N}\right)}
+y^{--}_{k_1,k_2}&=\bar{y}^{++}_{N-1-k_1,N-1-k_2}
 \end{align*}
-\item For $m_1,m_2\in\{0,\hdots,N-1\}$, we set:
-\begin{align*}
-  z_{m_1,m_2}=fft2d(y_{k_1,k_2})
-\end{align*}
-with $fft2d$ a bidimensionnal Fourier transformation.
 \item The contribution $\Sigma_{m_1,m_2}^{--}$ equals to:
 \begin{align*}
-  \Sigma_{m_1,m_2}^{--}=z_{m_1,m_2}e^{2i\pi\left(m_1+m_2\right)}
+  \Sigma_{m_1,m_2}^{--}=fft2d(y^{--}_{k_1,k_2})
 \end{align*}
 \end{enumerate}
 
@@ -272,16 +275,16 @@ with $fft2d$ a bidimensionnal Fourier transformation.
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
-y_{k_1,k_2}= \delta((k_1+1)h_1,(k_2-N)h_2)e^{-2i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\right)}e^{-2i\pi (k_2-N)\left(\tau_2-1+\frac{1}{N}\right)}
+y^{+-}_{k_1,k_2}= \delta((k_1+1)h_1,(k_2-N)h_2)e^{-i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\right)}e^{-i\pi (k_2-N)\left(\tau_2-1+\frac{1}{N}\right)}
 \end{align*}
 \item For $m_1,m_2\in\{0,\hdots,N-1\}$, we set:
 \begin{align*}
-  z_{m_1,m_2}=fft2d(y_{k_1,k_2})
+  z_{m_1,m_2}=fft2d(y^{+-}_{k_1,k_2})
 \end{align*}
 with $fft2d$ a bidimensionnal Fourier transformation.
 \item The contribution $\Sigma_{m_1,m_2}^{+-}$ equals to:
 \begin{align*}
-  \Sigma_{m_1,m_2}^{+-}=z_{m_1,m_2}e^{-2i\pi\left(\frac{m_1}{N}\right)} e^{2i\pi\left(m_2\right)}
+  \Sigma_{m_1,m_2}^{+-}=z_{m_1,m_2}e^{-2i\pi\left(\frac{m_1}{N}\right)}
 \end{align*}
 \end{enumerate}
 
@@ -291,16 +294,16 @@ with $fft2d$ a bidimensionnal Fourier transformation.
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
-y_{k_1,k_2}= \bar{\delta}(-(k_1-N)h_1,-(k_2+1)h_2)e^{-2i\pi (k_1-N)\left(\tau_1-1+\frac{1}{N}\right)}e^{-2i\pi (k_2+1)\left(\tau_2-1+\frac{1}{N}\right)}
+y^{-+}_{k_1,k_2}&=\bar{y}^{+-}_{N-1-k_1,N-1-k_2}
 \end{align*}
 \item For $m_1,m_2\in\{0,\hdots,N-1\}$, we set:
 \begin{align*}
-  z_{m_1,m_2}=fft2d(y_{k_1,k_2})
+  z_{m_1,m_2}=fft2d(y^{-+}_{k_1,k_2})
 \end{align*}
 with $fft2d$ a bidimensionnal Fourier transformation.
 \item The contribution $\Sigma_{m_1,m_2}^{-+}$ equals to:
 \begin{align*}
-  \Sigma_{m_1,m_2}^{+-}=z_{m_1,m_2}e^{2i\pi\left(m_1\right)}e^{-2i\pi\left(\frac{m_2}{N}\right)}
+  \Sigma_{m_1,m_2}^{-+}=z_{m_1,m_2} e^{-2i\pi\left(\frac{m_2}{N}\right)}
 \end{align*}
 \end{enumerate}
 
@@ -309,16 +312,16 @@ with $fft2d$ a bidimensionnal Fourier transformation.
 \begin{enumerate}
 \item For $k_1\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
-y_{k_1}= \delta((k_1+1)h_1,0)e^{-2i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\right)}
+y^{+0}_{k_1}= \delta((k_1+1)h_1,0)e^{-i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\right)}
 \end{align*}
 \item For $m_1\in\{0,\hdots,N-1\}$, we set:
 \begin{align*}
-  z_{m_1}=fft1d(y_{k_1})
+  z_{m_1}=fft1d(y^{+0}_{k_1})
 \end{align*}
 with $fft1d$ a unidimensionnal Fourier transformation.
 \item The contribution $\Sigma_{m_1,m_2}^{+0}$ equals to:
 \begin{align*}
-  \Sigma_{m_1,m_2}^{+0}=z_{m_1}e^{-2i\pi\left(\frac{m_1}{N}\right)} \forall m_2
+  \Sigma_{m_1,m_2}^{+0}=z_{m_1} e^{-2i\pi\left(\frac{m_1}{N}\right)}
 \end{align*}
 \end{enumerate}
 
@@ -326,33 +329,29 @@ with $fft1d$ a unidimensionnal Fourier transformation.
 \begin{enumerate}
 \item For $k_1\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
-y_{k_1}= \bar{\delta}(-(k_1-N)h_1,0)e^{-2i\pi (k_1-N)\left(\tau_1-1+\frac{1}{N}\right)}
+y^{-0}_{k_1}= \bar{y}^{+0}_{N-1-k_1}
 \end{align*}
-\item For $m_1\in\{0,\hdots,N-1\}$, we set:
-\begin{align*}
-  z_{m_1}=fft1d(y_{k_1})
-\end{align*}
-with $fft1d$ a unidimensionnal Fourier transformation.
 \item The contribution $\Sigma_{m_1,m_2}^{-0}$ equals to:
 \begin{align*}
-  \Sigma_{m_1,m_2}^{-0}=z_{m_1}e^{2i\pi\left(m_1\right)} \forall m_2
+  \Sigma_{m_1,m_2}^{-0}=fft1d(y^{-0}_{k_1})
 \end{align*}
+with $fft1d$ a unidimensionnal Fourier transformation.
 \end{enumerate}
 
 \subsubsection{$\Sigma_{m_1,m_2}^{0+}$}
 \begin{enumerate}
 \item For $k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
-y_{k_2}= \delta(0,(k_2+1)h_2)e^{-2i\pi (k_2+1)\left(\tau_2-1+\frac{1}{N}\right)}
+y^{0+}_{k_2}= \delta(0,(k_2+1)h_2)e^{-i\pi (k_2+1)\left(\tau_2-1+\frac{1}{N}\right)}
 \end{align*}
 \item For $m_2\in\{0,\hdots,N-1\}$, we set:
 \begin{align*}
-  z_{m_2}=fft1d(y_{k_2})
+  z_{m_2}=fft1d(y^{0+}_{k_2})
 \end{align*}
 with $fft1d$ a unidimensionnal Fourier transformation.
 \item The contribution $\Sigma_{m_1,m_2}^{0+}$ equals to:
 \begin{align*}
-  \Sigma_{m_1,m_2}^{0+}=z_{m_2}e^{-2i\pi\left(\frac{m_2}{N}\right)} \forall m_1
+  \Sigma_{m_1,m_2}^{0+}=z_{m_2}e^{-2i\pi\left(\frac{m_2}{N}\right)}
 \end{align*}
 \end{enumerate}
 
@@ -360,17 +359,13 @@ with $fft1d$ a unidimensionnal Fourier transformation.
 \begin{enumerate}
 \item For $k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
-y_{k_2}= \bar{\delta}(0,(N-k_2)h_2)e^{-2i\pi (k_2-N)\left(\tau_2-1+\frac{1}{N}\right)}
+y^{0-}_{k_2}= \bar{y}^{0+}_{N-1-k_2}
 \end{align*}
-\item For $m_2\in\{0,\hdots,N-1\}$, we set:
-\begin{align*}
-  z_{m_2}=fft1d(y_{k_2})
-\end{align*}
-with $fft1d$ a unidimensionnal Fourier transformation.
 \item The contribution $\Sigma_{m_1,m_2}^{0-}$ equals to:
 \begin{align*}
-  \Sigma_{m_1,m_2}^{0-}=z_{m_2}e^{2i\pi\left(m_2 N\right)} \forall m_1
+  \Sigma_{m_1,m_2}^{0-}=fft1d(y^{0-}_{k_2})
 \end{align*}
+with $fft1d$ a unidimensionnal Fourier transformation.
 \end{enumerate}
 
 \subsection{The tridimensionnal case}
