@@ -17,9 +17,9 @@
 The objective is to manipulate a multivariate random vector $\vect{Y}$ with a specific structure:
 it is the image of a random vector $\vect{X} = (X_1, \hdots, X_n) $ of independent and continuous univariate distributions by an affine transform $T$:
 \begin{align}\label{defY}
-  \vect{Y}=\vect{y}_0+\mat{M}\vect{X}
+  \vect{Y}=\vect{y}_0+\mat{M}\,\vect{X}
 \end{align}
-$\vect{y}_0\in\mathbb{R}^d$ is a deterministic vector with $d\in\{1,2,3\}$ and $\vect{M}\in\mathcal{M}_{d,n}(\mathbb{R})$
+$\vect{y}_0\in\mathbb{R}^d$ is a deterministic vector with $d\in\{1,2,3\}$ and $\mat{M}\in\mathcal{M}_{d,n}(\mathbb{R})$
 a deterministic matrix. This particular form allows the calculation of the law of $\vect{Y} $ using the Poisson summation formula, which links the characteristic
 function $\phi $ of $\vect{Y}$ to its density $p$. This formula is given by:
 
@@ -28,21 +28,21 @@ function $\phi $ of $\vect{Y}$ to its density $p$. This formula is given by:
     &\frac{h_1\times\cdots\times h_d}{2^d\pi^d}\sum_{k_1\in\mathbb{Z}}\hdots\sum_{k_d\in\mathbb{Z}}\phi\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}
 \end{align}
 
-By fixing $h_1,\hdots,h_d$ enough small, the nested sums of the left term are reduced to the central term $j_1=\hdots=j_d = 0$.
+By fixing $h_1,\hdots,h_d$ small enough, the nested sums of the left term are reduced to the central term $j_1=\hdots=j_d = 0$.
 The sums on the right are truncated symmetrically to $ 2N +1 $ terms, which gives:
 \begin{align}
   p\left(y_1,\hdots,y_d\right)\simeq\frac{H}{2^d\pi^d}\sum_{|k_1|\leq N}\hdots\sum_{|k_d|\leq N}\phi\left(k_1h_1,\hdots,k_dh_d\right)e^{-i(k_1h_1y_1+\cdots+k_dh_dy_d)}
 \end{align}
 where $H = h_1\times\hdots\times h_d$.
 
-The characteristic function of such a random vector $Y$ is obtained analytically using $\vect{y}_0$, $\vect{M}$ and the characteristic functions of $X_1$,\dots,$X_n$:
+The characteristic function of such a random vector $Y$ is obtained analytically using $\vect{y}_0$, $\mat{M}$ and the characteristic functions of $X_1$,\dots,$X_n$:
 \begin{align}
   \forall \vect{u}\in\mathbb{R}^d,\quad\phi(u_1,\hdots,u_d)=\prod_{j=1}^de^{iu_j{y_0}_j}\prod_{k=1}^n\phi_{X_k}((M^tu)_k)
 \end{align}
 
-It is possible to greatly improve the performance of the algorithm by noticing that equation~(\ref{poissonND}) is linear between $p$
+It is possible to greatly improve the performance of the algorithm by noticing that equation~\eqref{poissonND} is linear between $p$
 and $\phi $. We denote $q$ and $\psi$ respectively the density and the characteristic function of the multivariate normal distribution with the
-same mean $\vect{\mu}$ and same covariance matrix $\vect{C}$ as the the random mixture. By applying this multivariate normal distribution to the equation~(\ref{poissonND}), we obtain by subtraction:
+same mean $\vect{\mu}$ and same covariance matrix $\vect{C}$ as the the random mixture. By applying this multivariate normal distribution to the equation~\eqref{poissonND}, we obtain by subtraction:
 \begin{align}\label{algoPoisson}
 p\left(y_1,\hdots,y_d\right)\simeq \sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}}
   &q\left(y_1+\frac{2\pi j_1}{h_1},\hdots,y_d+\frac{2\pi j_d}{h_d}\right)+\notag\\
@@ -102,7 +102,7 @@ E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)
 with:
 \begin{align}
   \delta\left(k_1h_1,\hdots,k_dh_d\right)&=(\phi-\psi)\left(k_1h_1,\hdots,k_dh_d\right)\\
-  E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)&=e^{-i\sum_{j=1}^d k_jh_j\left(\mu_j+b\left(\frac{2m_j+1}{M}-1\right)\sigma_j\right)}
+  E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)&=e^{-i\sum_{j=1}^d k_jh_j\left(\mu_j+b\left(\frac{2m_j+1}{M}-1\right)\sigma_j\right)}\label{Eq:E}
 \end{align}
 
 The aim is to rewrite the previous expression as a $d$- discrete Fourier transform, in order to apply Fast Fourier Transform (\emph{FFT}) for its evaluation.
@@ -116,47 +116,47 @@ S_{m}=\frac{h}{2\pi}\Big\{&\Sigma_{m}^{+} + \Sigma_{m}^{-} \Big\}
 \end{align}
 with:
 \begin{align}
-\Sigma_{m}^{+}&=\sum_{k=1}^{N}\delta( kh)E_{m}(k)\\
-\Sigma_{m}^{-}&=\sum_{k=1}^{N}\delta(-kh)E_{m}(-k)\\
+\Sigma_{m}^{+}&=\sum_{k=1}^{N}\delta( kh)E_{m}(k) \label{Eq:sigma+}\\
+\Sigma_{m}^{-}&=\sum_{k=1}^{N}\delta(-kh)E_{m}(-k) \label{Eq:sigma-}
 \end{align}
 
 \subsubsection{\texorpdfstring{$\Sigma_{m}^{+}$}{sigma+}}
-By developing $E_m(k)$, we get:
+Equation~\eqref{Eq:E} gives:
 \begin{align*}
 E_{m}(k)&=e^{-ikh\left(\mu+b\left(\frac{2m+1}{M}-1\right)\sigma\right)}\\
 &=e^{-ikhb\sigma\left(\frac{\mu}{b\sigma}+\frac{2m}{M}+\frac{1}{M}-1\right)}\\
 \end{align*}
 We set $M=N$, $h=\frac{\pi}{b\sigma}$ and $\tau=\frac{\mu}{b\sigma}$. We obtain:
-\begin{align*}
-E_{m}(k)&=e^{-2i\pi\left(\frac{k m}{N}\right)}e^{-i\pi k\left(\tau-1+\frac{1}{N}\right)}
-\end{align*}
-By shifting sum index,
+\begin{align}
+E_{m}(k)&=e^{-2i\pi\left(\frac{k m}{N}\right)}e^{-i\pi k\left(\tau-1+\frac{1}{N}\right)} \label{Eq:E1d}
+\end{align}
+The change of variable $k'=k-1$ in equation~\eqref{Eq:sigma+} gives:
 \begin{align*}
 \Sigma_{m}^{+}&=\sum_{k=0}^{N-1}\delta((k+1)h)E_{m}(k+1)\\
   &=\sum_{k=0}^{N-1}\delta((k+1)h) e^{-2i\pi\left(\frac{(k+1) m}{N}\right)} e^{-i\pi (k+1)\left(\tau-1+\frac{1}{N}\right)}\\
   &=e^{-2i\pi\left(\frac{m}{N}\right)} \sum_{k=0}^{N-1}\left(\delta((k+1)h) e^{-i\pi (k+1)\left(\tau-1+\frac{1}{N}\right)}\right) e^{-2i\pi\left(\frac{k m}{N}\right)} 
 \end{align*}
-one can identify a discrete Fourier transform.
+One can identify a discrete Fourier transform.
 
 \begin{enumerate}
 \item For $k\in\{0,\hdots,N-1\}$, we set:
 \begin{align}
 y_{k}=\delta((k+1)h)e^{-i\pi (k+1)\left(\tau-1+\frac{1}{N}\right)}
 \end{align}
-\item For $m \in\{0,\hdots,N-1\}$, we set:
+\item For $m \in\{0,\hdots,N-1\}$, we compute:
 \begin{align}
-  z_{m}=fft(y_{k})
+  \widehat{y}_{m}=fft(y_{k})=\sum_{k=0}^{N-1} y_k e^{-2i\pi\left(\frac{k m}{N}\right)} 
 \end{align}
-with $fft$ a FFT algorithm
+with $fft$ an FFT algorithm
 \item Eventually $\Sigma_{m}^{+}$ is:
 \begin{align*}
-  \Sigma_{m}^{+}=z_{m}e^{-2i\pi\left(\frac{m}{N}\right)}
+  \Sigma_{m}^{+}=\widehat{y}_{m}e^{-2i\pi\left(\frac{m}{N}\right)}
 \end{align*}
 \end{enumerate}
 
 \subsubsection{\texorpdfstring{$\Sigma_{m}^{-}$}{sigma-}}
 
-We apply a variable change $k \rightarrow k-N$ and use the symmetry of the $\delta$ function
+We apply a change of variable $k'=N-k$ and use the symmetry of the $\delta$ function
 \begin{align*}
 \delta(-kh)=&\bar{\delta}(kh)
 \end{align*}
@@ -164,7 +164,7 @@ in order to reuse values computed in the previous section:
 \begin{align*}
 \Sigma_{m}^{-}&=\sum_{k=1}^{N}\delta(-kh)E_{m}(-k)\\
   &=\sum_{k=0}^{N-1}\delta((k-N)h)E_{m}(k-N)\\
-  &=\sum_{k=0}^{N-1}\delta((k-N)h) e^{-2i\pi\left(\frac{(k-N) m}{N}\right)}e^{-i\pi (k-N)\left(\tau-1+\frac{1}{N}\right)}\\
+  &=\sum_{k=0}^{N-1}\overline{\delta}((N-k)h) e^{-2i\pi\left(\frac{(k-N) m}{N}\right)}e^{-i\pi (k-N)\left(\tau-1+\frac{1}{N}\right)}\\
   &=\sum_{k=0}^{N-1}\left(\overline{\delta((N-k)h) e^{-i\pi (N-k)\left(\tau-1+\frac{1}{N}\right)}}\right) e^{-2i\pi\left(\frac{k m}{N}\right)} 
 \end{align*}
 
@@ -178,7 +178,7 @@ z_{k}= \bar{y}_{N-1-k}
 \begin{align}
   \Sigma_{m}^{-}=fft(z_{k})
 \end{align}
-with $fft$ a FFT algorithm
+with $fft$ an FFT algorithm
 \end{enumerate}
 
 \subsection{The bidimensional case}
@@ -191,48 +191,57 @@ S_{m_1,m_2}=\frac{h_1h_2}{4\pi^2}\Big\{
 \end{align}
 with:
 \begin{align}
-\Sigma_{m_1,m_2}^{++}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2)\\
-\Sigma_{m_1,m_2}^{--}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,-k_2h_2\right)E_{m_1,m_2}(-k_1,-k_2)\\
-\Sigma_{m_1,m_2}^{+-}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,-k_2h_2\right)E_{m_1,m_2}(k_1,-k_2)\\
-\Sigma_{m_1,m_2}^{-+}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,k_2h_2\right)E_{m_1,m_2}(-k_1,k_2)\\
-\Sigma_{m_1,m_2}^{+0}&=\sum_{k_1=1}^{N}\delta(k_1h_1,0)E_{m_1}(k_1)\\
-\Sigma_{m_1,m_2}^{-0}&=\sum_{k_1=1}^{N}\delta(-k_1h_1,0)E_{m_1}(-k_1)\\
-\Sigma_{m_1,m_2}^{0+}&=\sum_{k_2=1}^{N}\delta(0,k_2h_2)E_{m_2}(k_2)\\
-\Sigma_{m_1,m_2}^{0-}&=\sum_{k_2=1}^{N}\delta(0,-k_2h_2)E_{m_2}(-k_2)
+\Sigma_{m_1,m_2}^{++}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2) \label{Eq:sigma++}\\
+\Sigma_{m_1,m_2}^{--}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,-k_2h_2\right)E_{m_1,m_2}(-k_1,-k_2) \label{Eq:sigma--}\\
+\Sigma_{m_1,m_2}^{+-}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,-k_2h_2\right)E_{m_1,m_2}(k_1,-k_2) \label{Eq:sigma+-}\\
+\Sigma_{m_1,m_2}^{-+}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,k_2h_2\right)E_{m_1,m_2}(-k_1,k_2) \label{Eq:sigma-+}\\
+\Sigma_{m_1,m_2}^{+0}&=\sum_{k_1=1}^{N}\delta(k_1h_1,0)E_{m_1}(k_1) \label{Eq:sigma+0}\\
+\Sigma_{m_1,m_2}^{-0}&=\sum_{k_1=1}^{N}\delta(-k_1h_1,0)E_{m_1}(-k_1) \label{Eq:sigma-0}\\
+\Sigma_{m_1,m_2}^{0+}&=\sum_{k_2=1}^{N}\delta(0,k_2h_2)E_{m_2}(k_2) \label{Eq:sigma0+}\\
+\Sigma_{m_1,m_2}^{0-}&=\sum_{k_2=1}^{N}\delta(0,-k_2h_2)E_{m_2}(-k_2) \label{Eq:sigma0-}
 \end{align}
-We use the same techniques as in dimension~1 (symmetries, variable changes) in order to accurately evaluate the $\delta$ applied to the couples $(k_1, k_2)$ with $k_1\geq 0$:
+We rewrite equation~\eqref{Eq:E} when $d=2$:
+\begin{align*}
+  E_{m_1,m_2}(k_1,k_2)&=e^{-i\left[
+    k_1h_1b\sigma_1\left(\frac{\mu_1}{b\sigma_1}+\frac{2m_1+1}{M}-1\right) +
+    k_2h_2b\sigma_2\left(\frac{\mu_2}{b\sigma_2}+\frac{2m_2+1}{M}-1\right)
+  \right]}
+\end{align*}
+We use the same techniques as in dimension~1: we fix $M=N$, $h_1=\frac{\pi}{b\sigma_1}$, $h_2=\frac{\pi}{b\sigma_2}$, $\tau_1=\frac{\mu_1}{b\sigma_1}$, $\tau_2=\frac{\mu_2}{b\sigma_2}$ and obtain
 \begin{align}
-\delta\left(-k_1h_1,-k_2h_2\right)=&\bar{\delta}\left(k_1h_1,k_2h_2\right)\\
-\delta\left(-k_1h_1, k_2h_2\right)=&\bar{\delta}\left(k_1h_1,-k_2h_2\right)
+  E_{m_1,m_2}(k_1,k_2)&=
+     e^{-ik_1\pi\left(\tau_1+\frac{2m_1}{N}+\frac{1}{N}-1\right)} +
+     e^{-ik_2\pi\left(\tau_2+\frac{2m_2}{N}+\frac{1}{N}-1\right)} \notag\\
+ &= e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
+    e^{-ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
+    e^{-ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)} \label{Eq:E2d}
+\end{align}
+
+Symmetry of $\delta$ implies that for all $(k_1, k_2)$,
+\begin{align}
+\delta\left(-k_1h_1,-k_2h_2\right)=&\bar{\delta}\left(k_1h_1,k_2h_2\right)
 \end{align}
 
 \subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{++}$}{sigma++}}
 
+Equations~\eqref{Eq:sigma++} and \eqref{Eq:E2d} give:
 \begin{align*}
-E_{m_1,m_2}(k_1,k_2)
- &= e^{-ik_1h_1b\sigma_1\left(\frac{\mu_1}{b\sigma_1}+\frac{2m_1}{M}+\frac{1}{M}-1\right)}
-    e^{-ik_2h_2b\sigma_2\left(\frac{\mu_2}{b\sigma_2}+\frac{2m_2}{M}+\frac{1}{M}-1\right)}
-\end{align*}
-We fix $M=N$, $h_1=\frac{\pi}{b\sigma_1}$, $h_2=\frac{\pi}{b\sigma_2}$, $\tau_1=\frac{\mu_1}{b\sigma_1}$, $\tau_2=\frac{\mu_2}{b\sigma_2}$ and obtain
-\begin{align*}
-E_{m_1,m_2}(k_1,k_2)
- &= e^{-ik_1\pi\left(\tau_1+\frac{2m_1}{N}+\frac{1}{N}-1\right)}
-    e^{-ik_2\pi\left(\tau_2+\frac{2m_2}{N}+\frac{1}{N}-1\right)}\\
- &= e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
+\Sigma_{m_1,m_2}^{++}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,k_2h_2\right)
+    e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
     e^{-ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
     e^{-ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
 \end{align*}
 
-And thus
+We apply a change of variables $k_1'=k_1-1$, $k_2'=k_2-1$:
 \begin{align*}
 \Sigma_{m_1,m_2}^{++}=e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)}\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}
-  &\delta\left((k_1+1)h_1,(k_2+1)h_2\right) \times\\
-  & e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
+  & e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \times\\
+  & \delta\left((k_1+1)h_1,(k_2+1)h_2\right)
     e^{-i(k_1+1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
     e^{-i(k_2+1)\pi\left(\tau_2+\frac{1}{N}-1\right)}
 \end{align*}
 
-As in the unidimensional case, the evaluation of $\Sigma^{++}$ might be done using a FFT algorithm:
+As in the unidimensional case, the evaluation of $\Sigma^{++}$ can be performed by using an FFT algorithm:
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -251,6 +260,26 @@ with $fft2d$ a bidimensional discrete Fourier transform.
 
 \subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{--}$}{sigma--}}
 
+Equations~\eqref{Eq:sigma--} and \eqref{Eq:E2d} give:
+\begin{align*}
+\Sigma_{m_1,m_2}^{--}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,-k_2h_2\right)
+    e^{2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
+    e^{ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
+    e^{ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
+\end{align*}
+
+We apply a change of variables $k_1'=N-k_1$, $k_2'=N-k_2$:
+\begin{align*}
+\Sigma_{m_1,m_2}^{--}&=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}
+  \delta\left((k_1-N)h_1,(k_2-N)h_2\right) e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
+    e^{i(N-k_1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
+    e^{i(N-k_2)\pi\left(\tau_2+\frac{1}{N}-1\right)} \\
+ &=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} 
+  \overline{\delta}\left((N-k_1)h_1,(N-k_2)h_2\right) 
+    \overline{e^{-i(N-k_1)\pi\left(\tau_1+\frac{1}{N}-1\right)}}\,
+    \overline{e^{-i(N-k_2)\pi\left(\tau_2+\frac{1}{N}-1\right)}}
+\end{align*}
+
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -263,6 +292,22 @@ y^{--}_{k_1,k_2}&=\bar{y}^{++}_{N-1-k_1,N-1-k_2}
 \end{enumerate}
 
 \subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{+-}$}{sigma+-}}
+
+Equations~\eqref{Eq:sigma+-} and \eqref{Eq:E2d} give:
+\begin{align*}
+\Sigma_{m_1,m_2}^{+-}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,-k_2h_2\right)
+    e^{-2i\pi\left(\frac{k_1m_1-k_2m_2}{N}\right)}
+    e^{-ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
+    e^{ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
+\end{align*}
+
+We apply a change of variables $k_1'=k_1+1$, $k_2'=N-k_2$:
+\begin{align*}
+\Sigma_{m_1,m_2}^{+-}&=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}
+  \delta\left((k_1+1)h_1,(k_2-N)h_2\right) e^{-2i\pi\left(\frac{(k_1+1)m_1+k_2m_2}{N}\right)}
+    e^{-i(k_1+1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
+    e^{-i(k_2-N)\pi\left(\tau_2+\frac{1}{N}-1\right)}
+\end{align*}
 
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
@@ -283,6 +328,23 @@ with $fft2d$ a bidimensional Fourier transform.
 
 \subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{-+}$}{sigma-+}}
 
+Equations~\eqref{Eq:sigma-+} and \eqref{Eq:E2d} give:
+\begin{align*}
+\Sigma_{m_1,m_2}^{-+}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,k_2h_2\right)
+    e^{2i\pi\left(\frac{k_1m_1-k_2m_2}{N}\right)}
+    e^{ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
+    e^{-ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
+\end{align*}
+
+We apply a change of variables $k_1'=N-k_1$, $k_2'=k_2-1$:
+\begin{align*}
+\Sigma_{m_1,m_2}^{-+}&=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}
+  \delta\left((k_1-N)h_1,(k_2+1)h_2\right)
+    e^{-2i\pi\left(\frac{k_1m_1+(k_2+1)m_2}{N}\right)}
+    e^{i(N-k_1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
+    e^{-i(k_2+1)\pi\left(\tau_2+\frac{1}{N}-1\right)}
+\end{align*}
+
 \begin{enumerate}
 \item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -301,6 +363,20 @@ with $fft2d$ a bidimensional Fourier transform.
 
 
 \subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{+0}$}{sigma+0}}
+Equations~\eqref{Eq:sigma+0} and \eqref{Eq:E1d} give:
+\begin{align*}
+\Sigma_{m_1,m_2}^{+0}&=\sum_{k_1=1}^{N}\delta\left(k_1h_1,0\right)
+    e^{-2i\pi\left(\frac{k_1m_1}{N}\right)}
+    e^{-ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
+\end{align*}
+
+We apply a change of variable $k_1'=k_1+1$:
+\begin{align*}
+\Sigma_{m_1,m_2}^{+0}&=\sum_{k_1=0}^{N-1}
+  \delta\left((k_1+1)h_1,0\right) e^{-2i\pi\left(\frac{(k_1+1)m_1}{N}\right)}
+    e^{-i(k_1+1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
+\end{align*}
+
 \begin{enumerate}
 \item For $k_1\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -318,6 +394,24 @@ with $fft1d$ a unidimensional Fourier transform.
 \end{enumerate}
 
 \subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{-0}$}{sigma-0}}
+Equations~\eqref{Eq:sigma-0} and \eqref{Eq:E1d} give:
+\begin{align*}
+\Sigma_{m_1,m_2}^{-0}&=\sum_{k_1=1}^{N}\delta\left(-k_1h_1,0\right)
+    e^{2i\pi\left(\frac{k_1m_1}{N}\right)}
+    e^{ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
+\end{align*}
+
+We apply a change of variable $k_1'=N-k_1$:
+\begin{align*}
+\Sigma_{m_1,m_2}^{-0}&=\sum_{k_1=0}^{N-1}
+  \delta\left((k_1-N)h_1,0\right) e^{-2i\pi\left(\frac{k_1m_1}{N}\right)}
+    e^{i(N-k_1)\pi\left(\tau_1+\frac{1}{N}-1\right)} \\
+ &=\sum_{k_1=0}^{N-1}
+    e^{-2i\pi\left(\frac{k_1m_1}{N}\right)}
+  \bar{\delta}\left((N-k_1)h_1,0\right)
+   \overline{e^{-i(N-k_1)\pi\left(\tau_1+\frac{1}{N}-1\right)}}
+\end{align*}
+
 \begin{enumerate}
 \item For $k_1\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -331,6 +425,20 @@ with $fft1d$ a unidimensional Fourier transform.
 \end{enumerate}
 
 \subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{0+}$}{sigma0+}}
+Equations~\eqref{Eq:sigma0+} and \eqref{Eq:E1d} give:
+\begin{align*}
+\Sigma_{m_1,m_2}^{0+}&=\sum_{k_2=1}^{N}\delta\left(0,k_2h_2\right)
+    e^{-2i\pi\left(\frac{k_2m_2}{N}\right)}
+    e^{-ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
+\end{align*}
+
+We apply a change of variable $k_2'=k_2+1$:
+\begin{align*}
+\Sigma_{m_1,m_2}^{0+}&=\sum_{k_2=0}^{N-1}
+  \delta\left(0,(k_2+1)h_2\right) e^{-2i\pi\left(\frac{(k_2+1)m_2}{N}\right)}
+    e^{-i(k_2+1)\pi\left(\tau_2+\frac{1}{N}-1\right)}
+\end{align*}
+
 \begin{enumerate}
 \item For $k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
@@ -348,6 +456,24 @@ with $fft1d$ a unidimensional Fourier transform.
 \end{enumerate}
 
 \subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{0-}$}{sigma0-}}
+Equations~\eqref{Eq:sigma0-} and \eqref{Eq:E1d} give:
+\begin{align*}
+\Sigma_{m_1,m_2}^{0-}&=\sum_{k_2=1}^{N}\delta\left(0,-k_2h_2\right)
+    e^{2i\pi\left(\frac{k_2m_2}{N}\right)}
+    e^{ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
+\end{align*}
+
+We apply a change of variable $k_2'=N-k_2$:
+\begin{align*}
+\Sigma_{m_1,m_2}^{0-}&=\sum_{k_2=0}^{N-1}
+  \delta\left(0,(k_2-N)h_2\right) e^{-2i\pi\left(\frac{k_2m_2}{N}\right)}
+    e^{i(N-k_2)\pi\left(\tau_2+\frac{1}{N}-1\right)} \\
+ &=\sum_{k_2=0}^{N-1}
+    e^{-2i\pi\left(\frac{k_2m_2}{N}\right)}
+  \bar{\delta}\left(0,(N-k_2)h_2\right)
+   \overline{e^{-i(N-k_2)\pi\left(\tau_2+\frac{1}{N}-1\right)}}
+\end{align*}
+
 \begin{enumerate}
 \item For $k_2\in\{0,\hdots,N-1\}$, we fix:
 \begin{align*}
