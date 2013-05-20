@@ -691,14 +691,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # zm = exp(-2.0 * pi* 1j * m / N), m =0,1,...,N-1
         yk = dcf * np.exp(- pi* 1j * (tau - 1.0 + 1.0 / N) * np.arange(1, N+1))
         yk_hat = np.fft.fft(yk)
-        zm = np.exp(-2.0 * pi * 1j * np.arange(N) / N)
-        sigma_plus = yk_hat * zm
+        z_exp = np.exp(-2.0 * pi* 1j * np.arange(N) / N)
+        sigma_plus = yk_hat * z_exp
 
         # compute the \Sigma_- term
         # \Sigma_{m}^{-}=\sum_{k=0}^{N-1}\delta(-(k+1)h) E_{m}(-(k+1))
         # \Sigma_{m}^{-}_{m} = fft(zk)
         # zk = conj(\delta[(N-k)*h]) * exp(- pi* 1j * (k-N) * (tau - 1.0 + 1.0 / N))
-        zk = np.conjugate(yk[N - np.arange(N) - 1])
+        zk = np.conjugate(yk[::-1])
         sigma_minus = np.fft.fft(zk)
 
         # final computation
@@ -787,6 +787,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # Precompute the grid of delta functions
         ot.Log.Info("Precomputing delta grid")
 
+        #  These arrays are used below
+        f1 = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+        f2 = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+        z_exp_m2 = np.exp(-two_pi* 1j * np.arange(N) / N)
+        z_exp_m1 = z_exp_m2.reshape(N,1)
+
         # compute \Sigma_++
         # \Sigma_{m1, m2}^{++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta((k1+1)hx, (k2+1)hy) E_{m1,m2}(k1+1, k2+1)
         # \Sigma_{m1, m2}^{++} = fft(y_{k1, k2}) * z_{m1,m2} with :
@@ -794,12 +800,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N))
         # zm_{m1,m2} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m2 / N),forall k1,k2,m1,m2=0,1,...,N-1
         dcf = np.array( [[self.computeDeltaCharacteristicFunction([(i + 1) * h_x, (j + 1) * h_y]) for j in xrange(N)] for i in xrange(N)] )
-        yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
-        yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
-        yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
-        yk_hat = np.fft.fft2(dcf * yk)
-        zm = np.exp(-two_pi* 1j * np.arange(N) / N)
-        zm1m2 = zm.reshape(N,1) * zm.reshape(1,N)
+        f1f2 = f1.reshape(N,1) * f2
+        yplusplus = dcf * f1f2
+        yk_hat = np.fft.fft2(yplusplus)
+        zm1m2 = z_exp_m1 * z_exp_m2
         sigma_plus_plus = yk_hat * zm1m2
 
         # compute the \Sigma_--
@@ -808,14 +812,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # y_{k1, k2} = conj(\delta[-(N-k1)*hx, -(N-k2)*hy])* exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N)) *
         # exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N))
         # zm_{m1,m2} = exp(2.0 * pi* 1j * m1) * exp(2.0 * pi* 1j * m2),forall k1,k2,m1,m2=0,1,...,N-1
-        dcf_conjugate = np.conjugate(dcf[np.arange(N,0,-1)-1,:][:,np.arange(N,0,-1)-1])
-        yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
-        yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
-        yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
-        yk_hat = np.fft.fft2(dcf_conjugate * yk)
-        zm = np.exp(two_pi* 1j * np.arange(N))
-        zm1m2 = zm.reshape(N,1) * zm.reshape(1,N)
-        sigma_minus_minus = yk_hat * zm1m2
+        yminusminus = np.conjugate(yplusplus[::-1,::-1])
+        sigma_minus_minus = np.fft.fft2(yminusminus)
 
         # compute the \Sigma_+-
         # \Sigma_{m1, m2}^{+-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta((k1+1)hx, -(k2+1)hy) E_{m1,m2}((k1+1), -(k2+1))
@@ -824,14 +822,10 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N))
         # zm_{m1,m2} = exp(-2.0 * pi* 1j * m1/N) * exp(2.0 * pi* 1j * m2),forall k1,k2,m1,m2=0,1,...,N-1
         dcf = np.array( [[self.computeDeltaCharacteristicFunction([(i + 1) * h_x, (j - N) * h_y]) for j in xrange(N)] for i in xrange(N)] )
-        yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N + 1))
-        yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * (np.arange(N) - N))
-        yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
-        yk_hat = np.fft.fft2(dcf * yk)
-        zm1 = np.exp(-two_pi* 1j * np.arange(N) / N)
-        zm2 = np.exp(two_pi* 1j * np.arange(N))
-        zm1m2 = zm1.reshape(N,1) * zm2.reshape(1,N)
-        sigma_plus_minus = yk_hat * zm1m2
+        f1f2 = f1.reshape(N,1) * np.conjugate(f2[::-1])
+        yplusminus = dcf * f1f2
+        yk_hat = np.fft.fft2(yplusminus)
+        sigma_plus_minus = yk_hat * z_exp_m1
 
         # compute the \Sigma_-+
         # \Sigma_{m1, m2}^{-+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\delta(-(k1+1)hx, (k2+1)hy) E_{m1,m2}(-(k1+1), k2+1)
@@ -839,15 +833,9 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # y_{k1, k2} = conj(\delta[-(N-k1) * hx, -(k2+1) * hy]) * exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N)) *
         # exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N))
         # zm_{m1,m2} = exp(2.0 * pi* 1j * m1) * exp(-2.0 * pi* 1j * m2 / N),forall k1,k2,m1,m2=0,1,...,N-1
-        dcf_conjugate = np.conjugate(dcf[np.arange(N,0,-1)-1,:][:,np.arange(N,0,-1)-1])
-        yk_x = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * (np.arange(N) - N))
-        yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N + 1))
-        yk = yk_x.reshape(N,1) * yk_y.reshape(1,N)
-        yk_hat = np.fft.fft2(dcf_conjugate * yk)
-        zm1 = np.exp(two_pi* 1j * np.arange(N))
-        zm2 = np.exp(-two_pi* 1j * np.arange(N) / N)
-        zm1m2 = zm1.reshape(N,1) * zm2.reshape(1,N)
-        sigma_minus_plus = yk_hat * zm1m2
+        yminusplus = np.conjugate(yplusminus[::-1,::-1])
+        yk_hat = np.fft.fft2(yminusplus)
+        sigma_minus_plus = yk_hat * z_exp_m2
 
         # The interest here is to compute "1D" contributions
         # "1D" because one of the components is set to 0
@@ -856,6 +844,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # the case
         # For the "minus" case, results are deduced from the 1D case
         # whereas for "plus" cases, the calculations have been done manually
+        z_exp_m1 = np.exp(-two_pi* 1j * np.arange(N) / N)
 
         # \Sigma_+_0
         # \Sigma_{m1, m2}^{+0}=\sum_{k1=0}^{N-1}\delta((k1+1)hx, 0) E_{m1,m2}(k1+1, 0)
@@ -863,18 +852,17 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # y_{k1} = \delta[(k1+1) * hx, 0] * exp(- pi* 1j * (k1+1) * (tau_x - 1.0 + 1.0 / N))
         # zm_{m1} = exp(-2.0 * pi* 1j * m1 / N), forall k1,m1,m2=0,1,...,N-1
         dcf = np.array([self.computeDeltaCharacteristicFunction([(i + 1) * h_x, 0]) for i in xrange(N)])
-        yk = dcf * np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
+        yk = dcf * f1
         yk_hat = np.fft.fft(yk)
-        sigma_plus_0 = yk_hat * np.exp(-two_pi* 1j * np.arange(N) / N)
+        sigma_plus_0 = yk_hat * z_exp_m1
 
         # \Sigma_-_0
         # \Sigma_{m1, m2}^{-0}=\sum_{k1=0}^{N-1}\delta(-(k1+1)hx, 0) E_{m1,m2}(-(k1+1), 0)
         # \Sigma_{m1, m2}^{-0} = fft(y_{k1}) * z_{m1} with :
         # y_{k1} = conj(\delta[(N-k1) * hx, 0]) * exp(- pi* 1j * (k1-N) * (tau_x - 1.0 + 1.0 / N))
         # zm_{m1} = exp(2.0 * pi* 1j * m1), forall k1,m1,m2=0,1,...,N-1
-        yk = np.conjugate(dcf[N - np.arange(N) - 1]) * np.exp(-pi* 1j * (tau_x - 1.0 + 1.0/N) * (np.arange(N) - N))
-        yk_hat = np.fft.fft(yk)
-        sigma_minus_0 = yk_hat * np.exp(2 * pi* 1j * np.arange(N))
+        yk = np.conjugate(yk[::-1])
+        sigma_minus_0 = np.fft.fft(yk)
 
         # \Sigma_0_+
         # \Sigma_{m1, m2}^{0+}=\sum_{k2=0}^{N-1}\delta(0, (k2+1)hy) E_{m1,m2}(0, k2+1)
@@ -882,27 +870,21 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # y_{k1} = \delta[0, (k2+1) * hy] * exp(- pi* 1j * (k2+1) * (tau_y - 1.0 + 1.0 / N))
         # zm_{m1} = exp(-2.0 * pi* 1j * m2 / N), forall k2,m1,m2=0,1,...,N-1
         dcf = np.array([self.computeDeltaCharacteristicFunction([0, (i + 1) * h_y]) for i in xrange(N)])
-        yk = dcf * np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
+        yk = dcf * f2
         yk_hat = np.fft.fft(yk)
-        sigma_0_plus = yk_hat * np.exp(-two_pi* 1j * np.arange(N) / N)
+        sigma_0_plus = yk_hat * z_exp_m1
 
         # \Sigma_0_-
         # \Sigma_{m1, m2}^{0-}=\sum_{k2=0}^{N-1}\delta(0, -(k2+1)hy) E_{m1,m2}(0, -(k2+1))
         # \Sigma_{m1, m2}^{0-} = fft(y_{k2}) * z_{m2} with :
         # y_{k1} = conj(\delta[0, (N-k2) * hy]) * exp(- pi* 1j * (k2-N) * (tau_y - 1.0 + 1.0 / N))
         # zm_{m1} = exp(2.0 * pi* 1j * m2), forall k2,m1,m2=0,1,...,N-1
-        yk = np.conjugate(dcf[N - np.arange(N) - 1]) * np.exp(-pi* 1j * (tau_y - 1.0 + 1.0/N) * (np.arange(N) - N))
-        yk_hat = np.fft.fft(yk)
-        sigma_0_minus = yk_hat * np.exp(2 * pi* 1j * np.arange(N))
+        yk = np.conjugate(yk[::-1])
+        sigma_0_minus = np.fft.fft(yk)
 
-        # We start summation of the contributions
-        s_m = sigma_plus_plus + sigma_minus_minus + sigma_plus_minus + sigma_minus_plus
-        # We add 1D values to the s_m terms
-        for k in xrange(N):
-            s_m[:, k] += sigma_plus_0[:]
-            s_m[:, k] += sigma_minus_0[:]
-            s_m[k, :] += sigma_0_plus[:]
-            s_m[k, :] += sigma_0_minus[:]
+        # Summation of the contributions
+        s_m = sigma_plus_plus + sigma_minus_minus + sigma_plus_minus + sigma_minus_plus + \
+              sigma_plus_0.reshape(N,1) + sigma_minus_0.reshape(N,1) + sigma_0_plus + sigma_0_minus
         s_m *= (h_x * h_y) / (4.0 * pi * pi)
 
         # final computation
