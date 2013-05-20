@@ -42,7 +42,7 @@ The characteristic function of such a random vector $Y$ is obtained analytically
 
 It is possible to greatly improve the performance of the algorithm by noticing that equation~\eqref{poissonND} is linear between $p$
 and $\phi $. We denote $q$ and $\psi$ respectively the density and the characteristic function of the multivariate normal distribution with the
-same mean $\vect{\mu}$ and same covariance matrix $\vect{C}$ as the the random mixture. By applying this multivariate normal distribution to the equation~\eqref{poissonND}, we obtain by subtraction:
+same mean $\vect{\mu}$ and same covariance matrix $\vect{C}$ as the random mixture. By applying this multivariate normal distribution to the equation~\eqref{poissonND}, we obtain by subtraction:
 \begin{align}\label{algoPoisson}
 p\left(y_1,\hdots,y_d\right)\simeq \sum_{j_1\in\mathbb{Z}}\hdots\sum_{j_d\in\mathbb{Z}}
   &q\left(y_1+\frac{2\pi j_1}{h_1},\hdots,y_d+\frac{2\pi j_d}{h_d}\right)+\notag\\
@@ -55,7 +55,7 @@ The vector $\vect{\mu}$ and the covariance matrix $\mat{C}$ of the random vector
   \mat{C}=&\mat{M}\,\mat{\mathrm{Cov}}(\vect{X})\mat{M}^t\\
 \end{align}
 
-The matrix $\mat{\mathrm{Cov}}(\vect{X})$ is diagonal thanks to the the independence of $X_i$.
+The matrix $\mat{\mathrm{Cov}}(\vect{X})$ is diagonal thanks to the independence of $X_i$.
 The element $C_{i,j}$ of $\mat{C}$ is given by:
 \begin{align}
 \forall i,j\in\{1,\hdots,d\},\quad C_{i,j}=\sum_{k=1}^nM_{i,k}M_{j,k}\mathrm{Var}(X_k)
@@ -82,7 +82,6 @@ The $N$ parameter is dynamically calibrated: we start with $N=8$ then we double 
 \end{itemize}
 
 \section{Computation on a regular grid}
-\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
 
 The interest is to compute the density function on a regular grid. Purposes are drawing some iso-values.
 The regular grid is of form:
@@ -97,16 +96,100 @@ By denoting $p_{m_1,\hdots,m_d}=p_{\vect{Y}}(y_{1,m_1},\hdots,y_{d,m_d})$:
 for which the term $S_{m_1,\hdots,m_d}$ is the most CPU consuming. This term rewrites:
 \begin{align}
 S_{m_1,\hdots,m_d}=&\frac{H}{2^d\pi^d}\sum_{k_1=-N}^{N}\hdots\sum_{k_d=-N}^{N}\delta\left(k_1h_1,\hdots,k_dh_d\right)
-E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)
+E_{m_1,\hdots,m_d}(k_1,\hdots,k_d) \label{Eq:S}
 \end{align}
 with:
 \begin{align}
   \delta\left(k_1h_1,\hdots,k_dh_d\right)&=(\phi-\psi)\left(k_1h_1,\hdots,k_dh_d\right)\\
-  E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)&=e^{-i\sum_{j=1}^d k_jh_j\left(\mu_j+b\left(\frac{2m_j+1}{M}-1\right)\sigma_j\right)}\label{Eq:E}
+  E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)&=e^{-i\sum_{j=1}^d k_jh_j\left(\mu_j+b\left(\frac{2m_j+1}{M}-1\right)\sigma_j\right)}
 \end{align}
 
 The aim is to rewrite the previous expression as a $d$- discrete Fourier transform, in order to apply Fast Fourier Transform (\emph{FFT}) for its evaluation.
-We should before that divide the sums of the expression into blocks of optimal sizes for the FFT. This part of job is complex and some key issues are resumed here after.
+
+We set $M=N$ and $\forall j \in\{1,\hdots,d\},\: h_j=\frac{\pi}{b\sigma_j}$ and $\tau_j=\frac{\mu_j}{b\sigma_j}$.
+For convenience, we introduce the functions:
+$$
+f_j(k) = e^{-i\pi (k+1)\left(\tau_j-1+\frac{1}{N}\right)}
+$$
+We use $k+1$ instead of $k$ in this function to simplify expressions below.
+
+We obtain:
+\begin{align}
+E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)&=e^{-i\sum_{j=1}^{d} k_jh_jb\sigma_j\left(\frac{\mu_j}{b\sigma_j}+\frac{2m_j}{N}+\frac{1}{N}-1\right)}\notag\\
+   &=e^{-2i\pi\left(\frac{\sum_{j=1}^{d}k_j m_j}{N}\right)}e^{-i\pi\sum_{j=1}^{d} k_j\left(\tau_j-1+\frac{1}{N}\right)} \notag\\
+   &=e^{-2i\pi\left(\frac{\sum_{j=1}^{d}k_j m_j}{N}\right)} f_1(k_1-1) \times\hdots\times f_d(k_d-1) \label{Eq:E}
+\end{align}
+
+For performance reasons, we want to use the discrete Fourier transform provided by the numpy Python package.  Its convention is to compute
+$$
+A_m = \sum_{k=0}^{N-1} a_k e^{-2i\pi\frac{km}{N}}
+$$
+
+We decompose sums of~\eqref{Eq:S} on the interval $[-N,N]$ into three parts:
+\begin{align}
+\sum_{k_j=-N}^{N}\delta\left(k_1h_1,\hdots,k_dh_d\right) E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)
+  = & \sum_{k_j=-N}^{-1} \delta\left(k_1h_1,\hdots,k_dh_d\right) E_{m_1,\hdots,m_d}(k_1,\hdots,k_d) \notag\\
+  & + \delta\left(k_1h_1,\hdots,0,\hdots,k_dh_d\right) E_{m_1,\hdots,0,\hdots,m_d}(k_1,\hdots,0,\hdots,k_d) \notag\\
+  & + \sum_{k_j=1}^{N}\delta\left(k_1h_1,\hdots,k_dh_d\right) E_{m_1,\hdots,m_d}(k_1,\hdots,k_d) \label{Eq:decomposition-sum}
+\end{align}
+
+If we already computed $E$ for dimension $d-1$, then the middle term in this sum is trivial.
+
+To compute the last sum of~\eqref{Eq:decomposition-sum}, we apply a change of variable $k_j'=k_j-1$:
+\begin{align}
+\sum_{k_j=1}^{N}\delta\left(k_1h_1,\hdots,k_dh_d\right) E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)
+ = & \sum_{k_j=0}^{N-1}\delta\left(k_1h_1,\hdots,(k_j+1)h_j,\hdots,k_dh_d\right) \times\notag\\
+   & \hspace*{3cm} E_{m_1,\hdots,m_d}(k_1,\hdots,k_j+1,\hdots,k_d)
+\end{align}
+Equation~\eqref{Eq:E} gives:
+\begin{align}
+E_{m_1,\hdots,m_d}(k_1,\hdots,k_j+1,\hdots,k_d) 
+ &= 
+     e^{-2i\pi\left(\frac{\sum_{l=1}^{d}k_l m_l}{N} +\frac{m_j}{N}\right)}
+     f_1(k_1-1)\times\hdots\times f_j(k_j)\times\hdots\times f_d(k_d-1)\notag\\
+ &= 
+     e^{-2i\pi\left(\frac{m_j}{N}\right)}
+     e^{-2i\pi\left(\frac{\sum_{l=1}^{d}k_l m_l}{N}\right)}
+     f_1(k_1-1)\times\hdots\times f_j(k_j)\times\hdots\times f_d(k_d-1)
+\end{align}
+Thus
+\begin{align}
+\sum_{k_j=1}^{N}\delta\left(k_1h_1,\hdots,k_dh_d\right) E_{m_1,\hdots,m_d}&(k_1,\hdots,k_d)
+  = e^{-2i\pi\left(\frac{m_j}{N}\right)} \sum_{k_j=0}^{N-1}\delta\left(k_1h_1,\hdots,(k_j+1)h_j,\hdots,k_dh_d\right) \times\notag\\
+  & e^{-2i\pi\left(\frac{\sum_{l=1}^{d}k_l m_l}{N}\right)}
+     f_1(k_1-1)\times\hdots\times f_j(k_j)\times\hdots\times f_d(k_d-1) \label{Eq:j-sigma+}
+\end{align}
+
+To compute the first sum of equation~\eqref{Eq:decomposition-sum}, we apply a change of variable $k_j'=N+k_j$:
+\begin{align}
+\sum_{k_j=-N}^{-1}\delta\left(k_1h_1,\hdots,k_dh_d\right) E_{m_1,\hdots,m_d}(k_1,\hdots,k_d)
+ = & \sum_{k_j=0}^{N-1}\delta\left(k_1h_1,\hdots,(k_j-N)h_j,\hdots,k_dh_d\right) \times\notag\\
+   & \hspace*{3cm} E_{m_1,\hdots,m_d}(k_1,\hdots,k_j-N,\hdots,k_d)
+\end{align}
+Equation~\eqref{Eq:E} gives:
+\begin{align}
+E_{m_1,\hdots,m_d}(k_1,\hdots,k_j-N,\hdots,k_d) 
+ &= 
+     e^{-2i\pi\left(\frac{\sum_{l=1}^{d}k_l m_l}{N} -m_j\right)}
+     f_1(k_1-1)\times\hdots\times f_j(k_j-1-N)\times\hdots\times f_d(k_d-1) \notag\\
+ &= 
+     e^{-2i\pi\left(\frac{\sum_{l=1}^{d}k_l m_l}{N}\right)}
+     f_1(k_1-1)\times\hdots\times \overline{f}_j(N-1-k_j)\times\hdots\times f_d(k_d-1) 
+\end{align}
+
+Thus:
+\begin{align}
+\sum_{k_j=-N}^{-1}\delta\left(k_1h_1,\hdots,k_dh_d\right) E_{m_1,\hdots,m_d}&(k_1,\hdots,k_d)
+  = \sum_{k_j=0}^{N-1}\delta\left(k_1h_1,\hdots,(k_j-N)h_j,\hdots,k_dh_d\right) \times\notag\\
+  & e^{-2i\pi\left(\frac{\sum_{l=1}^{d}k_l m_l}{N}\right)}
+     f_1(k_1-1)\times\hdots\times \overline{f}_j(N-1-k_j)\times\hdots\times f_d(k_d-1) \label{Eq:j-sigma-}
+\end{align}
+
+To summarize:
+\begin{enumerate}
+\item In order to compute sum from $k_1=1$ to $N$, we multiply by $e^{-2i\pi\left(\frac{m_1}{N}\right)}$ and consider $\delta((k_1+1)h,\hdots)f_1(k_1)$
+\item In order to compute sum from $k_1=-N$ to $-1$, we consider $\delta((k_1-N)h,\hdots)\overline{f}_1(N-1-k_1)$
+\end{enumerate}
 
 \subsection{The unidimensional case}
 
@@ -116,27 +199,12 @@ S_{m}=\frac{h}{2\pi}\Big\{&\Sigma_{m}^{+} + \Sigma_{m}^{-} \Big\}
 \end{align}
 with:
 \begin{align}
-\Sigma_{m}^{+}&=\sum_{k=1}^{N}\delta( kh)E_{m}(k) \label{Eq:sigma+}\\
-\Sigma_{m}^{-}&=\sum_{k=1}^{N}\delta(-kh)E_{m}(-k) \label{Eq:sigma-}
+\Sigma_{m}^{+}&=\sum_{k=1}^{N}\delta( kh)E_{m}(k) \notag\\
+  &=e^{-2i\pi\left(\frac{m}{N}\right)} \sum_{k=0}^{N-1}\left(\delta((k+1)h) f_1(k)\right) e^{-2i\pi\left(\frac{k m}{N}\right)} \\
+\Sigma_{m}^{-}&=\sum_{k=-N}^{-1}\delta(kh)E_{m}(k) \notag\\
+  &= \sum_{k=0}^{N-1}\left(\delta((k-N)h) \overline{f}_1(N-1-k)\right) e^{-2i\pi\left(\frac{k m}{N}\right)} \notag\\
+  &= \sum_{k=0}^{N-1}\left(\overline{\delta}((N-k)h) \overline{f}_1(N-1-k)\right) e^{-2i\pi\left(\frac{k m}{N}\right)}
 \end{align}
-
-\subsubsection{\texorpdfstring{$\Sigma_{m}^{+}$}{sigma+}}
-Equation~\eqref{Eq:E} gives:
-\begin{align*}
-E_{m}(k)&=e^{-ikh\left(\mu+b\left(\frac{2m+1}{M}-1\right)\sigma\right)}\\
-&=e^{-ikhb\sigma\left(\frac{\mu}{b\sigma}+\frac{2m}{M}+\frac{1}{M}-1\right)}\\
-\end{align*}
-We set $M=N$, $h=\frac{\pi}{b\sigma}$ and $\tau=\frac{\mu}{b\sigma}$. We obtain:
-\begin{align}
-E_{m}(k)&=e^{-2i\pi\left(\frac{k m}{N}\right)}e^{-i\pi k\left(\tau-1+\frac{1}{N}\right)} \label{Eq:E1d}
-\end{align}
-The change of variable $k'=k-1$ in equation~\eqref{Eq:sigma+} gives:
-\begin{align*}
-\Sigma_{m}^{+}&=\sum_{k=0}^{N-1}\delta((k+1)h)E_{m}(k+1)\\
-  &=\sum_{k=0}^{N-1}\delta((k+1)h) e^{-2i\pi\left(\frac{(k+1) m}{N}\right)} e^{-i\pi (k+1)\left(\tau-1+\frac{1}{N}\right)}\\
-  &=e^{-2i\pi\left(\frac{m}{N}\right)} \sum_{k=0}^{N-1}\left(\delta((k+1)h) e^{-i\pi (k+1)\left(\tau-1+\frac{1}{N}\right)}\right) e^{-2i\pi\left(\frac{k m}{N}\right)} 
-\end{align*}
-One can identify a discrete Fourier transform.
 
 \begin{enumerate}
 \item For $k\in\{0,\hdots,N-1\}$, we set:
@@ -152,25 +220,7 @@ with $fft$ an FFT algorithm
 \begin{align*}
   \Sigma_{m}^{+}=\widehat{y}_{m}e^{-2i\pi\left(\frac{m}{N}\right)}
 \end{align*}
-\end{enumerate}
-
-\subsubsection{\texorpdfstring{$\Sigma_{m}^{-}$}{sigma-}}
-
-We apply a change of variable $k'=N-k$ and use the symmetry of the $\delta$ function
-\begin{align*}
-\delta(-kh)=&\bar{\delta}(kh)
-\end{align*}
-in order to reuse values computed in the previous section:
-\begin{align*}
-\Sigma_{m}^{-}&=\sum_{k=1}^{N}\delta(-kh)E_{m}(-k)\\
-  &=\sum_{k=0}^{N-1}\delta((k-N)h)E_{m}(k-N)\\
-  &=\sum_{k=0}^{N-1}\overline{\delta}((N-k)h) e^{-2i\pi\left(\frac{(k-N) m}{N}\right)}e^{-i\pi (k-N)\left(\tau-1+\frac{1}{N}\right)}\\
-  &=\sum_{k=0}^{N-1}\left(\overline{\delta((N-k)h) e^{-i\pi (N-k)\left(\tau-1+\frac{1}{N}\right)}}\right) e^{-2i\pi\left(\frac{k m}{N}\right)} 
-\end{align*}
-
-We can again identify a discrete Fourier transform, and reuse $y_k$ computed previously.
-\begin{enumerate}
-\item Pour $k\in\{0,\hdots,N-1\}$,
+\item For $k\in\{0,\hdots,N-1\}$,
 \begin{align}
 z_{k}= \bar{y}_{N-1-k}
 \end{align}
@@ -192,349 +242,201 @@ S_{m_1,m_2}=\frac{h_1h_2}{4\pi^2}\Big\{
 with:
 \begin{align}
 \Sigma_{m_1,m_2}^{++}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2) \label{Eq:sigma++}\\
-\Sigma_{m_1,m_2}^{--}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,-k_2h_2\right)E_{m_1,m_2}(-k_1,-k_2) \label{Eq:sigma--}\\
-\Sigma_{m_1,m_2}^{+-}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,-k_2h_2\right)E_{m_1,m_2}(k_1,-k_2) \label{Eq:sigma+-}\\
-\Sigma_{m_1,m_2}^{-+}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,k_2h_2\right)E_{m_1,m_2}(-k_1,k_2) \label{Eq:sigma-+}\\
+\Sigma_{m_1,m_2}^{--}&=\sum_{k_1=-N}^{-1}\sum_{k_2=-N}^{-1}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2) \label{Eq:sigma--}\\
+\Sigma_{m_1,m_2}^{+-}&=\sum_{k_1=1}^{N}\sum_{k_2=-N}^{-1}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2) \label{Eq:sigma+-}\\
+\Sigma_{m_1,m_2}^{-+}&=\sum_{k_1=-N}^{-1}\sum_{k_2=1}^{N}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2) \label{Eq:sigma-+}\\
 \Sigma_{m_1,m_2}^{+0}&=\sum_{k_1=1}^{N}\delta(k_1h_1,0)E_{m_1}(k_1) \label{Eq:sigma+0}\\
-\Sigma_{m_1,m_2}^{-0}&=\sum_{k_1=1}^{N}\delta(-k_1h_1,0)E_{m_1}(-k_1) \label{Eq:sigma-0}\\
+\Sigma_{m_1,m_2}^{-0}&=\sum_{k_1=-N}^{-1}\delta(k_1h_1,0)E_{m_1}(k_1) \label{Eq:sigma-0}\\
 \Sigma_{m_1,m_2}^{0+}&=\sum_{k_2=1}^{N}\delta(0,k_2h_2)E_{m_2}(k_2) \label{Eq:sigma0+}\\
-\Sigma_{m_1,m_2}^{0-}&=\sum_{k_2=1}^{N}\delta(0,-k_2h_2)E_{m_2}(-k_2) \label{Eq:sigma0-}
+\Sigma_{m_1,m_2}^{0-}&=\sum_{k_2=-N}^{-1}\delta(0,k_2h_2)E_{m_2}(k_2) \label{Eq:sigma0-}
 \end{align}
-We rewrite equation~\eqref{Eq:E} when $d=2$:
+
+We compute these four arrays for $k_1,k_2\in\{0,\hdots,N-1\}$:
 \begin{align*}
-  E_{m_1,m_2}(k_1,k_2)&=e^{-i\left[
-    k_1h_1b\sigma_1\left(\frac{\mu_1}{b\sigma_1}+\frac{2m_1+1}{M}-1\right) +
-    k_2h_2b\sigma_2\left(\frac{\mu_2}{b\sigma_2}+\frac{2m_2+1}{M}-1\right)
-  \right]}
+y^{++}_{k_1,k_2}&=\delta((k_1+1)h_1,(k_2+1)h_2) f_1(k_1) f_2(k_2) \\
+y^{+-}_{k_1,k_2}&=\delta((k_1+1)h_1,(k_2-N)h_2) f_1(k_1) \overline{f}_2(N-1-k_2) \\
+y^{+0}_{k_1}&=\delta((k_1+1)h_1,0) f_1(k_1) \\
+y^{0+}_{k_2}&=\delta(0,(k_2+1)h_2) f_2(k_2) \\
 \end{align*}
-We use the same techniques as in dimension~1: we fix $M=N$, $h_1=\frac{\pi}{b\sigma_1}$, $h_2=\frac{\pi}{b\sigma_2}$, $\tau_1=\frac{\mu_1}{b\sigma_1}$, $\tau_2=\frac{\mu_2}{b\sigma_2}$ and obtain
+
 \begin{align}
-  E_{m_1,m_2}(k_1,k_2)&=
-     e^{-ik_1\pi\left(\tau_1+\frac{2m_1}{N}+\frac{1}{N}-1\right)} +
-     e^{-ik_2\pi\left(\tau_2+\frac{2m_2}{N}+\frac{1}{N}-1\right)} \notag\\
- &= e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
-    e^{-ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
-    e^{-ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)} \label{Eq:E2d}
+\Sigma_{m_1,m_2}^{++}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2) \notag\\
+  &=e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} \delta\left((k_1+1)h_1,(k_2+1)h_2\right) f_1(k_1) f_2(k_2) e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \notag\\
+  &=e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} y^{++}_{k_1,k_2} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \\
+\Sigma_{m_1,m_2}^{--}&=\sum_{k_1=-N}^{-1}\sum_{k_2=-N}^{-1}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2) \notag\\
+  &= \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\delta\left((k_1-N)h_1,(k_2-N)h_2\right) \overline{f}_1(N-1-k_1)\overline{f}_2(N-1-k_2) e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \notag\\
+  &= \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\overline{\delta\left((N-k_1)h_1,(N-k_2)h_2\right) f_1(N-1-k_1)f_2(N-1-k_2)} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \notag\\
+  &= \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\overline{y}^{++}_{N-1-k_1,N-1-k_2} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \\
+\Sigma_{m_1,m_2}^{+-}&=\sum_{k_1=1}^{N}\sum_{k_2=-N}^{-1}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2) \notag\\
+  &=e^{-2i\pi\left(\frac{m_1}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} \delta\left((k_1+1)h_1,(k_2-N)h_2\right) f_1(k_1) \overline{f}_2(N-1-k_2) e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \notag\\
+  &=e^{-2i\pi\left(\frac{m_1}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} \delta\left((k_1+1)h_1,(k_2-N)h_2\right) f_1(k_1) f_2(k_2-1-N) e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \notag\\
+  &=e^{-2i\pi\left(\frac{m_1}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} y^{+-}_{k_1,k_2} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \\
+\Sigma_{m_1,m_2}^{-+}&=\sum_{k_1=-N}^{-1}\sum_{k_2=1}^{N}\delta\left(k_1h_1,k_2h_2\right)E_{m_1,m_2}(k_1,k_2) \notag\\
+  &=e^{-2i\pi\left(\frac{m_2}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} \delta\left((k_1-N)h_1,(k_2+1)h_2\right) \overline{f}_1(N-1-k_1) f_2(k_2) e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \notag\\
+  &=e^{-2i\pi\left(\frac{m_2}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} \overline{\delta}\left((N-k_1)h_1,-(k_2+1)h_2\right) \overline{f}_1(N-1-k_1) \overline{f}_2(-k_2-2) e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \notag\\
+  &=e^{-2i\pi\left(\frac{m_2}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} \overline{y}^{+-}_{N-1-k_1,N-1-k_2} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \\
+\Sigma_{m_1,m_2}^{+0}&=\sum_{k_1=1}^{N}\delta(k_1h_1,0)E_{m_1}(k_1) \notag\\
+  &=e^{-2i\pi\left(\frac{m_1}{N}\right)} \sum_{k_1=0}^{N-1} \delta((k_1+1)h_1,0) f_1(k_1) e^{-2i\pi\left(\frac{k_1m_1}{N}\right)} \notag\\
+  &=e^{-2i\pi\left(\frac{m_1}{N}\right)} \sum_{k_1=0}^{N-1} y^{+0}_{k_1} e^{-2i\pi\left(\frac{k_1m_1}{N}\right)}\\
+\Sigma_{m_1,m_2}^{-0}&=\sum_{k_1=-N}^{-1}\delta(k_1h_1,0)E_{m_1}(k_1) \notag\\
+  &= \sum_{k_1=0}^{N-1} \delta((k_1-N)h_1,0) \overline{f}_1(N-1-k_1) e^{-2i\pi\left(\frac{k_1m_1}{N}\right)}\notag\\
+  &= \sum_{k_1=0}^{N-1} \overline{y}^{+0}_{N-1-k_1} e^{-2i\pi\left(\frac{k_1m_1}{N}\right)}\\
+\Sigma_{m_1,m_2}^{0+}&=\sum_{k_2=1}^{N}\delta(0,k_2h_2)E_{m_2}(k_2) \notag\\
+  &=e^{-2i\pi\left(\frac{m_2}{N}\right)} \sum_{k_2=0}^{N-1} y^{0+}_{k_2} e^{-2i\pi\left(\frac{k_2m_2}{N}\right)}\\
+\Sigma_{m_1,m_2}^{0-}&=\sum_{k_2=-N}^{-1}\delta(0,k_2h_2)E_{m_2}(k_2) \notag\\
+  &= \sum_{k_2=0}^{N-1} \overline{y}^{0-}_{N-1-k_2} e^{-2i\pi\left(\frac{k_2m_2}{N}\right)}
 \end{align}
-
-Symmetry of $\delta$ implies that for all $(k_1, k_2)$,
-\begin{align}
-\delta\left(-k_1h_1,-k_2h_2\right)=&\bar{\delta}\left(k_1h_1,k_2h_2\right)
-\end{align}
-
-\subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{++}$}{sigma++}}
-
-Equations~\eqref{Eq:sigma++} and \eqref{Eq:E2d} give:
-\begin{align*}
-\Sigma_{m_1,m_2}^{++}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,k_2h_2\right)
-    e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
-    e^{-ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
-    e^{-ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
-\end{align*}
-
-We apply a change of variables $k_1'=k_1-1$, $k_2'=k_2-1$:
-\begin{align*}
-\Sigma_{m_1,m_2}^{++}=e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)}\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}
-  & e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \times\\
-  & \delta\left((k_1+1)h_1,(k_2+1)h_2\right)
-    e^{-i(k_1+1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
-    e^{-i(k_2+1)\pi\left(\tau_2+\frac{1}{N}-1\right)}
-\end{align*}
-
-As in the unidimensional case, the evaluation of $\Sigma^{++}$ can be performed by using an FFT algorithm:
-\begin{enumerate}
-\item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
-\begin{align*}
-y^{++}_{k_1,k_2}=\delta((k_1+1)h_1,(k_2+1)h_2)e^{-i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\right)}e^{-i\pi (k_2+1)\left(\tau_2-1+\frac{1}{N}\right)}
-\end{align*}
-\item For $m_1,m_2\in\{0,\hdots,N-1\}$, we set:
-\begin{align*}
-  z_{m_1,m_2}=fft2d(y^{++}_{k_1,k_2})
-\end{align*}
-with $fft2d$ a bidimensional discrete Fourier transform.
-\item The contribution $\Sigma_{m_1,m_2}^{++}$ equals to:
-\begin{align*}
-  \Sigma_{m_1,m_2}^{++}=z_{m_1,m_2}e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)}
-\end{align*}
-\end{enumerate}
-
-\subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{--}$}{sigma--}}
-
-Equations~\eqref{Eq:sigma--} and \eqref{Eq:E2d} give:
-\begin{align*}
-\Sigma_{m_1,m_2}^{--}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,-k_2h_2\right)
-    e^{2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
-    e^{ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
-    e^{ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
-\end{align*}
-
-We apply a change of variables $k_1'=N-k_1$, $k_2'=N-k_2$:
-\begin{align*}
-\Sigma_{m_1,m_2}^{--}&=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}
-  \delta\left((k_1-N)h_1,(k_2-N)h_2\right) e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)}
-    e^{i(N-k_1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
-    e^{i(N-k_2)\pi\left(\tau_2+\frac{1}{N}-1\right)} \\
- &=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} 
-  \overline{\delta}\left((N-k_1)h_1,(N-k_2)h_2\right) 
-    \overline{e^{-i(N-k_1)\pi\left(\tau_1+\frac{1}{N}-1\right)}}\,
-    \overline{e^{-i(N-k_2)\pi\left(\tau_2+\frac{1}{N}-1\right)}}
-\end{align*}
-
-\begin{enumerate}
-\item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
-\begin{align*}
-y^{--}_{k_1,k_2}&=\bar{y}^{++}_{N-1-k_1,N-1-k_2}
-\end{align*}
-\item The contribution $\Sigma_{m_1,m_2}^{--}$ equals to:
-\begin{align*}
-  \Sigma_{m_1,m_2}^{--}=fft2d(y^{--}_{k_1,k_2})
-\end{align*}
-\end{enumerate}
-
-\subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{+-}$}{sigma+-}}
-
-Equations~\eqref{Eq:sigma+-} and \eqref{Eq:E2d} give:
-\begin{align*}
-\Sigma_{m_1,m_2}^{+-}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(k_1h_1,-k_2h_2\right)
-    e^{-2i\pi\left(\frac{k_1m_1-k_2m_2}{N}\right)}
-    e^{-ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
-    e^{ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
-\end{align*}
-
-We apply a change of variables $k_1'=k_1+1$, $k_2'=N-k_2$:
-\begin{align*}
-\Sigma_{m_1,m_2}^{+-}&=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}
-  \delta\left((k_1+1)h_1,(k_2-N)h_2\right) e^{-2i\pi\left(\frac{(k_1+1)m_1+k_2m_2}{N}\right)}
-    e^{-i(k_1+1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
-    e^{-i(k_2-N)\pi\left(\tau_2+\frac{1}{N}-1\right)}
-\end{align*}
-
-\begin{enumerate}
-\item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
-\begin{align*}
-y^{+-}_{k_1,k_2}= \delta((k_1+1)h_1,(k_2-N)h_2)e^{-i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\right)}e^{-i\pi (k_2-N)\left(\tau_2-1+\frac{1}{N}\right)}
-\end{align*}
-\item For $m_1,m_2\in\{0,\hdots,N-1\}$, we set:
-\begin{align*}
-  z_{m_1,m_2}=fft2d(y^{+-}_{k_1,k_2})
-\end{align*}
-with $fft2d$ a bidimensional Fourier transform.
-\item The contribution $\Sigma_{m_1,m_2}^{+-}$ equals to:
-\begin{align*}
-  \Sigma_{m_1,m_2}^{+-}=z_{m_1,m_2}e^{-2i\pi\left(\frac{m_1}{N}\right)}
-\end{align*}
-\end{enumerate}
-
-
-\subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{-+}$}{sigma-+}}
-
-Equations~\eqref{Eq:sigma-+} and \eqref{Eq:E2d} give:
-\begin{align*}
-\Sigma_{m_1,m_2}^{-+}&=\sum_{k_1=1}^{N}\sum_{k_2=1}^{N}\delta\left(-k_1h_1,k_2h_2\right)
-    e^{2i\pi\left(\frac{k_1m_1-k_2m_2}{N}\right)}
-    e^{ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
-    e^{-ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
-\end{align*}
-
-We apply a change of variables $k_1'=N-k_1$, $k_2'=k_2-1$:
-\begin{align*}
-\Sigma_{m_1,m_2}^{-+}&=\sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}
-  \delta\left((k_1-N)h_1,(k_2+1)h_2\right)
-    e^{-2i\pi\left(\frac{k_1m_1+(k_2+1)m_2}{N}\right)}
-    e^{i(N-k_1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
-    e^{-i(k_2+1)\pi\left(\tau_2+\frac{1}{N}-1\right)}
-\end{align*}
-
-\begin{enumerate}
-\item For $k_1,k_2\in\{0,\hdots,N-1\}$, we fix:
-\begin{align*}
-y^{-+}_{k_1,k_2}&=\bar{y}^{+-}_{N-1-k_1,N-1-k_2}
-\end{align*}
-\item For $m_1,m_2\in\{0,\hdots,N-1\}$, we set:
-\begin{align*}
-  z_{m_1,m_2}=fft2d(y^{-+}_{k_1,k_2})
-\end{align*}
-with $fft2d$ a bidimensional Fourier transform.
-\item The contribution $\Sigma_{m_1,m_2}^{-+}$ equals to:
-\begin{align*}
-  \Sigma_{m_1,m_2}^{-+}=z_{m_1,m_2} e^{-2i\pi\left(\frac{m_2}{N}\right)}
-\end{align*}
-\end{enumerate}
-
-
-\subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{+0}$}{sigma+0}}
-Equations~\eqref{Eq:sigma+0} and \eqref{Eq:E1d} give:
-\begin{align*}
-\Sigma_{m_1,m_2}^{+0}&=\sum_{k_1=1}^{N}\delta\left(k_1h_1,0\right)
-    e^{-2i\pi\left(\frac{k_1m_1}{N}\right)}
-    e^{-ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
-\end{align*}
-
-We apply a change of variable $k_1'=k_1+1$:
-\begin{align*}
-\Sigma_{m_1,m_2}^{+0}&=\sum_{k_1=0}^{N-1}
-  \delta\left((k_1+1)h_1,0\right) e^{-2i\pi\left(\frac{(k_1+1)m_1}{N}\right)}
-    e^{-i(k_1+1)\pi\left(\tau_1+\frac{1}{N}-1\right)}
-\end{align*}
-
-\begin{enumerate}
-\item For $k_1\in\{0,\hdots,N-1\}$, we fix:
-\begin{align*}
-y^{+0}_{k_1}= \delta((k_1+1)h_1,0)e^{-i\pi (k_1+1)\left(\tau_1-1+\frac{1}{N}\right)}
-\end{align*}
-\item For $m_1\in\{0,\hdots,N-1\}$, we set:
-\begin{align*}
-  z_{m_1}=fft1d(y^{+0}_{k_1})
-\end{align*}
-with $fft1d$ a unidimensional Fourier transform.
-\item The contribution $\Sigma_{m_1,m_2}^{+0}$ equals to:
-\begin{align*}
-  \Sigma_{m_1,m_2}^{+0}=z_{m_1} e^{-2i\pi\left(\frac{m_1}{N}\right)}
-\end{align*}
-\end{enumerate}
-
-\subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{-0}$}{sigma-0}}
-Equations~\eqref{Eq:sigma-0} and \eqref{Eq:E1d} give:
-\begin{align*}
-\Sigma_{m_1,m_2}^{-0}&=\sum_{k_1=1}^{N}\delta\left(-k_1h_1,0\right)
-    e^{2i\pi\left(\frac{k_1m_1}{N}\right)}
-    e^{ik_1\pi\left(\tau_1+\frac{1}{N}-1\right)}
-\end{align*}
-
-We apply a change of variable $k_1'=N-k_1$:
-\begin{align*}
-\Sigma_{m_1,m_2}^{-0}&=\sum_{k_1=0}^{N-1}
-  \delta\left((k_1-N)h_1,0\right) e^{-2i\pi\left(\frac{k_1m_1}{N}\right)}
-    e^{i(N-k_1)\pi\left(\tau_1+\frac{1}{N}-1\right)} \\
- &=\sum_{k_1=0}^{N-1}
-    e^{-2i\pi\left(\frac{k_1m_1}{N}\right)}
-  \bar{\delta}\left((N-k_1)h_1,0\right)
-   \overline{e^{-i(N-k_1)\pi\left(\tau_1+\frac{1}{N}-1\right)}}
-\end{align*}
-
-\begin{enumerate}
-\item For $k_1\in\{0,\hdots,N-1\}$, we fix:
-\begin{align*}
-y^{-0}_{k_1}= \bar{y}^{+0}_{N-1-k_1}
-\end{align*}
-\item The contribution $\Sigma_{m_1,m_2}^{-0}$ equals to:
-\begin{align*}
-  \Sigma_{m_1,m_2}^{-0}=fft1d(y^{-0}_{k_1})
-\end{align*}
-with $fft1d$ a unidimensional Fourier transform.
-\end{enumerate}
-
-\subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{0+}$}{sigma0+}}
-Equations~\eqref{Eq:sigma0+} and \eqref{Eq:E1d} give:
-\begin{align*}
-\Sigma_{m_1,m_2}^{0+}&=\sum_{k_2=1}^{N}\delta\left(0,k_2h_2\right)
-    e^{-2i\pi\left(\frac{k_2m_2}{N}\right)}
-    e^{-ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
-\end{align*}
-
-We apply a change of variable $k_2'=k_2+1$:
-\begin{align*}
-\Sigma_{m_1,m_2}^{0+}&=\sum_{k_2=0}^{N-1}
-  \delta\left(0,(k_2+1)h_2\right) e^{-2i\pi\left(\frac{(k_2+1)m_2}{N}\right)}
-    e^{-i(k_2+1)\pi\left(\tau_2+\frac{1}{N}-1\right)}
-\end{align*}
-
-\begin{enumerate}
-\item For $k_2\in\{0,\hdots,N-1\}$, we fix:
-\begin{align*}
-y^{0+}_{k_2}= \delta(0,(k_2+1)h_2)e^{-i\pi (k_2+1)\left(\tau_2-1+\frac{1}{N}\right)}
-\end{align*}
-\item For $m_2\in\{0,\hdots,N-1\}$, we set:
-\begin{align*}
-  z_{m_2}=fft1d(y^{0+}_{k_2})
-\end{align*}
-with $fft1d$ a unidimensional Fourier transform.
-\item The contribution $\Sigma_{m_1,m_2}^{0+}$ equals to:
-\begin{align*}
-  \Sigma_{m_1,m_2}^{0+}=z_{m_2}e^{-2i\pi\left(\frac{m_2}{N}\right)}
-\end{align*}
-\end{enumerate}
-
-\subsubsection{\texorpdfstring{$\Sigma_{m_1,m_2}^{0-}$}{sigma0-}}
-Equations~\eqref{Eq:sigma0-} and \eqref{Eq:E1d} give:
-\begin{align*}
-\Sigma_{m_1,m_2}^{0-}&=\sum_{k_2=1}^{N}\delta\left(0,-k_2h_2\right)
-    e^{2i\pi\left(\frac{k_2m_2}{N}\right)}
-    e^{ik_2\pi\left(\tau_2+\frac{1}{N}-1\right)}
-\end{align*}
-
-We apply a change of variable $k_2'=N-k_2$:
-\begin{align*}
-\Sigma_{m_1,m_2}^{0-}&=\sum_{k_2=0}^{N-1}
-  \delta\left(0,(k_2-N)h_2\right) e^{-2i\pi\left(\frac{k_2m_2}{N}\right)}
-    e^{i(N-k_2)\pi\left(\tau_2+\frac{1}{N}-1\right)} \\
- &=\sum_{k_2=0}^{N-1}
-    e^{-2i\pi\left(\frac{k_2m_2}{N}\right)}
-  \bar{\delta}\left(0,(N-k_2)h_2\right)
-   \overline{e^{-i(N-k_2)\pi\left(\tau_2+\frac{1}{N}-1\right)}}
-\end{align*}
-
-\begin{enumerate}
-\item For $k_2\in\{0,\hdots,N-1\}$, we fix:
-\begin{align*}
-y^{0-}_{k_2}= \bar{y}^{0+}_{N-1-k_2}
-\end{align*}
-\item The contribution $\Sigma_{m_1,m_2}^{0-}$ equals to:
-\begin{align*}
-  \Sigma_{m_1,m_2}^{0-}=fft1d(y^{0-}_{k_2})
-\end{align*}
-with $fft1d$ a unidimensional Fourier transform.
-\end{enumerate}
 
 \subsection{The tridimensional case}
 In dimension 3, the expression of interest is~:
 \begin{align*}
 S_{m_1,m_2,m_3}=\frac{h_1h_2h_3}{8\pi^3}\Big\{
- &   \Sigma_{m1,m2,m3}^{+++} + \Sigma_{m1,m2,m3}^{---} +
-     \Sigma_{m1,m2,m3}^{++-} + \Sigma_{m1,m2,m3}^{--+} +
-     \Sigma_{m1,m2,m3}^{+-+} + \Sigma_{m1,m2,m3}^{-+-} + \\
- &   \Sigma_{m1,m2,m3}^{+--} + \Sigma_{m1,m2,m3}^{-++} +
-     \Sigma_{m1,m2,m3}^{++0} + \Sigma_{m1,m2,m3}^{--0} +
-     \Sigma_{m1,m2,m3}^{0++} + \Sigma_{m1,m2,m3}^{0--} + \\
- &   \Sigma_{m1,m2,m3}^{+0+} + \Sigma_{m1,m2,m3}^{-0-} +
-     \Sigma_{m1,m2,m3}^{+-0} + \Sigma_{m1,m2,m3}^{-+0} +
-     \Sigma_{m1,m2,m3}^{+0-} + \Sigma_{m1,m2,m3}^{-0+} + \\
- &   \Sigma_{m1,m2,m3}^{0+-} + \Sigma_{m1,m2,m3}^{0-+} +
-     \Sigma_{m1,m2,m3}^{+00} + \Sigma_{m1,m2,m3}^{-00} +
-     \Sigma_{m1,m2,m3}^{0+0} + \Sigma_{m1,m2,m3}^{0-0} + \\
- &   \Sigma_{m1,m2,m3}^{00+} + \Sigma_{m1,m2,m3}^{00-}
+ &   \Sigma_{m_1,m_2,m_3}^{+++} + \Sigma_{m_1,m_2,m_3}^{---} +
+     \Sigma_{m_1,m_2,m_3}^{++-} + \Sigma_{m_1,m_2,m_3}^{--+} +
+     \Sigma_{m_1,m_2,m_3}^{+-+} + \Sigma_{m_1,m_2,m_3}^{-+-} + \\
+ &   \Sigma_{m_1,m_2,m_3}^{+--} + \Sigma_{m_1,m_2,m_3}^{-++} +
+     \Sigma_{m_1,m_2,m_3}^{++0} + \Sigma_{m_1,m_2,m_3}^{--0} +
+     \Sigma_{m_1,m_2,m_3}^{0++} + \Sigma_{m_1,m_2,m_3}^{0--} + \\
+ &   \Sigma_{m_1,m_2,m_3}^{+0+} + \Sigma_{m_1,m_2,m_3}^{-0-} +
+     \Sigma_{m_1,m_2,m_3}^{+-0} + \Sigma_{m_1,m_2,m_3}^{-+0} +
+     \Sigma_{m_1,m_2,m_3}^{+0-} + \Sigma_{m_1,m_2,m_3}^{-0+} + \\
+ &   \Sigma_{m_1,m_2,m_3}^{0+-} + \Sigma_{m_1,m_2,m_3}^{0-+} +
+     \Sigma_{m_1,m_2,m_3}^{+00} + \Sigma_{m_1,m_2,m_3}^{-00} +
+     \Sigma_{m_1,m_2,m_3}^{0+0} + \Sigma_{m_1,m_2,m_3}^{0-0} + \\
+ &   \Sigma_{m_1,m_2,m_3}^{00+} + \Sigma_{m_1,m_2,m_3}^{00-}
 \Big\}
 \end{align*}
 
+\newcommand{\sigmaThree}[3]{%
+  \ifnum#1=-1\relax
+     \sum_{k1=-N}^{-1}
+  \fi
+  \ifnum#1=1\relax
+     \sum_{k1=1}^{N}
+  \fi
+  \ifnum#2=-1\relax
+     \sum_{k2=-N}^{-1}
+  \fi
+  \ifnum#2=1\relax
+     \sum_{k2=1}^{N}
+  \fi
+  \ifnum#3=-1\relax
+     \sum_{k3=-N}^{-1}
+  \fi
+  \ifnum#3=1\relax
+     \sum_{k3=1}^{N}
+  \fi
+  \delta(
+    \ifnum#1=0\relax0\else k_1h_1\fi,
+    \ifnum#2=0\relax0\else k_2h_2\fi,
+    \ifnum#3=0\relax0\else k_3h_3\fi
+  ) E_{m_1,m_2,m_3}(
+    \ifnum#1=0\relax0\else k_1\fi,
+    \ifnum#2=0\relax0\else k_2\fi,
+    \ifnum#3=0\relax0\else k_3\fi
+  )
+}
+
 with
 \begin{align*}
-\Sigma_{m1,m2,m3}^{+++}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,k_2h_2,k_3h_3) E_{m1,m2,m3}(k_1,k_2,k_3)\\
-\Sigma_{m1,m2,m3}^{---}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(-k_1h_1,-k_2h_2,-k_3h_3) E_{m1,m2,m3}(-k_1,-k_2,-k_3)\\
-\Sigma_{m1,m2,m3}^{++-}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,k_2h_2,-k_3h_3) E_{m1,m2,m3}(k_1,k_2,-k_3)\\
-\Sigma_{m1,m2,m3}^{--+}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(-k_1h_1,-k_2h_2,k_3h_3) E_{m1,m2,m3}(-k_1,-k_2,k_3)\\
-\Sigma_{m1,m2,m3}^{+-+}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,-k_2h_2,k_3h_3) E_{m1,m2,m3}(k_1,-k_2,k_3)\\
-\Sigma_{m1,m2,m3}^{-+-}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(-k_1h_1,k_2h_2,-k_3h_3) E_{m1,m2,m3}(-k_1,k_2,-k_3)\\
-\Sigma_{m1,m2,m3}^{+--}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,-k_2h_2,-k_3h_3) E_{m1,m2,m3}(k_1,-k_2,-k_3)\\
-\Sigma_{m1,m2,m3}^{-++}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,-k_2h_2,-k_3h_3) E_{m1,m2,m3}(k_1,-k_2,-k_3)\\
-\Sigma_{m1,m2,m3}^{++0}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\delta(k_1h_1,k_2h_2,0) E_{m1,m2,m3}(k_1,k_2,0)\\
-\Sigma_{m1,m2,m3}^{--0}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\delta(-k_1h_1,-k_2h_2,0) E_{m1,m2,m3}(-k_1,-k_2,0)\\
-\Sigma_{m1,m2,m3}^{0++}&=\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(0,k_2h_2,k_3h_3) E_{m1,m2,m3}(0,k_2,k_3)\\
-\Sigma_{m1,m2,m3}^{0--}&=\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(0,-k_2h_2,-k_3h_3) E_{m1,m2,m3}(0,k_2,k_3)\\
-\Sigma_{m1,m2,m3}^{+0+}&=\sum_{k1=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,0,k_3h_3) E_{m1,m2,m3}(k_1,0,k_3)\\
-\Sigma_{m1,m2,m3}^{-0-}&=\sum_{k1=1}^{N}\sum_{k3=1}^{N}\delta(-k_1h_1,0,-k_3h_3) E_{m1,m2,m3}(k_1,0,k_3)\\
-\Sigma_{m1,m2,m3}^{+-0}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\delta(k_1h_1,-k_2h_2, 0) E_{m1,m2,m3}(k_1,-k_2,0)\\
-\Sigma_{m1,m2,m3}^{-+0}&=\sum_{k1=1}^{N}\sum_{k2=1}^{N}\delta(-k_1h_1,k_2h_2, 0) E_{m1,m2,m3}(-k_1,k_2,0)\\
-\Sigma_{m1,m2,m3}^{+0-}&=\sum_{k1=1}^{N}\sum_{k3=1}^{N}\delta(k_1h_1,0,-k_3h_3) E_{m1,m2,m3}(k_1,0,-k_3\\
-\Sigma_{m1,m2,m3}^{-0+}&=\sum_{k1=1}^{N}\sum_{k3=1}^{N}\delta(-k_1h_1,0,k_3h_3) E_{m1,m2,m3}(-k_1,0,k_3\\
-\Sigma_{m1,m2,m3}^{0+-}&=\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(0, k_2h_2,-k_3h_3) E_{m1,m2,m3}(0, k_2,-k_2)\\
-\Sigma_{m1,m2,m3}^{0-+}&=\sum_{k2=1}^{N}\sum_{k3=1}^{N}\delta(0, k_2h_2,-k_3h_3) E_{m1,m2,m3}(0, k_2,-k_3)\\
-\Sigma_{m1,m2,m3}^{+00}&=\sum_{k1=1}^{N}\delta(k_1h_1,0,0) E_{m1,m2,m3}(k_1,0,0)\\
-\Sigma_{m1,m2,m3}^{-00}&=\sum_{k1=1}^{N}\delta(-k_1h_1,0,0) E_{m1,m2,m3}(-k_1,0,0)\\
-\Sigma_{m1,m2,m3}^{0+0}&=\sum_{k2=1}^{N}\delta(0,k_2h_2,0) E_{m1,m2,m3}(0,k_2,0)\\
-\Sigma_{m1,m2,m3}^{0-0}&=\sum_{k2=1}^{N}\delta(0,-k_2h_2,0) E_{m1,m2,m3}(0,-k_2,0)\\
-\Sigma_{m1,m2,m3}^{00+}&=\sum_{k3=1}^{N}\delta(0,0,k_3h_3) E_{m1,m2,m3}(0,0,k_3)\\
-\Sigma_{m1,m2,m3}^{00-}&=\sum_{k3=1}^{N}\delta(0,0,-k_3h_3) E_{m1,m2,m3}(0,0,-k_3)
+\Sigma_{m_1,m_2,m_3}^{+++}&=\sigmaThree{ 1}{ 1}{ 1}\\
+\Sigma_{m_1,m_2,m_3}^{---}&=\sigmaThree{-1}{-1}{-1}\\
+\Sigma_{m_1,m_2,m_3}^{++-}&=\sigmaThree{ 1}{ 1}{-1}\\
+\Sigma_{m_1,m_2,m_3}^{--+}&=\sigmaThree{-1}{-1}{ 1}\\
+\Sigma_{m_1,m_2,m_3}^{+-+}&=\sigmaThree{ 1}{-1}{ 1}\\
+\Sigma_{m_1,m_2,m_3}^{-+-}&=\sigmaThree{-1}{ 1}{-1}\\
+\Sigma_{m_1,m_2,m_3}^{+--}&=\sigmaThree{ 1}{-1}{-1}\\
+\Sigma_{m_1,m_2,m_3}^{-++}&=\sigmaThree{-1}{ 1}{ 1}\\
+\Sigma_{m_1,m_2,m_3}^{++0}&=\sigmaThree{ 1}{ 1}{ 0}\\
+\Sigma_{m_1,m_2,m_3}^{--0}&=\sigmaThree{-1}{-1}{ 0}\\
+\Sigma_{m_1,m_2,m_3}^{0++}&=\sigmaThree{ 0}{ 1}{ 1}\\
+\Sigma_{m_1,m_2,m_3}^{0--}&=\sigmaThree{ 0}{-1}{-1}\\
+\Sigma_{m_1,m_2,m_3}^{+0+}&=\sigmaThree{ 1}{ 0}{ 1}\\
+\Sigma_{m_1,m_2,m_3}^{-0-}&=\sigmaThree{-1}{ 0}{-1}\\
+\Sigma_{m_1,m_2,m_3}^{+-0}&=\sigmaThree{ 1}{-1}{ 0}\\
+\Sigma_{m_1,m_2,m_3}^{-+0}&=\sigmaThree{ 1}{ 1}{ 1}\\
+\Sigma_{m_1,m_2,m_3}^{+0-}&=\sigmaThree{ 1}{ 0}{-1}\\
+\Sigma_{m_1,m_2,m_3}^{-0+}&=\sigmaThree{-1}{ 0}{ 1}\\
+\Sigma_{m_1,m_2,m_3}^{0+-}&=\sigmaThree{ 0}{ 1}{-1}\\
+\Sigma_{m_1,m_2,m_3}^{0-+}&=\sigmaThree{ 0}{-1}{ 1}\\
+\Sigma_{m_1,m_2,m_3}^{+00}&=\sigmaThree{ 1}{ 0}{ 0}\\
+\Sigma_{m_1,m_2,m_3}^{-00}&=\sigmaThree{-1}{ 0}{ 0}\\
+\Sigma_{m_1,m_2,m_3}^{0+0}&=\sigmaThree{ 0}{ 1}{ 0}\\
+\Sigma_{m_1,m_2,m_3}^{0-0}&=\sigmaThree{ 0}{-1}{ 0}\\
+\Sigma_{m_1,m_2,m_3}^{00+}&=\sigmaThree{ 0}{ 0}{ 1}\\
+\Sigma_{m_1,m_2,m_3}^{00-}&=\sigmaThree{ 0}{ 0}{-1}
+\end{align*}
+
+We compute these thirteen arrays for $k_1,k_2,k_3\in\{0,\hdots,N-1\}$:
+\begin{align*}
+y^{+++}_{k_1,k_2,k_3}&=\delta((k_1+1)h_1,(k_2+1)h_2,(k_3+1)h_3) f_1(k_1) f_2(k_2) f_3(k_3)\\
+y^{++-}_{k_1,k_2,k_3}&=\delta((k_1+1)h_1,(k_2+1)h_2,(k_3-N)h_3) f_1(k_1) f_2(k_2) \overline{f}_3(N-1-k_3)\\
+y^{+-+}_{k_1,k_2,k_3}&=\delta((k_1+1)h_1,(k_2-N)h_2,(k_3+1)h_3) f_1(k_1) \overline{f}_2(N-1-k_2) f_3(k_3)\\
+y^{+--}_{k_1,k_2,k_3}&=\delta((k_1+1)h_1,(k_2-N)h_2,(k_3-N)h_3) f_1(k_1) \overline{f}_2(N-1-k_2) \overline{f}_3(N-1-k_3)\\
+y^{++0}_{k_1,k_2}    &=\delta((k_1+1)h_1,(k_2+1)h_2,         0) f_1(k_1) f_2(k_2)\\
+y^{0++}_{k_2,k_3}    &=\delta(         0,(k_2+1)h_2,(k_3+1)h_3) f_2(k_2) f_3(k_3)\\
+y^{+0+}_{k_1,k_3}    &=\delta((k_1+1)h_1,0         ,(k_3+1)h_3) f_1(k_1) f_3(k_3)\\
+y^{+-0}_{k_1,k_2}    &=\delta((k_1+1)h_1,(k_2-N)h_2,         0) f_1(k_1) \overline{f}_2(N-1-k_2)\\
+y^{+0-}_{k_1,k_3}    &=\delta((k_1+1)h_1,0         ,(k_3-N)h_3) f_1(k_1) \overline{f}_3(N-1-k_3)\\
+y^{0+-}_{k_2,k_3}    &=\delta(         0,(k_2+1)h_2,(k_3-N)h_3) f_2(k_2) \overline{f}_3(N-1-k_3)\\
+y^{+00}_{k_1}        &=\delta((k_1+1)h_1,0         ,         0) f_1(k_1)\\
+y^{0+0}_{k_2}        &=\delta(         0,(k_2+1)h_2,         0) f_2(k_2)\\
+y^{00+}_{k_3}        &=\delta(         0,0         ,(k_3+1)h_3) f_3(k_3)
 \end{align*}
 
 
-\addtocontents{toc}{\protect\setcounter{tocdepth}{4}}
+\begin{align*}
+\Sigma_{m_1,m_2,m_3}^{+++}&=
+  e^{-2i\pi\left(\frac{m_1+m_2+m_3}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} y^{+++}_{k_1,k_2,k_3} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{---}&=
+  \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} \overline{y}^{+++}_{N-1-k_1,N-1-k_2,N-1-k_3} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{++-}&=
+  e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} y^{++-}_{k_1,k_2,k_3} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{--+}&=
+  e^{-2i\pi\left(\frac{m_3}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} \overline{y}^{++-}_{N-1-k_1,N-1-k_2,N-1-k_3} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{+-+}&=
+  e^{-2i\pi\left(\frac{m_1+m_3}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} y^{+-+}_{k_1,k_2,k_3} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{-+-}&=
+  e^{-2i\pi\left(\frac{m_2}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} \overline{y}^{+-+}_{N-1-k_1,N-1-k_2,N-1-k_3} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{+--}&=
+  e^{-2i\pi\left(\frac{m_1}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} y^{+--}_{k_1,k_2,k_3} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{-++}&=
+  e^{-2i\pi\left(\frac{m_2+m_3}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} \overline{y}^{+--}_{N-1-k_1,N-1-k_2,N-1-k_3} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{++0}&=
+  e^{-2i\pi\left(\frac{m_1+m_2}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} y^{++0}_{k_1,k_2} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{--0}&=
+  \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} \overline{y}^{++0}_{N-1-k_1,N-1-k_2} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{0++}&=
+  e^{-2i\pi\left(\frac{m_2+m_3}{N}\right)} \sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} y^{0++}_{k_2,k_3} e^{-2i\pi\left(\frac{k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{0--}&=
+  \sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} \overline{y}^{0++}_{N-1-k_2,N-1-k_3} e^{-2i\pi\left(\frac{k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{+0+}&=
+  e^{-2i\pi\left(\frac{m_1+m_3}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_3=0}^{N-1} y^{+0+}_{k_1,k_3} e^{-2i\pi\left(\frac{k_1m_1+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{-0-}&=
+  \sum_{k_1=0}^{N-1}\sum_{k_3=0}^{N-1} \overline{y}^{0++}_{N-1-k_1,N-1-k_3} e^{-2i\pi\left(\frac{k_1m_1+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{+-0}&=
+  e^{-2i\pi\left(\frac{m_1}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} y^{+-0}_{k_1,k_2} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{-+0}&=
+  e^{-2i\pi\left(\frac{m_2}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_2=0}^{N-1} \overline{y}^{+-0}_{N-1-k_1,N-1-k_2} e^{-2i\pi\left(\frac{k_1m_1+k_2m_2}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{+0-}&=
+  e^{-2i\pi\left(\frac{m_1}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_3=0}^{N-1} y^{+0-}_{k_1,k_3} e^{-2i\pi\left(\frac{k_1m_1+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{-0+}&=
+  e^{-2i\pi\left(\frac{m_3}{N}\right)} \sum_{k_1=0}^{N-1}\sum_{k_3=0}^{N-1} \overline{y}^{+0-}_{N-1-k_1,N-1-k_3} e^{-2i\pi\left(\frac{k_1m_1+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{0+-}&=
+  e^{-2i\pi\left(\frac{m_2}{N}\right)} \sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} y^{0+-}_{k_2,k_3} e^{-2i\pi\left(\frac{k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{0-+}&=
+  e^{-2i\pi\left(\frac{m_2}{N}\right)} \sum_{k_2=0}^{N-1}\sum_{k_3=0}^{N-1} \overline{y}^{0+-}_{N-1-k_2,N-1-k_3} e^{-2i\pi\left(\frac{k_2m_2+k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{+00}&=
+  e^{-2i\pi\left(\frac{m_1}{N}\right)} \sum_{k_1=0}^{N-1} y^{+00}_{k_1} e^{-2i\pi\left(\frac{k_1m_1}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{-00}&=
+  \sum_{k_1=0}^{N-1} \overline{y}^{+00}_{k_1} e^{-2i\pi\left(\frac{k_1m_1}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{0+0}&=
+  e^{-2i\pi\left(\frac{m_2}{N}\right)} \sum_{k_2=0}^{N-1} y^{0+0}_{k_2} e^{-2i\pi\left(\frac{k_2m_2}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{0-0}&=
+  \sum_{k_2=0}^{N-1} \overline{y}^{0+0}_{k_2} e^{-2i\pi\left(\frac{k_2m_2}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{00+}&=
+  e^{-2i\pi\left(\frac{m_3}{N}\right)} \sum_{k_3=0}^{N-1} y^{00+}_{k_3} e^{-2i\pi\left(\frac{k_3m_3}{N}\right)} \\
+\Sigma_{m_1,m_2,m_3}^{00-}&=
+  \sum_{k_3=0}^{N-1} \overline{y}^{00+}_{k_3} e^{-2i\pi\left(\frac{k_3m_3}{N}\right)} \\
+\end{align*}
+
