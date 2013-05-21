@@ -1019,7 +1019,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         yk_y = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1,N+1))
         yk_z = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1,N+1))
         # yk is built such as yk[i,j,k] = yk_x[i] * yk_y[j] * yk_z[k]
-        yk = yk_x.reshape(N,1,1) * yk_y.reshape(1,N,1) * yk_y.reshape(1,1,N)
+        yk = yk_x.reshape(N,1,1) * yk_y.reshape(1,N,1) * yk_z.reshape(1,1,N)
         yk_hat = np.fft.fftn(dcf * yk)
         zm = np.exp(-two_pi* 1j * np.arange(N) / N)
         # zm1m2m3 is built such as zm1m2m3[i,j,k] = zm[i] * zm[j] * zm[k]
