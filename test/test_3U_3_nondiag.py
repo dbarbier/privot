@@ -37,8 +37,7 @@ if __name__ == "__main__":
     blockMin = 3
     blockMax = 7
     n_blockMax = 2**blockMax
-    n = 4 * n_blockMax * (n_blockMax + 1) * (2 * n_blockMax + 1) + 2 * n_blockMax
-    maxSize = n
+    maxSize = 4 * n_blockMax * (n_blockMax + 1) * (2 * n_blockMax + 1) + 2 * n_blockMax
     b = 6.0
     N = 128
 
