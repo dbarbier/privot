@@ -68,4 +68,14 @@ if __name__ == "__main__":
             max_abs_err = max(np.max(theoritical_values_array - pdf_values), np.min(theoritical_values_array - pdf_values))
             l2_err = np.sqrt(np.sum((theoritical_values_array - pdf_values) * (theoritical_values_array - pdf_values)))  / (N*N*N)
             print "L2_err=%s, Linfty_err = %s, CPU time=%s"%(l2_err,max_abs_err, toc - tic)
-                        
+            outfile = "out_valid_d3_4dists_" + str(b) + "_" + str(N) + ".csv"
+            print "Writing values in "+outfile
+            xgrid_values, ygrid_values, zgrid_values = tuple(grid)
+            f = open(outfile, 'w')
+            f.write("x,y,z,pdf\n")
+            for i in xrange(len(xgrid_values)):
+                for j in xrange(len(ygrid_values)):
+                    for k in xrange(len(zgrid_values)):
+                        f.write("{0:.16g},{1:.16g},{2:.16g},{3:.16g}\n".format(xgrid_values[i], ygrid_values[j], zgrid_values[k], pdf_values[i][j][k]))
+            f.close()
+
