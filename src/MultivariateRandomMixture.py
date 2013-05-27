@@ -661,9 +661,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         b_sigma = b * sigma
         tau = mu / b_sigma
         h = pi / b_sigma
-        # Vectorizing some functions
-        normal_pdf = np.vectorize(self.equivalentNormal_.computePDF)
-        normal_cf = np.vectorize(self.equivalentNormal_.computeCharacteristicFunction)
 
         # compute the gaussian pdf on y_m + 2(k+1)b \sigma, k in 0,..,N-1, m in 0,..,N-1
         # ym_grid is also usefull for visualization
