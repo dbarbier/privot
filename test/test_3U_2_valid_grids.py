@@ -53,15 +53,17 @@ if __name__ == "__main__":
     print "mean = ", mean
     print "cov = ", cov
     print "sigma = ", sigma
-    for b in [3, 4]:
+    for b in [3, 4, 5, 6]:
         for N in [512, 1024]:
             # filename for the current b and N
             filename = "../validation/pdf_grid/valid_d2_3unif_" + str(b) + "_" + str(N) + ".csv"
             theoritical_values = ot.NumericalSample.ImportFromCSVFile(filename)
             print "Use case : b=%s, N=%s"%(b, N)
+            tic = time.time()
             [grid, pdf_values] = distribution.computePDFOn2DGrid(b, N)
+            toc = time.time()
             theoritical_values_array = np.array([[theoritical_values[iy + ix *N][2]for iy in xrange(N)] for ix in xrange(N)])
             max_abs_err = max(np.max(theoritical_values_array - pdf_values), np.min(theoritical_values_array - pdf_values))
-            l2_err = np.sqrt(np.sum((theoritical_values_array - pdf_values) * (theoritical_values_array - pdf_values)))
-            print "L2_err=%s, Linfty_err = %s"%(l2_err,max_abs_err)
+            l2_err = np.sqrt(np.sum((theoritical_values_array - pdf_values) * (theoritical_values_array - pdf_values))) / (N*N)
+            print "L2_err=%s, Linfty_err = %s, CPU time = %s"%(l2_err,max_abs_err,toc-tic)
 
