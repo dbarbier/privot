@@ -649,6 +649,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> b = 4 # we are interested in the pdf on mean +/- b * sigma
         >>> N = 256 # 256 points for the grid
         >>> [grid_values, pdf_values] = dist.computePDFOn1DGrid(b, N)
+        >>> f = open("out.csv", "w")
+        >>> f.write("x;pdf\n")
+        >>> for i in xrange(len(grid_values)):
+        ...     f.write("{0:.16g};{1:.16g}\n".format(xgrid_values[i], pdf_values[i]))
+        ... f.close()
 
         """
         if self.dimension_ != 1:
@@ -751,8 +756,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> matrix = ot.Matrix([[1,2], [3,4]])
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix)
         >>> b = 4 # we are interested in the pdf on mean +/- b * sigma
-        >>> N = 64 # 256 points for the grid
+        >>> N = 64 # 64x64 points for the grid
         >>> [grid_values, pdf_values] = dist.computePDFOn2DGrid(b, N)
+        >>> xgrid_values, ygrid_values = tuple(grid_values)
+        >>> f = open("out.csv", "w")
+        >>> f.write("x;y;pdf\n")
+        >>> for i in xrange(len(xgrid_values)):
+        ...     for j in xrange(len(ygrid_values)):
+        ...         f.write("{0:.16g};{1:.16g};{2:.16g}\n".format(xgrid_values[i], ygrid_values[j], pdf_values[i][j]))
+        ... f.close()
 
         """
 
@@ -956,8 +968,16 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         >>> matrix = ot.Matrix([[1,2, 4], [3,4,5], [6,0,1]])
         >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix)
         >>> b = 4 # we are interested in the pdf on mean +/- b * sigma
-        >>> N = 2**4 # 1024 points for the 3D grid
+        >>> N = 128 # 128x128x128 points for the 3D grid
         >>> [grid_values, pdf_values] = dist.computePDFOn3DGrid(b, N)
+        >>> xgrid_values, ygrid_values, zgrid_values = tuple(grid_values)
+        >>> f = open("out.csv", "w")
+        >>> f.write("x;y;z;pdf\n")
+        >>> for i in xrange(len(xgrid_values)):
+        ...     for j in xrange(len(ygrid_values)):
+        ...         for k in xrange(len(zgrid_values)):
+        ...             f.write("{0:.16g};{1:.16g};{2:.16g};{3:.16g}\n".format(xgrid_values[i], ygrid_values[j], zgrid_values[k], pdf_values[i][j][k]))
+        ... f.close()
 
         """
 
