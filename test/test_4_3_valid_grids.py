@@ -57,7 +57,8 @@ if __name__ == "__main__":
     for b in [3, 4, 5, 6]:
         for N in [64, 128]:
             # filename for the current b and N
-            filename = "../validation/pdf_grid/valid_d3_4dists_" + str(b) + "_" + str(N) + ".csv"
+            filename = "../validation/pdf_grid/valid_test_4_3/" + str(b) + "_" + str(N) + "/" + \
+                       "valid_d3_4dists_" + str(b) + "_" + str(N) + ".csv"
             theoritical_values = ot.NumericalSample.ImportFromCSVFile(filename)
             print "Use case : b=%s, N=%s"%(b, N)
             tic = time.time()
