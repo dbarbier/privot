@@ -1,0 +1,37 @@
+restart:
+Digits := 25:
+with(Statistics):
+assume(m11, real, m12, real, m13, real, m14, real, m21, real, m22, real, m23, real, m24, real, m31, real, m32, real, m33, real, m34, real);
+valnum := m11 = 1, m12 = -0.05, m13 = 1, m14 = -0.5, m21 = 0.5, m22 = 1, m23 = -0.05, m24 = 0.3, m31 = -0.5, m32 = -0.1, m33 = 1.2, m34 = -0.8;
+p1 := PDF(RandomVariable(Normal(0, 1)), x1);
+p2 := PDF(RandomVariable(Normal(2, 1)), x2)/2+PDF(RandomVariable(Normal(-2, 1)), x2)/2;
+p3 := PDF(RandomVariable(Uniform(0, 1)), x3);# assuming x3>0, x3<1;
+p4 := PDF(RandomVariable(Uniform(0, 1)), x4);# assuming x4>0, x4<1;
+M := Matrix(4, 4, [m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, 0, 0, 0, 1]);
+with(LinearAlgebra):
+R := MatrixInverse(M):
+x := R . Vector([z1, z2, z3, z4]):
+expr:=simplify(subs(valnum,subs(x1 = x[1], p1) * subs(x2 = x[2], p2) * subs(x3 = x[3], p3) * subs(x4 = x[4], p4) * abs(Determinant(R)))) assuming z4>0,z4<1;
+pdfZ := int(expr, z4=0..1);
+muX := [evalf(Int(x1*p1, x1=-infinity..infinity)), evalf(Int(x2*p2, x2=-infinity..infinity)), evalf(Int(x3*p3, x3=0..1)), evalf(Int(x4*p4, x4=0..1))];
+varX := Matrix(4, 4, [evalf(Int((x1-muX[1])^2*p1, x1=-infinity..infinity)), 0,0,0,0,evalf(Int((x2-muX[2])^2*p2, x2=-infinity..infinity)), 0,0,0,0,evalf(Int((x3-muX[3])^2*p3, x3=0..1)), 0,0,0,0,evalf(Int((x4-muX[4])^2*p4, x4=0..1))]);
+Mnum := subs(valnum, M[1..3,1..4]);
+mu := Mnum . Vector(muX);
+var := Mnum . varX . Transpose(Mnum);
+sigma := [sqrt(var[1,1]), sqrt(var[2,2]), sqrt(var[3,3])];
+fd := fopen("valid_d3_4dists_6_128.csv", WRITE, TEXT);
+b := 6;
+N := 128;
+for i from 0 to N-1 do
+  for j from 0 to N-1 do
+    for k from 0 to N-1 do
+      v1 := evalf(mu[1] + b * sigma[1] * ((2 * i + 1) / N - 1));
+      v2 := evalf(mu[2] + b * sigma[2] * ((2 * j + 1) / N - 1));
+      v3 := evalf(mu[3] + b * sigma[3] * ((2 * k + 1) / N - 1));
+      pdf := abs(evalf(subs(z1 = v1, z2 = v2, z3 = v3, pdfZ)));
+      fprintf(fd, "%.20g; %.20g; %.20g; %.20g\n", v1, v2, v3, pdf);
+    end do:
+  end do:
+  print([v1,v2,v3,pdf]);
+end do:
+fclose(fd):
