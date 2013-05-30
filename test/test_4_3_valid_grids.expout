@@ -8,17 +8,25 @@ cov =  [[  1.11667   0.233333 -0.341667 ]
 sigma =  [1.05672,2.29297,0.687992]
 Use case : b=3, N=64
 L2_err=1.17503690315e-07, Linfty_err = 0.000141956824382, CPU time=341.240742922
+Writing values in out_valid_d3_4dists_3_64.csv
 Use case : b=3, N=128
 L2_err=4.16821612254e-08, Linfty_err = 7.32945286725e-05, CPU time=2704.14358997
+Writing values in out_valid_d3_4dists_3_128.csv
 Use case : b=4, N=64
 L2_err=8.40137014762e-09, Linfty_err = 0.000183896218383, CPU time=335.41396904
+Writing values in out_valid_d3_4dists_4_64.csv
 Use case : b=4, N=128
 L2_err=1.17867129293e-09, Linfty_err = 0.000100442524913, CPU time=2666.11875486
+Writing values in out_valid_d3_4dists_4_128.csv
 Use case : b=5, N=64
 L2_err=8.30955033497e-09, Linfty_err = 0.000234311750485, CPU time=300.216585875
+Writing values in out_valid_d3_4dists_5_64.csv
 Use case : b=5, N=128
 L2_err=1.01438051788e-09, Linfty_err = 0.000118532657483, CPU time=2383.50906014
+Writing values in out_valid_d3_4dists_5_128.csv
 Use case : b=6, N=64
 L2_err=7.5961683936e-09, Linfty_err = 0.000225186655583, CPU time=261.154907942
+Writing values in out_valid_d3_4dists_6_64.csv
 Use case : b=6, N=128
 L2_err=1.02480594104e-09, Linfty_err = 0.000143379089409, CPU time=2066.00195813
+Writing values in out_valid_d3_4dists_6_128.csv
