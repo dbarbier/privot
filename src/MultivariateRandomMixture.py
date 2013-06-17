@@ -144,6 +144,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # compute the range
         self.computeRange()
         # compute h parameters for the evaluation of the density function
+        self.meshGrid_ = None
         self.computeReferenceBandwidth()
         # set equivalent Normal distribution, i.e a normal distribution with mean = self.mean_
         # and covariance = self.cov_
@@ -291,14 +292,15 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         """
         if (len(self.collection_) <= ot.ResourceMap.GetAsUnsignedLong( "MultivariateRandomMixture-SmallSize" )):
-            self.referenceBandwidth_ = [2.0 * cmath.pi / (self.getRange().getUpperBound()[k] - self.getRange().getLowerBound()[k]) for k in xrange(self.dimension_)]
+            referenceBandwidth = [2.0 * cmath.pi / (self.getRange().getUpperBound()[k] - self.getRange().getLowerBound()[k]) for k in xrange(self.dimension_)]
             # Shrink a little bit the bandwidth if the range is finite
             isFinite = [self.getRange().getFiniteLowerBound()[k] and self.getRange().getFiniteUpperBound()[k] for k in xrange(self.dimension_)]
             if (all(isFinite)):
-                self.referenceBandwidth_ = [self.referenceBandwidth_[k] * 0.5 for k in xrange(self.dimension_)]
+                referenceBandwidth = [referenceBandwidth[k] * 0.5 for k in xrange(self.dimension_)]
         # Else use a kind of Normal approximation
         else:
-            self.referenceBandwidth_ = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.dimension_)]
+            referenceBandwidth = [2.0 * cmath.pi / ((self.beta_ + 4.0 * self.alpha_) * self.sigma_[l]) for l in xrange(self.dimension_)]
+        self.setReferenceBandwidth(referenceBandwidth)
 
     def computeRange(self):
         """
@@ -565,9 +567,6 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # Compute the factor \prod_{k=1}^{d} h_k/'2\pi
         # h_k are supposed to be small values, we must care about
         # numerical troubles
-        factor = 1.0
-        for component in self.referenceBandwidth_:
-            factor *= component / (2.0 * cmath.pi)
         # 2) Compute a difference of characteristic functions on the point y
         # sum of delta functions
         k = 1
@@ -592,7 +591,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     cos_hy = cmath.cos(h_y).real
                     sin_hy = cmath.sin(h_y).real
                     error += cfValue.real * cos_hy + cfValue.imag * sin_hy
-            error *= factor
+            error *= self.referenceBandwidthFactor_
             if self.meshGrid_.isSymmetric():
                 error *= 2.0
             value += error
@@ -1802,7 +1801,12 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             raise ValueError("The given bandwidth's size differ with the dimension of distribution")
         self.referenceBandwidth_ = [float(element) for element in bandwidth]
         # Update the grid mesher
-        self.setGridMesher(self.meshGrid_.clone(self.referenceBandwidth_))
+        if self.meshGrid_:
+            self.setGridMesher(self.meshGrid_.clone(self.referenceBandwidth_))
+        # Update other members
+        self.referenceBandwidthFactor_ = 1.0
+        for component in self.referenceBandwidth_:
+            self.referenceBandwidthFactor_ *= component / (2.0 * cmath.pi)
 
 class MultivariateRandomMixture(ot.Distribution):
     """
