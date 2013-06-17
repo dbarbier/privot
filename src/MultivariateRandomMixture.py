@@ -396,11 +396,11 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         This method should not be used, except by the __init__ method.
         """
         distributions = []
-        for k in xrange(len(collection)):
+        for dist in collection:
             # check if distribution is univariate
-            if (collection[k].getDimension() != 1):
+            if (dist.getDimension() != 1):
                 raise ValueError("Expected a collection of univariate distributions")
-            distributions.append(collection[k])
+            distributions.append(dist)
         self.collection_ = distributions
 
     def clone(self, steps):
@@ -451,8 +451,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         smallScalar = 0.5 * ot.SpecFunc.LogMinNumericalScalar
         # compute the random part
         # The variables are independent
-        for k in xrange(n):
-            somme += self.collection_[k].computeLogCharacteristicFunction(mt_y[k])
+        for dist, mty in zip(self.collection_, mt_y):
+            somme += dist.computeLogCharacteristicFunction(mty)
             if somme.real < smallScalar:
                 break
         return somme
@@ -566,8 +566,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # h_k are supposed to be small values, we must care about
         # numerical troubles
         factor = 1.0
-        for k in xrange(self.dimension_):
-            factor *= self.referenceBandwidth_[k] / (2.0 * cmath.pi)
+        for component in self.referenceBandwidth_:
+            factor *= component / (2.0 * cmath.pi)
         # 2) Compute a difference of characteristic functions on the point y
         # sum of delta functions
         k = 1

@@ -96,12 +96,9 @@ class Cube1D:
 
     def get_skin_iterator_evaluate(self, index, function):
         iterator = self.get_skin_iterator(index)
-        try:
-            while True:
-                point = iterator.next()
-                yield point, function(point)
-        except StopIteration:
-            raise StopIteration()
+        for _ in xrange(self.get_size_of_level(index)):
+            point = iterator.next()
+            yield point, function(point)
 
     def get_size_of_level(self, index):
         if index == 0:
@@ -174,12 +171,9 @@ class Cube2D:
 
     def get_skin_iterator_evaluate(self, index, function):
         iterator = self.get_skin_iterator(index)
-        try:
-            while True:
-                point = iterator.next()
-                yield point, function(point)
-        except StopIteration:
-            raise StopIteration()
+        for _ in xrange(self.get_size_of_level(index)):
+            point = iterator.next()
+            yield point, function(point)
 
     def get_size_of_level(self, index):
         if index == 0:
@@ -261,12 +255,9 @@ class SkinCube2D:
 
     def get_skin_iterator_evaluate(self, index, function):
         iterator = self.get_skin_iterator(index)
-        try:
-            while True:
-                point = iterator.next()
-                yield point, function(point)
-        except StopIteration:
-            raise StopIteration()
+        for _ in xrange(self.get_size_of_level(index)):
+            point = iterator.next()
+            yield point, function(point)
 
     def get_size_of_level(self, index):
         if index == 0:
@@ -353,12 +344,9 @@ class Cube3D:
 
     def get_skin_iterator_evaluate(self, index, function):
         iterator = self.get_skin_iterator(index)
-        try:
-            while True:
-                point = iterator.next()
-                yield point, function(point)
-        except StopIteration:
-            raise StopIteration()
+        for _ in xrange(self.get_size_of_level(index)):
+            point = iterator.next()
+            yield point, function(point)
 
     def get_size_of_level(self, index):
         if index == 0:
@@ -460,12 +448,9 @@ class SkinCube3D:
 
     def get_skin_iterator_evaluate(self, index, function):
         iterator = self.get_skin_iterator(index)
-        try:
-            while True:
-                point = iterator.next()
-                yield point, function(point)
-        except StopIteration:
-            raise StopIteration()
+        for _ in xrange(self.get_size_of_level(index)):
+            point = iterator.next()
+            yield point, function(point)
 
     def get_size_of_level(self, index):
         if index == 0:
@@ -523,11 +508,8 @@ class CachedMeshGrid:
             #  For simplicity reason, if this level does not fully fit
             #  into the cache, it is not stored
             iterator = self.meshGrid_.get_skin_iterator(index)
-            try:
-                while True:
-                    yield iterator.next()
-            except StopIteration:
-                raise StopIteration()
+            for _ in xrange(self.meshGrid_.get_size_of_level(index)):
+                yield iterator.next()
         else:
             #  Find the first level not being cached
             start = index + 1
@@ -537,12 +519,10 @@ class CachedMeshGrid:
             #  Fill up the cache
             for  i in xrange(start, index + 1):
                 iterator = self.meshGrid_.get_skin_iterator(i)
-                try:
-                    while True:
-                        self.cachedPosition_.append(iterator.next())
-                except StopIteration:
-                    pass
-                self.currentSize_ += self.meshGrid_.get_size_of_level(i)
+                size = self.meshGrid_.get_size_of_level(i)
+                for _ in xrange(size):
+                    self.cachedPosition_.append(iterator.next())
+                self.currentSize_ += size
 
             for x in xrange(self.meshGrid_.get_size_upto_level(index), self.meshGrid_.get_size_upto_level(index)+self.meshGrid_.get_size_of_level(index)):
                 yield self.cachedPosition_[x]
@@ -552,12 +532,9 @@ class CachedMeshGrid:
             #  For simplicity reason, if this level does not fully fit
             #  into the cache, it is not stored
             iterator = self.meshGrid_.get_skin_iterator(index)
-            try:
-                while True:
-                    point = iterator.next()
-                    yield (point, function(point))
-            except StopIteration:
-                raise StopIteration()
+            for _ in xrange(self.meshGrid_.get_size_of_level(index)):
+                point = iterator.next()
+                yield (point, function(point))
         else:
             #  Find the first level not being cached
             start = index + 1
@@ -567,14 +544,12 @@ class CachedMeshGrid:
             #  Fill up the cache
             for  i in xrange(start, index + 1):
                 iterator = self.meshGrid_.get_skin_iterator(i)
-                try:
-                    while True:
-                        point = iterator.next()
-                        self.cachedPosition_.append(point)
-                        self.cachedValue_.append(function(point))
-                except StopIteration:
-                    pass
-                self.currentSize_ += self.meshGrid_.get_size_of_level(i)
+                size = self.meshGrid_.get_size_of_level(i)
+                for _ in xrange(size):
+                    point = iterator.next()
+                    self.cachedPosition_.append(point)
+                    self.cachedValue_.append(function(point))
+                self.currentSize_ += size
 
             for x in xrange(self.meshGrid_.get_size_upto_level(index), self.meshGrid_.get_size_upto_level(index)+self.meshGrid_.get_size_of_level(index)):
                 yield (self.cachedPosition_[x], self.cachedValue_[x])
