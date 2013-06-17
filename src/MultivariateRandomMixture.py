@@ -37,6 +37,7 @@ import openturns as ot
 import cmath
 import numpy as np
 import MaxNormMeshGrid
+import sys
 
 # ResourceMap : setting different numerical parameters useful for the distribution
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin", 3)
@@ -234,7 +235,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         self.equivalentNormal_ = ot.Normal(self.getMean(), self.getCovariance())
 
-    def computeEquivalentNormalPDFSum(self, y, mesh_grid):
+    def computeEquivalentNormalPDFSum(self, y, mesh_grid, imax=sys.maxint):
         """
         Compute the left-hand sum in Poisson's summation formula for the equivalent normal.
         The goal is to compute:
@@ -255,13 +256,14 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         """
         gaussian_pdf = self.equivalentNormal_.computePDF(y)
         i = 0
-        condition = True
+        delta = max(1.0, gaussian_pdf)
         isGridSymmetric = mesh_grid.isSymmetric()
-        while (condition):
+        eps = self.pdfEpsilon_
+        while delta > gaussian_pdf * eps and i < imax:
             i = i + 1
             delta = 0.0
             iterator = mesh_grid.get_skin_iterator(i)
-            for n in xrange(mesh_grid.get_size_of_level(i)):
+            for _ in xrange(mesh_grid.get_size_of_level(i)):
                 point = iterator.next()
                 x = [y[k] + point[k] for k in xrange(self.dimension_)]
                 delta += self.equivalentNormal_.computePDF(x)
@@ -269,8 +271,33 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
                     x = [y[k] - point[k] for k in xrange(self.dimension_)]
                     delta += self.equivalentNormal_.computePDF(x)
             gaussian_pdf += delta
-            condition = delta > gaussian_pdf * self.pdfEpsilon_
         return gaussian_pdf
+
+    def getEquivalentNormalPDFSumLevelMax(self, mu, mesh_grid):
+        """
+        Compute the range of the equivalent normal distribution.
+        This method is private, it is used to speed up computeEquivalentNormalPDFSum
+        when computing PDF on a regular grid.
+
+        """
+        gaussian_pdf = self.equivalentNormal_.computePDF(mu)
+        i = 0
+        delta = max(1.0, gaussian_pdf)
+        isGridSymmetric = mesh_grid.isSymmetric()
+        eps = self.pdfEpsilon_
+        while delta > gaussian_pdf * eps:
+            i = i + 1
+            delta = 0.0
+            iterator = mesh_grid.get_skin_iterator(i)
+            for _ in xrange(mesh_grid.get_size_of_level(i)):
+                point = iterator.next()
+                x = [mu[k] + point[k] for k in xrange(self.dimension_)]
+                delta += self.equivalentNormal_.computePDF(x)
+                if isGridSymmetric:
+                    x = [mu[k] - point[k] for k in xrange(self.dimension_)]
+                    delta += self.equivalentNormal_.computePDF(x)
+            gaussian_pdf += delta
+        return i-1
 
     def computeMean(self):
         """
@@ -675,7 +702,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         ot.Log.Info("Precomputing gaussian pdf")
         alt_grid_mesher = self.temp_mesh_grid_.clone([2.0 * b_sigma])
-        pdf = [self.computeEquivalentNormalPDFSum([el], alt_grid_mesher) for el in ym_grid]
+        imax = self.getEquivalentNormalPDFSumLevelMax([mu], alt_grid_mesher);
+        pdf = [self.computeEquivalentNormalPDFSum([el], alt_grid_mesher, imax) for el in ym_grid]
         ot.Log.Info("End of gaussian approximation")
 
         # Precompute the grid of delta functions
@@ -789,7 +817,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # gaussian sum pdf computation
         ot.Log.Info("Precomputing gaussian pdf")
         alt_grid_mesher = self.temp_mesh_grid_.clone([2.0 * b_sigma_x, 2.0 * b_sigma_y])
-        pdf = np.array([[self.computeEquivalentNormalPDFSum([xm, ym], alt_grid_mesher) for ym in y_grid] for xm in x_grid])
+        imax = self.getEquivalentNormalPDFSumLevelMax([mu_x, mu_y], alt_grid_mesher);
+        pdf = np.array([[self.computeEquivalentNormalPDFSum([xm, ym], alt_grid_mesher, imax) for ym in y_grid] for xm in x_grid])
         ot.Log.Info("End of gaussian approximation")
 
         # Precompute the grid of delta functions
@@ -1002,7 +1031,8 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         # gaussian sum pdf computation
         ot.Log.Info("Precomputing gaussian pdf")
         alt_grid_mesher = self.temp_mesh_grid_.clone([2.0 * b_sigma_x, 2.0 * b_sigma_y, 2.0 * b_sigma_z])
-        pdf = np.array([[[self.computeEquivalentNormalPDFSum([xm, ym, zm], alt_grid_mesher) for zm in z_grid] for ym in y_grid] for xm in x_grid])
+        imax = self.getEquivalentNormalPDFSumLevelMax([mu_x, mu_y, mu_z], alt_grid_mesher);
+        pdf = np.array([[[self.computeEquivalentNormalPDFSum([xm, ym, zm], alt_grid_mesher, imax) for zm in z_grid] for ym in y_grid] for xm in x_grid])
         ot.Log.Info("End of gaussian approximation")
 
         #  These arrays are used below
