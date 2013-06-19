@@ -138,7 +138,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
         sigma_minus_minus_minus = np.fft.fftn(np.conjugate(yk[::-1,::-1,::-1]))
         logging.debug("End of Process 0")
-        return (sigma_plus_plus_plus + sigma_minus_minus_minus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_plus_plus_plus + sigma_minus_minus_minus
 
     if process_local_id == 1:
         logging.debug("Process 1: compute \Sigma_++- and compute \Sigma_--+")
@@ -164,7 +164,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         yk_hat = np.fft.fftn(np.conjugate(yk[::-1,::-1,::-1]))
         sigma_minus_minus_plus = yk_hat * z_exp_m3
         logging.debug("End of Process 1")
-        return (sigma_plus_plus_minus + sigma_minus_minus_plus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_plus_plus_minus + sigma_minus_minus_plus
 
     if process_local_id == 2:
         logging.debug("Process 2: compute \Sigma_+-+ and compute \Sigma_-+-")
@@ -190,7 +190,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         yk_hat = np.fft.fftn(np.conjugate(yk[::-1,::-1,::-1]))
         sigma_minus_plus_minus = yk_hat * z_exp_m2
         logging.debug("End of Process 2")
-        return (sigma_plus_minus_plus + sigma_minus_plus_minus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_plus_minus_plus + sigma_minus_plus_minus
 
     if process_local_id == 3:
         logging.debug("Process 3: compute \Sigma_+-- and compute \Sigma_-++")
@@ -216,7 +216,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         yk_hat = np.fft.fftn(np.conjugate(yk[::-1,::-1,::-1]))
         sigma_minus_plus_plus = yk_hat * z_exp_m2 * z_exp_m3
         logging.debug("End of Process 3")
-        return (sigma_plus_minus_minus + sigma_minus_plus_plus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_plus_minus_minus + sigma_minus_plus_plus
 
     #----------------------------------------#
     #----------------- FFT2D ----------------#
@@ -254,7 +254,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_minus_minus_0 = np.fft.fft2(np.conjugate(yk[::-1,::-1]))
         logging.debug("End of Process 4")
-        return (sigma_plus_plus_0 + sigma_minus_minus_0) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_plus_plus_0 + sigma_minus_minus_0
 
     if process_local_id == 5:
         logging.debug("Process 5: compute \Sigma_0++ and compute \Sigma_0--")
@@ -281,7 +281,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_0_minus_minus = np.fft.fft2(np.conjugate(yk[::-1,::-1]))
         logging.debug("End of Process 5")
-        return (sigma_0_plus_plus + sigma_0_minus_minus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_0_plus_plus + sigma_0_minus_minus
 
     if process_local_id == 6:
         logging.debug("Process 6: compute \Sigma_+0+ and compute \Sigma_-0-")
@@ -308,7 +308,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_minus_0_minus = np.fft.fft2(np.conjugate(yk[::-1,::-1]))
         logging.debug("End of Process 6")
-        return (sigma_plus_0_plus + sigma_minus_0_minus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_plus_0_plus + sigma_minus_0_minus
 
     if process_local_id == 7:
         logging.debug("Process 7: compute \Sigma_+-0 and compute \Sigma_-+0")
@@ -335,7 +335,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_minus_plus_0 = np.fft.fft2(np.conjugate(yk[::-1,::-1])) * z_exp_m2
         logging.debug("End of Process 7")
-        return (sigma_plus_minus_0 + sigma_minus_plus_0) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_plus_minus_0 + sigma_minus_plus_0
 
     if process_local_id == 8:
         logging.debug("Process 8: compute \Sigma_+0- and compute \Sigma_-0+")
@@ -362,7 +362,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_minus_0_plus = np.fft.fft2(np.conjugate(yk[::-1,::-1])) * z_exp_m2
         logging.debug("End of Process 8")
-        return (sigma_plus_0_minus + sigma_minus_0_plus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_plus_0_minus + sigma_minus_0_plus
 
     if process_local_id == 9:
         logging.debug("Process 9: compute \Sigma_0+- and compute \Sigma_0-+")
@@ -389,7 +389,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_0_minus_plus = np.fft.fft2(np.conjugate(yk[::-1,::-1])) * z_exp_m2
         logging.debug("End of Process 9")
-        return (sigma_0_plus_minus + sigma_0_minus_plus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_0_plus_minus + sigma_0_minus_plus
 
     #----------------------------------------#
     #----------------- FFT1D ----------------#
@@ -421,7 +421,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # Care components here are of dimension 1, FFT should be of dimension 1
         sigma_minus_0_0 = np.fft.fft(np.conjugate(yk[::-1]))
         logging.debug("End of Process 10")
-        return (sigma_plus_0_0 + sigma_minus_0_0) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_plus_0_0 + sigma_minus_0_0
 
     if process_local_id == 11:
         logging.debug("Process 11: compute \Sigma_0+0 and compute \Sigma_0-0")
@@ -446,7 +446,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # Care components here are of dimension 1, FFT should be of dimension 1
         sigma_0_minus_0 = np.fft.fft(np.conjugate(yk[::-1]))
         logging.debug("End of Process 11")
-        return (sigma_0_plus_0 + sigma_0_minus_0) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_0_plus_0 + sigma_0_minus_0
 
     if process_local_id == 12:
         logging.debug("Process 12: compute \Sigma_00+ and compute \Sigma_00-")
@@ -471,7 +471,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # Care components here are of dimension 1, FFT should be of dimension 1
         sigma_0_0_minus = np.fft.fft(np.conjugate(yk[::-1]))
         logging.debug("End of Process 12")
-        return (sigma_0_0_plus + sigma_0_0_minus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
+        return sigma_0_0_plus + sigma_0_0_minus
 
 
 def factorizer_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = multiprocessing.cpu_count()):
@@ -522,6 +522,7 @@ def factorizer_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mu
          + resultdict[8].reshape(N,1,N)  + resultdict[9].reshape(1,N,N) \
          + resultdict[10].reshape(N,1,1) + resultdict[11].reshape(1,N,1) \
          + resultdict[12].reshape(1,1,N)
+    s_m =* (h_x * h_y * h_z) /(8*pi*pi*pi)
     return s_m
 
 def compute_3d_grid(distribution, b, N):
@@ -562,6 +563,7 @@ def compute_gaussian_equivalent_parallel(distribution, b, N, nprocs = multiproce
     pdf = pool.map(_compute_equivalent_normal_pdf_sum, x)
     pdf = np.array(pdf)
     pdf = pdf.reshape(N,N,N)
+    pool.close()
     return pdf
 
 def compute_analytical_pdf_parallel(distribution, b, N, nprocs = multiprocessing.cpu_count()):
@@ -577,6 +579,7 @@ def compute_analytical_pdf_parallel(distribution, b, N, nprocs = multiprocessing
     pdf = pool.map(_compute_pdf, grid)
     pdf = np.array(pdf)
     pdf = pdf.reshape(N,N,N)
+    pool.close()
     return pdf
 
 
