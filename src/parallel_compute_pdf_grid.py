@@ -3,7 +3,7 @@ import time
 import numpy as np
 import itertools
 import logging
-    
+
 def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process_local_id):
     """
     The interest is to compute one of the following quantities:
@@ -516,13 +516,21 @@ def factorizer_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mu
     for p in procs:
         p.join()
 
+    pi = np.pi
+    two_pi = 2.0 * pi
+    mu_x, mu_y, mu_z = tuple(distribution.getMean())
+    sigma_x, sigma_y, sigma_z = tuple(distribution.getStandardDeviation())
+    b_sigma_x, b_sigma_y , b_sigma_z = sigma_x * b, sigma_y * b, sigma_z * b
+    tau_x, tau_y, tau_z = mu_x / b_sigma_x, mu_y / b_sigma_y, mu_z / b_sigma_z
+    h_x, h_y, h_z = pi / b_sigma_x, pi / b_sigma_y, pi / b_sigma_z
+    # final s_m
     s_m = resultdict[0] + resultdict[1] + resultdict[2] + resultdict[3] \
          + resultdict[4].reshape(N,N,1)  + resultdict[5].reshape(1,N,N) \
          + resultdict[6].reshape(N,1,N)  + resultdict[7].reshape(N,N,1) \
          + resultdict[8].reshape(N,1,N)  + resultdict[9].reshape(1,N,N) \
          + resultdict[10].reshape(N,1,1) + resultdict[11].reshape(1,N,1) \
          + resultdict[12].reshape(1,1,N)
-    s_m =* (h_x * h_y * h_z) /(8*pi*pi*pi)
+    s_m *= (h_x * h_y * h_z) /(8*pi*pi*pi)
     return s_m
 
 def compute_3d_grid(distribution, b, N):
@@ -563,6 +571,7 @@ def compute_gaussian_equivalent_parallel(distribution, b, N, nprocs = multiproce
     pdf = pool.map(_compute_equivalent_normal_pdf_sum, x)
     pdf = np.array(pdf)
     pdf = pdf.reshape(N,N,N)
+    pool.terminate()
     pool.close()
     return pdf
 
@@ -579,6 +588,7 @@ def compute_analytical_pdf_parallel(distribution, b, N, nprocs = multiprocessing
     pdf = pool.map(_compute_pdf, grid)
     pdf = np.array(pdf)
     pdf = pdf.reshape(N,N,N)
+    pool.terminate()
     pool.close()
     return pdf
 
@@ -685,7 +695,7 @@ def compute_pdf_on_3d_grid(distribution, b, N, nprocs=multiprocessing.cpu_count(
         # Compute the delta part
         logging.info("Delta characteristic function approximation")
         tic = time.time()
-        s_m = factorizer_compute_delta_function_on_3d_grid(distribution, b, N)
+        s_m = factorizer_compute_delta_function_on_3d_grid(distribution, b, N, nprocs)
         toc = time.time()
         logging.info("End of Delta characteristic function evaluation")
         logging.debug("It tooks %s second(s) to evaluate the delta function on the grid" %(toc-tic))
