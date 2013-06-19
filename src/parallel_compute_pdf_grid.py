@@ -1,14 +1,101 @@
-import math
 import multiprocessing
 import time
-import openturns as ot
 import numpy as np
-import MultivariateRandomMixture as MV
 import itertools
-
+import logging
+    
 def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process_local_id):
     """
-    Evaluation of a part of delta characteristic function using FFT
+    The interest is to compute one of the following quantities:
+
+    if process_local_id = 0
+    \Sigma_{m1,m2,m3}^{+++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,k3+1)
+    \Sigma_{m1,m2,m3}^{---}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),-(k3+1))
+    if process_local_id = 1
+    \Sigma_{m1,m2,m3}^{++-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,-(k3+1))
+    \Sigma_{m1,m2,m3}^{--+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),k3+1)
+    if process_local_id = 2
+    \Sigma_{m1,m2,m3}^{+-+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),k3+1)
+    \Sigma_{m1,m2,m3}^{-+-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),(k2+1),-(k3+1))
+    if process_local_id = 3
+    \Sigma_{m1,m2,m3}^{+--}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))
+    \Sigma_{m1,m2,m3}^{-++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))
+    if process_local_id = 4
+    \Sigma_{m1,m2,m3}^{++0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta((k1+1)hx,(k2+1)hy,0) E_{m1,m2,m3}(k1+1,k2+1,0)
+    \Sigma_{m1,m2,m3}^{--0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta(-(k1+1)hx,-(k2+1)hy,0) E_{m1,m2,m3}(-(k1+1),-(k2+1),0)
+    if process_local_id = 5
+    \Sigma_{m1,m2,m3}^{0++}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)
+    \Sigma_{m1,m2,m3}^{0--}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)
+    if process_local_id = 6
+    \Sigma_{m1,m2,m3}^{+0+}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta((k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)
+    \Sigma_{m1,m2,m3}^{-0-}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(-(k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)
+    if process_local_id = 7
+    \Sigma_{m1,m2,m3}^{+-0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta((k1+1)hx,-(k2+1)hy, 0) E_{m1,m2,m3}(k1+1,-(k2+1),0)
+    \Sigma_{m1,m2,m3}^{-+0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta(-(k1+1)hx,(k2+1)hy, 0) E_{m1,m2,m3}(-(k1+1),(k2+1),0)
+    if process_local_id = 8
+    \Sigma_{m1,m2,m3}^{+0-}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta((k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,-(k3+1)
+    \Sigma_{m1,m2,m3}^{-0+}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(-(k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),0,(k3+1)
+    if process_local_id = 9
+    \Sigma_{m1,m2,m3}^{0+-}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k2+1))
+    \Sigma_{m1,m2,m3}^{0-+}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k3+1))
+    if process_local_id = 10
+    \Sigma_{m1,m2,m3}^{+00}=\sum_{k1=0}^{N-1} \delta((k1+1)hx,0,0) E_{m1,m2,m3}(k1+1,0,0)
+    \Sigma_{m1,m2,m3}^{-00}=\sum_{k1=0}^{N-1} \delta(-(k1+1)hx,0,0) E_{m1,m2,m3}(-(k1+1),0,0)
+    if process_local_id = 11
+    \Sigma_{m1,m2,m3}^{0+0}=\sum_{k2=0}^{N-1} \delta(0,(k2+1)hy,0) E_{m1,m2,m3}(0,k2+1,0)
+    \Sigma_{m1,m2,m3}^{0-0}=\sum_{k2=0}^{N-1} \delta(0,-(k2+1)hy,0) E_{m1,m2,m3}(0,-(k2+1),0)
+    if process_local_id = 12
+    \Sigma_{m1,m2,m3}^{00+}=\sum_{k3=0}^{N-1} \delta(0,0,(k3+1)hz) E_{m1,m2,m3}(0,0,k3+1)
+    \Sigma_{m1,m2,m3}^{00-}=\sum_{k3=0}^{N-1} \delta(0,0,-(k3+1)hz) E_{m1,m2,m3}(0,0,-(k3+1)
+
+    When fixing a process_local_id, the two computations are done and their sum is returned
+
+    The final purpose of this "private" function is to be called seuqentially or concurrenctly and compute :
+    S_{m1,m2,m3} = \frac{hx hy hz}{8\pi^3}\sum_{k1=-N}^{N}\sum_{k2=-N}^{N}\sum_{k3=-N}^{N}\delta(k1 h_x,k2 h_y k3 h_z) E_{m1,m2,m3}(k1,k2,k3)
+    Here :
+      E_{m1,m2,m3}(k1,k2,k3)=e^{-i\sum_{j=1}^{3} k_jh_j (\mu_j+a (\frac{2m_j+1}{M}-1)\sigma_j)}
+    Thus,
+    S_{m1,m2,m3}=\frac{hx hy hz}{4\pi^2} \sum_{s1,s2,s3 \in [0,-,+]} \Sigma_{m1,m2,m3}^{s1 s2 s3}
+
+    Parameters
+    ----------
+    distribution : PythonMultivariateRandomMixture
+        MultivariateRandomMixture distribution for which the pdf is evaluated in links with its characteristic function
+
+    b : positive float
+        The number of marginal standard deviations beyond which the density is evaluated
+
+    N : positive integer, preference of form N = 2^k
+        The number of points used for meshing the interval [mean - b * sigma, mean + b * sigma]
+
+    process_local_id : positive integer
+        Fix which part of calculations is wondered
+
+    Returns
+    -------
+
+    s : complex-ndarray of shape (N,N,N)
+        The sigma values fixed by the user
+
+    Example
+    -------
+    >>> import openturns as ot
+    >>> import MultivariateRandomMixture as MV
+    >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0), ot.Uniform(2.0, 5.0)])
+    >>> matrix = ot.Matrix([[1,2, 4], [3,4,5], [6,0,1]])
+    >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix)
+    >>> b = 4 # we are interested in the pdf on mean +/- b * sigma
+    >>> N = 128 # 128x128x128 points for the 3D grid
+    >>> [grid_values, pdf_values] = dist.computePDFOn3DGrid(b, N)
+    >>> xgrid_values, ygrid_values, zgrid_values = tuple(grid_values)
+    >>> f = open("out.csv", "w")
+    >>> f.write("x;y;z;pdf\n")
+    >>> for i in xrange(len(xgrid_values)):
+    ...     for j in xrange(len(ygrid_values)):
+    ...         for k in xrange(len(zgrid_values)):
+    ...             f.write("{0:.16g};{1:.16g};{2:.16g};{3:.16g}\n".format(xgrid_values[i], ygrid_values[j], zgrid_values[k], pdf_values[i][j][k]))
+    ... f.close()
+
     """
 
     assert (float(b) > 0)
@@ -29,6 +116,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
     z_exp_m2 = z_exp_m3.reshape(1,N,1)
 
     if process_local_id == 0:
+        logging.debug("Process 0: compute \Sigma_+++ and compute \Sigma_---")
         # 1) compute \Sigma_+++
         # \Sigma_{m1,m2,m3}^{+++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,k3+1)
         # \Sigma_{m1,m2,m3}^{+++} = fft(y_{k1, k2,k3}) * z_{m1,m2,m3} with :
@@ -49,10 +137,11 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # zm_{m1,m2,m3} = exp(2.0 * pi* 1j * m1) * exp(2.0 * pi* 1j * m2) * exp(2.0 * pi* 1j * m3)
         # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
         sigma_minus_minus_minus = np.fft.fftn(np.conjugate(yk[::-1,::-1,::-1]))
-        print "finish 0"
+        logging.debug("End of Process 0")
         return (sigma_plus_plus_plus + sigma_minus_minus_minus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     if process_local_id == 1:
+        logging.debug("Process 1: compute \Sigma_++- and compute \Sigma_--+")
         # 3) compute \Sigma_++-
         # \Sigma_{m1,m2,m3}^{++-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,-(k3+1))
         # \Sigma_{m1,m2,m3}^{++-} = fft(y_{k1, k2,k3}) * z_{m1,m2,m3} with :
@@ -74,10 +163,11 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
         yk_hat = np.fft.fftn(np.conjugate(yk[::-1,::-1,::-1]))
         sigma_minus_minus_plus = yk_hat * z_exp_m3
-        print "finish 1"
+        logging.debug("End of Process 1")
         return (sigma_plus_plus_minus + sigma_minus_minus_plus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     if process_local_id == 2:
+        logging.debug("Process 2: compute \Sigma_+-+ and compute \Sigma_-+-")
         # 5) compute \Sigma_+-+
         # \Sigma_{m1,m2,m3}^{+-+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),k3+1)
         # \Sigma_{m1,m2,m3}^{+-+} = fft(y_{k1,k2,k3}) * z_{m1,m2,m3} with :
@@ -99,10 +189,11 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
         yk_hat = np.fft.fftn(np.conjugate(yk[::-1,::-1,::-1]))
         sigma_minus_plus_minus = yk_hat * z_exp_m2
-        print "finish 2"
+        logging.debug("End of Process 2")
         return (sigma_plus_minus_plus + sigma_minus_plus_minus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     if process_local_id == 3:
+        logging.debug("Process 3: compute \Sigma_+-- and compute \Sigma_-++")
         # 7) compute \Sigma_+--
         # \Sigma_{m1,m2,m3}^{+--}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))
         # \Sigma_{m1,m2,m3}^{+--} = fft(y_{k1,k2,k3}) * z_{m1,m2,m3} with :
@@ -124,7 +215,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
         yk_hat = np.fft.fftn(np.conjugate(yk[::-1,::-1,::-1]))
         sigma_minus_plus_plus = yk_hat * z_exp_m2 * z_exp_m3
-        print "finish 3"
+        logging.debug("End of Process 3")
         return (sigma_plus_minus_minus + sigma_minus_plus_plus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     #----------------------------------------#
@@ -139,6 +230,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
     z_exp_m1 = z_exp_m2.reshape(N,1)
 
     if process_local_id == 4:
+        logging.debug("Process 4: compute \Sigma_++0 and compute \Sigma_--0")
         # 9) compute \Sigma_++0
         # \Sigma_{m1,m2,m3}^{++0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta((k1+1)hx,(k2+1)hy,0) E_{m1,m2,m3}(k1+1,k2+1,0)
         # \Sigma_{m1,m2,m3}^{++0} = fft(y_{k1, k2,0}) * z_{m1,m2,m3} with :
@@ -161,10 +253,11 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k1,k2,m1,m2,m3=0,1,...,N-1
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_minus_minus_0 = np.fft.fft2(np.conjugate(yk[::-1,::-1]))
-        print "finish 4"
+        logging.debug("End of Process 4")
         return (sigma_plus_plus_0 + sigma_minus_minus_0) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     if process_local_id == 5:
+        logging.debug("Process 5: compute \Sigma_0++ and compute \Sigma_0--")
         # 11) compute \Sigma_0++
         # \Sigma_{m1,m2,m3}^{0++}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)
         # \Sigma_{m1,m2,m3}^{0++} = fft(y_{0,k2, k3}) * z_{m1,m2,m3} with :
@@ -187,10 +280,11 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k2,k3,m1,m2,m3=0,1,...,N-1
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_0_minus_minus = np.fft.fft2(np.conjugate(yk[::-1,::-1]))
-        print "finish 5"
+        logging.debug("End of Process 5")
         return (sigma_0_plus_plus + sigma_0_minus_minus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     if process_local_id == 6:
+        logging.debug("Process 6: compute \Sigma_+0+ and compute \Sigma_-0-")
         # 13) compute \Sigma_+0+
         # \Sigma_{m1,m2,m3}^{+0+}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta((k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)
         # \Sigma_{m1,m2,m3}^{+0+} = fft(y_{k1,0,k3}) * z_{m1,m2,m3} with :
@@ -213,10 +307,11 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k1,k3,m1,m2,m3=0,1,...,N-1
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_minus_0_minus = np.fft.fft2(np.conjugate(yk[::-1,::-1]))
-        print "finish 6"
+        logging.debug("End of Process 6")
         return (sigma_plus_0_plus + sigma_minus_0_minus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     if process_local_id == 7:
+        logging.debug("Process 7: compute \Sigma_+-0 and compute \Sigma_-+0")
         # 15) compute \Sigma_+-0
         # \Sigma_{m1,m2,m3}^{+-0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta((k1+1)hx,-(k2+1)hy, 0) E_{m1,m2,m3}(k1+1,-(k2+1),0)
         # \Sigma_{m1,m2,m3}^{+-0} = fft(y_{k1,k2,0}) * z_{m1,m2,m3} with :
@@ -239,10 +334,11 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k1,k2,m1,m2,m3=0,1,...,N-1
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_minus_plus_0 = np.fft.fft2(np.conjugate(yk[::-1,::-1])) * z_exp_m2
-        print "finish 7"
+        logging.debug("End of Process 7")
         return (sigma_plus_minus_0 + sigma_minus_plus_0) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     if process_local_id == 8:
+        logging.debug("Process 8: compute \Sigma_+0- and compute \Sigma_-0+")
         # 17) compute \Sigma_+0-
         # \Sigma_{m1,m2,m3}^{+0-}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta((k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,-(k3+1)
         # \Sigma_{m1,m2,m3}^{+0-} = fft(y_{k1,0,k3}) * z_{m1,m2,m3} with :
@@ -265,10 +361,11 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k1,k3,m1,m2,m3=0,1,...,N-1
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_minus_0_plus = np.fft.fft2(np.conjugate(yk[::-1,::-1])) * z_exp_m2
-        print "finish 8"
+        logging.debug("End of Process 8")
         return (sigma_plus_0_minus + sigma_minus_0_plus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     if process_local_id == 9:
+        logging.debug("Process 9: compute \Sigma_0+- and compute \Sigma_0-+")
         # 19) compute \Sigma_0+-
         # \Sigma_{m1,m2,m3}^{0+-}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k2+1))
         # \Sigma_{m1,m2,m3}^{0+-} = fft(y_{k1,k2,0}) * z_{m1,m2,m3} with :
@@ -291,7 +388,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k2,k3,m1,m2,m3=0,1,...,N-1
         # Care components here are of dimension 2, FFT should be of dimension 2
         sigma_0_minus_plus = np.fft.fft2(np.conjugate(yk[::-1,::-1])) * z_exp_m2
-        print "finish 9"
+        logging.debug("End of Process 9")
         return (sigma_0_plus_minus + sigma_0_minus_plus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     #----------------------------------------#
@@ -302,6 +399,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
     z_exp_m1 = np.exp(-two_pi* 1j * np.arange(N) / N)
 
     if process_local_id == 10:
+        logging.debug("Process 10: compute \Sigma_+00 and compute \Sigma_-00")
         # 21) compute \Sigma_+00
         # \Sigma_{m1,m2,m3}^{+00}=\sum_{k1=0}^{N-1} \delta((k1+1)hx,0,0) E_{m1,m2,m3}(k1+1,0,0)
         # \Sigma_{m1,m2,m3}^{+00} = fft(y_{k1,0,0}) * z_{m1,m2,m3} with :
@@ -322,10 +420,11 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k1,m1,m2,m3=0,1,...,N-1
         # Care components here are of dimension 1, FFT should be of dimension 1
         sigma_minus_0_0 = np.fft.fft(np.conjugate(yk[::-1]))
-        print "finish 10"
+        logging.debug("End of Process 10")
         return (sigma_plus_0_0 + sigma_minus_0_0) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     if process_local_id == 11:
+        logging.debug("Process 11: compute \Sigma_0+0 and compute \Sigma_0-0")
         # 23) compute \Sigma_0+0
         # \Sigma_{m1,m2,m3}^{0+0}=\sum_{k2=0}^{N-1} \delta(0, (k2+1)hy,0) E_{m1,m2,m3}(0,k2+1,0)
         # \Sigma_{m1,m2,m3}^{0+0} = fft(y_{0,k2,0}) * z_{m1,m2,m3} with :
@@ -346,10 +445,11 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k2,m1,m2,m3=0,1,...,N-1
         # Care components here are of dimension 1, FFT should be of dimension 1
         sigma_0_minus_0 = np.fft.fft(np.conjugate(yk[::-1]))
-        print "finish 11"
+        logging.debug("End of Process 11")
         return (sigma_0_plus_0 + sigma_0_minus_0) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
     if process_local_id == 12:
+        logging.debug("Process 12: compute \Sigma_00+ and compute \Sigma_00-")
         # 25) compute \Sigma_00+
         # \Sigma_{m1,m2,m3}^{00+}=\sum_{k3=0}^{N-1} \delta(0, 0,(k3+1)hz) E_{m1,m2,m3}(0,0,k3+1)
         # \Sigma_{m1,m2,m3}^{00+} = fft(y_{0,0,k3}) * z_{m1,m2,m3} with :
@@ -370,7 +470,7 @@ def compute_delta_characteristic_function_on_3d_grid(distribution, b, N, process
         # forall k3,m1,m2,m3=0,1,...,N-1
         # Care components here are of dimension 1, FFT should be of dimension 1
         sigma_0_0_minus = np.fft.fft(np.conjugate(yk[::-1]))
-        print "finish 12"
+        logging.debug("End of Process 12")
         return (sigma_0_0_plus + sigma_0_0_minus) * (h_x * h_y * h_z) /(8*pi*pi*pi)
 
 
@@ -395,7 +495,7 @@ def factorizer_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mu
     # Each process will get 'chunksize' nums and a queue to put his out
     # dict into
     out_q = multiprocessing.Queue()
-    chunksize = int(math.ceil(len(nums) / float(nprocs)))
+    chunksize = int(np.ceil(len(nums) / float(nprocs)))
     procs = []
 
     for i in range(nprocs):
@@ -425,6 +525,10 @@ def factorizer_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mu
     return s_m
 
 def compute_3d_grid(distribution, b, N):
+    """
+    This function is used for 3D computations
+    It helps to generate the 3D grids and mesh
+    """
     pi = np.pi
     two_pi = 2.0 * pi
     mu_x, mu_y, mu_z = tuple(distribution.getMean())
@@ -441,9 +545,11 @@ def compute_3d_grid(distribution, b, N):
     grid = list(grid.reshape(N*N*N,3))
     return [x_grid, y_grid, z_grid, grid, alt_grid_mesher]
 
-def pdf_sum_parallel(distribution, b, N, nprocs = multiprocessing.cpu_count()):
+def compute_gaussian_equivalent_parallel(distribution, b, N, nprocs = multiprocessing.cpu_count()):
     """
-    Local function
+    This function is used for 3D computations
+    It helps to compute gaussian approximations on 3D regular grids
+    The function uses parallel processes
     """
     global _compute_equivalent_normal_pdf_sum
     def _compute_equivalent_normal_pdf_sum(args):
@@ -458,9 +564,10 @@ def pdf_sum_parallel(distribution, b, N, nprocs = multiprocessing.cpu_count()):
     pdf = pdf.reshape(N,N,N)
     return pdf
 
-def pdf_parallel(distribution, b, N, nprocs = multiprocessing.cpu_count()):
+def compute_analytical_pdf_parallel(distribution, b, N, nprocs = multiprocessing.cpu_count()):
     """
-    Local function
+    This function is used for 3D computations
+    It helps to compute the analytical PDF on a 3D grid using parallel processes
     """
     global _compute_pdf
     def _compute_pdf(y):
@@ -554,36 +661,43 @@ def compute_pdf_on_3d_grid(distribution, b, N, nprocs=multiprocessing.cpu_count(
     if distribution.dimension_ != 3:
         raise ValueError("Dimension of distribution should be 3")
     # get the grid
+    logging.info("Starting evaluation of PDF on the 3D Grid...")
     [x_grid, y_grid, z_grid, grid, alt_grid_mesher] = compute_3d_grid(distribution, b, N)
+    logging.info("Number of parallel process : %d " %nprocs)
     if distribution.isAnalyticPDF_:
-        ot.Log.Info("Analytical evaluation of the pdf")
+        logging.info("Analytical evaluation of the pdf")
         tic = time.time()
-        pdf = pdf_parallel(distribution, b, N, nprocs)
+        pdf = compute_analytical_pdf_parallel(distribution, b, N, nprocs)
         toc = time.time()
-        ot.Log.Info("End of analytical evaluation")
-        ot.Log.Debug("It tooks %s second(s) to evaluate the analytical pdf" %(toc-tic))
+        logging.info("End of analytical evaluation")
+        logging.debug("It tooks %s second(s) to evaluate the analytical pdf" %(toc-tic))
     else:
-        ot.Log.Debug("Number of parallel process : %d " %nprocs)
+        logging.info("Numerical approximation...")
+        logging.info("Computing gaussian approximation")
         tic = time.time()
-        ot.Log.Info("Precomputing gaussian pdf")
-        pdf = pdf_sum_parallel(distribution, b, N, nprocs)
-        ot.Log.Info("End of gaussian approximation")
+        pdf = compute_gaussian_equivalent_parallel(distribution, b, N, nprocs)
         toc = time.time()
-        ot.Log.Debug("It tooks %s second(s) to evaluate the gaussian approximation on the grid" %(toc-tic))
+        logging.info("End of gaussian approximation")
+        logging.debug("It tooks %s second(s) to evaluate the gaussian approximation on the grid" %(toc-tic))
         # Compute the delta part
-        ot.Log.Info("Delta characteristic function approximation")
+        logging.info("Delta characteristic function approximation")
         tic = time.time()
         s_m = factorizer_compute_delta_function_on_3d_grid(distribution, b, N)
         toc = time.time()
-        ot.Log.Info("End of Delta characteristic function evaluation")
-        ot.Log.Debug("It tooks %s second(s) to evaluate the delta function on the grid" %(toc-tic))
+        logging.info("End of Delta characteristic function evaluation")
+        logging.debug("It tooks %s second(s) to evaluate the delta function on the grid" %(toc-tic))
         pdf += s_m.real
         pdf *= pdf > 0
+    logging.info("End of computations")
     return [[x_grid, y_grid, z_grid],pdf]
 
 if __name__== "__main__":
     # Log parameters
-    ot.Log.Show(ot.Log.ALL)
+    import openturns as ot
+    import MultivariateRandomMixture as MV
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s:%(asctime)s: %(message)s")
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
     b = 6
     N = 128
     # Define the distribution
