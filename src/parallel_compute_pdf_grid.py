@@ -639,12 +639,9 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     z = np.arange(1,N+1) * h_z
     grid = itertools.product(x,y,z)
     pool = multiprocessing.Pool(nprocs)
-    #dcf = np.array([[[_compute_delta_characterstic_function_3d([(i+1)*h_x, (j+1)*h_y, (k+1)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
-    dcf = pool.map(_compute_delta_characterstic_function_3d, grid)
-    dcf = np.array(dcf)
-    dcf = dcf.reshape(N,N,N)
-    pool.terminate()
-    pool.close()
+    #dcf = np.array([[[self.computeDeltaCharacteristicFunction([(i+1)*h_x, (j+1)*h_y, (k+1)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
+    dcf = pool.map(_compute_delta_characterstic_function_3d, grid, N*N)
+    dcf = np.array(dcf).reshape(N,N,N)
 
     # 1) compute \Sigma_+++
     # \Sigma_{m1,m2,m3}^{+++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,k3+1)
@@ -654,6 +651,7 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     # zm_{m1,m2,m3} = exp(-2.0 * pi* 1j * m1 / N) * exp(-2.0 * pi* 1j * m2 / N) * exp(-2.0 * pi* 1j * m3 / N)
     # forall k1,k2,k3,m1,m2,m3=0,1,...,N-1
     yk = dcf * f1 * f2 * f3
+    del dcf
     yk_hat = np.fft.fftn(yk)
     sigma_plus_plus_plus = yk_hat * z_exp_m1 * z_exp_m2 * z_exp_m3
 
@@ -681,15 +679,12 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     y = np.arange(1,N+1) * h_y
     z = np.arange(-N,0,1) * h_z
     grid = itertools.product(x,y,z)
-    pool = multiprocessing.Pool(nprocs)
     #dcf = np.array([[[self.computeDeltaCharacteristicFunction([(i+1)*h_x, (j+1)*h_y, (k-N)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
-    dcf = pool.map(_compute_delta_characterstic_function_3d, grid)
-    dcf = np.array(dcf)
-    dcf = dcf.reshape(N,N,N)
-    pool.terminate()
-    pool.close()
+    dcf = pool.map(_compute_delta_characterstic_function_3d, grid, N*N)
+    dcf = np.array(dcf).reshape(N,N,N)
 
     yk = dcf * f1 * f2 * np.conjugate(f3[:,:,::-1])
+    del dcf
     yk_hat = np.fft.fftn(yk)
     sigma_plus_plus_minus = yk_hat * z_exp_m1 * z_exp_m2
 
@@ -717,14 +712,11 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     y = np.arange(-N,0,1) * h_y
     z = np.arange(1,N+1) * h_z
     grid = itertools.product(x,y,z)
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_3d, grid)
-    dcf = np.array(dcf)
-    dcf = dcf.reshape(N,N,N)
-    pool.terminate()
-    pool.close()
+    dcf = pool.map(_compute_delta_characterstic_function_3d, grid, N*N)
+    dcf = np.array(dcf).reshape(N,N,N)
 
     yk = dcf * f1 * np.conjugate(f2[:,::-1,:]) * f3
+    del dcf
     yk_hat = np.fft.fftn(yk)
     sigma_plus_minus_plus = yk_hat * z_exp_m1 * z_exp_m3
 
@@ -752,15 +744,12 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     y = np.arange(-N,0,1) * h_y
     z = np.arange(-N,0,1) * h_z
     grid = itertools.product(x,y,z)
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_3d, grid)
     #dcf = np.array([[[self.computeDeltaCharacteristicFunction([(i+1)*h_x, (j-N)*h_y, (k-N)*h_z]) for k in xrange(N)] for j in xrange(N)] for i in xrange(N)] )
-    dcf = np.array(dcf)
-    dcf = dcf.reshape(N,N,N)
-    pool.terminate()
-    pool.close()
+    dcf = pool.map(_compute_delta_characterstic_function_3d, grid, N*N)
+    dcf = np.array(dcf).reshape(N,N,N)
 
     yk = dcf * f1 * np.conjugate(f2[:,::-1,:]) * np.conjugate(f3[:,:,::-1])
+    del dcf
     yk_hat = np.fft.fftn(yk)
     sigma_plus_minus_minus = yk_hat * z_exp_m1
 
@@ -780,18 +769,6 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     #--- In this section, we apply 2D FFT ---#
     #--- and we propagate in 3 dimensions ---#
     #----------------------------------------#
-    global _compute_delta_characterstic_function_2d_x_y_0
-    global _compute_delta_characterstic_function_2d_x_0_y
-    global _compute_delta_characterstic_function_2d_0_x_y
-    def _compute_delta_characterstic_function_2d_x_y_0(args):
-        return distribution.computeDeltaCharacteristicFunction([args[0],args[1],0])
-
-    def _compute_delta_characterstic_function_2d_0_x_y(args):
-        return distribution.computeDeltaCharacteristicFunction([0,args[0],args[1]])
-
-    def _compute_delta_characterstic_function_2d_x_0_y(args):
-        return distribution.computeDeltaCharacteristicFunction([args[0],0,args[1]])
-
     f1 = np.exp(- pi* 1j * (tau_x - 1.0 + 1.0 / N) * np.arange(1, N+1))
     f2 = np.exp(- pi* 1j * (tau_y - 1.0 + 1.0 / N) * np.arange(1, N+1))
     f3 = np.exp(- pi* 1j * (tau_z - 1.0 + 1.0 / N) * np.arange(1, N+1))
@@ -807,16 +784,7 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     # forall k1,k2,m1,m2,m3=0,1,...,N-1
     # Care components here are of dimension 2, FFT should be of dimension 2
     logging.debug("Process: compute \Sigma_++0 and compute \Sigma_--0")
-    x = np.arange(1,N+1) * h_x
-    y = np.arange(1,N+1) * h_y
-    grid = itertools.product(x,y)
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_2d_x_y_0, grid)
-    #dcf = np.array([[self.computeDeltaCharacteristicFunction([(i+1) * h_x, (j+1) * h_y, 0]) for j in xrange(N)] for i in xrange(N)] )
-    dcf = np.array(dcf)
-    dcf = dcf.reshape(N,N)
-    pool.terminate()
-    pool.close()
+    dcf = np.array([[distribution.computeDeltaCharacteristicFunction([(i+1) * h_x, (j+1) * h_y, 0]) for j in xrange(N)] for i in xrange(N)] )
 
     yk = dcf * f1.reshape(N,1) * f2
     yk_hat = np.fft.fft2(yk)
@@ -842,16 +810,7 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     # forall k1,k2,m1,m2,m3=0,1,...,N-1
     # Care components here are of dimension 2, FFT should be of dimension 2
     logging.debug("Process: compute \Sigma_+-0 and compute \Sigma_-+0")
-    x = np.arange(1,N+1) * h_x
-    y = np.arange(-N,0,1) * h_y
-    grid = itertools.product(x,y)
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_2d_x_y_0, grid)
-    #dcf = np.array([[self.computeDeltaCharacteristicFunction([(i+1)*h_x, (j-N)*h_y, 0]) for j in xrange(N)] for i in xrange(N)])
-    dcf = np.array(dcf)
-    dcf = dcf.reshape(N,N)
-    pool.terminate()
-    pool.close()
+    dcf = np.array([[distribution.computeDeltaCharacteristicFunction([(i+1)*h_x, (j-N)*h_y, 0]) for j in xrange(N)] for i in xrange(N)])
 
     yk = dcf * f1.reshape(N,1) * np.conjugate(f2[::-1])
     yk_hat = np.fft.fft2(yk)
@@ -877,16 +836,7 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     # forall k2,k3,m1,m2,m3=0,1,...,N-1
     # Care components here are of dimension 2, FFT should be of dimension 2
     logging.debug("Process: compute \Sigma_0++ and compute \Sigma_0--")
-    x = np.arange(1,N+1) * h_y
-    y = np.arange(1,N+1) * h_z
-    grid = itertools.product(x,y)
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_2d_0_x_y, grid)
-    #dcf = np.array([[self.computeDeltaCharacteristicFunction([0, (i+1)*h_y, (j+1)*h_z]) for j in xrange(N)] for i in xrange(N)] )
-    dcf = np.array(dcf)
-    dcf = dcf.reshape(N,N)
-    pool.terminate()
-    pool.close()
+    dcf = np.array([[distribution.computeDeltaCharacteristicFunction([0, (i+1)*h_y, (j+1)*h_z]) for j in xrange(N)] for i in xrange(N)] )
 
     yk = dcf * f2.reshape(N,1) * f3
     yk_hat = np.fft.fft2(yk)
@@ -912,16 +862,7 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     # forall k2,k3,m1,m2,m3=0,1,...,N-1
     # Care components here are of dimension 2, FFT should be of dimension 2
     logging.debug("Process: compute \Sigma_0+- and compute \Sigma_0-+")
-    x = np.arange(1,N+1) * h_y
-    y = np.arange(-N,0,1) * h_z
-    grid = itertools.product(x,y)
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_2d_0_x_y, grid)
-    #dcf = np.array([[self.computeDeltaCharacteristicFunction([0, (i+1)*h_y, (j-N)*h_z]) for j in xrange(N)] for i in xrange(N)] )
-    dcf = np.array(dcf)
-    dcf = dcf.reshape(N,N)
-    pool.terminate()
-    pool.close()
+    dcf = np.array([[distribution.computeDeltaCharacteristicFunction([0, (i+1)*h_y, (j-N)*h_z]) for j in xrange(N)] for i in xrange(N)] )
 
     yk = dcf * f2.reshape(N,1) * np.conjugate(f3[::-1])
     yk_hat = np.fft.fft2(yk)
@@ -947,16 +888,7 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     # forall k1,k3,m1,m2,m3=0,1,...,N-1
     # Care components here are of dimension 2, FFT should be of dimension 2
     logging.debug("Process: compute \Sigma_+0+ and compute \Sigma_-0-")
-    x = np.arange(1,N+1) * h_x
-    y = np.arange(1,N+1) * h_z
-    grid = itertools.product(x,y)
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_2d_x_0_y, grid)
-    #dcf = np.array([[self.computeDeltaCharacteristicFunction([(i + 1) * h_x, 0, (j + 1) * h_z]) for j in xrange(N)] for i in xrange(N)] )
-    dcf = np.array(dcf)
-    dcf = dcf.reshape(N,N)
-    pool.terminate()
-    pool.close()
+    dcf = np.array([[distribution.computeDeltaCharacteristicFunction([(i + 1) * h_x, 0, (j + 1) * h_z]) for j in xrange(N)] for i in xrange(N)] )
 
     yk = dcf * f1.reshape(N,1) * f3
     yk_hat = np.fft.fft2(yk)
@@ -982,16 +914,7 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     # forall k1,k3,m1,m2,m3=0,1,...,N-1
     # Care components here are of dimension 2, FFT should be of dimension 2
     logging.debug("Process: compute \Sigma_+0- and compute \Sigma_-0+")
-    x = np.arange(1,N+1) * h_x
-    y = np.arange(-N,0,1) * h_z
-    grid = itertools.product(x,y)
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_2d_x_0_y, grid)
-    #dcf = np.array([[self.computeDeltaCharacteristicFunction([(i+1)*h_x, 0, (j-N)*h_z]) for j in xrange(N)] for i in xrange(N)] )
-    dcf = np.array(dcf)
-    dcf = dcf.reshape(N,N)
-    pool.terminate()
-    pool.close()
+    dcf = np.array([[distribution.computeDeltaCharacteristicFunction([(i+1)*h_x, 0, (j-N)*h_z]) for j in xrange(N)] for i in xrange(N)] )
 
     yk = dcf * f1.reshape(N,1) * np.conjugate(f3[::-1])
     yk_hat = np.fft.fft2(yk)
@@ -1013,19 +936,6 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     #--- In this section, we apply 1D FFT ---#
     #--- and we propagate in 3 dimensions ---#
     #----------------------------------------#
-    global _compute_delta_characterstic_function_1d_x_0_0
-    global _compute_delta_characterstic_function_1d_0_0_x
-    global _compute_delta_characterstic_function_1d_0_x_0
-
-    def _compute_delta_characterstic_function_1d_x_0_0(args):
-        return distribution.computeDeltaCharacteristicFunction([args,0,0])
-
-    def _compute_delta_characterstic_function_1d_0_x_0(args):
-        return distribution.computeDeltaCharacteristicFunction([0,args,0])
-
-    def _compute_delta_characterstic_function_1d_0_0_x(args):
-        return distribution.computeDeltaCharacteristicFunction([0,0,args])
-
     z_exp_m1 = np.exp(-two_pi* 1j * np.arange(N) / N)
 
     # 21) compute \Sigma_+00
@@ -1036,13 +946,7 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     # forall k1,m1,m2,m3=0,1,...,N-1
     # Care components here are of dimension 1, FFT should be of dimension 1
     logging.debug("Process: compute \Sigma_+00 and compute \Sigma_-00")
-    x = np.arange(1,N+1) * h_x
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_1d_x_0_0, x)
-    #dcf = np.array([self.computeDeltaCharacteristicFunction([(i+1)*h_x,0,0]) for i in xrange(N)])
-    dcf = np.array(dcf)
-    pool.terminate()
-    pool.close()
+    dcf = np.array([distribution.computeDeltaCharacteristicFunction([(i+1)*h_x,0,0]) for i in xrange(N)])
 
     yk = dcf * f1
     yk_hat = np.fft.fft(yk)
@@ -1066,13 +970,7 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     # forall k2,m1,m2,m3=0,1,...,N-1
     # Care components here are of dimension 1, FFT should be of dimension 1
     logging.debug("Process: compute \Sigma_0+0 and compute \Sigma_0-0")
-    x = np.arange(1,N+1) * h_y
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_1d_0_x_0, x)
-    #dcf = np.array([self.computeDeltaCharacteristicFunction([0,(i+1)*h_y,0]) for i in xrange(N)])
-    dcf = np.array(dcf)
-    pool.terminate()
-    pool.close()
+    dcf = np.array([distribution.computeDeltaCharacteristicFunction([0,(i+1)*h_y,0]) for i in xrange(N)])
 
     yk = dcf * f2
     yk_hat = np.fft.fft(yk)
@@ -1096,13 +994,7 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
     # forall k3,m1,m2,m3=0,1,...,N-1
     # Care components here are of dimension 1, FFT should be of dimension 1
     logging.debug("Process: compute \Sigma_00+ and compute \Sigma_00-")
-    x = np.arange(1,N+1) * h_z
-    pool = multiprocessing.Pool(nprocs)
-    dcf = pool.map(_compute_delta_characterstic_function_1d_0_0_x, x)
-    #dcf = np.array([self.computeDeltaCharacteristicFunction([0,0,(i+1)*h_z]) for i in xrange(N)])
-    dcf = np.array(dcf)
-    pool.terminate()
-    pool.close()
+    dcf = np.array([distribution.computeDeltaCharacteristicFunction([0,0,(i+1)*h_z]) for i in xrange(N)])
 
     yk = dcf * f3
     yk_hat = np.fft.fft(yk)
