@@ -1042,9 +1042,7 @@ def compute_3d_grid(distribution, b, N):
     y_grid = mu_y + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_y
     z_grid = mu_z + ( (2.0 * np.arange(N) + 1.0) / N - 1.0) * b_sigma_z
     alt_grid_mesher = distribution.temp_mesh_grid_.clone([2.0 * b_sigma_x, 2.0 * b_sigma_y, 2.0 * b_sigma_z])
-    grid = np.array([[[[xm, ym, zm] for zm in z_grid] for ym in y_grid] for xm in x_grid])
-    grid = list(grid.reshape(N*N*N,3))
-    return [x_grid, y_grid, z_grid, grid, alt_grid_mesher]
+    return [x_grid, y_grid, z_grid, alt_grid_mesher]
 
 def compute_gaussian_equivalent_parallel(distribution, b, N, nprocs = multiprocessing.cpu_count()):
     """
@@ -1057,8 +1055,9 @@ def compute_gaussian_equivalent_parallel(distribution, b, N, nprocs = multiproce
         y, mesh, imax = tuple(args)
         return distribution.computeEquivalentNormalPDFSum(y, mesh, imax)
     pool = multiprocessing.Pool(nprocs)
-    [x_grid, y_grid, z_grid, grid, alt_grid_mesher] = compute_3d_grid(distribution, b,N)
+    [x_grid, y_grid, z_grid, alt_grid_mesher] = compute_3d_grid(distribution, b,N)
     imax = distribution.getEquivalentNormalPDFSumLevelMax(distribution.getMean(), alt_grid_mesher)
+    grid = itertools.product(x_grid, y_grid, z_grid)
     x = itertools.izip(grid, itertools.cycle([alt_grid_mesher]), itertools.cycle([imax]))
     pdf = pool.map(_compute_equivalent_normal_pdf_sum, x)
     pdf = np.array(pdf)
@@ -1076,7 +1075,8 @@ def compute_analytical_pdf_parallel(distribution, b, N, nprocs = multiprocessing
     def _compute_pdf(y):
         return distribution.computePDF(y)
     pool = multiprocessing.Pool(nprocs)
-    [x_grid, y_grid, z_grid, grid, alt_grid_mesher] = compute_3d_grid(distribution,b,N)
+    [x_grid, y_grid, z_grid, alt_grid_mesher] = compute_3d_grid(distribution,b,N)
+    grid = itertools.product(x_grid, y_grid, z_grid)
     pdf = pool.map(_compute_pdf, grid)
     pdf = np.array(pdf)
     pdf = pdf.reshape(N,N,N)
@@ -1167,7 +1167,7 @@ def compute_pdf_on_3d_grid(distribution, b, N, nprocs=multiprocessing.cpu_count(
         raise ValueError("Dimension of distribution should be 3")
     # get the grid
     logging.info("Starting evaluation of PDF on the 3D Grid...")
-    [x_grid, y_grid, z_grid, grid, alt_grid_mesher] = compute_3d_grid(distribution, b, N)
+    [x_grid, y_grid, z_grid, alt_grid_mesher] = compute_3d_grid(distribution, b, N)
     logging.info("Number of parallel process : %d " %nprocs)
     if distribution.isAnalyticPDF_:
         logging.info("Analytical evaluation of the pdf")
