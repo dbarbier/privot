@@ -1052,8 +1052,7 @@ def compute_gaussian_equivalent_parallel(distribution, b, N, nprocs = multiproce
     """
     global _compute_equivalent_normal_pdf_sum
     def _compute_equivalent_normal_pdf_sum(args):
-        y, mesh, imax = tuple(args)
-        return distribution.computeEquivalentNormalPDFSum(y, mesh, imax)
+        return distribution.computeEquivalentNormalPDFSum(*args)
     pool = multiprocessing.Pool(nprocs)
     [x_grid, y_grid, z_grid, alt_grid_mesher] = compute_3d_grid(distribution, b,N)
     imax = distribution.getEquivalentNormalPDFSumLevelMax(distribution.getMean(), alt_grid_mesher)
