@@ -1023,6 +1023,8 @@ def parallel_compute_delta_function_on_3d_grid(distribution, b, N, nprocs = mult
         + sigma_plus_0_0.reshape(N,1,1)     + sigma_minus_0_0.reshape(N,1,1)
 
     s_m *= (h_x * h_y * h_z) /(8*pi*pi*pi)
+    pool.terminate()
+    pool.close()
     return s_m
 
 def compute_3d_grid(distribution, b, N):
