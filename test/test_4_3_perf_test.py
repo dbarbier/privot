@@ -56,7 +56,6 @@ if __name__ == "__main__":
     print "cov = ", cov
     print "sigma = ", sigma
     for b in [6]:
-        dt_parallel_computations = []
         for N in [64, 128]:
             # filename for the current b and N
             filename = "../validation/pdf_grid/valid_test_4_3/" + str(b) + "_" + str(N) + "/" + \
@@ -73,6 +72,7 @@ if __name__ == "__main__":
             l2_err = np.sqrt(np.sum((theoritical_values_array - pdf_values) * (theoritical_values_array - pdf_values)))  / (N*N*N)
             print "L2_err=%s, Linfty_err = %s, CPU time=%s"%(l2_err,max_abs_err, dt0)
             
+            dt_parallel_computations = []
             for nproc in range(8):
                 tic = time.time()
                 [grid, pdf_values] = distribution.parallel_compute_pdf_on_3d_grid(b,N, nproc+1)
@@ -83,7 +83,6 @@ if __name__ == "__main__":
                 max_abs_err = max(np.max(theoritical_values_array - pdf_values), np.min(theoritical_values_array - pdf_values))
                 l2_err = np.sqrt(np.sum((theoritical_values_array - pdf_values) * (theoritical_values_array - pdf_values)))  / (N*N*N)
                 print "L2_err=%s, Linfty_err = %s, CPU time=%s"%(l2_err,max_abs_err, dt)
-
             fig = plt.figure()
             plt.subplot(211)
             plt.plot(np.arange(8) + 1, dt_parallel_computations, 'b', label = 'parallel version')
