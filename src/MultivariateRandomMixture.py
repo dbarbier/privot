@@ -38,6 +38,8 @@ import cmath
 import numpy as np
 import MaxNormMeshGrid
 import sys
+import parallel_compute_pdf_grid
+from multiprocessing import cpu_count
 
 # ResourceMap : setting different numerical parameters useful for the distribution
 ot.ResourceMap.SetAsUnsignedLong("MultivariateRandomMixture-DefaultBlockMin", 3)
@@ -1372,6 +1374,86 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
 
         return [[x_grid, y_grid, z_grid], pdf]
 
+    def parallel_compute_pdf_on_3d_grid(self, b, N, nproc=cpu_count()):
+        """
+        The interest is to compute the density function on a 3D grid of form:
+          r \in {1,2,3},\forall m\in\{0,\hdots,N-1\},\:y_{r,m}=\mu_r+b(\frac{2m+1}{N} - 1)\sigma_r
+
+        The density is given by:
+          p_{m1,,m2, m3}= Q_{m1,m2,m3}+S_{m1,m2,m3}
+        with S_{m1,m2,m3} = \frac{hx hy hz}{8\pi^3}\sum_{k1=-N}^{N}\sum_{k2=-N}^{N}\sum_{k3=-N}^{N}\delta(k1 h_x,k2 h_y k3 h_z) E_{m1,m2,m3}(k1,k2,k3)
+        Here :
+          E_{m1,m2,m3}(k1,k2,k3)=e^{-i\sum_{j=1}^{3} k_jh_j (\mu_j+a (\frac{2m_j+1}{M}-1)\sigma_j)}
+        Using FFT,
+        S_{m1,m2,m3}=\frac{hx hy hz}{4\pi^2} \sum_{s1,s2,s3 \in [0,-,+]} \Sigma_{m1,m2,m3}^{s1 s2 s3}
+
+        with
+        \Sigma_{m1,m2,m3}^{+++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,k3+1)
+        \Sigma_{m1,m2,m3}^{---}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),-(k3+1))
+        \Sigma_{m1,m2,m3}^{++-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,k2+1,-(k3+1))
+        \Sigma_{m1,m2,m3}^{--+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),-(k2+1),k3+1)
+        \Sigma_{m1,m2,m3}^{+-+}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),k3+1)
+        \Sigma_{m1,m2,m3}^{-+-}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta(-(k1+1)hx,(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(-(k1+1),(k2+1),-(k3+1))
+        \Sigma_{m1,m2,m3}^{+--}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))
+        \Sigma_{m1,m2,m3}^{-++}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\delta((k1+1)hx,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(k1+1,-(k2+1),-(k3+1))
+        \Sigma_{m1,m2,m3}^{++0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta((k1+1)hx,(k2+1)hy,0) E_{m1,m2,m3}(k1+1,k2+1,0)
+        \Sigma_{m1,m2,m3}^{--0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta(-(k1+1)hx,-(k2+1)hy,0) E_{m1,m2,m3}(-(k1+1),-(k2+1),0)
+        \Sigma_{m1,m2,m3}^{0++}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0,(k2+1)hy,(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)
+        \Sigma_{m1,m2,m3}^{0--}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0,-(k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0,k2+1,k3+1)
+        \Sigma_{m1,m2,m3}^{+0+}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta((k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)
+        \Sigma_{m1,m2,m3}^{-0-}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(-(k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,k3+1)
+        \Sigma_{m1,m2,m3}^{+-0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta((k1+1)hx,-(k2+1)hy, 0) E_{m1,m2,m3}(k1+1,-(k2+1),0)
+        \Sigma_{m1,m2,m3}^{-+0}=\sum_{k1=0}^{N-1}\sum_{k2=0}^{N-1}\\delta(-(k1+1)hx,(k2+1)hy, 0) E_{m1,m2,m3}(-(k1+1),(k2+1),0)
+        \Sigma_{m1,m2,m3}^{+0-}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta((k1+1)hx,0,-(k3+1)hz) E_{m1,m2,m3}(k1+1,0,-(k3+1)
+        \Sigma_{m1,m2,m3}^{-0+}=\sum_{k1=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(-(k1+1)hx,0,(k3+1)hz) E_{m1,m2,m3}(-(k1+1),0,(k3+1)
+        \Sigma_{m1,m2,m3}^{0+-}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k2+1))
+        \Sigma_{m1,m2,m3}^{0-+}=\sum_{k2=0}^{N-1}\sum_{k3=0}^{N-1}\\delta(0, (k2+1)hy,-(k3+1)hz) E_{m1,m2,m3}(0, k2+1,-(k3+1))
+        \Sigma_{m1,m2,m3}^{+00}=\sum_{k1=0}^{N-1} \delta((k1+1)hx,0,0) E_{m1,m2,m3}(k1+1,0,0)
+        \Sigma_{m1,m2,m3}^{-00}=\sum_{k1=0}^{N-1} \delta(-(k1+1)hx,0,0) E_{m1,m2,m3}(-(k1+1),0,0)
+        \Sigma_{m1,m2,m3}^{0+0}=\sum_{k2=0}^{N-1} \delta(0,(k2+1)hy,0) E_{m1,m2,m3}(0,k2+1,0)
+        \Sigma_{m1,m2,m3}^{0-0}=\sum_{k2=0}^{N-1} \delta(0,-(k2+1)hy,0) E_{m1,m2,m3}(0,-(k2+1),0)
+        \Sigma_{m1,m2,m3}^{00+}=\sum_{k3=0}^{N-1} \delta(0,0,(k3+1)hz) E_{m1,m2,m3}(0,0,k3+1)
+        \Sigma_{m1,m2,m3}^{00-}=\sum_{k3=0}^{N-1} \delta(0,0,-(k3+1)hz) E_{m1,m2,m3}(0,0,-(k3+1)
+
+        Parameters
+        ----------
+        b : positive float
+            The number of marginal standard deviations beyond which the density is evaluated
+
+        N : positive integer, preference of form N = 2^k
+            The number of points used for meshing the interval [mean - b * sigma, mean + b * sigma]
+
+        Returns
+        -------
+        grid_values : ndarray of shape (N, 3)
+                      3D Grid on which the probability density function has been evaluated
+
+        pdf_values : ndarray of shape (N,N,N)
+                    The probability density function values on the grid
+
+        Example
+        -------
+        >>> import openturns as ot
+        >>> import MultivariateRandomMixture as MV
+        >>> collection = ot.DistributionCollection([ot.Normal(0.0, 1.0), ot.Uniform(2.0, 5.0), ot.Uniform(2.0, 5.0)])
+        >>> matrix = ot.Matrix([[1,2, 4], [3,4,5], [6,0,1]])
+        >>> dist = MV.PythonMultivariateRandomMixture(collection, matrix)
+        >>> b = 4 # we are interested in the pdf on mean +/- b * sigma
+        >>> N = 128 # 128x128x128 points for the 3D grid
+        >>> [grid_values, pdf_values] = dist.computePDFOn3DGrid(b, N)
+        >>> xgrid_values, ygrid_values, zgrid_values = tuple(grid_values)
+        >>> f = open("out.csv", "w")
+        >>> f.write("x;y;z;pdf\n")
+        >>> for i in xrange(len(xgrid_values)):
+        ...     for j in xrange(len(ygrid_values)):
+        ...         for k in xrange(len(zgrid_values)):
+        ...             f.write("{0:.16g};{1:.16g};{2:.16g};{3:.16g}\n".format(xgrid_values[i], ygrid_values[j], zgrid_values[k], pdf_values[i][j][k]))
+        ... f.close()
+
+        """
+        [[x_grid, y_grid, z_grid],pdf] = parallel_compute_pdf_grid.compute_pdf_on_3d_grid(self, b, N, nproc)
+        return [[x_grid, y_grid, z_grid],pdf]
+
     def getAlpha(self):
         """
         Returns the alpha parameter used for the evaluation of the range.
@@ -1837,6 +1919,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
         self.referenceBandwidthFactor_ = 1.0
         for component in self.referenceBandwidth_:
             self.referenceBandwidthFactor_ *= component / (2.0 * cmath.pi)
+
 
 class MultivariateRandomMixture(ot.Distribution):
     """
