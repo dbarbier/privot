@@ -686,7 +686,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             raise ValueError("Method available for dimension 1 only")
         assert float(b) > 0.0
         # Initializing some variables
-        pi = np.pi
+        pi = cmath.pi
         mu = self.getMean()[0]
         sigma = self.getStandardDeviation()[0]
         b_sigma = b * sigma
@@ -799,7 +799,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             raise ValueError("Method available for dimension 2 only")
         # Initializing some variables
         assert (float(b) > 0)
-        pi = np.pi
+        pi = cmath.pi
         two_pi = 2.0 * pi
         mu_x, mu_y = tuple(self.getMean())
         sigma_x, sigma_y = tuple(self.getStandardDeviation())
@@ -1013,7 +1013,7 @@ class PythonMultivariateRandomMixture(ot.PythonDistribution):
             raise ValueError("Method available for dimension 3 only")
             # Initializing some variables
         assert (float(b) > 0)
-        pi = np.pi
+        pi = cmath.pi
         two_pi = 2.0 * pi
         mu_x, mu_y, mu_z = tuple(self.getMean())
         sigma_x, sigma_y, sigma_z = tuple(self.getStandardDeviation())
