@@ -1,0 +1,42 @@
+range =  [-8.2038, 8.7038]
+[-13.5259, 13.7759]
+[-5.30394, 5.70394]
+mean =  [0.25,0.125,0.2]
+cov =  [[  1.11667   0.233333 -0.341667 ]
+ [  0.233333  5.25771  -0.775    ]
+ [ -0.341667 -0.775     0.473333 ]]
+sigma =  [1.05672,2.29297,0.687992]
+Use case : b=6, N=64
+Error evaluation - parallel version with 1 cores
+L2_err=7.59616839086e-09, Linfty_err = 0.000225186655583, CPU time=38.6730749607
+Error evaluation - parallel version with 2 cores
+L2_err=7.59616839086e-09, Linfty_err = 0.000225186655583, CPU time=20.6733169556
+Error evaluation - parallel version with 3 cores
+L2_err=7.59616839086e-09, Linfty_err = 0.000225186655583, CPU time=14.9541530609
+Error evaluation - parallel version with 4 cores
+L2_err=7.59616839086e-09, Linfty_err = 0.000225186655583, CPU time=11.7361981869
+Error evaluation - parallel version with 5 cores
+L2_err=7.59616839086e-09, Linfty_err = 0.000225186655583, CPU time=10.1804959774
+Error evaluation - parallel version with 6 cores
+L2_err=7.59616839086e-09, Linfty_err = 0.000225186655583, CPU time=9.15166091919
+Error evaluation - parallel version with 7 cores
+L2_err=7.59616839086e-09, Linfty_err = 0.000225186655583, CPU time=8.39201211929
+Error evaluation - parallel version with 8 cores
+L2_err=7.59616839086e-09, Linfty_err = 0.000225186655583, CPU time=7.8755209446
+Use case : b=6, N=128
+Error evaluation - parallel version with 1 cores
+L2_err=1.02480594025e-09, Linfty_err = 0.000143379089409, CPU time=285.26740694
+Error evaluation - parallel version with 2 cores
+L2_err=1.02480594025e-09, Linfty_err = 0.000143379089409, CPU time=151.868021011
+Error evaluation - parallel version with 3 cores
+L2_err=1.02480594025e-09, Linfty_err = 0.000143379089409, CPU time=109.394824982
+Error evaluation - parallel version with 4 cores
+L2_err=1.02480594025e-09, Linfty_err = 0.000143379089409, CPU time=87.1953029633
+Error evaluation - parallel version with 5 cores
+L2_err=1.02480594025e-09, Linfty_err = 0.000143379089409, CPU time=76.3945071697
+Error evaluation - parallel version with 6 cores
+L2_err=1.02480594025e-09, Linfty_err = 0.000143379089409, CPU time=67.8907170296
+Error evaluation - parallel version with 7 cores
+L2_err=1.02480594025e-09, Linfty_err = 0.000143379089409, CPU time=61.838285923
+Error evaluation - parallel version with 8 cores
+L2_err=1.02480594025e-09, Linfty_err = 0.000143379089409, CPU time=58.2578589916
