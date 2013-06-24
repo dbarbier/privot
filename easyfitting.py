@@ -328,7 +328,8 @@ class FitContinuousDistribution1D:
 
         """
         uppercriterion = self.checkCriterionArg(criterion)
-        index = len(self._catalog)
+        catalog = self._getSortedCatalog(uppercriterion)
+        index = len(catalog)
         return self.getBestDistribution(range(index), uppercriterion)
 
     def printAcceptedDistribution(self, criterion="BIC"):
