@@ -42,6 +42,7 @@ if __name__ == "__main__":
     Test
     ------
     """
+    col = ['b', 'r', 'g', 'k']
 
     mixture = ot.Mixture(ot.DistributionCollection([ot.Normal(2,1), ot.Normal(-2,1)]))
     collection = ot.DistributionCollection([ot.Normal(0.0,1.0), mixture, ot.Uniform(0,1), ot.Uniform(0,1)])
@@ -56,6 +57,8 @@ if __name__ == "__main__":
     print "cov = ", cov
     print "sigma = ", sigma
     for b in [6]:
+        fig = plt.figure()
+        color_index = 0
         for N in [64, 128]:
             # filename for the current b and N
             filename = "../validation/pdf_grid/valid_test_4_3/" + str(b) + "_" + str(N) + "/" + \
@@ -63,19 +66,10 @@ if __name__ == "__main__":
             theoritical_values = ot.NumericalSample.ImportFromCSVFile(filename)
             theoritical_values_array = np.array([[[theoritical_values[iz + iy *N + ix * N * N][3]for iz in xrange(N)] for iy in xrange(N)] for ix in xrange(N)])
             print "Use case : b=%s, N=%s"%(b, N)
-            tic = time.time()
-            [grid, pdf_values] = distribution.computePDFOn3DGrid(b, N)
-            toc = time.time()
-            dt0 = toc - tic
-            print "Error evaluation - standard version"
-            max_abs_err = max(np.max(theoritical_values_array - pdf_values), np.min(theoritical_values_array - pdf_values))
-            l2_err = np.sqrt(np.sum((theoritical_values_array - pdf_values) * (theoritical_values_array - pdf_values)))  / (N*N*N)
-            print "L2_err=%s, Linfty_err = %s, CPU time=%s"%(l2_err,max_abs_err, dt0)
-            
             dt_parallel_computations = []
             for nproc in range(8):
                 tic = time.time()
-                [grid, pdf_values] = distribution.parallel_compute_pdf_on_3d_grid(b,N, nproc+1)
+                [grid, pdf_values] = distribution.computePDFOn3DGrid(b,N, nproc+1)
                 toc = time.time()
                 dt = toc - tic
                 dt_parallel_computations.append(dt)
@@ -83,20 +77,12 @@ if __name__ == "__main__":
                 max_abs_err = max(np.max(theoritical_values_array - pdf_values), np.min(theoritical_values_array - pdf_values))
                 l2_err = np.sqrt(np.sum((theoritical_values_array - pdf_values) * (theoritical_values_array - pdf_values)))  / (N*N*N)
                 print "L2_err=%s, Linfty_err = %s, CPU time=%s"%(l2_err,max_abs_err, dt)
-            fig = plt.figure()
-            plt.subplot(211)
-            plt.plot(np.arange(8) + 1, dt_parallel_computations, 'b', label = 'parallel version')
-            plt.plot(np.arange(8) + 1, 8 * [dt0], 'r', label = 'standard version')
-            #plt.xlabel('Number of cores')
-            plt.ylabel('CPU time')
-            plt.title('Performance of PDF evaluation on 3D grid with N = %s' %N)
-            plt.legend(loc=0)
-            plt.grid('on')
-            plt.subplot(212)
-            plt.plot(np.arange(8) + 1, dt / np.array(dt_parallel_computations), 'b', label = 'performance')
-            plt.xlabel('Number of cores')
-            plt.ylabel('Speed up')
-            plt.legend(loc=0)
-            plt.grid('on')
-            plt.savefig('test_4_3_perf_tests_' + str(N) + '.png')
-            plt.close()
+            plt.plot(np.arange(8) + 1, dt_parallel_computations, color = col[color_index], label = '3D grid with %s^3 points' %N)
+            color_index += 1
+        plt.xlabel('Number of cores')
+        plt.ylabel('CPU time')
+        plt.title('Performance of PDF evaluation on 3D grid')
+        plt.legend(loc=0)
+        plt.grid('on')
+        plt.savefig('test_4_3_perf_tests_' + str(b) + '.png')
+        plt.close()
